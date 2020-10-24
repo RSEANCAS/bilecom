@@ -1,0 +1,6 @@
+D:\JARE\bilecom\bilecom.be\bin\Debug\bilecom.be.dll
+D:\JARE\bilecom\bilecom.be\bin\Debug\bilecom.be.pdb
+D:\JARE\bilecom\bilecom.be\obj\Debug\bilecom.be.csprojAssemblyReference.cache
+D:\JARE\bilecom\bilecom.be\obj\Debug\bilecom.be.csproj.CoreCompileInputs.cache
+D:\JARE\bilecom\bilecom.be\obj\Debug\bilecom.be.dll
+D:\JARE\bilecom\bilecom.be\obj\Debug\bilecom.be.pdb
