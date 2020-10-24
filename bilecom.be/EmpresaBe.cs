@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class Class1
+    public class EmpresaBe
     {
+        public int EmpresaId { get; set; }
+        public string Ruc { get; set; }
     }
 }
