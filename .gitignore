@@ -1,6 +1,8 @@
 .vs
 bilecom.app/bin
 bilecom.app/obj
+bilecom.app.admin/bin
+bilecom.app.admin/obj
 bilecom.bl/bin
 bilecom.bl/obj
 bilecom.da/bin
