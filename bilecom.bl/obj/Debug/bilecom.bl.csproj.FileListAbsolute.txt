@@ -1,6 +1,0 @@
-D:\JARE\bilecom\bilecom.bl\bin\Debug\bilecom.bl.dll
-D:\JARE\bilecom\bilecom.bl\bin\Debug\bilecom.bl.pdb
-D:\JARE\bilecom\bilecom.bl\obj\Debug\bilecom.bl.csprojAssemblyReference.cache
-D:\JARE\bilecom\bilecom.bl\obj\Debug\bilecom.bl.csproj.CoreCompileInputs.cache
-D:\JARE\bilecom\bilecom.bl\obj\Debug\bilecom.bl.dll
-D:\JARE\bilecom\bilecom.bl\obj\Debug\bilecom.bl.pdb
