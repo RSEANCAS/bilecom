@@ -41,8 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CargoBe.cs" />
     <Compile Include="EmpresaBe.cs" />
+    <Compile Include="OpcionBe.cs" />
+    <Compile Include="PerfilBe.cs" />
+    <Compile Include="PerfilOpcionBe.cs" />
+    <Compile Include="PersonalBe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SedeBe.cs" />
+    <Compile Include="SedeUsuarioBe.cs" />
+    <Compile Include="TipoDocumentoIdentidadBe.cs" />
+    <Compile Include="TipoSedeBe.cs" />
+    <Compile Include="UsuarioBe.cs" />
+    <Compile Include="UsuarioPerfilBe.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
