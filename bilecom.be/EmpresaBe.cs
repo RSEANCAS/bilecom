@@ -10,5 +10,7 @@ namespace bilecom.be
     {
         public int EmpresaId { get; set; }
         public string Ruc { get; set; }
+        public string RazonSocial { get; set; }
+        public string NombreComercial { get; set; }
     }
 }
