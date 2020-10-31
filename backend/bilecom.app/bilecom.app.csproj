@@ -2759,6 +2759,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\InicioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3050,6 +3051,7 @@
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Controllers\Api\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Inicio\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
