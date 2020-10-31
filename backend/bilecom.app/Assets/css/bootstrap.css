@@ -12,6 +12,7 @@ html {
 body {
   margin: 0;
 }
+
 article,
 aside,
 details,
@@ -25,7 +26,7 @@ menu,
 nav,
 section,
 summary {
-  display: block;
+    display: block;
 }
 audio,
 canvas,
@@ -238,6 +239,7 @@ th {
   h3 {
     page-break-after: avoid;
   }
+
   .navbar {
     display: none;
   }
@@ -1188,6 +1190,7 @@ h6,
   line-height: 1.1;
   color: inherit;
 }
+
 h1 small,
 h2 small,
 h3 small,
