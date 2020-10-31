@@ -9,3 +9,5 @@ backend/bilecom.da/bin
 backend/bilecom.da/obj
 backend/bilecom.be/bin
 backend/bilecom.be/obj
+backend/bilecom.ut/bin
+backend/bilecom.ut/obj
