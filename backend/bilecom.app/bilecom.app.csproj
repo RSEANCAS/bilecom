@@ -330,6 +330,7 @@
     <Content Include="Assets\js\bootstrap.js" />
     <Content Include="Assets\js\bootstrap.min.js" />
     <Content Include="Assets\js\demo\bg-images.js" />
+    <Content Include="Assets\js\demo\ClienteMantenimiento.js" />
     <Content Include="Assets\js\demo\dashboard-2.js" />
     <Content Include="Assets\js\demo\dashboard.js" />
     <Content Include="Assets\js\demo\easy-pie-chart.js" />
@@ -3070,6 +3071,7 @@
     <Content Include="Views\Inicio\Index.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Views\Cliente\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
