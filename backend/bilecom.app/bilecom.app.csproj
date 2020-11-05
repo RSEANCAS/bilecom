@@ -347,6 +347,7 @@
     <Content Include="Assets\js\demo\morris-js.js" />
     <Content Include="Assets\js\demo\nifty-demo.js" />
     <Content Include="Assets\js\demo\nifty-demo.min.js" />
+    <Content Include="Assets\js\demo\PersonalMantenimiento.js" />
     <Content Include="Assets\js\demo\sparklines.js" />
     <Content Include="Assets\js\demo\tables-bs-table.js" />
     <Content Include="Assets\js\demo\tables-datatables.js" />
@@ -2777,6 +2778,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3072,6 +3074,8 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\Cliente\Mantenimiento.cshtml" />
+    <Content Include="Views\Personal\Index.cshtml" />
+    <Content Include="Views\Personal\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
