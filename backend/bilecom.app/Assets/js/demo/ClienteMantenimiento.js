@@ -2,6 +2,7 @@
 $("#txt-numero-documento-identidad").bind('keypress', function (e) {
     let keyCode = (e.which) ? e.which : event.keyCode;
     return ((keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91) || (keyCode > 96 && keyCode < 123));
+    //return (keyCode == 32); -> código Ansi del "espacio"
 });
 
 $("#txt-nombres").bind('keypress', function (e) {
