@@ -3084,6 +3084,10 @@
     <Content Include="Views\TipoSede\Index.cshtml" />
     <Content Include="Views\Proveedor\Index.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
+    <Content Include="Views\Sede\Mantenimiento.cshtml" />
+    <Content Include="Views\TipoSede\Mantenimiento.cshtml" />
+    <Content Include="Views\Proveedor\Mantenimiento.cshtml" />
+    <Content Include="Views\Producto\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

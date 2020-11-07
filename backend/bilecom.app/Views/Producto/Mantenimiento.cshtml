@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Producto Mantenimiento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h2 class="page-header text-overflow">Nuevo Producto</h2>
+        </div>
+    </div>
+    <form action="#" id="form-producto-mantimiento" name="form-producto-mantimiento" method="post">
+        <div id="page-content">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Nombre</span>
+                                <input class="form-control" placeholder="Nombre" name="txt-nombre" id="txt-nombre" data-bv-field="txt-nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Categoria</font></font></span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-categoria" id="cmb-categoria" data-bv-field="cmb-categoria" tabindex="-1" aria-hidden="false">
+                                </select>
+                                <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-categoria" style=""></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
+<script src="@Url.Content("~/Assets/js/demo/ProductoMantenimiento.js")"></script>

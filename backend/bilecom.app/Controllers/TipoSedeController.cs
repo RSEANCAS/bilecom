@@ -13,5 +13,9 @@ namespace bilecom.app.Controllers
         {
             return View();
         }
+        public ActionResult Mantenimiento()
+        {
+            return View();
+        }
     }
 }
