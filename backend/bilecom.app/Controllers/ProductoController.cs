@@ -18,5 +18,9 @@ namespace bilecom.app.Controllers
             return View();
         }
 
+        public ActionResult CategoriaProducto()
+        {
+            return View();
+        }
     }
 }

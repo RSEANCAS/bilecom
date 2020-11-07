@@ -3083,6 +3083,7 @@
     <Content Include="Views\Sede\Index.cshtml" />
     <Content Include="Views\TipoSede\Index.cshtml" />
     <Content Include="Views\Proveedor\Index.cshtml" />
+    <Content Include="Views\Producto\CategoriaProducto.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
     <Content Include="Views\Sede\Mantenimiento.cshtml" />
     <Content Include="Views\TipoSede\Mantenimiento.cshtml" />
