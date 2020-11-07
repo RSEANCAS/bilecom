@@ -330,6 +330,7 @@
     <Content Include="Assets\js\bootstrap.js" />
     <Content Include="Assets\js\bootstrap.min.js" />
     <Content Include="Assets\js\demo\bg-images.js" />
+    <Content Include="Assets\js\demo\ClienteMantenimiento.js" />
     <Content Include="Assets\js\demo\dashboard-2.js" />
     <Content Include="Assets\js\demo\dashboard.js" />
     <Content Include="Assets\js\demo\easy-pie-chart.js" />
@@ -346,6 +347,7 @@
     <Content Include="Assets\js\demo\morris-js.js" />
     <Content Include="Assets\js\demo\nifty-demo.js" />
     <Content Include="Assets\js\demo\nifty-demo.min.js" />
+    <Content Include="Assets\js\demo\PersonalMantenimiento.js" />
     <Content Include="Assets\js\demo\sparklines.js" />
     <Content Include="Assets\js\demo\tables-bs-table.js" />
     <Content Include="Assets\js\demo\tables-datatables.js" />
@@ -2774,9 +2776,15 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CategoriaProductoController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\PersonalController.cs" />
+    <Compile Include="Controllers\ProductoController.cs" />
+    <Compile Include="Controllers\ProveedorController.cs" />
+    <Compile Include="Controllers\SedeController.cs" />
+    <Compile Include="Controllers\TipoSedeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3071,6 +3079,19 @@
     <Content Include="Views\Inicio\Index.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Views\Cliente\Mantenimiento.cshtml" />
+    <Content Include="Views\Personal\Index.cshtml" />
+    <Content Include="Views\Personal\Mantenimiento.cshtml" />
+    <Content Include="Views\Sede\Index.cshtml" />
+    <Content Include="Views\TipoSede\Index.cshtml" />
+    <Content Include="Views\Proveedor\Index.cshtml" />
+    <Content Include="Views\Producto\Index.cshtml" />
+    <Content Include="Views\Sede\Mantenimiento.cshtml" />
+    <Content Include="Views\TipoSede\Mantenimiento.cshtml" />
+    <Content Include="Views\Proveedor\Mantenimiento.cshtml" />
+    <Content Include="Views\Producto\Mantenimiento.cshtml" />
+    <Content Include="Views\Producto\MantenimientoCategoria.cshtml" />
+    <Content Include="Views\CategoriaProducto\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

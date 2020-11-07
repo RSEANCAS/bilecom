@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace bilecom.app.Controllers
 {
-    public class ClienteController : Controller
+    public class PersonalController : Controller
     {
-        // GET: Cliente
+        // GET: Personal
         public ActionResult Index()
         {
             return View();

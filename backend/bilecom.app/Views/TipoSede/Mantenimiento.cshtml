@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Tipo Sede Mantenimiento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h2 class="page-header text-overflow">Nuevo Tipo de Sede</h2>
+        </div>
+    </div>
+    <form action="#" id="form-personal-mantimiento" name="form-tipo-sede-mantimiento" method="post">
+        <div id="page-content">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Nombre Tipo de Sede</span>
+                                <input class="form-control" placeholder="Tipo de Sede" name="txt-tipo-sede" id="txt-tipo-sede" data-bv-field="txt-tipo-sede" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
+<script src="@Url.Content("~/Assets/js/demo/TipoSedeMantenimiento.js")"></script>
