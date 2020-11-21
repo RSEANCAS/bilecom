@@ -27,8 +27,8 @@
                                 message: "Debe ingresar el Usuario"
                             },
                             regexp: {
-                                regexp: /^[a-zA-Z]+$/g,
-                                message: 'Solo puede ingresar caracteres alfanuméricos'
+                                regexp: /^[a-zA-Z]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
                             }
 
                         }
@@ -52,10 +52,12 @@
         let usuario = $("#txt-usuario").val();
         let contraseña = $("#txt-contraseña").val();
 
-        let headers = {};
-        let url = `${urlRoot}`;
+        let url = `${urlRoot}api/usuario/autenticar?ruc=${ruc}&usuario=${usuario}&contraseña=${contraseña}`;
+        //let params = JSON.stringify({ ruc, usuario, contraseña });
+        //let headers = { 'Content-Type': 'application/json' };
+        let init = { method: 'POST' };
 
-        fetch(url, headers)
+        fetch(url, init)
             .then(r => r.json())
             .then(pageLogin.ResponseEnviarFormulario);
     },
