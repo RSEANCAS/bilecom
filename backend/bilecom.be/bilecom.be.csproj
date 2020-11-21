@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base.cs" />
     <Compile Include="CargoBe.cs" />
+    <Compile Include="CotizacionBe.cs" />
     <Compile Include="EmpresaBe.cs" />
     <Compile Include="OpcionBe.cs" />
     <Compile Include="PerfilBe.cs" />
