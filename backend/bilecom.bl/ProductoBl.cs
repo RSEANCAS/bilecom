@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace bilecom.bl
 {
@@ -30,5 +31,51 @@ namespace bilecom.bl
             }
             return lProducto;
         }
+
+        public bool ProductoGuardar(ProductoBe productoBe)
+        {
+            bool respuesta = false;
+            using (cn)
+            {
+                try
+                {
+                    cn.Open();
+                    respuesta = new ProductoDa().ProductoGuardar(productoBe, cn);
+                    cn.Close();
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+                finally
+                {
+                    if (cn.State == ConnectionState.Open) cn.Close();
+                }
+            }
+            return respuesta;
+        }
+        public bool ProductoActualizar(ProductoBe productoBe)
+        {
+            bool respuesta = false;
+            using (cn)
+            {
+                try
+                {
+                    cn.Open();
+                    respuesta = new ProductoDa().ProductoActualizar(productoBe, cn);
+                    cn.Close();
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+                finally
+                {
+                    if (cn.State == ConnectionState.Open) cn.Close();
+                }
+            }
+            return respuesta;
+        }
+
     }
 }
