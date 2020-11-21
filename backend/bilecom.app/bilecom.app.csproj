@@ -361,6 +361,7 @@
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\nifty.js" />
     <Content Include="Assets\js\nifty.min.js" />
+    <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
     <Content Include="Assets\plugins\animate-css\LICENSE.txt" />
@@ -2775,7 +2776,9 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -3091,6 +3094,7 @@
     <Content Include="Views\Producto\Mantenimiento.cshtml" />
     <Content Include="Views\Producto\MantenimientoCategoria.cshtml" />
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
+    <Content Include="Views\Cotizacion\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3101,7 +3105,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
-    <Folder Include="Controllers\Api\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
