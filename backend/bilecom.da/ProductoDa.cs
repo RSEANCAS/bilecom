@@ -38,5 +38,54 @@ namespace bilecom.da
             }
             return lProducto;
         }
+        public bool ProductoGuardar(ProductoBe productoBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            { 
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId);
+                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId);
+                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre);
+                    oCommand.Parameters.AddWithValue("@CreadoPor", productoBe.Usuario);
+                    oCommand.Parameters.AddWithValue("@FechaCreacion", productoBe.Fecha);
+
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
+        public bool ProductoActualizar(ProductoBe productoBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId);
+                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId);
+                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre);
+                    oCommand.Parameters.AddWithValue("@ModificadoPor", productoBe.Usuario);
+                    oCommand.Parameters.AddWithValue("@FechaModificación", productoBe.Fecha);
+
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
+
     }
 }

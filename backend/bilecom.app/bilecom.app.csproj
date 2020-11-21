@@ -361,7 +361,6 @@
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\nifty.js" />
     <Content Include="Assets\js\nifty.min.js" />
-    <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
     <Content Include="Assets\plugins\animate-css\LICENSE.txt" />
@@ -2776,9 +2775,9 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\Api\ClienteController.cs" />
+    <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\Api\ProductoController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
-    <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -3092,9 +3091,8 @@
     <Content Include="Views\TipoSede\Mantenimiento.cshtml" />
     <Content Include="Views\Proveedor\Mantenimiento.cshtml" />
     <Content Include="Views\Producto\Mantenimiento.cshtml" />
-    <Content Include="Views\Producto\MantenimientoCategoria.cshtml" />
+    <Content Include="Views\CategoriaProducto\MantenimientoCategoria.cshtml" />
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
-    <Content Include="Views\Cotizacion\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3106,6 +3104,16 @@
     <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
+      <Project>{E9F1604B-36AF-4C5D-A7A1-0F5125CD30AB}</Project>
+      <Name>bilecom.be</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.bl\bilecom.bl.csproj">
+      <Project>{12CC74E5-E96C-468F-8DB7-18BE7AB7067C}</Project>
+      <Name>bilecom.bl</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
