@@ -47,6 +47,41 @@ namespace bilecom.da
             return item;
         }
 
+        public EmpresaBe ObtenerPorRuc(string ruc, SqlConnection cn)
+        {
+            EmpresaBe item = null;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("usp_empresa_obtener_x_ruc", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ruc", ruc.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            item = new EmpresaBe();
+                            if (dr.Read())
+                            {
+                                item.EmpresaId = dr.GetData<int>("EmpresaId");
+                                item.Ruc = dr.GetData<string>("Ruc");
+                                item.RazonSocial = dr.GetData<string>("RazonSocial");
+                                item.NombreComercial = dr.GetData<string>("NombreComercial");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return item;
+        }
+
         public bool Guardar(EmpresaBe registro, SqlConnection cn, out int? empresaId)
         {
             empresaId = null;
