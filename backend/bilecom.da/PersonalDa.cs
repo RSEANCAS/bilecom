@@ -11,7 +11,7 @@ namespace bilecom.da
 {
     public class PersonalDa
     {
-        public List<PersonalBe> fListar(SqlConnection cn, int empresaId)
+        public List<PersonalBe> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string nombresCompletos)
         {
             List<PersonalBe> lPersonal = new List<PersonalBe>();
             PersonalBe oPersonal = new PersonalBe();
@@ -20,6 +20,8 @@ namespace bilecom.da
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
                 oCommand.Parameters.AddWithValue("@empresaId", empresaId);
+                oCommand.Parameters.AddWithValue("@nroDocumentoIdentidad", nroDocumentoIdentidad);
+                oCommand.Parameters.AddWithValue("@nombresCompletos", @nombresCompletos);
 
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {

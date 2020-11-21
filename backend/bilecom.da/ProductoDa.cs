@@ -1,4 +1,5 @@
 ﻿using bilecom.be;
+using bilecom.ut;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,26 +12,29 @@ namespace bilecom.da
 {
     public class ProductoDa
     {
-        public List<ProductoBe> fListar(SqlConnection cn, int productoId, string nombre)
+        public List<ProductoBe> fListar(SqlConnection cn, string categoriaNombre, string nombre, int empresaId)
         {
-            List<ProductoBe> lProducto = new List<ProductoBe>();
+            List<ProductoBe> lProducto = null;
             ProductoBe oProducto;
 
             using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_listar", cn))
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.Parameters.AddWithValue("@productoId", productoId);
+                oCommand.Parameters.AddWithValue("@categoriaNombre", categoriaNombre);
                 oCommand.Parameters.AddWithValue("@nombre", nombre);
+                oCommand.Parameters.AddWithValue("@EmpresaId", empresaId);
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {
                     if(oDr.HasRows)
                     {
-                        if(oDr.Read())
+                        lProducto = new List<ProductoBe>();
+                        if (oDr.Read())
                         {
                             oProducto = new ProductoBe();
-                            if (!DBNull.Value.Equals(oDr["ProductoId"])) oProducto.ProductoId = (int)oDr["ProductoId"];
-                            if (!DBNull.Value.Equals(oDr["CategoriaId"])) oProducto.CategoriaId = (int)oDr["CategoriaId"];
-                            if (!DBNull.Value.Equals(oDr["Nombre"])) oProducto.Nombre = (string)oDr["Nombre"];
+
+                            oProducto.Nombre = oDr.GetData<string>("NombreProducto");
+                            oProducto.categoriaProducto = new CategoriaProductoBe();
+                            oProducto.categoriaProducto.Nombre = oDr.GetData<string>("NombreCategoria");
                             lProducto.Add(oProducto);
                         }
                     }
@@ -38,5 +42,54 @@ namespace bilecom.da
             }
             return lProducto;
         }
+        public bool ProductoGuardar(ProductoBe productoBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            { 
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId);
+                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId);
+                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre);
+                    oCommand.Parameters.AddWithValue("@CreadoPor", productoBe.Usuario);
+                    oCommand.Parameters.AddWithValue("@FechaCreacion", productoBe.Fecha);
+
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
+        public bool ProductoActualizar(ProductoBe productoBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId);
+                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId);
+                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre);
+                    oCommand.Parameters.AddWithValue("@ModificadoPor", productoBe.Usuario);
+                    oCommand.Parameters.AddWithValue("@FechaModificación", productoBe.Fecha);
+
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
+
     }
 }
