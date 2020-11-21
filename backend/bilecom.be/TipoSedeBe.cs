@@ -9,7 +9,9 @@ namespace bilecom.be
     public class TipoSedeBe
     {
         public int SedeId { get; set; }
+        public int EmpresaId { get; set; }
         public string Nombre { get; set; }
+        public bool FlagActivo { get; set; }
         public string CreadoPor { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string ModificadoPor { get; set; }
