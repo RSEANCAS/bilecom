@@ -13,5 +13,18 @@ namespace bilecom.app.Controllers
         {
             return View();
         }
+        public ActionResult Nuevo()
+        {
+            return View("Mantenimiento");
+        }
+        public ActionResult Editar(int id)
+        {
+            return View("Mantenimiento");
+        }
+        public ActionResult MantenimientoCategoria()
+        {
+            return View();
+        }
+
     }
 }

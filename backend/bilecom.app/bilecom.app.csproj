@@ -373,6 +373,7 @@
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\nifty.js" />
     <Content Include="Assets\js\nifty.min.js" />
+    <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
     <Content Include="Assets\plugins\animate-css\LICENSE.txt" />
@@ -2790,6 +2791,9 @@
     <Compile Include="Controllers\Api\Jwt\TokenGenerator.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenValidationHandler.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
+    <Compile Include="Controllers\Api\ClienteController.cs" />
+    <Compile Include="Controllers\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -3099,6 +3103,13 @@
     <Content Include="Views\TipoSede\Index.cshtml" />
     <Content Include="Views\Proveedor\Index.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
+    <Content Include="Views\Sede\Mantenimiento.cshtml" />
+    <Content Include="Views\TipoSede\Mantenimiento.cshtml" />
+    <Content Include="Views\Proveedor\Mantenimiento.cshtml" />
+    <Content Include="Views\Producto\Mantenimiento.cshtml" />
+    <Content Include="Views\Producto\MantenimientoCategoria.cshtml" />
+    <Content Include="Views\CategoriaProducto\Index.cshtml" />
+    <Content Include="Views\Cotizacion\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

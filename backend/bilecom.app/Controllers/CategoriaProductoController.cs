@@ -6,14 +6,10 @@ using System.Web.Mvc;
 
 namespace bilecom.app.Controllers
 {
-    public class TipoSedeController : Controller
+    public class CategoriaProductoController : Controller
     {
-        // GET: TipoSede
+        // GET: CategoriaProducto
         public ActionResult Index()
-        {
-            return View();
-        }
-        public ActionResult Mantenimiento()
         {
             return View();
         }

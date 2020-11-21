@@ -42,10 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClienteBl.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="EmpresaBl.cs" />
+    <Compile Include="PersonalBl.cs" />
+    <Compile Include="ProductoBl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsuarioBl.cs" />
+    <Compile Include="ProveedorBl.cs" />
+    <Compile Include="SedeBl.cs" />
+    <Compile Include="TipoSedeBl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">

@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class PersonalBe
+    public class Cliente
     {
-        public int PersonalId { get; set; }
+        public int ClientId { get; set; }
         public int EmpresaId { get; set; }
-        public int TipoDocumentoIdentidadId { get; set; }
+        public string TipoDocumento { get; set; }
         public string NroDocumentoIdentidad { get; set; }
-        public string Nombres { get; set; }
+        public string RazonSocial { get; set; }
+        public string NombreComercial { get; set; }
+        public int DistritoId { get; set; }
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
-        public string CreadoPor { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public string ModificadoPor { get; set; }
-        public DateTime FechaModificacion { get; set; }
+
     }
 }
