@@ -10,7 +10,7 @@ namespace bilecom.bl
 {
     public class ClienteBl : Conexion
     {
-        public List<Cliente> Listar(int empresaId)
+        public List<Cliente> Listar(int empresaId , string nroDocumentoIdentidad, string razonSocial)
         {
             List<Cliente> lCliente = new List<Cliente>();
             using (cn)
@@ -18,7 +18,7 @@ namespace bilecom.bl
                 try
                 {
                     cn.Open();
-                    lCliente = new ClienteDa().fListar(cn, empresaId);
+                    lCliente = new ClienteDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial);
                     cn.Close();
                 }
                 catch (Exception)

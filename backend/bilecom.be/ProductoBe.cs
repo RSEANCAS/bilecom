@@ -13,5 +13,6 @@ namespace bilecom.be
         public string Nombre { get; set; }
         public string Usuario { get; set; }
         public DateTime Fecha { get; set; }
+        public CategoriaProductoBe categoriaProducto { get; set; }
     }
 }

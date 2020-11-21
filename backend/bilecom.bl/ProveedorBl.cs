@@ -10,7 +10,7 @@ namespace bilecom.bl
 {
     public class ProveedorBl : Conexion
     {
-        public List<ProveedorBe> Listar(int proveedorId)
+        public List<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial)
         {
             List<ProveedorBe> lProveedor = new List<ProveedorBe>();
             using (cn)
@@ -18,7 +18,7 @@ namespace bilecom.bl
                 try
                 {
                     cn.Open();
-                    lProveedor = new ProveedorDa().fListar(cn, proveedorId);
+                    lProveedor = new ProveedorDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial);
                     cn.Close();
                 }
                 catch (Exception)
