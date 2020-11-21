@@ -15,7 +15,7 @@ namespace bilecom.be
         public int NroComprobante { get; set; }
         public string NroPedido { get; set; }
         public int ClienteId { get; set; }
-        
+        public ClienteBe Cliente { get; set; }
         public int PersonalId { get; set; }
         public PersonalBe Personal { get; set; }
         public int MonedaId { get; set; }

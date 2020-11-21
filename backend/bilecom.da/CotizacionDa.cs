@@ -10,10 +10,9 @@ using System.Threading.Tasks;
 
 namespace bilecom.da
 {
-    class CotizacionDa
+    public class CotizacionDa
     {
-        public List<CotizacionBe> fListar(SqlConnection cn, int EmpresaId, string NombresCompletosPersonal, string RazonSocial, 
-            DateTime FechaHoraEmisionDesde, DateTime FechaHoraEmisionHasta)
+        public List<CotizacionBe> fListar(SqlConnection cn, int EmpresaId, string NombresCompletosPersonal, string RazonSocial, DateTime FechaHoraEmisionDesde, DateTime FechaHoraEmisionHasta)
         {
             List<CotizacionBe> lCotizacion = null;
             using (SqlCommand cmd = new SqlCommand("usp_cotizacion_listar", cn))
@@ -37,7 +36,14 @@ namespace bilecom.da
                             item.Fila = dr.GetData<int>("Fila");
                             item.SerieId = dr.GetData<int>("SerieId");
                             item.NroComprobante = dr.GetData<int>("NroComprobante");
-
+                            item.NroPedido = dr.GetData<string>("NroPedido");
+                            item.FechaHoraEmision = dr.GetData<DateTime>("FechaHoraEmision");
+                            //Para personal antes de asignarlo hay que instanciar
+                            item.Personal = new PersonalBe();
+                            item.Personal.NombresCompletos = dr.GetData<string>("NombresCompletosPersonal");
+                            item.Cliente = new ClienteBe();
+                            item.Cliente.RazonSocial = dr.GetData<string>("RazonSocialCliente");
+                            item.CotizacionId = dr.GetData<int>("CotizacionId");
                             lCotizacion.Add(item);
                         }
                     }

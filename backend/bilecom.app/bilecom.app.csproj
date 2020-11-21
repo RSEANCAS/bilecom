@@ -44,6 +44,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.6.8.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.6.8.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.8.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.8.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -2776,7 +2788,12 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Api\Jwt\TokenGenerator.cs" />
+    <Compile Include="Controllers\Api\Jwt\TokenValidationHandler.cs" />
+    <Compile Include="Controllers\Api\UsuarioController.cs" />
+    <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -3092,6 +3109,7 @@
     <Content Include="Views\Producto\Mantenimiento.cshtml" />
     <Content Include="Views\Producto\MantenimientoCategoria.cshtml" />
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
+    <Content Include="Views\Cotizacion\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3102,8 +3120,21 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
-    <Folder Include="Controllers\Api\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
+      <Project>{E9F1604B-36AF-4C5D-A7A1-0F5125CD30AB}</Project>
+      <Name>bilecom.be</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.bl\bilecom.bl.csproj">
+      <Project>{12CC74E5-E96C-468F-8DB7-18BE7AB7067C}</Project>
+      <Name>bilecom.bl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
+      <Project>{8929A9EE-5864-4CFA-B7AE-3D6850945AB1}</Project>
+      <Name>bilecom.ut</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
