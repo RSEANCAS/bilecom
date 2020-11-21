@@ -11,7 +11,7 @@ namespace bilecom.da
 {
     public class ClienteDa
     {
-        public List<Cliente> fListar(SqlConnection cn, int empresaId)
+        public List<Cliente> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial)
         {
             List<Cliente> lCliente = new List<Cliente>();
             Cliente oCliente;
@@ -19,6 +19,8 @@ namespace bilecom.da
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
                 oCommand.Parameters.AddWithValue("@empresaId", empresaId);
+                oCommand.Parameters.AddWithValue("@nroDocumentoIdentidad", nroDocumentoIdentidad);
+                oCommand.Parameters.AddWithValue("@razonSocial", razonSocial);
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {
                     if(oDr.HasRows)
