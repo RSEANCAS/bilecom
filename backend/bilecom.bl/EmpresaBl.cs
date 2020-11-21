@@ -21,13 +21,25 @@ namespace bilecom.bl
                 cn.Open();
 
                 item = empresaDa.Obtener(empresaId, cn);
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cn.Close(); }
 
-                cn.Close();
-            }
-            catch (Exception ex)
+            return item;
+        }
+
+        public EmpresaBe ObtenerPorRuc(string ruc)
+        {
+            EmpresaBe item = null;
+
+            try
             {
-                throw ex;
+                cn.Open();
+
+                item = empresaDa.ObtenerPorRuc(ruc, cn);
             }
+            catch (Exception ex) { throw ex; }
+            finally { cn.Close(); }
 
             return item;
         }

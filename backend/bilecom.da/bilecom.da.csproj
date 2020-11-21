@@ -47,6 +47,7 @@
     <Compile Include="PersonalDa.cs" />
     <Compile Include="ProductoDa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioDa.cs" />
     <Compile Include="ProveedorDa.cs" />
     <Compile Include="SedeDa.cs" />
     <Compile Include="TipoSedeDa.cs" />
