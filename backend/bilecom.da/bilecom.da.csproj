@@ -41,11 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="CotizacionDa.cs" />
-=======
     <Compile Include="CategoriaProductoDa.cs" />
->>>>>>> 376a00755f6331d21a221b94219bb10102f3f4fe
     <Compile Include="ClienteDa.cs" />
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="PersonalDa.cs" />

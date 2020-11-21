@@ -43,11 +43,8 @@
   <ItemGroup>
     <Compile Include="Base.cs" />
     <Compile Include="CargoBe.cs" />
-<<<<<<< HEAD
     <Compile Include="CotizacionBe.cs" />
-=======
     <Compile Include="CategoriaProductoBe.cs" />
->>>>>>> 376a00755f6331d21a221b94219bb10102f3f4fe
     <Compile Include="Cliente.cs" />
     <Compile Include="EmpresaBe.cs" />
     <Compile Include="OpcionBe.cs" />
