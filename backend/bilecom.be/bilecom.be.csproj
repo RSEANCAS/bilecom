@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CargoBe.cs" />
+    <Compile Include="CategoriaProductoBe.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="EmpresaBe.cs" />
     <Compile Include="OpcionBe.cs" />

@@ -11,7 +11,7 @@ namespace bilecom.bl
 {
     public class SedeBl : Conexion
     {
-        public List<SedeBe> Listar(int empresaId)
+        public List<SedeBe> Listar(int empresaId, string nombre)
         {
             List<SedeBe> lSede = new List<SedeBe>();
             using (cn)
@@ -19,7 +19,7 @@ namespace bilecom.bl
                 try
                 {
                     cn.Open();
-                    lSede = new SedeDa().fListar(cn, empresaId);
+                    lSede = new SedeDa().fListar(cn, empresaId, nombre);
                     cn.Close();
                 }
                 catch (Exception)

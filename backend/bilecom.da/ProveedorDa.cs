@@ -11,14 +11,16 @@ namespace bilecom.da
 {
     public class ProveedorDa
     {
-        public List<ProveedorBe> fListar(SqlConnection cn, int proveedorId)
+        public List<ProveedorBe> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial)
         {
             List<ProveedorBe> lProveedor = new List<ProveedorBe>();
             ProveedorBe oProveedor;
             using (SqlCommand oCommand = new SqlCommand("usp_proveedor_listar", cn))
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.Parameters.AddWithValue("@proveedorId", proveedorId);
+                oCommand.Parameters.AddWithValue("@empresaId", empresaId);
+                oCommand.Parameters.AddWithValue("@nroDocumentoIdentidad", nroDocumentoIdentidad);
+                oCommand.Parameters.AddWithValue("@razonSocial", razonSocial);
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {
                     if(oDr.HasRows)

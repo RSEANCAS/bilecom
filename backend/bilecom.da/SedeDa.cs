@@ -12,7 +12,7 @@ namespace bilecom.da
 {
     public class SedeDa
     {
-        public List<SedeBe> fListar(SqlConnection cn, int empresaId)
+        public List<SedeBe> fListar(SqlConnection cn, int empresaId, string nombre)
         {
             List<SedeBe> lSede = new List<SedeBe>();
             SedeBe oSede;
@@ -20,6 +20,7 @@ namespace bilecom.da
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
                 oCommand.Parameters.AddWithValue("@empresaId", empresaId);
+                oCommand.Parameters.AddWithValue("@nombre", nombre);
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {
                     if (oDr.HasRows)

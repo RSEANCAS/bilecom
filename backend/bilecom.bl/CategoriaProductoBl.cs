@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace bilecom.bl
 {
-    public class ClienteBl : Conexion
+    public class CategoriaProductoBl : Conexion
     {
-        public List<Cliente> Listar(int empresaId , string nroDocumentoIdentidad, string razonSocial)
+        public List<CategoriaProductoBe> Listar(int empresaId, string nombre)
         {
-            List<Cliente> lCliente = new List<Cliente>();
+            List<CategoriaProductoBe> lCategoriaProducto = new List<CategoriaProductoBe>();
             using (cn)
             {
                 try
                 {
                     cn.Open();
-                    lCliente = new ClienteDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial);
+                    lCategoriaProducto = new CategoriaProductoDa().fListar(cn, empresaId, nombre);
                     cn.Close();
                 }
                 catch (Exception)
@@ -27,7 +27,7 @@ namespace bilecom.bl
                     throw;
                 }
             }
-            return lCliente;
+            return lCategoriaProducto;
         }
     }
 }
