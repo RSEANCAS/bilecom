@@ -1,4 +1,5 @@
 ﻿using bilecom.app.Controllers.Api.Jwt;
+using bilecom.be;
 using bilecom.bl;
 using bilecom.ut;
 using System;
@@ -40,18 +41,28 @@ namespace bilecom.app.Controllers.Api
             if (user == null)
                 return BadRequest($"El ruc {ruc} no se encuentra registrado.");
 
-
-
             bool isCredentialValid = Seguridad.CompareMD5(contraseña, user.Contrasena);
 
             if (isCredentialValid)
             {
                 var token = TokenGenerator.GenerateTokenJwt(user);
+
                 var response = new
                 {
-                    token,
-                    user
+                    Token = token,
+                    Usuario = new
+                    {
+                        Empresa = new
+                        {
+                            empresa.RazonSocial,
+                            empresa.Ruc,
+                            empresa.NombreComercial
+                        },
+                        NombreUsuario = user.Nombre,
+                        //Nombres = user.Personal.Nombres
+                    }
                 };
+
                 return Ok(response);
             }
             else

@@ -11,10 +11,14 @@ namespace bilecom.da
 {
     public class ClienteDa
     {
+<<<<<<< HEAD
+        public List<ClienteBe> fListar(SqlConnection cn, int empresaId)
+=======
         public List<Cliente> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial)
+>>>>>>> 376a00755f6331d21a221b94219bb10102f3f4fe
         {
-            List<Cliente> lCliente = new List<Cliente>();
-            Cliente oCliente;
+            List<ClienteBe> lCliente = new List<ClienteBe>();
+            ClienteBe oCliente;
             using (SqlCommand oCommand = new SqlCommand("dbo.usp_cliente_listar", cn))
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
@@ -27,7 +31,7 @@ namespace bilecom.da
                     {
                         if(oDr.Read())
                         {
-                            oCliente = new Cliente();
+                            oCliente = new ClienteBe();
                             if (!DBNull.Value.Equals(oDr["ClienteId"])) oCliente.ClientId = (int)oDr["ClienteId"];
                             if (!DBNull.Value.Equals(oDr["EmpresaId"])) oCliente.EmpresaId = (int)oDr["EmpresaId"];
                             if (!DBNull.Value.Equals(oDr["TipoDocumentoIdentidad"])) oCliente.TipoDocumento = (string)oDr["TipoDocumentoIdentidad"];
