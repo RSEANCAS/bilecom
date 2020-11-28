@@ -41,5 +41,51 @@ namespace bilecom.da
             return lCategoriaProducto;
 
         }
+        public bool CategoriaProductoGuardar(CategoriaProductoBe categoriaProductoBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_categoriaproducto_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId);
+                    oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId);
+                    oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre);
+                    oCommand.Parameters.AddWithValue("@CreadoPor", categoriaProductoBe.Usuario);
+                    oCommand.Parameters.AddWithValue("@FechaCreacion", categoriaProductoBe.Fecha);
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
+        public bool CategoriaProductoActualizar(CategoriaProductoBe categoriaProductoBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_categoriaproducto_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId);
+                    oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId);
+                    oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre);
+                    oCommand.Parameters.AddWithValue("@ModificadoPor", categoriaProductoBe.Usuario);
+                    oCommand.Parameters.AddWithValue("@FechaModificacio", categoriaProductoBe.Fecha);
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
     }
 }

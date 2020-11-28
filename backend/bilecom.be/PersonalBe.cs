@@ -12,7 +12,7 @@ namespace bilecom.be
         public int EmpresaId { get; set; }
         public int TipoDocumentoIdentidadId { get; set; }
         public string NroDocumentoIdentidad { get; set; }
-        public string Nombres { get; set; }
+        public string NombresCompletos { get; set; }
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
