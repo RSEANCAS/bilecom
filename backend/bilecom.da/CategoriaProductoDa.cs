@@ -52,8 +52,7 @@ namespace bilecom.da
                     oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId.GetNullable());
                     oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId.GetNullable());
                     oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre.GetNullable());
-                    oCommand.Parameters.AddWithValue("@CreadoPor", categoriaProductoBe.Usuario.GetNullable());
-                    oCommand.Parameters.AddWithValue("@FechaCreacion", categoriaProductoBe.Fecha.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Usuario", categoriaProductoBe.Usuario.GetNullable());
                     int result = oCommand.ExecuteNonQuery();
                     if (result > 0) respuesta = true;
                 }
