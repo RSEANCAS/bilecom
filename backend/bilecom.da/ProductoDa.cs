@@ -50,11 +50,11 @@ namespace bilecom.da
                 using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId);
-                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId);
-                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre);
-                    oCommand.Parameters.AddWithValue("@CreadoPor", productoBe.Usuario);
-                    oCommand.Parameters.AddWithValue("@FechaCreacion", productoBe.Fecha);
+                    oCommand.Parameters.AddWithValue("@EmpresaId", productoBe.EmpresaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable());
 
                     int result = oCommand.ExecuteNonQuery();
                     if (result > 0) respuesta = true;
@@ -74,11 +74,10 @@ namespace bilecom.da
                 using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId);
-                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId);
-                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre);
-                    oCommand.Parameters.AddWithValue("@ModificadoPor", productoBe.Usuario);
-                    oCommand.Parameters.AddWithValue("@FechaModificación", productoBe.Fecha);
+                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable().GetNullable());
 
                     int result = oCommand.ExecuteNonQuery();
                     if (result > 0) respuesta = true;

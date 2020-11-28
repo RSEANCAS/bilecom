@@ -13,7 +13,7 @@
             <h2 class="page-header text-overflow">Nuevo Producto</h2>
         </div>
     </div>
-    <form action="#" id="form-producto-mantimiento" name="form-producto-mantimiento" method="post">
+    <form id="frm-producto-mantenimiento" name="frm-producto-mantenimiento" method="post">
         <div id="page-content">
             <div class="panel">
                 <div class="panel-body">
@@ -38,10 +38,10 @@
 
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
+                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar">Cancelar</button>
+                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -49,5 +49,14 @@
         </div>
     </form>
 </div>
-<script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
-<script src="@Url.Content("~/Assets/js/demo/ProductoMantenimiento.js")"></script>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientoproducto.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
+    <script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pageMantenimientoProducto.Init();
+        });
+    </script>
+}
