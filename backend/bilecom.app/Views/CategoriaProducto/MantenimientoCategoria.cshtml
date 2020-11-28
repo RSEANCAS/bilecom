@@ -12,7 +12,7 @@
             <h2 class="page-header text-overflow">Nueva Categoria</h2>
         </div>
     </div>
-    <form action="#" id="form-personal-mantimiento" name="form-categoria-mantimiento" method="post">
+    <form id="form-categoriaproducto-mantimiento" name="form-categoriaproducto-mantimiento" method="post">
         <div id="page-content">
             <div class="panel">
                 <div class="panel-body">
@@ -28,7 +28,7 @@
                         <div class="col-sm-6">
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
+                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
                             <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar">Cancelar</button>
@@ -40,4 +40,12 @@
     </form>
 </div>
 <script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
-<script src="@Url.Content("~/Assets/js/demo/CategoriaMantenimiento.js")"></script>
+<script src="@Url.Content("~/Assets/js/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+<script src="@Url.Content("~/Assets/js/pages/mantenimientocategoriaproducto.js")"></script>
+<script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pageMantenimientoCategoriaProducto.Init();
+        });
+</script>
