@@ -9,17 +9,17 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/cliente")]
-    public class ClienteController : ApiController
+    [RoutePrefix("api/proveedor")]
+    public class ProveedorController : ApiController
     {
         [HttpPost]
         [Route("guardar")]
-        public bool Guardar(ClienteBe clienteBe)
+        public bool Guardar(ProveedorBe proveedorBe)
         {
             bool respuesta = false;
             try
             {
-                respuesta = new ClienteBl().ClienteGuardar(clienteBe);
+                respuesta = new ProveedorBl().ProveedorGuardar(proveedorBe);
             }
             catch (Exception ex)
             {

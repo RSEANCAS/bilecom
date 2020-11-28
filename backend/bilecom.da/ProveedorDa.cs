@@ -1,4 +1,5 @@
 ﻿using bilecom.be;
+using bilecom.ut;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,6 +40,33 @@ namespace bilecom.da
             }
 
             return lProveedor;
+        }
+
+        public bool ProveedorGuardar(ProveedorBe proveedorBe, SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_proveedor_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@EmpresaId", proveedorBe.EmpresaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@ProveedorId", proveedorBe.ProveedorId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@TipoDocumentoIdentidad", proveedorBe.TipoDocumentoIdentidad.GetNullable());
+                    oCommand.Parameters.AddWithValue("@NroDocumentoIdentidad", proveedorBe.NroDocumentoIdentidad.GetNullable());
+                    oCommand.Parameters.AddWithValue("@RazonSocial", proveedorBe.RazonSocial.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Usuario", proveedorBe.Usuario.GetNullable());
+
+
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
         }
     }
 }

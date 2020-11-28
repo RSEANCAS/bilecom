@@ -8,7 +8,7 @@ namespace bilecom.be
 {
     public class ClienteBe
     {
-        public int ClientId { get; set; }
+        public int ClienteId { get; set; }
         public int EmpresaId { get; set; }
         public string TipoDocumento { get; set; }
         public string NroDocumentoIdentidad { get; set; }
@@ -18,6 +18,7 @@ namespace bilecom.be
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
+        public string Usuario { get; set; }
 
     }
 }
