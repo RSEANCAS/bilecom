@@ -52,14 +52,13 @@ namespace bilecom.app.Controllers.Api
                     Token = token,
                     Usuario = new
                     {
+                        Nombre = user.Nombre,
                         Empresa = new
                         {
                             empresa.RazonSocial,
                             empresa.Ruc,
                             empresa.NombreComercial
                         },
-                        NombreUsuario = user.Nombre,
-                        //Nombres = user.Personal.Nombres
                     }
                 };
 
