@@ -11,11 +11,7 @@ namespace bilecom.da
 {
     public class ClienteDa
     {
-<<<<<<< HEAD
-        public List<ClienteBe> fListar(SqlConnection cn, int empresaId)
-=======
-        public List<Cliente> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial)
->>>>>>> 376a00755f6331d21a221b94219bb10102f3f4fe
+        public List<ClienteBe> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial)
         {
             List<ClienteBe> lCliente = new List<ClienteBe>();
             ClienteBe oCliente;

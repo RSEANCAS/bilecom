@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class Cliente
+    public class ClienteBe
     {
         // Definir los atributos que tiene la clase o tabla
         public int ClientId { get; set; }

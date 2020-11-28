@@ -43,9 +43,9 @@
   <ItemGroup>
     <Compile Include="Base.cs" />
     <Compile Include="CargoBe.cs" />
+    <Compile Include="ClienteBe.cs" />
     <Compile Include="CotizacionBe.cs" />
     <Compile Include="CategoriaProductoBe.cs" />
-    <Compile Include="Cliente.cs" />
     <Compile Include="EmpresaBe.cs" />
     <Compile Include="OpcionBe.cs" />
     <Compile Include="PerfilBe.cs" />
