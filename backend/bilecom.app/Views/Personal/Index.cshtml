@@ -38,13 +38,13 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label">N° Doc. Identidad</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" id="txt-numero-documento-identidad">
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Nombres Completos</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" id="txt-nombres-completos">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -52,7 +52,7 @@
                             <label class="control-label">&nbsp;</label>
                             <div class="clear"></div>
                             <button class="btn btn-primary" type="submit">Nuevo</button>
-                            <button class="btn btn-primary" type="submit">Buscar</button>
+                            <button class="btn btn-primary" type="submit" id="btn-buscar">Buscar</button>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                             <td>Edinburgh</td>
                             <td>61</td>
                             <td>
-                                <input id="demo-form-checkbox-1" class="magic-checkbox" type="checkbox" >
+                                <input id="demo-form-checkbox-1" class="magic-checkbox" type="checkbox">
                                 <label for="demo-form-checkbox-1"></label>
                                 <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
                                 <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
@@ -90,7 +90,7 @@
                             <td>Tokyo</td>
                             <td>63</td>
                             <td>
-                                <input id="demo-form-checkbox-2" class="magic-checkbox" type="checkbox" >
+                                <input id="demo-form-checkbox-2" class="magic-checkbox" type="checkbox">
                                 <label for="demo-form-checkbox-2"></label>
                                 <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
                                 <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
@@ -102,7 +102,7 @@
                             <td>Tokyo</td>
                             <td>63</td>
                             <td>
-                                <input id="demo-form-checkbox-3" class="magic-checkbox" type="checkbox" >
+                                <input id="demo-form-checkbox-3" class="magic-checkbox" type="checkbox">
                                 <label for="demo-form-checkbox-3"></label>
                                 <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
                                 <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
@@ -126,6 +126,14 @@
     <!--End page content-->
 
 </div>
-
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/js/pages/personal.js")"></script>
+    <script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pagePersonal.Init();
+        });
+    </script>
+}
 
 

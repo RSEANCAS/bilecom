@@ -34,7 +34,7 @@ namespace bilecom.da
                             if (!DBNull.Value.Equals(oDr["EmpresaId"])) oPersonal.EmpresaId = (int)oDr["EmpresaId"];
                             if (!DBNull.Value.Equals(oDr["TipoDocumentoIdentidadId"])) oPersonal.TipoDocumentoIdentidadId = (int)oDr["TipoDocumentoIdentidadId"];
                             if (!DBNull.Value.Equals(oDr["NroDocumentoIdentidad"])) oPersonal.NroDocumentoIdentidad = (string)oDr["NroDocumentoIdentidad"];
-                            if (!DBNull.Value.Equals(oDr["NombresCompletos"])) oPersonal.Nombres = (string)oDr["NombresCompletos"];
+                            if (!DBNull.Value.Equals(oDr["NombresCompletos"])) oPersonal.NombresCompletos = (string)oDr["NombresCompletos"];
                             if (!DBNull.Value.Equals(oDr["Direccion"])) oPersonal.Direccion = (string)oDr["Direccion"];
                             if (!DBNull.Value.Equals(oDr["Correo"])) oPersonal.Correo = (string)oDr["Correo"];
                             if (!DBNull.Value.Equals(oDr["FlagActivo"])) oPersonal.FlagActivo = (bool)oDr["FlagActivo"];

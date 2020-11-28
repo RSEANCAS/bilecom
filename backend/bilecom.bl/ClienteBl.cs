@@ -10,9 +10,9 @@ namespace bilecom.bl
 {
     public class ClienteBl : Conexion
     {
-        public List<Cliente> Listar(int empresaId , string nroDocumentoIdentidad, string razonSocial)
+        public List<ClienteBe> Listar(int empresaId , string nroDocumentoIdentidad, string razonSocial)
         {
-            List<Cliente> lCliente = new List<Cliente>();
+            List<ClienteBe> lCliente = new List<ClienteBe>();
             using (cn)
             {
                 try

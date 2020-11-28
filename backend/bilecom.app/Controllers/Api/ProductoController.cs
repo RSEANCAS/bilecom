@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
+    [RoutePrefix("api/Producto")]
     public class ProductoController : ApiController
     {
         public bool ProductoGuardar(ProductoBe productoBe)
@@ -37,6 +38,12 @@ namespace bilecom.app.Controllers.Api
                 respuesta = false;
             }
             return respuesta;
+        }
+        [HttpGet]
+        [Route("Listar/{empresaId}/{nroDocumentoIdentidad}/{nombresCompletos}")]
+        public List<ProductoBe> Listar(int empresaId, string nombre, string categoriaNombre)
+        {
+            return new ProductoBl().Listar(categoriaNombre, nombre, empresaId);
         }
     }
 }

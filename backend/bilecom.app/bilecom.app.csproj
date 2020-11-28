@@ -375,6 +375,7 @@
     <Content Include="Assets\js\nifty.min.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
+    <Content Include="Assets\js\pages\personal.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
     <Content Include="Assets\plugins\animate-css\LICENSE.txt" />
@@ -2865,9 +2866,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="obj\Debug\bilecom.app.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\bilecom.app.dll" />
-    <Content Include="obj\Debug\bilecom.app.pdb" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="bin\bilecom.app.dll.config" />
@@ -2897,9 +2895,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\Api\PersonalController.cs" />
     <Compile Include="Controllers\Api\ProductoController.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenGenerator.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenValidationHandler.cs" />
+    <Compile Include="Controllers\Api\ProveedorController.cs" />
+    <Compile Include="Controllers\Api\SedeController.cs" />
+    <Compile Include="Controllers\Api\TipoSedeController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
@@ -3231,7 +3233,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
-    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">

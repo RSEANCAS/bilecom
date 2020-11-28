@@ -9,9 +9,10 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
+    [RoutePrefix("api/categoriaproducto")]
     public class CategoriaProductoController : ApiController
     {
-        public bool CategoriaProductoGuardar(CategoriaProductoBe categoriaProductoBe)
+        public bool Guardar(CategoriaProductoBe categoriaProductoBe)
         {
             bool respuesta = false;
             try
@@ -25,7 +26,7 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
-        public bool CategoriaProductoActualizar(CategoriaProductoBe categoriaProductoBe)
+        public bool Actualizar(CategoriaProductoBe categoriaProductoBe)
         {
             bool respuesta = false;
             try
@@ -37,6 +38,12 @@ namespace bilecom.app.Controllers.Api
                 respuesta = false;
             }
             return respuesta;
+        }
+        [HttpGet]
+        [Route("Listar/{empresaId}/{nombre}")]
+        public List<CategoriaProductoBe> Listar(int empresaId, string nombre)
+        {
+            return new CategoriaProductoBl().Listar(empresaId, nombre);
         }
     }
 }

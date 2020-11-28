@@ -62,6 +62,7 @@
             .then(pageLogin.ResponseEnviarFormulario);
     },
     ResponseEnviarFormulario: function (data) {
+        if((data || '') != '')
         console.log(data);
     }
 }

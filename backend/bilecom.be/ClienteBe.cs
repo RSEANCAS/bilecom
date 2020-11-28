@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class Cliente
+    public class ClienteBe
     {
         public int ClientId { get; set; }
         public int EmpresaId { get; set; }
