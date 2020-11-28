@@ -18,9 +18,32 @@ namespace bilecom.app.Controllers.Api
         EmpresaBl empresaBl = new EmpresaBl();
         UsuarioBl usuarioBl = new UsuarioBl();
 
+        [HttpGet]
+        [Route("validar-usuario")]
+        public IHttpActionResult ValidarUsuario(string ruc, string usuario)
+        {
+            if (string.IsNullOrEmpty((ruc ?? "").Trim()))
+                return BadRequest("El ruc está vacío.");
+
+            if (string.IsNullOrEmpty((usuario ?? "").Trim()))
+                return BadRequest("El usuario está vacío.");
+
+            var empresa = empresaBl.ObtenerPorRuc(ruc);
+
+            if (empresa == null)
+                return BadRequest($"El ruc {ruc} no se encuentra registrado.");
+
+            var user = usuarioBl.ObtenerPorNombre(usuario, empresa.EmpresaId);
+
+            if (user == null)
+                return BadRequest($"El usuario {usuario} no se encuentra registrado.");
+
+            return Ok(true);
+        }
+
         [HttpPost]
         [Route("autenticar")]
-        public IHttpActionResult Authenticate(string ruc, string usuario, string contraseña)
+        public IHttpActionResult Autenticar(string ruc, string usuario, string contraseña)
         {
             if (string.IsNullOrEmpty((ruc ?? "").Trim()))
                 return BadRequest("El ruc está vacío.");

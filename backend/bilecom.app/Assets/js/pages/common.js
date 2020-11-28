@@ -5,6 +5,6 @@
     },
     ObtenerUsuario() {
         let user = localStorage['ls.us'];
-        return user == null ? null : user;
+        return user == null ? null : JSON.parse(user);
     }
 }

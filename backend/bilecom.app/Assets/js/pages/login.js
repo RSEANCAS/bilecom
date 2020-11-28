@@ -1,5 +1,6 @@
 ﻿const pageLogin = {
     Init: function () {
+        this.ValidarCuentaLogueada();
         this.Validar();
         this.InitEvents();
     },
@@ -68,8 +69,9 @@
     },
     ResponseEnviarFormulario: function (data) {
         if (data != null) {
-            localStorage['ls.us'] = data.Usuario;
+            localStorage['ls.us'] = JSON.stringify(data.Usuario);
             localStorage['ls.tk'] = data.Token;
         }
+        this.ValidarCuentaLogueada();
     }
 }
