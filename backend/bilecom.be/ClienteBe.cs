@@ -8,6 +8,7 @@ namespace bilecom.be
 {
     public class Cliente
     {
+        // Definir los atributos que tiene la clase o tabla
         public int ClientId { get; set; }
         public int EmpresaId { get; set; }
         public string TipoDocumento { get; set; }
@@ -18,6 +19,8 @@ namespace bilecom.be
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
+        public string Usuario { get; set; } // referencia a creadoPor y modificadoPor de la tabla Cliente.
+        public DateTime Fecha { get; set; }
 
     }
 }

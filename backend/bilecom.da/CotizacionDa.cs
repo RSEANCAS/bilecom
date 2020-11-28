@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// En el DA van los métodos a ser llamados por el BL
 namespace bilecom.da
 {
     public class CotizacionDa

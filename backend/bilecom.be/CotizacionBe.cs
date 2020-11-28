@@ -8,6 +8,7 @@ namespace bilecom.be
 {
     public class CotizacionBe:Base
     {
+        // Definir los atributos que tiene la clase o tabla
         public int CotizacionId { get; set; }
         public int EmpresaId { get; set; }
         public DateTime FechaHoraEmision { get; set; }

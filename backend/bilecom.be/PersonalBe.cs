@@ -8,6 +8,7 @@ namespace bilecom.be
 {
     public class PersonalBe
     {
+        // Definir los atributos que tiene la clase
         public int PersonalId { get; set; }
         public int EmpresaId { get; set; }
         public int TipoDocumentoIdentidadId { get; set; }
