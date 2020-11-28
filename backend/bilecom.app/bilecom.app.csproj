@@ -2791,6 +2791,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\Api\EmpresaController.cs" />
     <Compile Include="Controllers\Api\ProductoController.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenGenerator.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenValidationHandler.cs" />

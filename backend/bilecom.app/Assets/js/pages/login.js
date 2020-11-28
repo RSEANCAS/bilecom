@@ -72,6 +72,6 @@
             localStorage['ls.us'] = JSON.stringify(data.Usuario);
             localStorage['ls.tk'] = data.Token;
         }
-        this.ValidarCuentaLogueada();
+        pageLogin.ValidarCuentaLogueada();
     }
 }

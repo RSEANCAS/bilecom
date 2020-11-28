@@ -62,7 +62,7 @@ namespace bilecom.app.Controllers.Api
             var user = usuarioBl.ObtenerPorNombre(usuario, empresa.EmpresaId);
 
             if (user == null)
-                return BadRequest($"El ruc {ruc} no se encuentra registrado.");
+                return BadRequest($"El usuario {usuario} no se encuentra registrado.");
 
             bool isCredentialValid = Seguridad.CompareMD5(contraseña, user.Contrasena);
 
@@ -78,6 +78,7 @@ namespace bilecom.app.Controllers.Api
                         Nombre = user.Nombre,
                         Empresa = new
                         {
+                            empresa.EmpresaId,
                             empresa.RazonSocial,
                             empresa.Ruc,
                             empresa.NombreComercial
