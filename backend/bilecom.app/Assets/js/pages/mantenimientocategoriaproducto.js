@@ -10,7 +10,7 @@
         $("#frm-categoriaproducto-mantenimiento")
             .bootstrapValidator({
                 fields: {
-                    "txt-categoria": {
+                    "txt-nombre": {
                         validators: {
                             notEmpty: {
                                 message: "Debe ingresar Categoria.",
@@ -26,6 +26,7 @@
     },
     EnviarFormulario: function () {
         let nombre = $("#txt-nombre").val();
+
         let ObjectoJson = {
             EmpresaId: 1,
             CategoriaProductoId: 0,
@@ -44,6 +45,11 @@
             .then(pageMantenimientoCategoriaProducto.ResponseEnviarFormulario);
     },
     ResponseEnviarFormulario: function (data) {
-        console.log(data);
+        if (data == true) {
+            alert("Se ha guardado con éxito.");
+            location.href = "Index";
+        } else {
+            alert("No se pudo guardar la categoria intentelo otra vez.");
+        }
     }
 }
