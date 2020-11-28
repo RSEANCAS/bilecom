@@ -6,6 +6,11 @@
     InitEvents: function () {
 
     },
+    ValidarCuentaLogueada: function () {
+        let token = common.ObtenerToken();
+
+        if (token != null) location.href = `${urlRoot}`;
+    },
     Validar: function () {
         $("#frm-login")
             .bootstrapValidator({
@@ -62,7 +67,9 @@
             .then(pageLogin.ResponseEnviarFormulario);
     },
     ResponseEnviarFormulario: function (data) {
-        if((data || '') != '')
-        console.log(data);
+        if (data != null) {
+            localStorage['ls.us'] = data.Usuario;
+            localStorage['ls.tk'] = data.Token;
+        }
     }
 }
