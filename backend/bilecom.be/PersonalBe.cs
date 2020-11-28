@@ -16,9 +16,8 @@ namespace bilecom.be
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
-        public string CreadoPor { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public string ModificadoPor { get; set; }
-        public DateTime FechaModificacion { get; set; }
+        public string Usuario { get; set; }
+        public DateTime Fecha { get; set; }
+        public string DistritoId { get; set; }
     }
 }
