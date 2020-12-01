@@ -11,6 +11,7 @@ namespace bilecom.be
         public int PersonalId { get; set; }
         public int EmpresaId { get; set; }
         public int TipoDocumentoIdentidadId { get; set; }
+        public TipoDocumentoIdentidadBe TipoDocumentoIdentidad { get; set; }
         public string NroDocumentoIdentidad { get; set; }
         public string NombresCompletos { get; set; }
         public string Direccion { get; set; }

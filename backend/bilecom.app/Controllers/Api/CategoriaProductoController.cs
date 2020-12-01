@@ -41,5 +41,11 @@ namespace bilecom.app.Controllers.Api
             }
             return respuesta;
         }
+        [HttpGet]
+        [Route("Listar/{empresaId}/{nombre}")]
+        public List<CategoriaProductoBe> Listar(int empresaId, string nombre)
+        {
+            return new CategoriaProductoBl().Listar(empresaId, nombre);
+        }
     }
 }

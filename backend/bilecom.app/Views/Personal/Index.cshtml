@@ -2,7 +2,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+}
 <div id="content-container">
     <div id="page-head">
 
@@ -38,13 +41,13 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label class="control-label">N° Doc. Identidad</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" id="txt-numero-documento-identidad">
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Nombres Completos</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" id="txt-nombres-completos">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -61,61 +64,17 @@
 
         <div class="panel">
             <div class="panel-body">
-                <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="tbl-lista" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th rowspan="1" colspan="1" style="width:25px">N°</th>
-                            <th>Tipo Doc. Ident.</th>
-                            <th class="min-tablet">N° Doc. Ident.</th>
-                            <th class="min-tablet">Nombres Completos</th>
-                            <th class="min-desktop" rowspan="1" colspan="1" style="width:130px">Opciones</th>
+                            <th style="width:25px" data-column="PersonalId">N°</th>
+                            <th data-column="PersonalId">Tipo Doc. Ident.</th>
+                            <th class="min-tablet" data-column="PersonalId">N° Doc. Ident.</th>
+                            <th class="min-tablet" data-column="PersonalId">Nombres Completos</th>
+                            <th class="min-desktop" style="width:130px" data-column="PersonalId">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>
-                                <input id="demo-form-checkbox-1" class="magic-checkbox" type="checkbox" >
-                                <label for="demo-form-checkbox-1"></label>
-                                <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
-                                <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>
-                                <input id="demo-form-checkbox-2" class="magic-checkbox" type="checkbox" >
-                                <label for="demo-form-checkbox-2"></label>
-                                <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
-                                <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>
-                                <input id="demo-form-checkbox-3" class="magic-checkbox" type="checkbox" >
-                                <label for="demo-form-checkbox-3"></label>
-                                <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
-                                <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -126,6 +85,16 @@
     <!--End page content-->
 
 </div>
-
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/personal.js")"></script>
+    <script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pagePersonal.Init();
+        });
+    </script>
+}
 
 

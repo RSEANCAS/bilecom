@@ -12,6 +12,12 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/proveedor")]
     public class ProveedorController : ApiController
     {
+        [HttpGet]
+        [Route("listar/{empresaId}/{nroDocumentoIdentidad}/{razonSococial}")]
+        public List<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial)
+        {
+            return new ProveedorBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial);
+        }
         [HttpPost]
         [Route("guardar")]
         public bool Guardar(ProveedorBe proveedorBe)

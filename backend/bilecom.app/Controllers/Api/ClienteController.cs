@@ -9,9 +9,15 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/cliente")]
+    [RoutePrefix("api/Cliente")]
     public class ClienteController : ApiController
     {
+        [HttpGet]
+        [Route("Listar/{empresaId}/{nroDocumentoIdentidad}/{razonSocial}")]
+        public List<ClienteBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial)
+        {
+            return new ClienteBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial);
+        }
         [HttpPost]
         [Route("guardar")]
         public bool Guardar(ClienteBe clienteBe)
