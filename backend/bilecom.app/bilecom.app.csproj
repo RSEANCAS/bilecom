@@ -373,6 +373,7 @@
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\nifty.js" />
     <Content Include="Assets\js\nifty.min.js" />
+    <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\personal.js" />
@@ -2866,8 +2867,14 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="obj\Debug\bilecom.app.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\bilecom.app.dll" />
+    <Content Include="obj\Debug\bilecom.app.pdb" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="obj\Debug\bilecom.app.csproj.CopyComplete" />
+    <Content Include="obj\Debug\bilecom.app.csprojAssemblyReference.cache" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="bin\bilecom.app.dll.config" />
     <Content Include="bin\roslyn\csc.exe.config" />
     <Content Include="bin\roslyn\csc.rsp" />
@@ -2896,6 +2903,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
     <Compile Include="Controllers\Api\PersonalController.cs" />
+    <Compile Include="Controllers\Api\EmpresaController.cs" />
     <Compile Include="Controllers\Api\ProductoController.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenGenerator.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenValidationHandler.cs" />
@@ -3233,6 +3241,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">

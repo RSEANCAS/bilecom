@@ -7,10 +7,10 @@
         
     },
     Validar: function (){
-        $("#form-categoriaproducto-mantimiento")
+        $("#frm-categoriaproducto-mantenimiento")
             .bootstrapValidator({
                 fields: {
-                    "txt-categoria": {
+                    "txt-nombre": {
                         validators: {
                             notEmpty: {
                                 message: "Debe ingresar Categoria.",
@@ -26,14 +26,13 @@
     },
     EnviarFormulario: function () {
         let nombre = $("#txt-nombre").val();
+
         let ObjectoJson = {
-            categoriaProductoBe: {
-                EmpresaId : '10762193987',
-                CategoriaProductoId : 0,
-                Nombre: nombre ,
-                Usuario: 'pepe lucho',
-                Fecha: Date.now
-            }
+            EmpresaId: 1,
+            CategoriaProductoId: 0,
+            Nombre: nombre,
+            Usuario: 'pepe lucho',
+            Fecha: new Date()
         }
 
         let url = `${urlRoot}api/categoriaproducto/guardar`;
@@ -43,9 +42,14 @@
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageLogin.ResponseEnviarFormulario);
+            .then(pageMantenimientoCategoriaProducto.ResponseEnviarFormulario);
     },
     ResponseEnviarFormulario: function (data) {
-        console.log(data);
+        if (data == true) {
+            alert("Se ha guardado con éxito.");
+            location.href = "Index";
+        } else {
+            alert("No se pudo guardar la categoria intentelo otra vez.");
+        }
     }
 }

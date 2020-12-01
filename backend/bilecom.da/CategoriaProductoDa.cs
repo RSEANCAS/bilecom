@@ -49,11 +49,10 @@ namespace bilecom.da
                 using (SqlCommand oCommand = new SqlCommand("dbo.usp_categoriaproducto_guardar", cn))
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId);
-                    oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId);
-                    oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre);
-                    oCommand.Parameters.AddWithValue("@CreadoPor", categoriaProductoBe.Usuario);
-                    oCommand.Parameters.AddWithValue("@FechaCreacion", categoriaProductoBe.Fecha);
+                    oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Usuario", categoriaProductoBe.Usuario.GetNullable());
                     int result = oCommand.ExecuteNonQuery();
                     if (result > 0) respuesta = true;
                 }
