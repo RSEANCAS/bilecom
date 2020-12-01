@@ -58,5 +58,35 @@ namespace bilecom.da
 
             return lPersonal;
         }
+
+        public bool PersonalGuardar(PersonalBe personalBe,SqlConnection cn)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.[usp_personal_guardar]", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@PersonalId", personalBe.PersonalId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@EmpresaId", personalBe.EmpresaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@TipoDocumentoIdentidadId", personalBe.TipoDocumentoIdentidadId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@NroDocumentoIdentidad", personalBe.NroDocumentoIdentidad.GetNullable());
+                    oCommand.Parameters.AddWithValue("@NombresCompletos", personalBe.NombresCompletos.GetNullable());
+                    oCommand.Parameters.AddWithValue("@DistritoId", personalBe.DistritoId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Direccion", personalBe.Direccion.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Correo", personalBe.Correo.GetNullable());
+                    oCommand.Parameters.AddWithValue("@FlagActivo", personalBe.FlagActivo.GetNullable());
+                    oCommand.Parameters.AddWithValue("@Usuario", personalBe.Usuario.GetNullable());
+
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
     }
 }

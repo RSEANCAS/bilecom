@@ -9,9 +9,11 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/Producto")]
+    [RoutePrefix("api/producto")]
     public class ProductoController : ApiController
     {
+        [HttpPost]
+        [Route("guardar")]
         public bool ProductoGuardar(ProductoBe productoBe)
         {
             bool respuesta = false;

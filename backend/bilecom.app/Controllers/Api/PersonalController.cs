@@ -27,7 +27,21 @@ namespace bilecom.app.Controllers.Api
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
-                
+        }
+        [HttpPost]
+        [Route("guardar")]
+        public bool Guardar(PersonalBe personalBe)
+        {
+            bool respuesta = false;
+            try
+            {
+                respuesta = new PersonalBl().PersonalGuardar(personalBe);
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
         }
     }
 }

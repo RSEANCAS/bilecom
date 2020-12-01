@@ -1,13 +1,13 @@
-﻿const pageMantenimientoCategoriaProducto = {
+﻿const pageMantenimientoProducto = {
     Init: function () {
         this.Validar();
         this.InitEvents();
     },
     InitEvents: function () {
-        
+
     },
-    Validar: function (){
-        $("#frm-categoriaproducto-mantenimiento")
+    Validar: function () {
+        $("#frm-producto-mantenimiento")
             .bootstrapValidator({
                 fields: {
                     "txt-nombre": {
@@ -21,7 +21,7 @@
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoCategoriaProducto.EnviarFormulario();
+                pageMantenimientoProducto.EnviarFormulario();
             });
     },
     EnviarFormulario: function () {
@@ -30,20 +30,21 @@
         let user = common.ObtenerUsuario().Nombre;
 
         let ObjectoJson = {
-            EmpresaId: empresaId,
-            CategoriaProductoId: 0,
+            EmpresaId : empresaId,
+            ProductoId :0,
+            CategoriaId :1,
             Nombre: nombre,
-            Usuario: user
+            Usuario : user
         }
 
-        let url = `${urlRoot}api/categoriaproducto/guardar`;
+        let url = `${urlRoot}api/producto/guardar`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
-        let init = { method: 'POST',body: params , headers};
+        let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoCategoriaProducto.ResponseEnviarFormulario);
+            .then(pageMantenimientoProducto.ResponseEnviarFormulario);
     },
     ResponseEnviarFormulario: function (data) {
         if (data == true) {
