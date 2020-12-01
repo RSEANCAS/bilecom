@@ -18,6 +18,7 @@ namespace bilecom.app.Controllers.Api
         {
             return new ClienteBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial);
         }
+        
         [HttpPost]
         [Route("guardar")]
         public bool Guardar(ClienteBe clienteBe)

@@ -2908,7 +2908,6 @@
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
     <Compile Include="Controllers\Api\PersonalController.cs" />
     <Compile Include="Controllers\Api\EmpresaController.cs" />
-    <Compile Include="Controllers\Api\PersonalController.cs" />
     <Compile Include="Controllers\Api\ProductoController.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenGenerator.cs" />
     <Compile Include="Controllers\Api\Jwt\TokenValidationHandler.cs" />
