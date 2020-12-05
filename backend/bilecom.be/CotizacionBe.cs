@@ -8,6 +8,7 @@ namespace bilecom.be
 {
     public class CotizacionBe:Base
     {
+        // Definir los atributos que tiene la clase o tabla
         public int CotizacionId { get; set; }
         public int EmpresaId { get; set; }
         public DateTime FechaHoraEmision { get; set; }
@@ -25,5 +26,7 @@ namespace bilecom.be
         public DateTime FechaCreacion { get; set; }
         public string ModificadoPor { get; set; }
         public DateTime FechaModificacion { get; set; }
+        public List<CotizacionDetalleBe> ListaCotizacionDetalle { get; set; }
     }
+    
 }
