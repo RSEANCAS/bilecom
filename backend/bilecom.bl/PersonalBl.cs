@@ -32,6 +32,21 @@ namespace bilecom.bl
             return lPersonal;
         }
 
+        public PersonalBe PersonalObtener(int EmpresaId, int PersonalId)
+        {
+            PersonalBe respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = new PersonalDa().PersonalObtener(EmpresaId, PersonalId,cn);
+                cn.Close();
+            }
+            catch(Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
         public bool PersonalGuardar(PersonalBe personalBe)
         {
             bool respuesta = false;

@@ -28,6 +28,13 @@ namespace bilecom.app.Controllers.Api
                 recordsTotal = totalRegistros
             };
         }
+        [HttpGet]
+        [Route("obtener")]
+        public PersonalBe PersonalObtener(int EmpresaId, int PersonalId)
+        {
+            return new PersonalBl().PersonalObtener(EmpresaId, PersonalId);
+        }
+
         [HttpPost]
         [Route("guardar")]
         public bool Guardar(PersonalBe personalBe)
