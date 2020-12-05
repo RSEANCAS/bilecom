@@ -15,14 +15,14 @@ namespace bilecom.app.Controllers.Api
     {
         [HttpGet]
         [Route("listar")]
-        public DataPaginate<SedeBe> Listar(int empresaId, string nombre, int pagina = 1, int cantidadRegistros = 10, string columnaOrden = "SedeId", string ordenMax = "ASC")
+        public DataPaginate<SedeBe> Listar(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "SedeId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = new SedeBl().Listar(empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
+            var lista = new SedeBl().Listar(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
             return new DataPaginate<SedeBe>
             {
                 data = lista,
-                draw = 1,
+                draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };

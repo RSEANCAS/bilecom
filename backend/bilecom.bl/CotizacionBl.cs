@@ -49,7 +49,7 @@ namespace bilecom.bl
                         {
                             foreach(var item in cotizacion.ListaCotizacionDetalle)
                             {
-                                seGuardo = new 
+                                //seGuardo = new 
                             }
                         }
                     }

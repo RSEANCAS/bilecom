@@ -37,7 +37,7 @@
         $(id).dataTable({
             serverSide: true,
             ajax: `${urlRoot}api/proveedor/listar?empresaId=${empresaId}&nroDocumentoIdentidad=${pageProveedor.ObtenerNroDocumentoIdentidad()}&razonSocial=${pageProveedor.ObtenerNombres()}`,
-            destroy: true,
+            //destroy: true,
             //data: data,
             columns: [
                 { data: "ProveedorId" },

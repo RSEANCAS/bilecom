@@ -44,13 +44,13 @@ namespace bilecom.app.Controllers.Api
         }
         [HttpGet]
         [Route("listar")]
-        public DataPaginate<ProductoBe> Listar(int empresaId, string nombre, string categoriaNombre, int pagina = 1, int cantidadRegistros = 10, string columnaOrden = "ProductoId", string ordenMax = "ASC")
+        public DataPaginate<ProductoBe> Listar(int empresaId, string nombre, string categoriaNombre, int draw, int start, int length, string columnaOrden = "ProductoId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = new ProductoBl().Listar(categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
+            var lista = new ProductoBl().Listar(categoriaNombre, nombre, empresaId, start, length, columnaOrden, ordenMax, out totalRegistros);
             return new DataPaginate<ProductoBe>{
                 data = lista,
-                draw = 1,
+                draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };

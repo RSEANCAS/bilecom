@@ -39,7 +39,7 @@
         $(id).dataTable({
             serverSide: true,
             ajax: `${urlRoot}api/producto/listar?empresaId=${empresaId}&nombre=${pageProducto.ObtenerNombre()}&categoriaNombre=${pageProducto.ObtenerCategoria()}`,
-            destroy: true,
+            //destroy: true,
             //data: data,
             columns: [
                 { data: "ProductoId" },

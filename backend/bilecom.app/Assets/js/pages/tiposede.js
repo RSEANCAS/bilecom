@@ -32,7 +32,7 @@
         $(id).dataTable({
             serverSide: true,
             ajax: `${urlRoot}api/tiposede/listar?empresaId=${empresaId}&nombre=${pageTipoSede.ObtenerNombre()}`,
-            destroy: true,
+            //destroy: true,
             //data: data,
             columns: [
                 { data: "TipoSedeId" },
