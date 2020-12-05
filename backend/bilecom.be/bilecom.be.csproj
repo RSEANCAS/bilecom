@@ -47,6 +47,7 @@
     <Compile Include="CotizacionBe.cs" />
     <Compile Include="CategoriaProductoBe.cs" />
     <Compile Include="CotizacionDetalleBe.cs" />
+    <Compile Include="Custom\DataPaginate.cs" />
     <Compile Include="EmpresaBe.cs" />
     <Compile Include="OpcionBe.cs" />
     <Compile Include="PerfilBe.cs" />
@@ -61,6 +62,20 @@
     <Compile Include="TipoSedeBe.cs" />
     <Compile Include="UsuarioBe.cs" />
     <Compile Include="UsuarioPerfilBe.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\bilecom.be.dll" />
+    <Content Include="bin\Debug\bilecom.be.pdb" />
+    <Content Include="obj\Debug\bilecom.be.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\bilecom.be.dll" />
+    <Content Include="obj\Debug\bilecom.be.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\Debug\bilecom.be.csprojAssemblyReference.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

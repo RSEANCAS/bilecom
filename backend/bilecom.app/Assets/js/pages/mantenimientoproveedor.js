@@ -1,13 +1,13 @@
-﻿const pageMantenimientoCategoriaProducto = {
+﻿const pageMantenimientoProveedor = {
     Init: function () {
         this.Validar();
         this.InitEvents();
     },
     InitEvents: function () {
-        
+
     },
-    Validar: function (){
-        $("#frm-categoriaproducto-mantenimiento")
+    Validar: function () {
+        $("#frm-proveedor-mantenimiento")
             .bootstrapValidator({
                 fields: {
                     "txt-nombre": {
@@ -21,36 +21,48 @@
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoCategoriaProducto.EnviarFormulario();
+                pageMantenimientoProveedor.EnviarFormulario();
             });
     },
     EnviarFormulario: function () {
-        let nombre = $("#txt-nombre").val();
+        let nombres = $("#txt-nombres").val();
+        let nrodocumento = $("#txt-numero-documento-identidad").val();
+        let nombrecomercial = $("#txt-nombre-comercial").val();
+        let direcion = $("#txt-direccion").val();
+        let correo = $("#txt-correo").val();
+
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
         let ObjectoJson = {
+            ClienteId: 0,
             EmpresaId: empresaId,
-            CategoriaProductoId: 0,
-            Nombre: nombre,
+            TipoDocumento: 6,
+            NroDocumentoIdentidad: nrodocumento,
+            RazonSocial: nombres,
+            NombreComercial: nombrecomercial,
+            DistritoId: '100101',
+            Direccion: direcion,
+            Correo: correo,
+            FlagActivo: 1,
             Usuario: user
         }
 
-        let url = `${urlRoot}api/categoriaproducto/guardar`;
+        let url = `${urlRoot}api/proveedor/guardar`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
-        let init = { method: 'POST',body: params , headers};
+        let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoCategoriaProducto.ResponseEnviarFormulario);
+            .then(pageMantenimientoProveedor.ResponseEnviarFormulario);
     },
     ResponseEnviarFormulario: function (data) {
         if (data == true) {
             alert("Se ha guardado con éxito.");
             location.href = "Index";
         } else {
-            alert("No se pudo guardar la categoria intentelo otra vez.");
+            alert("No se pudo guardar la proveedor intentelo otra vez.");
         }
     }
 }

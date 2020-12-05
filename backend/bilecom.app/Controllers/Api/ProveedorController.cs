@@ -9,24 +9,23 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/Cliente")]
-    public class ClienteController : ApiController
+    [RoutePrefix("api/proveedor")]
+    public class ProveedorController : ApiController
     {
         [HttpGet]
-        [Route("Listar/{empresaId}/{nroDocumentoIdentidad}/{razonSocial}")]
-        public List<ClienteBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial)
+        [Route("listar/{empresaId}/{nroDocumentoIdentidad}/{razonSococial}")]
+        public List<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial)
         {
-            return new ClienteBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial);
+            return new ProveedorBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial);
         }
-        
         [HttpPost]
         [Route("guardar")]
-        public bool Guardar(ClienteBe clienteBe)
+        public bool Guardar(ProveedorBe proveedorBe)
         {
             bool respuesta = false;
             try
             {
-                respuesta = new ClienteBl().ClienteGuardar(clienteBe);
+                respuesta = new ProveedorBl().ProveedorGuardar(proveedorBe);
             }
             catch (Exception ex)
             {
@@ -34,5 +33,6 @@ namespace bilecom.app.Controllers.Api
             }
             return respuesta;
         }
+
     }
 }

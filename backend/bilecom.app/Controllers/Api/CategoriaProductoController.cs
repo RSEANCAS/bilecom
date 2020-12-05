@@ -12,12 +12,14 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/categoriaproducto")]
     public class CategoriaProductoController : ApiController
     {
-        public bool Guardar(CategoriaProductoBe categoriaProductoBe)
+        [HttpPost]
+        [Route("guardar")]
+        public bool Guardar(CategoriaProductoBe categoriaProducto)
         {
             bool respuesta = false;
             try
             {
-                respuesta = new CategoriaProductoBl().CategoriaProductoGuardar(categoriaProductoBe);
+                respuesta = new CategoriaProductoBl().CategoriaProductoGuardar(categoriaProducto);
             }
             catch(Exception ex)
             {
@@ -38,6 +40,12 @@ namespace bilecom.app.Controllers.Api
                 respuesta = false;
             }
             return respuesta;
+        }
+        [HttpGet]
+        [Route("Listar/{empresaId}/{nombre}")]
+        public List<CategoriaProductoBe> Listar(int empresaId, string nombre)
+        {
+            return new CategoriaProductoBl().Listar(empresaId, nombre);
         }
     }
 }
