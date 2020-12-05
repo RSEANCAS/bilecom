@@ -10,33 +10,31 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/cliente")]
-    public class ClienteController : ApiController
+    [RoutePrefix("api/proveedor")]
+    public class ProveedorController : ApiController
     {
         [HttpGet]
         [Route("listar")]
-        public DataPaginate<ClienteBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina = 1, int cantidadRegistros = 10, string columnaOrden = "ClienteId", string ordenMax = "ASC")
+        public DataPaginate<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina = 1, int cantidadRegistros = 10, string columnaOrden = "ProveedorId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = new ClienteBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros , columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<ClienteBe>
+            var lista= new ProveedorBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
+            return new DataPaginate<ProveedorBe>
             {
                 data = lista,
                 draw = 1,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
-
         }
-        
         [HttpPost]
         [Route("guardar")]
-        public bool Guardar(ClienteBe clienteBe)
+        public bool Guardar(ProveedorBe proveedorBe)
         {
             bool respuesta = false;
             try
             {
-                respuesta = new ClienteBl().ClienteGuardar(clienteBe);
+                respuesta = new ProveedorBl().ProveedorGuardar(proveedorBe);
             }
             catch (Exception ex)
             {
@@ -44,5 +42,6 @@ namespace bilecom.app.Controllers.Api
             }
             return respuesta;
         }
+
     }
 }

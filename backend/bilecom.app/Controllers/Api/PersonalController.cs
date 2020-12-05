@@ -10,33 +10,32 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/cliente")]
-    public class ClienteController : ApiController
+    [RoutePrefix("api/personal")]
+    //[Authorize]
+    public class PersonalController : ApiController
     {
         [HttpGet]
         [Route("listar")]
-        public DataPaginate<ClienteBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina = 1, int cantidadRegistros = 10, string columnaOrden = "ClienteId", string ordenMax = "ASC")
+        public DataPaginate<PersonalBe> Listar (int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int pagina=1, int cantidadRegistros=10, string columnaOrden="PersonalId", string ordenMax="ASC")
         {
             int totalRegistros = 0;
-            var lista = new ClienteBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros , columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<ClienteBe>
+                var lista = new PersonalBl().Listar(empresaId, nroDocumentoIdentidad, nombresCompletos, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
+            return new DataPaginate<PersonalBe>
             {
                 data = lista,
                 draw = 1,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
-
         }
-        
         [HttpPost]
         [Route("guardar")]
-        public bool Guardar(ClienteBe clienteBe)
+        public bool Guardar(PersonalBe personalBe)
         {
             bool respuesta = false;
             try
             {
-                respuesta = new ClienteBl().ClienteGuardar(clienteBe);
+                respuesta = new PersonalBl().PersonalGuardar(personalBe);
             }
             catch (Exception ex)
             {

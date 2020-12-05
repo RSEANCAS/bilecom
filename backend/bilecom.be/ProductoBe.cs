@@ -8,9 +8,11 @@ namespace bilecom.be
 {
     public class ProductoBe
     {
+        public int EmpresaId { get; set; }
         public int ProductoId { get; set; }
         public int CategoriaId { get; set; }
         public string Nombre { get; set; }
+        public int Stock { get; set; }
         public string Usuario { get; set; }
         public DateTime Fecha { get; set; }
         public CategoriaProductoBe categoriaProducto { get; set; }

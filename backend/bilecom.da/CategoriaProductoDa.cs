@@ -12,8 +12,9 @@ namespace bilecom.da
 {
     public class CategoriaProductoDa
     {
-        public List<CategoriaProductoBe> fListar(SqlConnection cn, int empresaId, string nombre)
+        public List<CategoriaProductoBe> fListar(SqlConnection cn, int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
+            totalRegistros = 0;
             List<CategoriaProductoBe> lCategoriaProducto = null;
             CategoriaProductoBe oCategoriaProducto;
 
@@ -22,18 +23,25 @@ namespace bilecom.da
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
                 cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
+                cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                cmd.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                cmd.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                cmd.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
 
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)
                     {
                         lCategoriaProducto = new List<CategoriaProductoBe>();
-                        if (dr.Read())
+                        while (dr.Read())
                         {
                             oCategoriaProducto = new CategoriaProductoBe();
+                            oCategoriaProducto.CategoriaProductoId = dr.GetData<int>("Fila");
                             oCategoriaProducto.EmpresaId = dr.GetData<int>("EmpresaId");
                             oCategoriaProducto.Nombre = dr.GetData<string>("Nombre");
                             lCategoriaProducto.Add(oCategoriaProducto);
+
+                            if (!DBNull.Value.Equals(dr["Total"])) totalRegistros = (int)dr["Total"];
                         }
                     }
                 }

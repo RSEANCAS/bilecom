@@ -11,8 +11,9 @@ namespace bilecom.bl
 {
     public class ProductoBl : Conexion
     {
-        public List<ProductoBe> Listar(string categoriaNombre, string nombre, int empresaId)
+        public List<ProductoBe> Listar(string categoriaNombre, string nombre, int empresaId, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
+            totalRegistros = 0;
             List<ProductoBe> lProducto = new List<ProductoBe>();
 
             using (cn)
@@ -20,7 +21,7 @@ namespace bilecom.bl
                 try
                 {
                     cn.Open();
-                    lProducto = new ProductoDa().fListar(cn, categoriaNombre, nombre, empresaId);
+                    lProducto = new ProductoDa().fListar(cn, categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
                     cn.Close();
                 }
                 catch (Exception)
