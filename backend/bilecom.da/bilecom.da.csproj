@@ -44,6 +44,7 @@
     <Compile Include="CotizacionDa.cs" />
     <Compile Include="CategoriaProductoDa.cs" />
     <Compile Include="ClienteDa.cs" />
+    <Compile Include="CotizacionDetalleDa.cs" />
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="PersonalDa.cs" />
     <Compile Include="ProductoDa.cs" />

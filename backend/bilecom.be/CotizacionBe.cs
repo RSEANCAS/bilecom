@@ -26,5 +26,7 @@ namespace bilecom.be
         public DateTime FechaCreacion { get; set; }
         public string ModificadoPor { get; set; }
         public DateTime FechaModificacion { get; set; }
+        public List<CotizacionDetalleBe> ListaCotizacionDetalle { get; set; }
     }
+    
 }
