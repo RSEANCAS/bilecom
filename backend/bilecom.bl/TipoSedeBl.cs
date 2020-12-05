@@ -10,15 +10,16 @@ namespace bilecom.bl
 {
     public class TipoSedeBl : Conexion
     {
-        public List<TipoSedeBe> Listar(int empresaId, string nombre)
+        public List<TipoSedeBe> Listar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
+            totalRegistros = 0;
             List<TipoSedeBe> lTipoSede = new List<TipoSedeBe>();
             using (cn)
             {
                 try
                 {
                     cn.Open();
-                    lTipoSede = new TipoSedeDa().fListar(cn, empresaId, nombre);
+                    lTipoSede = new TipoSedeDa().fListar(cn, empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
                     cn.Close();
                 }
                 catch (Exception)

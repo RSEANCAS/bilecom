@@ -11,6 +11,7 @@ namespace bilecom.be
         public int SedeId { get; set; }
         public int EmpresaId { get; set; }
         public int TipoSedeId { get; set; }
+        public TipoSedeBe TipoSede { get; set; }
         public int DistritoId { get; set; }
         public string Ruc { get; set; }
         public int Rubro { get; set; }

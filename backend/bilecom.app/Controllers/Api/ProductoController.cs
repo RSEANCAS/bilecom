@@ -1,4 +1,5 @@
 ﻿using bilecom.be;
+using bilecom.be.Custom;
 using bilecom.bl;
 using System;
 using System.Collections.Generic;
@@ -42,10 +43,18 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
         [HttpGet]
-        [Route("Listar/{empresaId}/{nroDocumentoIdentidad}/{nombresCompletos}")]
-        public List<ProductoBe> Listar(int empresaId, string nombre, string categoriaNombre)
+        [Route("listar")]
+        public DataPaginate<ProductoBe> Listar(int empresaId, string nombre, string categoriaNombre, int pagina = 1, int cantidadRegistros = 10, string columnaOrden = "ProductoId", string ordenMax = "ASC")
         {
-            return new ProductoBl().Listar(categoriaNombre, nombre, empresaId);
+            int totalRegistros = 0;
+            var lista = new ProductoBl().Listar(categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
+            return new DataPaginate<ProductoBe>{
+                data = lista,
+                draw = 1,
+                recordsFiltered = totalRegistros,
+                recordsTotal = totalRegistros
+            };
+
         }
     }
 }

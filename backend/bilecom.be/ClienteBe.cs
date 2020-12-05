@@ -10,7 +10,8 @@ namespace bilecom.be
     {
         public int ClienteId { get; set; }
         public int EmpresaId { get; set; }
-        public string TipoDocumento { get; set; }
+        public int TipoDocumento { get; set; }
+        public TipoDocumentoIdentidadBe TipoDocumentoIdentidad { get; set; }
         public string NroDocumentoIdentidad { get; set; }
         public string RazonSocial { get; set; }
         public string NombreComercial { get; set; }

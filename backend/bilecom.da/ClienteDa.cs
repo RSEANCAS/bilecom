@@ -12,34 +12,43 @@ namespace bilecom.da
 {
     public class ClienteDa
     {
-        public List<ClienteBe> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial)
+        public List<ClienteBe> fListar(SqlConnection cn, int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
-            List<ClienteBe> lCliente = new List<ClienteBe>();
-            ClienteBe oCliente;
+            totalRegistros = 0;
+            List<ClienteBe> lCliente = null;
+            ClienteBe oCliente ;
             using (SqlCommand oCommand = new SqlCommand("dbo.usp_cliente_listar", cn))
             {
                 oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.Parameters.AddWithValue("@empresaId", empresaId);
-                oCommand.Parameters.AddWithValue("@nroDocumentoIdentidad", nroDocumentoIdentidad);
-                oCommand.Parameters.AddWithValue("@razonSocial", razonSocial);
+                oCommand.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                oCommand.Parameters.AddWithValue("@nroDocumentoIdentidad", nroDocumentoIdentidad.GetNullable());
+                oCommand.Parameters.AddWithValue("@razonSocial", razonSocial.GetNullable());
+                oCommand.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                oCommand.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                oCommand.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                oCommand.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {
                     if(oDr.HasRows)
                     {
-                        if(oDr.Read())
+                        lCliente = new List<ClienteBe>();
+                        while(oDr.Read())
                         {
                             oCliente = new ClienteBe();
-                            if (!DBNull.Value.Equals(oDr["ClienteId"])) oCliente.ClienteId = (int)oDr["ClienteId"];
+                            oCliente.ClienteId = oDr.GetData<int>("Fila");
+                            //if (!DBNull.Value.Equals(oDr["ClienteId"])) oCliente.ClienteId = (int)oDr["ClienteId"];
                             if (!DBNull.Value.Equals(oDr["EmpresaId"])) oCliente.EmpresaId = (int)oDr["EmpresaId"];
-                            if (!DBNull.Value.Equals(oDr["TipoDocumentoIdentidad"])) oCliente.TipoDocumento = (string)oDr["TipoDocumentoIdentidad"];
+                            if (!DBNull.Value.Equals(oDr["TipoDocumento"])) oCliente.TipoDocumento = (int)oDr["TipoDocumento"];
+                            oCliente.TipoDocumentoIdentidad = new TipoDocumentoIdentidadBe();
+                            if (!DBNull.Value.Equals(oDr["DescripcionTipoDocumentoIdentidad"])) oCliente.TipoDocumentoIdentidad.Descripcion = (string)oDr["DescripcionTipoDocumentoIdentidad"];
                             if (!DBNull.Value.Equals(oDr["NroDocumentoIdentidad"])) oCliente.NroDocumentoIdentidad = (string)oDr["NroDocumentoIdentidad"];
                             if (!DBNull.Value.Equals(oDr["RazonSocial"])) oCliente.RazonSocial = (string)oDr["RazonSocial"];
                             if (!DBNull.Value.Equals(oDr["NombreComercial"])) oCliente.NombreComercial = (string)oDr["NombreComercial"];
                             if (!DBNull.Value.Equals(oDr["DistritoId"])) oCliente.DistritoId = (int)oDr["DistritoId"];
                             if (!DBNull.Value.Equals(oDr["Direccion"])) oCliente.Direccion = (string)oDr["Direccion"];
                             if (!DBNull.Value.Equals(oDr["Correo"])) oCliente.Direccion = (string)oDr["Correo"];
-                            if (!DBNull.Value.Equals(oDr["FlagActivo"])) oCliente.FlagActivo = (bool)oDr["FlagActivo"];
                             lCliente.Add(oCliente);
+                            if (!DBNull.Value.Equals(oDr["Total"])) totalRegistros = (int)oDr["Total"];
                         }
                     }
                 }
