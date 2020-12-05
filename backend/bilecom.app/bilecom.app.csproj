@@ -2912,6 +2912,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\Api\CotizacionController.cs" />
+    <Compile Include="Controllers\Api\httpPostAttribute.cs" />
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
@@ -3245,6 +3247,7 @@
     <Content Include="Views\CategoriaProducto\MantenimientoCategoria.cshtml" />
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
     <Content Include="Views\Cotizacion\Index.cshtml" />
+    <Content Include="Views\Cotizacion\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

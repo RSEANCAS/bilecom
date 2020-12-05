@@ -20,6 +20,8 @@ namespace bilecom.bl
             {
                 try
                 {
+                    using (TransactionScope scope = new TransactionScope())
+
                     cn.Open();
                     lCotizacion = new CotizacionDa().Listar(cn, EmpresaId, NombresCompletosPersonal, RazonSocial, FechaHoraEmisionDesde, FechaHoraEmisionHasta);
                     cn.Close();
@@ -34,21 +36,24 @@ namespace bilecom.bl
         }
         public bool CotizacionGuardar(CotizacionBe cotizacion, out int? cotizacionId)
         {
-            cotizacionId = null;
-            bool seGuardo = false;
-            using (cn)
+            cotizacionId = 0;
+            bool seGuardo = false;           
             {
                 try
                 {
-                    cn.Open();
-                    //seGuardo = new CotizacionDa()(cotizacion, cn);
+
                     seGuardo = new CotizacionDa().CotizacionGuardar(cotizacion, cn, out cotizacionId);
+                    // Si seGuardo es True entonces 
                     if (seGuardo)
                     {
+                        // Si la Lista de Detalle es diferente de Null
                         if (cotizacion.ListaCotizacionDetalle != null)
                         {
+                            //Entonces recorro la misma Lista de detalle con el Item
                             foreach(var item in cotizacion.ListaCotizacionDetalle)
                             {
+                                item.CotizacionId = (int)cotizacionId;
+                                seGuardo = new CotizacionDetalleDa().CotizacionDetalleGuardar(item, cn);
                                 //seGuardo = new 
                             }
                         }
