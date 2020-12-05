@@ -7,6 +7,12 @@
         let user = localStorage['ls.us'];
         return user == null ? null : JSON.parse(user);
     },
+    ResponseToJson(response) {
+        debugger;
+        if (response.status == 200) return response.json();
+        else if (response.status == 401) return (async() => "La contraseña es incorrecta")();
+        else new Error("");
+    },
     ConfiguracionDataTable() {
         $.extend($.fn.dataTable.defaults, {
             searching: false,
@@ -17,7 +23,7 @@
                 zeroRecords: "No se encontraron registros coincidentes",
                 loadingRecords: "Cargando...",
                 Procesing: "Procesando...",
-                infoEmpty:"Mostrando 0 a 0 de 0 registros",
+                infoEmpty: "Mostrando 0 a 0 de 0 registros",
                 paginate: {
                     first: "Primero",
                     last: "Último",

@@ -11,15 +11,16 @@ namespace bilecom.bl
 {
     public class ProveedorBl : Conexion
     {
-        public List<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial)
+        public List<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
+            totalRegistros = 0;
             List<ProveedorBe> lProveedor = new List<ProveedorBe>();
             using (cn)
             {
                 try
                 {
                     cn.Open();
-                    lProveedor = new ProveedorDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial);
+                    lProveedor = new ProveedorDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
                     cn.Close();
                 }
                 catch (Exception)

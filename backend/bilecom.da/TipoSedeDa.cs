@@ -12,8 +12,9 @@ namespace bilecom.da
 {
     public class TipoSedeDa
     {
-        public List<TipoSedeBe> fListar(SqlConnection cn, int empresaId, string nombre)
+        public List<TipoSedeBe> fListar(SqlConnection cn, int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
+            totalRegistros = 0;
             List<TipoSedeBe> lTipoSede = new List<TipoSedeBe>();
             TipoSedeBe oTipoSede;
 
@@ -22,18 +23,23 @@ namespace bilecom.da
                 oCommand.CommandType = CommandType.StoredProcedure;
                 oCommand.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
                 oCommand.Parameters.AddWithValue("@nombre", nombre.GetNullable());
+                oCommand.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                oCommand.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                oCommand.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                oCommand.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
                 using (SqlDataReader oDr = oCommand.ExecuteReader())
                 {
                     if (oDr.HasRows)
                     {
-                        if (oDr.Read())
+                        while (oDr.Read())
                         {
                             oTipoSede = new TipoSedeBe();
-                            oTipoSede.SedeId = oDr.GetData<int>("SedeId");
+                            oTipoSede.TipoSedeId = oDr.GetData<int>("Fila");
                             oTipoSede.EmpresaId = oDr.GetData<int>("EmpresaId");
                             oTipoSede.Nombre = oDr.GetData<string>("Nombre");
                             oTipoSede.FlagActivo = oDr.GetData<bool>("FlagActivo");
                             lTipoSede.Add(oTipoSede);
+                            if (!DBNull.Value.Equals(oDr["Total"])) totalRegistros = (int)oDr["Total"];
 
                         }
                     }

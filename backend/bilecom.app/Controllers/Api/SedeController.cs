@@ -1,4 +1,5 @@
 ﻿using bilecom.be;
+using bilecom.be.Custom;
 using bilecom.bl;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,22 @@ using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/Sede")]
+    [RoutePrefix("api/sede")]
     public class SedeController : ApiController
     {
         [HttpGet]
-        [Route("Listar/{empresaId}/{nombre}")]
-        public List<SedeBe> Listar(int empresaId, string nombre)
+        [Route("listar")]
+        public DataPaginate<SedeBe> Listar(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "SedeId", string ordenMax = "ASC")
         {
-            return new SedeBl().Listar(empresaId, nombre);
+            int totalRegistros = 0;
+            var lista = new SedeBl().Listar(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
+            return new DataPaginate<SedeBe>
+            {
+                data = lista,
+                draw = draw,
+                recordsFiltered = totalRegistros,
+                recordsTotal = totalRegistros
+            };
         }
     }
 }

@@ -46,6 +46,8 @@
     <Compile Include="ClienteBe.cs" />
     <Compile Include="CotizacionBe.cs" />
     <Compile Include="CategoriaProductoBe.cs" />
+    <Compile Include="Custom\BootStrapValidator.cs" />
+    <Compile Include="CotizacionDetalleBe.cs" />
     <Compile Include="Custom\DataPaginate.cs" />
     <Compile Include="DepartamentoBe.cs" />
     <Compile Include="DistritoBe.cs" />

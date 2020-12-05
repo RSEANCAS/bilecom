@@ -44,8 +44,12 @@
     <Compile Include="CotizacionDa.cs" />
     <Compile Include="CategoriaProductoDa.cs" />
     <Compile Include="ClienteDa.cs" />
+<<<<<<< HEAD
     <Compile Include="DepartamentoDa.cs" />
     <Compile Include="DistritoDa.cs" />
+=======
+    <Compile Include="CotizacionDetalleDa.cs" />
+>>>>>>> 211a9e3518472ce632672a343947069ddae4f6e5
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="PaisDa.cs" />
     <Compile Include="PersonalDa.cs" />

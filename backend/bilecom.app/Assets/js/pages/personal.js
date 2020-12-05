@@ -37,7 +37,7 @@
         $(id).dataTable({
             serverSide: true,
             ajax: `${urlRoot}api/personal/listar?empresaId=${empresaId}&nroDocumentoIdentidad=${pagePersonal.ObtenerNroDocumentoIdentidad()}&nombresCompletos=${pagePersonal.ObtenerNombreCompletos()}`,
-            destroy: true,
+            //destroy: true,
             //data: data,
             columns: [
                 {data: "PersonalId"},

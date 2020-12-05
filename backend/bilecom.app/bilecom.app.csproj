@@ -373,6 +373,8 @@
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\nifty.js" />
     <Content Include="Assets\js\nifty.min.js" />
+    <Content Include="Assets\js\pages\categoriaproducto.js" />
+    <Content Include="Assets\js\pages\cliente.js" />
     <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -381,6 +383,10 @@
     <Content Include="Assets\js\pages\mantenimientopersonal.js" />
     <Content Include="Assets\js\pages\mantenimientoproducto.js" />
     <Content Include="Assets\js\pages\mantenimientoproveedor.js" />
+    <Content Include="Assets\js\pages\producto.js" />
+    <Content Include="Assets\js\pages\proveedor.js" />
+    <Content Include="Assets\js\pages\sede.js" />
+    <Content Include="Assets\js\pages\tiposede.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
     <Content Include="Assets\plugins\animate-css\LICENSE.txt" />

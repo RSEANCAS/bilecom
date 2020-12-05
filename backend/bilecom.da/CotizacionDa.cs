@@ -8,11 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// En el DA van los métodos a ser llamados por el BL
 namespace bilecom.da
 {
     public class CotizacionDa
     {
-        public List<CotizacionBe> fListar(SqlConnection cn, int EmpresaId, string NombresCompletosPersonal, string RazonSocial, DateTime FechaHoraEmisionDesde, DateTime FechaHoraEmisionHasta)
+        public List<CotizacionBe> Listar(SqlConnection cn, int EmpresaId, string NombresCompletosPersonal, string RazonSocial, DateTime FechaHoraEmisionDesde, DateTime FechaHoraEmisionHasta)
         {
             List<CotizacionBe> lCotizacion = null;
             using (SqlCommand cmd = new SqlCommand("usp_cotizacion_listar", cn))
@@ -51,5 +52,34 @@ namespace bilecom.da
             }
             return lCotizacion;
         }
+        public bool CotizacionGuardar(CotizacionBe cotizacion, SqlConnection cn, out int? cotizacionId)
+        {
+            cotizacionId = null;
+            bool seGuardo = false;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_cotizacion_guardar", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@cotizacionId", cotizacion.CotizacionId);
+                    oCommand.Parameters.AddWithValue("@empresaId", cotizacion.EmpresaId);
+                    oCommand.Parameters.AddWithValue("@serieId", cotizacion.SerieId);
+                    oCommand.Parameters.AddWithValue("@nroComprobante", cotizacion.NroComprobante);
+                    oCommand.Parameters.AddWithValue("@monedaId", cotizacion.MonedaId);
+                    oCommand.Parameters.AddWithValue("@clienteID", cotizacion.ClienteId);
+                    oCommand.Parameters.AddWithValue("@personalId", cotizacion.PersonalId);
+                    oCommand.Parameters.AddWithValue("@totalImporte", cotizacion.TotalImporte);
+                    oCommand.Parameters.AddWithValue("@usuario", cotizacion.CreadoPor);
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result > 0) seGuardo = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                seGuardo = false;
+            }
+            return seGuardo;
+        }
     }
+
 }

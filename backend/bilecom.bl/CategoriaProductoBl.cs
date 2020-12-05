@@ -11,15 +11,16 @@ namespace bilecom.bl
 {
     public class CategoriaProductoBl : Conexion
     {
-        public List<CategoriaProductoBe> Listar(int empresaId, string nombre)
+        public List<CategoriaProductoBe> Listar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
+            totalRegistros = 0;
             List<CategoriaProductoBe> lCategoriaProducto = new List<CategoriaProductoBe>();
             using (cn)
             {
                 try
                 {
                     cn.Open();
-                    lCategoriaProducto = new CategoriaProductoDa().fListar(cn, empresaId, nombre);
+                    lCategoriaProducto = new CategoriaProductoDa().fListar(cn, empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
                     cn.Close();
                 }
                 catch (Exception)
