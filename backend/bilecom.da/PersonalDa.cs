@@ -50,15 +50,50 @@ namespace bilecom.da
 
                             if (!DBNull.Value.Equals(oDr["Total"])) totalRegistros = (int)oDr["Total"];
                         }
-
-                        
                     }
                 }
             }
-
             return lPersonal;
         }
 
+        public PersonalBe PersonalObtener(int EmpresaId,int PersonalId,SqlConnection cn)
+        {
+            PersonalBe respuesta = null;
+            try
+            {
+                using (SqlCommand oCommand = new SqlCommand("dbo.usp_personal_obtener", cn))
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.Parameters.AddWithValue("@EmpresaId", EmpresaId.GetNullable());
+                    oCommand.Parameters.AddWithValue("@PersonalId", PersonalId.GetNullable());
+                    
+                    using (SqlDataReader dr = oCommand.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new PersonalBe();
+                                respuesta.PersonalId = dr.GetData<int>("PersonalId");
+                                respuesta.EmpresaId = dr.GetData<int>("EmpresaId");
+                                respuesta.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
+                                respuesta.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");
+                                respuesta.NombresCompletos = dr.GetData<string>("NombresCompletos");
+                                respuesta.Direccion = dr.GetData<string>("Direccion");
+                                respuesta.Correo = dr.GetData<string>("Correo");
+                                respuesta.FlagActivo = dr.GetData<bool>("FlagActivo");
+                                respuesta.DistritoId = dr.GetData<int>("DistritoId");
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
         public bool PersonalGuardar(PersonalBe personalBe,SqlConnection cn)
         {
             bool respuesta = false;
@@ -77,7 +112,9 @@ namespace bilecom.da
                     oCommand.Parameters.AddWithValue("@Correo", personalBe.Correo.GetNullable());
                     oCommand.Parameters.AddWithValue("@FlagActivo", personalBe.FlagActivo.GetNullable());
                     oCommand.Parameters.AddWithValue("@Usuario", personalBe.Usuario.GetNullable());
-
+                    
+                    //oCommand.ExecuteNonQuery();
+                    //respuesta = true;
                     int result = oCommand.ExecuteNonQuery();
                     if (result > 0) respuesta = true;
                 }

@@ -3,13 +3,29 @@
     ViewBag.Title = "Personal Mantenimiento";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+links_footer
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+    
+}
+
 <div id="content-container">
     <div id="page-head">
 
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h2 class="page-header text-overflow">Nuevo Personal</h2>
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nuevo Personal</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Personal</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+
         </div>
     </div>
     <form id="frm-personal-mantenimiento" name="frm-personal-mantenimiento" method="post">
@@ -102,9 +118,9 @@
     </form>
 </div>
 @section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientopersonal.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
     <script>
         const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {

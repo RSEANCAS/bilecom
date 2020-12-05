@@ -37,7 +37,7 @@
         $(id).dataTable({
             serverSide: true,
             ajax: `${urlRoot}api/personal/listar?empresaId=${empresaId}&nroDocumentoIdentidad=${pagePersonal.ObtenerNroDocumentoIdentidad()}&nombresCompletos=${pagePersonal.ObtenerNombreCompletos()}`,
-            destroy: true,
+            //destroy: true,
             //data: data,
             columns: [
                 {data: "PersonalId"},
@@ -46,7 +46,7 @@
                 {data: "NombresCompletos"},
                 {
                     data: "PersonalId", render: function (data, row) {
-                        return '<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href = "#" data - original - title="Delete" data - container="body" ></a >'} },
+                        return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href = "#" data - original - title="Delete" data - container="body" ></a >`} },
             ]
         })
     }

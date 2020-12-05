@@ -54,6 +54,7 @@ namespace bilecom.bl
                             {
                                 item.CotizacionId = (int)cotizacionId;
                                 seGuardo = new CotizacionDetalleDa().CotizacionDetalleGuardar(item, cn);
+                                //seGuardo = new 
                             }
                         }
                     }

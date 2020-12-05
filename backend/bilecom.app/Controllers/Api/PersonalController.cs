@@ -16,18 +16,25 @@ namespace bilecom.app.Controllers.Api
     {
         [HttpGet]
         [Route("listar")]
-        public DataPaginate<PersonalBe> Listar (int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int pagina=1, int cantidadRegistros=10, string columnaOrden="PersonalId", string ordenMax="ASC")
+        public DataPaginate<PersonalBe> Listar (int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int draw, int start, int length, string columnaOrden="PersonalId", string ordenMax="ASC")
         {
             int totalRegistros = 0;
-                var lista = new PersonalBl().Listar(empresaId, nroDocumentoIdentidad, nombresCompletos, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
+                var lista = new PersonalBl().Listar(empresaId, nroDocumentoIdentidad, nombresCompletos, start, length, columnaOrden, ordenMax, out totalRegistros);
             return new DataPaginate<PersonalBe>
             {
                 data = lista,
-                draw = 1,
+                draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
         }
+        [HttpGet]
+        [Route("obtener")]
+        public PersonalBe PersonalObtener(int EmpresaId, int PersonalId)
+        {
+            return new PersonalBl().PersonalObtener(EmpresaId, PersonalId);
+        }
+
         [HttpPost]
         [Route("guardar")]
         public bool Guardar(PersonalBe personalBe)

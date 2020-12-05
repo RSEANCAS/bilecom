@@ -1,5 +1,6 @@
 ﻿using bilecom.app.Controllers.Api.Jwt;
 using bilecom.be;
+using bilecom.be.Custom;
 using bilecom.bl;
 using bilecom.ut;
 using System;
@@ -22,23 +23,27 @@ namespace bilecom.app.Controllers.Api
         [Route("validar-usuario")]
         public IHttpActionResult ValidarUsuario(string ruc, string usuario)
         {
+            BootStrapValidator.Remote item = new BootStrapValidator.Remote();
+
             if (string.IsNullOrEmpty((ruc ?? "").Trim()))
-                return BadRequest("El ruc está vacío.");
+                return Ok(item);
 
             if (string.IsNullOrEmpty((usuario ?? "").Trim()))
-                return BadRequest("El usuario está vacío.");
+                return Ok(item);
 
             var empresa = empresaBl.ObtenerPorRuc(ruc);
 
             if (empresa == null)
-                return BadRequest($"El ruc {ruc} no se encuentra registrado.");
+                return Ok(item);
 
             var user = usuarioBl.ObtenerPorNombre(usuario, empresa.EmpresaId);
 
             if (user == null)
-                return BadRequest($"El usuario {usuario} no se encuentra registrado.");
+                return Ok(item);
 
-            return Ok(true);
+            item.valid = true;
+
+            return Ok(item);
         }
 
         [HttpPost]

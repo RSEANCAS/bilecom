@@ -92,7 +92,7 @@
                         <h1 class="h3">BileCom</h1>
                         <p>Ingrese sus credenciales</p>
                     </div>
-                    <form id="frm-login">
+                    <form id="frm-login" autocomplete="off">
                         <div class="form-group">
                             <input id="txt-ruc" name="txt-ruc" type="text" class="form-control" placeholder="RUC" autofocus>
                         </div>
@@ -103,8 +103,8 @@
                             <input id="txt-contraseña" name="txt-contraseña" type="password" class="form-control" placeholder="CONTRASEÑA">
                         </div>
                         <div class="checkbox pad-btm text-left">
-                            <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox">
-                            <label for="demo-form-checkbox">Recordar contraseña</label>
+                            <input id="chkRecordarCuenta" class="magic-checkbox" type="checkbox">
+                            <label for="chkRecordarCuenta">Recordar cuenta</label>
                         </div>
                         <button class="btn btn-primary btn-lg btn-block" type="submit">INGRESAR</button>
                     </form>
@@ -144,6 +144,7 @@
     <!--Background Image [ DEMONSTRATION ]-->
     <script src="@Url.Content("~/Assets/js/demo/bg-images.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/demo/ui-alerts.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/login.js")"></script>
     <script>

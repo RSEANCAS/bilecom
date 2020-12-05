@@ -20,6 +20,6 @@ namespace bilecom.be
         public bool FlagActivo { get; set; }
         public string Usuario { get; set; }
         public DateTime Fecha { get; set; }
-        public string DistritoId { get; set; }
+        public int DistritoId { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using bilecom.be.Custom;
+using bilecom.bl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,7 +12,25 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/empresa")]
     public class EmpresaController : ApiController
     {
-        //[Route("")]
-        //p
+        EmpresaBl empresaBl = new EmpresaBl();
+
+        [HttpGet]
+        [Route("validar-ruc")]
+        public IHttpActionResult ValidarRuc(string ruc)
+        {
+            BootStrapValidator.Remote item = new BootStrapValidator.Remote();
+
+            if (string.IsNullOrEmpty((ruc ?? "").Trim()))
+                return Ok(item);
+
+            var empresa = empresaBl.ObtenerPorRuc(ruc);
+
+            if (empresa == null)
+                return Ok(item);
+
+            item.valid = true;
+
+            return Ok(item);
+        }
     }
 }
