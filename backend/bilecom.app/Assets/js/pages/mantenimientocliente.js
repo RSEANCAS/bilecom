@@ -48,7 +48,7 @@
             Usuario: user
         }
 
-        let url = `${urlRoot}api/cliente/guardar`;
+        let url = `${urlRoot}api/cliente/guardar-cliente`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };

@@ -9,26 +9,22 @@ using System.Threading.Tasks;
 
 namespace bilecom.bl
 {
-    public class PaisBl:Conexion
+    public class PaisBl : Conexion
     {
-        public List<PaisBe> PaisListar()
+        PaisDa paisDa = new PaisDa();
+
+        public List<PaisBe> ListarPais()
         {
-            List<PaisBe> respuesta = null;
+            List<PaisBe> lista = null;
             try
             {
                 cn.Open();
-                respuesta = new PaisDa().PaisListar(cn);
+                lista = paisDa.Listar(cn);
                 cn.Close();
             }
-            catch (Exception ex)
-            {
-                respuesta = null;
-            }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
-            return respuesta;
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
     }
 }

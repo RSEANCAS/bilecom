@@ -1,11 +1,11 @@
 ﻿const common = {
     ObtenerToken() {
         let token = localStorage['ls.tk'];
-        return token == null ? null : token;
+        return token == null ? null : atob(token);
     },
     ObtenerUsuario() {
         let user = localStorage['ls.us'];
-        return user == null ? null : JSON.parse(user);
+        return user == null ? null : JSON.parse(atob(user));
     },
     ResponseToJson(response) {
         debugger;
@@ -22,7 +22,7 @@
                 emptyTable: "No hay datos disponibles",
                 zeroRecords: "No se encontraron registros coincidentes",
                 loadingRecords: "Cargando...",
-                Procesing: "Procesando...",
+                Processing: "Procesando...",
                 infoEmpty: "Mostrando 0 a 0 de 0 registros",
                 paginate: {
                     first: "Primero",

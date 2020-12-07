@@ -11,48 +11,35 @@ namespace bilecom.bl
 {
     public class ProveedorBl : Conexion
     {
-        public List<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        ProveedorDa proveedorDa = new ProveedorDa();
+
+        public List<ProveedorBe> BuscarProveedor(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<ProveedorBe> lProveedor = new List<ProveedorBe>();
-            using (cn)
+            List<ProveedorBe> lista = new List<ProveedorBe>();
+            try
             {
-                try
-                {
-                    cn.Open();
-                    lProveedor = new ProveedorDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
-                    cn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                cn.Open();
+                lista = proveedorDa.Buscar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                cn.Close();
             }
-            return lProveedor;
+            catch (Exception) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
 
-        public bool ProveedorGuardar(ProveedorBe proveedorBe)
+        public bool ProveedorGuardar(ProveedorBe registro)
         {
-            bool respuesta = false;
-            using (cn)
+            bool seGuardo = false;
+            try
             {
-                try
-                {
-                    cn.Open();
-                    respuesta = new ProveedorDa().ProveedorGuardar(proveedorBe, cn);
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-                    respuesta = false;
-                }
-                finally
-                {
-                    if (cn.State == ConnectionState.Open) cn.Close();
-                }
+                cn.Open();
+                seGuardo = proveedorDa.Guardar(registro, cn);
+                cn.Close();
             }
-            return respuesta;
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
         }
     }
 }

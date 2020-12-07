@@ -5,23 +5,11 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
-        $("#btn-buscar").click(pageProducto.btnBuscarClick);
+        $("#btn-buscar").click(pageProducto.BtnBuscarClick);
     },
-    btnBuscarClick: function (e) {
+    BtnBuscarClick: function (e) {
         e.preventDefault();
         pageProducto.CreateDataTable("#tbl-lista")
-        //pagePersonal.Listar();
-    },
-    Listar: function () {
-        let user = common.ObtenerUsuario();
-        let empresaId = user.Empresa.EmpresaId;
-        let nombre = $("#txt-nombre").val();
-        let categoria = $("#txt-categoria").val();
-        
-        let url = `${urlRoot}api/producto/listar?empresaId=${empresaId}&nombre=${nombre}&categoriaNombre=${categoria}`;
-        //fetch(url)
-        //    .then(r => r.json())
-        //    .then(data => pagePersonal.CreateDataTable("#tbl-lista", data, {}));
     },
     ObtenerNombre: function () {
         let nombre = $("#txt-nombre").val();
@@ -31,16 +19,12 @@
         let categoria = $("#txt-categoria").val();
         return categoria;
     },
-
-    //CreateDataTable: function (id, data, options) {
     CreateDataTable: function (id) {
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
             serverSide: true,
-            ajax: `${urlRoot}api/producto/listar?empresaId=${empresaId}&nombre=${pageProducto.ObtenerNombre()}&categoriaNombre=${pageProducto.ObtenerCategoria()}`,
-            //destroy: true,
-            //data: data,
+            ajax: `${urlRoot}api/producto/buscar-producto?empresaId=${empresaId}&nombre=${pageProducto.ObtenerNombre()}&categoriaNombre=${pageProducto.ObtenerCategoria()}`,
             columns: [
                 { data: "ProductoId" },
                 { data: "Nombre" },

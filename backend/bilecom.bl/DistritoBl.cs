@@ -11,24 +11,20 @@ namespace bilecom.bl
 {
     public class DistritoBl:Conexion
     {
-        public List<DistritoBe> DistritoListar()
+        DistritoDa distritoDa = new DistritoDa();
+
+        public List<DistritoBe> ListarDistrito()
         {
-            List<DistritoBe> respuesta = null;
+            List<DistritoBe> lista = null;
             try
             {
                 cn.Open();
-                respuesta = new DistritoDa().DistritoListar(cn);
+                lista = distritoDa.Listar(cn);
                 cn.Close();
             }
-            catch (Exception ex)
-            {
-                respuesta = null;
-            }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
-            return respuesta;
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
     }
 }

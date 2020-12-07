@@ -50,7 +50,7 @@
                             },
                             remote: {
                                 message: "El ruc ingresado no existe",
-                                url: `${urlRoot}api/empresa/validar-ruc`,
+                                url: `${urlRoot}api/empresa/validar-empresa-por-ruc`,
                                 data: (validator) => {
                                     return {
                                         ruc: validator.getFieldElements("txt-ruc").val()
@@ -103,7 +103,7 @@
         let usuario = $("#txt-usuario").val();
         let contraseña = $("#txt-contraseña").val();
 
-        let url = `${urlRoot}api/usuario/autenticar?ruc=${ruc}&usuario=${usuario}&contraseña=${contraseña}`;
+        let url = `${urlRoot}api/usuario/autenticar-usuario?ruc=${ruc}&usuario=${usuario}&contraseña=${contraseña}`;
         //let params = JSON.stringify({ ruc, usuario, contraseña });
         //let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST' };
@@ -115,8 +115,8 @@
     },
     ResponseThenEnviarFormulario: function (data) {
         if (data != null && typeof (data) == "object") {
-            localStorage['ls.us'] = JSON.stringify(data.Usuario);
-            localStorage['ls.tk'] = data.Token;
+            localStorage['ls.us'] = btoa(JSON.stringify(data.Usuario));
+            localStorage['ls.tk'] = btoa(data.Token);
         }
         else if(typeof(data) == "string") {
             $.niftyNoty({
@@ -129,7 +129,7 @@
                     animationOut: "fadeOut"
                 },
                 focus: true,
-                timer: 2500
+                timer: 0
             });
             pageLogin.RecordarCuenta();
         }

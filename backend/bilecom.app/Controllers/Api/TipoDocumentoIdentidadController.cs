@@ -12,11 +12,13 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/tipodocumentoidentidad")]
     public class TipoDocumentoIdentidadController : ApiController
     {
+        TipoDocumentoIdentidadBl tipoDocumentoIdentidadBl = new TipoDocumentoIdentidadBl();
+
         [HttpGet]
-        [Route("listar")]
-        public List<TipoDocumentoIdentidadBe> TipoDocumentoIdentidadListar()
+        [Route("listar-tipodocumentoidentidad")]
+        public List<TipoDocumentoIdentidadBe> ListarTipoDocumentoIdentidad()
         {
-            return new TipoDocumentoIdentidadBl().TipoDocumentoIdentidadListar();
+            return tipoDocumentoIdentidadBl.ListarTipoDocumentoIdentidad();
         }
     }
 }

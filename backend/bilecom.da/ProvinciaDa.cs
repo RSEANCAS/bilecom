@@ -12,28 +12,27 @@ namespace bilecom.da
 {
     public class ProvinciaDa
     {
-        public List<ProvinciaBe> ProvinciaListar(SqlConnection cn)
+        public List<ProvinciaBe> Listar(SqlConnection cn)
         {
-            List<ProvinciaBe> respuesta = null;
+            List<ProvinciaBe> lista = null;
             try
             {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_provincia_listar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_provincia_listar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataReader oDr = oCommand.ExecuteReader())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        if (oDr.HasRows)
+                        if (dr.HasRows)
                         {
-                            respuesta = new List<ProvinciaBe>();
-                            while (oDr.Read())
+                            lista = new List<ProvinciaBe>();
+                            while (dr.Read())
                             {
-                                respuesta.Add(new ProvinciaBe
-                                {
-                                    DepartamentoId = oDr.GetData<int>("DepartamentoId"),
-                                    ProvinciaId = oDr.GetData<int>("ProvinciaId"),
-                                    CodigoUbigeo = oDr.GetData<string>("CodigoUbigeo"),
-                                    Nombre = oDr.GetData<string>("Nombre")
-                                });
+                                ProvinciaBe item = new ProvinciaBe();
+                                item.DepartamentoId = dr.GetData<int>("DepartamentoId");
+                                item.ProvinciaId = dr.GetData<int>("ProvinciaId");
+                                item.CodigoUbigeo = dr.GetData<string>("CodigoUbigeo");
+                                item.Nombre = dr.GetData<string>("Nombre");
+                                lista.Add(item);
                             }
                         }
                     }
@@ -41,9 +40,9 @@ namespace bilecom.da
             }
             catch (Exception ex)
             {
-                respuesta = null;
+                lista = null;
             }
-            return respuesta;
+            return lista;
         }
     }
 }

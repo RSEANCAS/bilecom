@@ -12,26 +12,25 @@ namespace bilecom.da
 {
     public class PaisDa
     {
-        public List<PaisBe> PaisListar(SqlConnection cn)
+        public List<PaisBe> Listar(SqlConnection cn)
         {
-            List<PaisBe> respuesta = null;
+            List<PaisBe> lista = null;
             try
             {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_pais_listar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_pais_listar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataReader oDr = oCommand.ExecuteReader())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        if (oDr.HasRows)
+                        if (dr.HasRows)
                         {
-                            respuesta = new List<PaisBe>();
-                            while (oDr.Read())
+                            lista = new List<PaisBe>();
+                            while (dr.Read())
                             {
-                                respuesta.Add(new PaisBe
-                                {
-                                    PaisId = oDr.GetData<int>("PaisId"),
-                                    Nombre = oDr.GetData<string>("Nombre")
-                                });
+                                PaisBe item = new PaisBe();
+                                item.PaisId = dr.GetData<int>("PaisId");
+                                item.Nombre = dr.GetData<string>("Nombre");
+                                lista.Add(item);
                             }
                         }
                     }
@@ -39,9 +38,9 @@ namespace bilecom.da
             }
             catch (Exception ex)
             {
-                respuesta = null;
+                lista = null;
             }
-            return respuesta;
+            return lista;
         }
     }
 }

@@ -12,44 +12,44 @@ namespace bilecom.da
 {
     public class SedeDa
     {
-        public List<SedeBe> fListar(SqlConnection cn, int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        public List<SedeBe> Buscar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<SedeBe> lSede = new List<SedeBe>();
-            SedeBe oSede;
-            using (SqlCommand oCommand = new SqlCommand("dbo.usp_sede_listar", cn))
+            List<SedeBe> lista = new List<SedeBe>();
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_sede_buscar", cn))
             {
-                oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
-                oCommand.Parameters.AddWithValue("@nombre", nombre.GetNullable());
-                oCommand.Parameters.AddWithValue("@pagina", pagina.GetNullable());
-                oCommand.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
-                oCommand.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
-                oCommand.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
-                using (SqlDataReader oDr = oCommand.ExecuteReader())
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
+                cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                cmd.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                cmd.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                cmd.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
+                using (SqlDataReader dr = cmd.ExecuteReader())
                 {
-                    if (oDr.HasRows)
+                    if (dr.HasRows)
                     {
-                        while (oDr.Read())
+                        while (dr.Read())
                         {
-                            oSede = new SedeBe();
-                            oSede.SedeId = oDr.GetData<int>("Fila");
-                            //oSede.SedeId = oDr.GetData<int>("SedeId");
-                            oSede.EmpresaId = oDr.GetData<int>("EmpresaId");
-                            oSede.TipoSedeId = oDr.GetData<int>("TipoSedeId");
-                            oSede.TipoSede = new TipoSedeBe();
-                            oSede.TipoSede.Nombre = oDr.GetData<string>("TipoSedeNombre");
-                            oSede.Nombre = oDr.GetData<string>("NombreSede");
-                            oSede.DistritoId = oDr.GetData<int>("DistritoId");
-                            oSede.Direccion = oDr.GetData<string>("Direccion");
-                            oSede.FlagActivo = oDr.GetData<bool>("SedeActivo");
-                            lSede.Add(oSede);
-                            if (!DBNull.Value.Equals(oDr["Total"])) totalRegistros = (int)oDr["Total"];
+                            SedeBe item = new SedeBe();
+                            item.SedeId = dr.GetData<int>("Fila");
+                            //item.SedeId = dr.GetData<int>("SedeId");
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.TipoSedeId = dr.GetData<int>("TipoSedeId");
+                            item.TipoSede = new TipoSedeBe();
+                            item.TipoSede.Nombre = dr.GetData<string>("TipoSedeNombre");
+                            item.Nombre = dr.GetData<string>("NombreSede");
+                            item.DistritoId = dr.GetData<int>("DistritoId");
+                            item.Direccion = dr.GetData<string>("Direccion");
+                            item.FlagActivo = dr.GetData<bool>("SedeActivo");
+                            lista.Add(item);
+
+                            totalRegistros = dr.GetData<int>("Total");
                         }
                     }
                 }
             }
-            return lSede;
+            return lista;
         }
     }
 }

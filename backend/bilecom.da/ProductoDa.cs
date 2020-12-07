@@ -12,90 +12,66 @@ namespace bilecom.da
 {
     public class ProductoDa
     {
-        public List<ProductoBe> fListar(SqlConnection cn, string categoriaNombre, string nombre, int empresaId, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        public List<ProductoBe> Buscar(string categoriaNombre, string nombre, int empresaId, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<ProductoBe> lProducto = null;
-            ProductoBe oProducto;
-
-            using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_listar", cn))
+            List<ProductoBe> lista = null;
+            
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_producto_buscar", cn))
             {
-                oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.Parameters.AddWithValue("@categoriaNombre", categoriaNombre.GetNullable());
-                oCommand.Parameters.AddWithValue("@nombre", nombre.GetNullable());
-                oCommand.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
-                oCommand.Parameters.AddWithValue("@pagina", pagina.GetNullable());
-                oCommand.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
-                oCommand.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
-                oCommand.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
-                using (SqlDataReader oDr = oCommand.ExecuteReader())
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@categoriaNombre", categoriaNombre.GetNullable());
+                cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
+                cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                cmd.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                cmd.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                cmd.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
+                using (SqlDataReader dr = cmd.ExecuteReader())
                 {
-                    if(oDr.HasRows)
+                    if(dr.HasRows)
                     {
-                        lProducto = new List<ProductoBe>();
-                        while (oDr.Read())
+                        lista = new List<ProductoBe>();
+                        while (dr.Read())
                         {
-                            oProducto = new ProductoBe();
-                            oProducto.ProductoId = oDr.GetData<int>("Fila");
-                            oProducto.Nombre = oDr.GetData<string>("NombreProducto");
-                            oProducto.categoriaProducto = new CategoriaProductoBe();
-                            oProducto.categoriaProducto.Nombre = oDr.GetData<string>("NombreCategoria");
-                            oProducto.Stock = oDr.GetData<int>("Stock");
-                            lProducto.Add(oProducto);
-                            if (!DBNull.Value.Equals(oDr["Total"])) totalRegistros = (int)oDr["Total"];
+                            ProductoBe item = new ProductoBe();
+                            item.ProductoId = dr.GetData<int>("Fila");
+                            item.Nombre = dr.GetData<string>("NombreProducto");
+                            item.categoriaProducto = new CategoriaProductoBe();
+                            item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
+                            item.Stock = dr.GetData<int>("Stock");
+                            lista.Add(item);
+
+                            totalRegistros = dr.GetData<int>("Total");
                         }
                     }
                 }
             }
-            return lProducto;
+            return lista;
         }
-        public bool ProductoGuardar(ProductoBe productoBe, SqlConnection cn)
+        public bool Guardar(ProductoBe productoBe, SqlConnection cn)
         {
-            bool respuesta = false;
+            bool seGuardo = false;
             try
             { 
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_producto_guardar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@EmpresaId", productoBe.EmpresaId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre.GetNullable());
-                    oCommand.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable());
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", productoBe.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Nombre", productoBe.Nombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable());
 
-                    int result = oCommand.ExecuteNonQuery();
-                    if (result > 0) respuesta = true;
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
                 }
             }
             catch (Exception ex)
             {
-                respuesta = false;
+                seGuardo = false;
             }
-            return respuesta;
+            return seGuardo;
         }
-        public bool ProductoActualizar(ProductoBe productoBe, SqlConnection cn)
-        {
-            bool respuesta = false;
-            try
-            {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_producto_guardar", cn))
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@Nombre", productoBe.Nombre.GetNullable());
-                    oCommand.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable().GetNullable());
-
-                    int result = oCommand.ExecuteNonQuery();
-                    if (result > 0) respuesta = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
-            return respuesta;
-        }
-
     }
 }

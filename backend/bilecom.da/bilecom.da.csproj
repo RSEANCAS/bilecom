@@ -69,24 +69,6 @@
       <Name>bilecom.ut</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\bilecom.be.dll" />
-    <Content Include="bin\Debug\bilecom.be.pdb" />
-    <Content Include="bin\Debug\bilecom.da.dll" />
-    <Content Include="bin\Debug\bilecom.da.pdb" />
-    <Content Include="bin\Debug\bilecom.ut.dll" />
-    <Content Include="bin\Debug\bilecom.ut.pdb" />
-    <Content Include="obj\Debug\bilecom.da.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\bilecom.da.dll" />
-    <Content Include="obj\Debug\bilecom.da.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="obj\Debug\bilecom.da.csproj.CopyComplete" />
-    <None Include="obj\Debug\bilecom.da.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\Debug\TempPE\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,15 +12,15 @@ namespace bilecom.bl
     {
         EmpresaDa empresaDa = new EmpresaDa();
 
-        public EmpresaBe Obtener(int empresaId)
+        public EmpresaBe ObtenerEmpresa(int empresaId)
         {
             EmpresaBe item = null;
 
             try
             {
                 cn.Open();
-
                 item = empresaDa.Obtener(empresaId, cn);
+                cn.Close();
             }
             catch (Exception ex) { throw ex; }
             finally { cn.Close(); }
@@ -28,7 +28,7 @@ namespace bilecom.bl
             return item;
         }
 
-        public EmpresaBe ObtenerPorRuc(string ruc)
+        public EmpresaBe ObtenerEmpresaPorRuc(string ruc)
         {
             EmpresaBe item = null;
 

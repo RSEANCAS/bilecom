@@ -12,11 +12,13 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/provincia")]
     public class ProvinciaController : ApiController
     {
+        ProvinciaBl provinciaBl = new ProvinciaBl();
+
         [HttpGet]
-        [Route("listar")]
-        public List<ProvinciaBe> ProvinciaListar()
+        [Route("listar-provincia")]
+        public List<ProvinciaBe> ListarProvincia()
         {
-            return new ProvinciaBl().ProvinciaListar();
+            return provinciaBl.ListarProvincia();
         }
     }
 }

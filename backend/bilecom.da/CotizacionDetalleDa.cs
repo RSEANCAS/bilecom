@@ -1,4 +1,5 @@
 ﻿using bilecom.be;
+using bilecom.ut;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,23 +12,23 @@ namespace bilecom.da
 {
     public class CotizacionDetalleDa
     {
-        public bool CotizacionDetalleGuardar(CotizacionDetalleBe cotizacionDetalle, SqlConnection cn)
+        public bool Guardar(CotizacionDetalleBe registro, SqlConnection cn)
         {
             bool seGuardo = false;
             try
             {
-                using (SqlCommand oCommand = new SqlCommand("usp_cotizacion_detalle_guardar", cn))
+                using (SqlCommand cmd = new SqlCommand("usp_cotizacion_detalle_guardar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@@cotizacionDetalleId", cotizacionDetalle.CotizacionDetalleId);
-                    oCommand.Parameters.AddWithValue("@descripcion", cotizacionDetalle.Descripcion);
-                    oCommand.Parameters.AddWithValue("@cantidad", cotizacionDetalle.Descripcion);
-                    oCommand.Parameters.AddWithValue("@precioUnitario", cotizacionDetalle.PrecioUnitario);
-                    oCommand.Parameters.AddWithValue("@totalImporte", cotizacionDetalle.TotalImporte);
-                    oCommand.Parameters.AddWithValue("@usuario", cotizacionDetalle.CreadoPor);
-                    
-                    int result = oCommand.ExecuteNonQuery();
-                    if (result > 0) seGuardo = true;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cotizacionDetalleId", registro.CotizacionDetalleId.GetNullable());
+                    cmd.Parameters.AddWithValue("@descripcion", registro.Descripcion.GetNullable());
+                    cmd.Parameters.AddWithValue("@cantidad", registro.Cantidad.GetNullable());
+                    cmd.Parameters.AddWithValue("@precioUnitario", registro.PrecioUnitario.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalImporte", registro.TotalImporte.GetNullable());
+                    cmd.Parameters.AddWithValue("@usuario", registro.CreadoPor.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
                 }
             }
             catch (Exception ex)

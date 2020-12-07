@@ -14,47 +14,27 @@ namespace bilecom.app.Controllers.Api
     public class CategoriaProductoController : ApiController
     {
         [HttpPost]
-        [Route("guardar")]
-        public bool Guardar(CategoriaProductoBe categoriaProducto)
+        [Route("guardar-categoriaproducto")]
+        public bool GuardarCategoriaProducto(CategoriaProductoBe categoriaProducto)
         {
-            bool respuesta = false;
-            try
-            {
-                respuesta = new CategoriaProductoBl().CategoriaProductoGuardar(categoriaProducto);
-            }
-            catch(Exception ex)
-            {
-                respuesta = false;
-            }
+            bool respuesta = new CategoriaProductoBl().CategoriaProductoGuardar(categoriaProducto);
             return respuesta;
         }
 
-        public bool Actualizar(CategoriaProductoBe categoriaProductoBe)
-        {
-            bool respuesta = false;
-            try
-            {
-                respuesta = new CategoriaProductoBl().CategoriaProductoActualizar(categoriaProductoBe);
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
-            return respuesta;
-        }
         [HttpGet]
-        [Route("listar")]
-        public DataPaginate<CategoriaProductoBe> Listar(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "CategoriaProductoId", string ordenMax = "ASC")
+        [Route("buscar-categoriaproducto")]
+        public DataPaginate<CategoriaProductoBe> BuscarCategoriaProducto(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "CategoriaProductoId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-                var lista =  new CategoriaProductoBl().Listar(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<CategoriaProductoBe>
+            var lista = new CategoriaProductoBl().BuscarCategoriaProducto(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<CategoriaProductoBe>
             {
                 data = lista,
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
+            return respuesta;
         }
     }
 }
