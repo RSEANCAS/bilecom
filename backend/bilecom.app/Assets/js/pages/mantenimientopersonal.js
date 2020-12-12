@@ -168,12 +168,29 @@ const pageMantenimientoPersonal = {
     },
 
     ResponseEnviarFormulario: function (data) {
+        let tipo = "";
         if (data == true) {
-            alert("Se ha guardado con éxito.");
-            location.href = "Index";
+            tipo = "success";
         } else {
-            alert("No se pudo guardar la categoria intentelo otra vez.");
+            tipo="danger"
         }
+        $.niftyNoty({
+            type: tipo,
+            container: "floating",
+            html: "¡Se ha guardado con éxito!",
+            floating: {
+                position: "top-center",
+                animationIn: "shake",
+                animationOut: "fadeOut"
+            },
+            focus: true,
+            timer: 3000,
+            onHide: function () {
+                if (data == true) {
+                    urlRoot;
+                }
+            }
+        });
     },
 
     RespondeObtenerDatos: function (data) {
