@@ -45,12 +45,9 @@
     <Compile Include="CategoriaProductoBl.cs" />
     <Compile Include="ClienteBl.cs" />
     <Compile Include="Conexion.cs" />
-<<<<<<< HEAD
     <Compile Include="DepartamentoBl.cs" />
     <Compile Include="DistritoBl.cs" />
-=======
     <Compile Include="CotizacionBl.cs" />
->>>>>>> 211a9e3518472ce632672a343947069ddae4f6e5
     <Compile Include="EmpresaBl.cs" />
     <Compile Include="PaisBl.cs" />
     <Compile Include="PersonalBl.cs" />
