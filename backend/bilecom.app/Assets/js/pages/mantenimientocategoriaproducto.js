@@ -36,7 +36,7 @@
             Usuario: user
         }
 
-        let url = `${urlRoot}api/categoriaproducto/guardar`;
+        let url = `${urlRoot}api/categoriaproducto/guardar-categoriaproducto`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST',body: params , headers};

@@ -12,41 +12,40 @@ namespace bilecom.da
 {
     public class TipoSedeDa
     {
-        public List<TipoSedeBe> fListar(SqlConnection cn, int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        public List<TipoSedeBe> Buscar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<TipoSedeBe> lTipoSede = new List<TipoSedeBe>();
-            TipoSedeBe oTipoSede;
+            List<TipoSedeBe> lista = new List<TipoSedeBe>();
 
-            using (SqlCommand oCommand = new SqlCommand("dbo.usp_tiposede_Listar", cn))
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_tiposede_Listar", cn))
             {
-                oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
-                oCommand.Parameters.AddWithValue("@nombre", nombre.GetNullable());
-                oCommand.Parameters.AddWithValue("@pagina", pagina.GetNullable());
-                oCommand.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
-                oCommand.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
-                oCommand.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
-                using (SqlDataReader oDr = oCommand.ExecuteReader())
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
+                cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                cmd.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                cmd.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                cmd.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
+                using (SqlDataReader dr = cmd.ExecuteReader())
                 {
-                    if (oDr.HasRows)
+                    if (dr.HasRows)
                     {
-                        while (oDr.Read())
+                        while (dr.Read())
                         {
-                            oTipoSede = new TipoSedeBe();
-                            oTipoSede.TipoSedeId = oDr.GetData<int>("Fila");
-                            oTipoSede.EmpresaId = oDr.GetData<int>("EmpresaId");
-                            oTipoSede.Nombre = oDr.GetData<string>("Nombre");
-                            oTipoSede.FlagActivo = oDr.GetData<bool>("FlagActivo");
-                            lTipoSede.Add(oTipoSede);
-                            if (!DBNull.Value.Equals(oDr["Total"])) totalRegistros = (int)oDr["Total"];
+                            TipoSedeBe item = new TipoSedeBe();
+                            item.TipoSedeId = dr.GetData<int>("Fila");
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.Nombre = dr.GetData<string>("Nombre");
+                            item.FlagActivo = dr.GetData<bool>("FlagActivo");
+                            lista.Add(item);
 
+                            totalRegistros = dr.GetData<int>("Total");
                         }
                     }
                 }
             }
 
-            return lTipoSede;
+            return lista;
         }
     }
 }

@@ -12,13 +12,12 @@ namespace bilecom.da
 {
     public class CategoriaProductoDa
     {
-        public List<CategoriaProductoBe> fListar(SqlConnection cn, int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        public List<CategoriaProductoBe> Buscar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<CategoriaProductoBe> lCategoriaProducto = null;
-            CategoriaProductoBe oCategoriaProducto;
+            List<CategoriaProductoBe> lista = null;
 
-            using (SqlCommand cmd = new SqlCommand("dbo.usp_CategoriaProducto_Listar", cn))
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_categoriaproducto_buscar", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
@@ -32,67 +31,45 @@ namespace bilecom.da
                 {
                     if (dr.HasRows)
                     {
-                        lCategoriaProducto = new List<CategoriaProductoBe>();
+                        lista = new List<CategoriaProductoBe>();
                         while (dr.Read())
                         {
-                            oCategoriaProducto = new CategoriaProductoBe();
-                            oCategoriaProducto.CategoriaProductoId = dr.GetData<int>("Fila");
-                            oCategoriaProducto.EmpresaId = dr.GetData<int>("EmpresaId");
-                            oCategoriaProducto.Nombre = dr.GetData<string>("Nombre");
-                            lCategoriaProducto.Add(oCategoriaProducto);
+                            CategoriaProductoBe item = new CategoriaProductoBe();
+                            item.CategoriaProductoId = dr.GetData<int>("Fila");
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.Nombre = dr.GetData<string>("Nombre");
+                            lista.Add(item);
 
-                            if (!DBNull.Value.Equals(dr["Total"])) totalRegistros = (int)dr["Total"];
+                            totalRegistros = dr.GetData<int>("Total");
                         }
                     }
                 }
             }
-            return lCategoriaProducto;
+            return lista;
 
         }
-        public bool CategoriaProductoGuardar(CategoriaProductoBe categoriaProductoBe, SqlConnection cn)
+
+        public bool Guardar(CategoriaProductoBe registro, SqlConnection cn)
         {
-            bool respuesta = false;
+            bool seGuardo = false;
             try
             {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_categoriaproducto_guardar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_categoriaproducto_guardar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId.GetNullable());
-                    oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre.GetNullable());
-                    oCommand.Parameters.AddWithValue("@Usuario", categoriaProductoBe.Usuario.GetNullable());
-                    int result = oCommand.ExecuteNonQuery();
-                    if (result > 0) respuesta = true;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@categoriaProductoId", registro.CategoriaProductoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@nombre", registro.Nombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
                 }
             }
             catch (Exception ex)
             {
-                respuesta = false;
+                seGuardo = false;
             }
-            return respuesta;
-        }
-        public bool CategoriaProductoActualizar(CategoriaProductoBe categoriaProductoBe, SqlConnection cn)
-        {
-            bool respuesta = false;
-            try
-            {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_categoriaproducto_guardar", cn))
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@EmpresaId", categoriaProductoBe.EmpresaId);
-                    oCommand.Parameters.AddWithValue("@CategoriaProductoId", categoriaProductoBe.CategoriaProductoId);
-                    oCommand.Parameters.AddWithValue("@Nombre", categoriaProductoBe.Nombre);
-                    oCommand.Parameters.AddWithValue("@ModificadoPor", categoriaProductoBe.Usuario);
-                    oCommand.Parameters.AddWithValue("@FechaModificacio", categoriaProductoBe.Fecha);
-                    int result = oCommand.ExecuteNonQuery();
-                    if (result > 0) respuesta = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
-            return respuesta;
+            return seGuardo;
         }
     }
 }

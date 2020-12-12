@@ -12,26 +12,25 @@ namespace bilecom.da
 {
     public class TipoDocumentoIdentidadDa
     {
-        public List<TipoDocumentoIdentidadBe> TipoDocumentoIdentidadListar(SqlConnection cn)
+        public List<TipoDocumentoIdentidadBe> Listar(SqlConnection cn)
         {
-            List<TipoDocumentoIdentidadBe> respuesta = null;
+            List<TipoDocumentoIdentidadBe> lista = null;
             try
             {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_tipodocumentoidentidad_listar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tipodocumentoidentidad_listar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataReader oDr = oCommand.ExecuteReader())
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        if (oDr.HasRows)
+                        if (dr.HasRows)
                         {
-                            respuesta = new List<TipoDocumentoIdentidadBe>();
-                            while (oDr.Read())
+                            lista = new List<TipoDocumentoIdentidadBe>();
+                            while (dr.Read())
                             {
-                                respuesta.Add(new TipoDocumentoIdentidadBe
-                                {
-                                    TipoDocumentoIdentidadId = oDr.GetData<int>("TipoDocumentoIdentidadId"),
-                                    Descripcion = oDr.GetData<string>("Descripcion")
-                                });
+                                TipoDocumentoIdentidadBe item = new TipoDocumentoIdentidadBe();
+                                item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
+                                item.Descripcion = dr.GetData<string>("Descripcion");
+                                lista.Add(item);
                             }
                         }
                     }
@@ -39,9 +38,9 @@ namespace bilecom.da
             }
             catch (Exception ex)
             {
-                respuesta = null;
+                lista = null;
             }
-            return respuesta;
+            return lista;
         }
     }
 }

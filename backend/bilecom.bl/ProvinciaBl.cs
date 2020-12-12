@@ -11,24 +11,20 @@ namespace bilecom.bl
 {
     public class ProvinciaBl:Conexion
     {
-        public List<ProvinciaBe> ProvinciaListar()
+        ProvinciaDa provinciaDa = new ProvinciaDa();
+
+        public List<ProvinciaBe> ListarProvincia()
         {
-            List<ProvinciaBe> respuesta = null;
+            List<ProvinciaBe> lista = null;
             try
             {
                 cn.Open();
-                respuesta = new ProvinciaDa().ProvinciaListar(cn);
+                lista = provinciaDa.Listar(cn);
                 cn.Close();
             }
-            catch (Exception ex)
-            {
-                respuesta = null;
-            }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
-            return respuesta;
+            catch (Exception ex){lista = null;}
+            finally{if (cn.State == ConnectionState.Open) cn.Close();}
+            return lista;
         }
     }
 }

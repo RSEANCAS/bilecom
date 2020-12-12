@@ -11,24 +11,20 @@ namespace bilecom.bl
 {
     public class TipoDocumentoIdentidadBl:Conexion
     {
-        public List<TipoDocumentoIdentidadBe> TipoDocumentoIdentidadListar()
+        TipoDocumentoIdentidadDa tipoDocumentoIdentidadDa = new TipoDocumentoIdentidadDa();
+
+        public List<TipoDocumentoIdentidadBe> ListarTipoDocumentoIdentidad()
         {
-            List<TipoDocumentoIdentidadBe> respuesta = null;
+            List<TipoDocumentoIdentidadBe> lista = null;
             try
             {
                 cn.Open();
-                respuesta = new TipoDocumentoIdentidadDa().TipoDocumentoIdentidadListar(cn);
+                lista = tipoDocumentoIdentidadDa.Listar(cn);
                 cn.Close();
             }
-            catch (Exception ex)
-            {
-                respuesta = null;
-            }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
-            return respuesta;
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
     }
 }

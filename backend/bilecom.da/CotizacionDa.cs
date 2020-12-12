@@ -13,23 +13,24 @@ namespace bilecom.da
 {
     public class CotizacionDa
     {
-        public List<CotizacionBe> Listar(SqlConnection cn, int EmpresaId, string NombresCompletosPersonal, string RazonSocial, DateTime FechaHoraEmisionDesde, DateTime FechaHoraEmisionHasta)
+        public List<CotizacionBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, SqlConnection cn, out int totalRegistros)
         {
-            List<CotizacionBe> lCotizacion = null;
-            using (SqlCommand cmd = new SqlCommand("usp_cotizacion_listar", cn))
+            totalRegistros = 0;
+            List<CotizacionBe> lista = null;
+            using (SqlCommand cmd = new SqlCommand("usp_cotizacion_buscar", cn))
             {
                 // Instanciando a la funcion CommandType
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@empresaId", EmpresaId);
-                cmd.Parameters.AddWithValue("@nombresPersonal", NombresCompletosPersonal);
-                cmd.Parameters.AddWithValue("@cliente", RazonSocial);
-                cmd.Parameters.AddWithValue("@fechaHoraEmisionDesde", FechaHoraEmisionDesde);
-                cmd.Parameters.AddWithValue("@fechaHoraEmisionHasta", FechaHoraEmisionHasta);
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@nombresPersonal", nombresCompletosPersonal.GetNullable());
+                cmd.Parameters.AddWithValue("@cliente", razonSocial.GetNullable());
+                cmd.Parameters.AddWithValue("@fechaHoraEmisionDesde", fechaHoraEmisionDesde.GetNullable());
+                cmd.Parameters.AddWithValue("@fechaHoraEmisionHasta", fechaHoraEmisionHasta.GetNullable());
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)
                     {
-                        lCotizacion = new List<CotizacionBe>();
+                        lista = new List<CotizacionBe>();
 
                         while (dr.Read())
                         {
@@ -45,33 +46,36 @@ namespace bilecom.da
                             item.Cliente = new ClienteBe();
                             item.Cliente.RazonSocial = dr.GetData<string>("RazonSocialCliente");
                             item.CotizacionId = dr.GetData<int>("CotizacionId");
-                            lCotizacion.Add(item);
+                            lista.Add(item);
+
+                            totalRegistros = dr.GetData<int>("Total");
                         }
                     }
                 }
             }
-            return lCotizacion;
+            return lista;
         }
-        public bool CotizacionGuardar(CotizacionBe cotizacion, SqlConnection cn, out int? cotizacionId)
+
+        public bool Guardar(CotizacionBe registro, SqlConnection cn, out int? cotizacionId)
         {
             cotizacionId = null;
             bool seGuardo = false;
             try
             {
-                using (SqlCommand oCommand = new SqlCommand("dbo.usp_cotizacion_guardar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_cotizacion_guardar", cn))
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.Parameters.AddWithValue("@cotizacionId", cotizacion.CotizacionId);
-                    oCommand.Parameters.AddWithValue("@empresaId", cotizacion.EmpresaId);
-                    oCommand.Parameters.AddWithValue("@serieId", cotizacion.SerieId);
-                    oCommand.Parameters.AddWithValue("@nroComprobante", cotizacion.NroComprobante);
-                    oCommand.Parameters.AddWithValue("@monedaId", cotizacion.MonedaId);
-                    oCommand.Parameters.AddWithValue("@clienteID", cotizacion.ClienteId);
-                    oCommand.Parameters.AddWithValue("@personalId", cotizacion.PersonalId);
-                    oCommand.Parameters.AddWithValue("@totalImporte", cotizacion.TotalImporte);
-                    oCommand.Parameters.AddWithValue("@usuario", cotizacion.CreadoPor);
-                    int result = oCommand.ExecuteNonQuery();
-                    if (result > 0) seGuardo = true;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@cotizacionId", registro.CotizacionId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@serieId", registro.SerieId.GetNullable());
+                    cmd.Parameters.AddWithValue("@nroComprobante", registro.NroComprobante.GetNullable());
+                    cmd.Parameters.AddWithValue("@monedaId", registro.MonedaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@clienteID", registro.ClienteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@personalId", registro.PersonalId.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalImporte", registro.TotalImporte.GetNullable());
+                    cmd.Parameters.AddWithValue("@usuario", registro.CreadoPor.GetNullable());
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
                 }
             }
             catch (Exception ex)

@@ -5,35 +5,22 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
-        $("#btn-buscar").click(pageSede.btnBuscarClick);
+        $("#btn-buscar").click(pageSede.BtnBuscarClick);
     },
-    btnBuscarClick: function (e) {
+    BtnBuscarClick: function (e) {
         e.preventDefault();
         pageSede.CreateDataTable("#tbl-lista")
-        //pagePersonal.Listar();
-    },
-    Listar: function () {
-        let user = common.ObtenerUsuario();
-        let empresaId = user.Empresa.EmpresaId;
-        let nombre = $("#txt-nombre").val();
-        let url = `${urlRoot}api/sede/listar?empresaId=${empresaId}&nombre=${nombre}`;
-        //fetch(url)
-        //    .then(r => r.json())
-        //    .then(data => pagePersonal.CreateDataTable("#tbl-lista", data, {}));
     },
     ObtenerNombre: function () {
         let nombre = $("#txt-nombre").val();
         return nombre;
     },
-    //CreateDataTable: function (id, data, options) {
     CreateDataTable: function (id) {
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
             serverSide: true,
-            ajax: `${urlRoot}api/sede/listar?empresaId=${empresaId}&nombre=${pageSede.ObtenerNombre()}`,
-            //destroy: true,
-            //data: data,
+            ajax: `${urlRoot}api/sede/buscar-sede?empresaId=${empresaId}&nombre=${pageSede.ObtenerNombre()}`,
             columns: [
                 { data: "SedeId" },
                 { data: "Nombre" },

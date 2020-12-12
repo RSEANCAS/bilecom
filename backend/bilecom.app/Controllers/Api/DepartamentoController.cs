@@ -12,11 +12,13 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/departamento")]
     public class DepartamentoController : ApiController
     {
+        DepartamentoBl departamentoBl = new DepartamentoBl();
+
         [HttpGet]
-        [Route("listar")]
-        public List<DepartamentoBe> DepartamentoListar()
+        [Route("listar-departamento")]
+        public List<DepartamentoBe> ListarDepartamento()
         {
-            return new DepartamentoBl().DepartamentoListar();
+            return departamentoBl.ListarDepartamento();
         }
 
     }

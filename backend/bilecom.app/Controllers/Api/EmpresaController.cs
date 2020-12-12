@@ -15,15 +15,15 @@ namespace bilecom.app.Controllers.Api
         EmpresaBl empresaBl = new EmpresaBl();
 
         [HttpGet]
-        [Route("validar-ruc")]
-        public IHttpActionResult ValidarRuc(string ruc)
+        [Route("validar-empresa-por-ruc")]
+        public IHttpActionResult ValidarEmpresaPorRuc(string ruc)
         {
             BootStrapValidator.Remote item = new BootStrapValidator.Remote();
 
             if (string.IsNullOrEmpty((ruc ?? "").Trim()))
                 return Ok(item);
 
-            var empresa = empresaBl.ObtenerPorRuc(ruc);
+            var empresa = empresaBl.ObtenerEmpresaPorRuc(ruc);
 
             if (empresa == null)
                 return Ok(item);
