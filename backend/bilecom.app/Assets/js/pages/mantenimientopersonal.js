@@ -118,10 +118,31 @@ const pageMantenimientoPersonal = {
         $("#frm-personal-mantenimiento")
             .bootstrapValidator({
                 fields: {
-                    "txt-nombre": {
+                    "txt-nombres": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria",
+                                message: "Debe ingresar nombres completos",
+                            }
+                        }
+                    },
+                    "txt-numero-documento-identidad": {
+                        validators: {
+                        notEmpty: {
+                            message: "Debe ingresar numero de documento de identidad",
+                            }
+                        }
+                    },
+                    "txt-correo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar correo valido",
+                            }
+                        }
+                    },
+                    "txt-direccion": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar direccion",
                             }
                         }
                     }
@@ -168,16 +189,19 @@ const pageMantenimientoPersonal = {
     },
 
     ResponseEnviarFormulario: function (data) {
-        let tipo = "";
+        let tipo = "",mensaje="";
         if (data == true) {
             tipo = "success";
+            mensaje = "¡Se ha guardado con éxito!";
         } else {
-            tipo="danger"
+            tipo = "danger";
+            mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
         }
+
         $.niftyNoty({
             type: tipo,
             container: "floating",
-            html: "¡Se ha guardado con éxito!",
+            html: mensaje,
             floating: {
                 position: "top-center",
                 animationIn: "shake",
@@ -187,10 +211,11 @@ const pageMantenimientoPersonal = {
             timer: 3000,
             onHide: function () {
                 if (data == true) {
-                    urlRoot;
+                    location.href = `${urlRoot}Personal`
                 }
             }
         });
+        
     },
 
     RespondeObtenerDatos: function (data) {
