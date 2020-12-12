@@ -22,6 +22,14 @@ namespace bilecom.app.Controllers.Api
             bool respuesta = productoBl.ProductoGuardar(registro);
             return respuesta;
         }
+
+        [HttpGet]
+        [Route("obtener-producto")]
+        public ProductoBe ObtenerProducto(int empresaId, int productoId)
+        {
+            return new ProductoBl().Obtener(empresaId, productoId);
+        }
+
         [HttpGet]
         [Route("buscar-producto")]
         public DataPaginate<ProductoBe> BuscarProducto(int empresaId, string nombre, string categoriaNombre, int draw, int start, int length, string columnaOrden = "ProductoId", string ordenMax = "ASC")

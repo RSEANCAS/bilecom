@@ -28,6 +28,20 @@ namespace bilecom.bl
             return lista;
         }
 
+        public ClienteBe Obtener(int EmpresaId, int ClienteId)
+        {
+            ClienteBe respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = clienteDa.Obtener(EmpresaId, ClienteId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { respuesta = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return respuesta;
+        }
+
         public bool GuardarCliente(ClienteBe registro)
         {
             bool seGuardo = false;

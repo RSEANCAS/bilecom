@@ -15,15 +15,13 @@ namespace bilecom.app.Controllers
         }
         public ActionResult Nuevo()
         {
+            TempData["Id"] = 0;
             return View("Mantenimiento");
         }
         public ActionResult Editar(int id)
         {
+            TempData["Id"] = id;
             return View("Mantenimiento");
-        }
-        public ActionResult MantenimientoCategoria()
-        {
-            return View();
         }
 
     }
