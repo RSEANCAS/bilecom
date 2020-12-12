@@ -31,12 +31,12 @@ namespace bilecom.app.Controllers.Api
             if (string.IsNullOrEmpty((usuario ?? "").Trim()))
                 return Ok(item);
 
-            var empresa = empresaBl.ObtenerPorRuc(ruc);
+            var empresa = empresaBl.ObtenerEmpresaPorRuc(ruc);
 
             if (empresa == null)
                 return Ok(item);
 
-            var user = usuarioBl.ObtenerPorNombre(usuario, empresa.EmpresaId);
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId);
 
             if (user == null)
                 return Ok(item);
@@ -47,8 +47,8 @@ namespace bilecom.app.Controllers.Api
         }
 
         [HttpPost]
-        [Route("autenticar")]
-        public IHttpActionResult Autenticar(string ruc, string usuario, string contraseña)
+        [Route("autenticar-usuario")]
+        public IHttpActionResult AutenticarUsuario(string ruc, string usuario, string contraseña)
         {
             if (string.IsNullOrEmpty((ruc ?? "").Trim()))
                 return BadRequest("El ruc está vacío.");
@@ -59,12 +59,12 @@ namespace bilecom.app.Controllers.Api
             if (string.IsNullOrEmpty((contraseña ?? "").Trim()))
                 return BadRequest("La contraseña está vacía.");
 
-            var empresa = empresaBl.ObtenerPorRuc(ruc);
+            var empresa = empresaBl.ObtenerEmpresaPorRuc(ruc);
 
             if (empresa == null)
                 return BadRequest($"El ruc {ruc} no se encuentra registrado.");
 
-            var user = usuarioBl.ObtenerPorNombre(usuario, empresa.EmpresaId);
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId);
 
             if (user == null)
                 return BadRequest($"El usuario {usuario} no se encuentra registrado.");

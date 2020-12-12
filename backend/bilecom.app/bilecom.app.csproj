@@ -2913,7 +2913,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
     <Compile Include="Controllers\Api\CotizacionController.cs" />
-    <Compile Include="Controllers\Api\httpPostAttribute.cs" />
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />

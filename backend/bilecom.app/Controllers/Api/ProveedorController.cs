@@ -13,33 +13,29 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/proveedor")]
     public class ProveedorController : ApiController
     {
+        ProveedorBl proveedorBl = new ProveedorBl();
+
         [HttpGet]
-        [Route("listar")]
-        public DataPaginate<ProveedorBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int draw, int start, int length, string columnaOrden = "ProveedorId", string ordenMax = "ASC")
+        [Route("buscar-proveedor")]
+        public DataPaginate<ProveedorBe> BuscarProveedor(int empresaId, string nroDocumentoIdentidad, string razonSocial, int draw, int start, int length, string columnaOrden = "ProveedorId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista= new ProveedorBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<ProveedorBe>
+            var lista= proveedorBl.BuscarProveedor(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<ProveedorBe>
             {
                 data = lista,
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
+            return respuesta;
         }
+
         [HttpPost]
-        [Route("guardar")]
-        public bool Guardar(ProveedorBe proveedorBe)
+        [Route("guardar-proveedor")]
+        public bool GuardarProveedor(ProveedorBe registro)
         {
-            bool respuesta = false;
-            try
-            {
-                respuesta = new ProveedorBl().ProveedorGuardar(proveedorBe);
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
+            bool respuesta = proveedorBl.ProveedorGuardar(registro);
             return respuesta;
         }
 

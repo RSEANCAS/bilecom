@@ -2,6 +2,7 @@
 using bilecom.da;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace bilecom.bl
     {
         UsuarioDa usuarioDa = new UsuarioDa();
 
-        public UsuarioBe ObtenerPorNombre(string nombre, int? empresaId)
+        public UsuarioBe ObtenerUsuarioPorNombre(string nombre, int? empresaId)
         {
             UsuarioBe item = null;
 
@@ -23,7 +24,7 @@ namespace bilecom.bl
                 item = usuarioDa.ObtenerPorNombre(nombre, empresaId, cn);
             }
             catch (Exception ex) { throw ex; }
-            finally { cn.Close(); }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return item;
         }

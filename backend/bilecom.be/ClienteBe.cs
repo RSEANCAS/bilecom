@@ -11,7 +11,7 @@ namespace bilecom.be
         // Definir los atributos que tiene la clase o tabla
         public int ClienteId { get; set; }
         public int EmpresaId { get; set; }
-        public int TipoDocumento { get; set; }
+        public int TipoDocumentoIdentidadId { get; set; }
         public TipoDocumentoIdentidadBe TipoDocumentoIdentidad { get; set; }
         public string NroDocumentoIdentidad { get; set; }
         public string RazonSocial { get; set; }

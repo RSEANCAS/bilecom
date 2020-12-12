@@ -2,6 +2,7 @@
 using bilecom.da;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,25 +11,21 @@ namespace bilecom.bl
 {
     public class TipoSedeBl : Conexion
     {
-        public List<TipoSedeBe> Listar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        TipoSedeDa tipoSedeDa = new TipoSedeDa();
+
+        public List<TipoSedeBe> BuscarTipoSede(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<TipoSedeBe> lTipoSede = new List<TipoSedeBe>();
-            using (cn)
+            List<TipoSedeBe> lista = new List<TipoSedeBe>();
+            try
             {
-                try
-                {
-                    cn.Open();
-                    lTipoSede = new TipoSedeDa().fListar(cn, empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
-                    cn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                cn.Open();
+                lista = tipoSedeDa.Buscar(empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                cn.Close();
             }
-            return lTipoSede;
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
     }
 }

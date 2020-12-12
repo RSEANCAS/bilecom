@@ -5,22 +5,11 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
-        $("#btn-buscar").click(pagePersonal.btnBuscarClick);
+        $("#btn-buscar").click(pagePersonal.BtnBuscarClick);
     },
-    btnBuscarClick: function (e) {
+    BtnBuscarClick: function (e) {
         e.preventDefault();
         pagePersonal.CreateDataTable("#tbl-lista")
-        //pagePersonal.Listar();
-    },
-    Listar: function () {
-        let user = common.ObtenerUsuario();
-        let empresaId = user.Empresa.EmpresaId;
-        let nroIdentidad = $("#txt-numero-documento-identidad").val();
-        let nombresCompletos = $("#txt-nombres-completos").val();  
-        let url = `${urlRoot}api/personal/listar?empresaId=${empresaId}&nroDocumentoIdentidad=${nroIdentidad}&nombresCompletos=${nombresCompletos}`;
-        //fetch(url)
-        //    .then(r => r.json())
-        //    .then(data => pagePersonal.CreateDataTable("#tbl-lista", data, {}));
     },
     ObtenerNroDocumentoIdentidad: function () {
         let nroIdentidad = $("#txt-numero-documento-identidad").val();
@@ -30,15 +19,26 @@
         let nombresCompletos = $("#txt-nombres-completos").val();  
         return nombresCompletos;
     },
-    //CreateDataTable: function (id, data, options) {
     CreateDataTable: function (id) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
+            processing: true,
             serverSide: true,
-            ajax: `${urlRoot}api/personal/listar?empresaId=${empresaId}&nroDocumentoIdentidad=${pagePersonal.ObtenerNroDocumentoIdentidad()}&nombresCompletos=${pagePersonal.ObtenerNombreCompletos()}`,
-            //destroy: true,
-            //data: data,
+            ajax: {
+                //url: `${urlRoot}api/personal/buscar-personal?empresaId=${empresaId}&nroDocumentoIdentidad=${pagePersonal.ObtenerNroDocumentoIdentidad()}&nombresCompletos=${pagePersonal.ObtenerNombreCompletos()}`,
+                url: `${urlRoot}api/personal/buscar-personal`,
+                data: {
+                    empresaId: empresaId,
+                    nroDocumentoIdentidad: pagePersonal.ObtenerNroDocumentoIdentidad,
+                    nombresCompletos: pagePersonal.ObtenerNombreCompletos
+                }
+            },
             columns: [
                 {data: "PersonalId"},
                 {data: "TipoDocumentoIdentidad.Descripcion"},
@@ -46,7 +46,9 @@
                 {data: "NombresCompletos"},
                 {
                     data: "PersonalId", render: function (data, row) {
-                        return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href = "#" data - original - title="Delete" data - container="body" ></a >`} },
+                        return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Personal/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href = "#" data - original - title="Delete" data - container="body" ></a >`
+                    }
+                },
             ]
         })
     }

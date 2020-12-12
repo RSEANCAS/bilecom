@@ -12,22 +12,15 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/cotizacion")]
     public class CotizacionController : ApiController
     {
-        [httpPost]
-        [Route("guardar")]
+        CotizacionBl cotizacionBl = new CotizacionBl();
 
-        public bool CotizacionGuardar(CotizacionBe cotizacion, out int? cotizacionId)
+        [HttpPost]
+        [Route("guardar-cotizacion")]
+
+        public bool GuardarCotizacion(CotizacionBe registro)
         {
             //Cada parámetro que tiene un "out int?" tiene que que inicializarse con nulo, porque el "int?" acepta valores nulos
-            cotizacionId = null;
-            bool respuesta = false;
-            try
-            {
-                respuesta = new CotizacionBl().CotizacionGuardar(cotizacion, out cotizacionId);
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
+            bool respuesta = cotizacionBl.GuardarCotizacion(registro);
             return respuesta;
         }
 

@@ -11,48 +11,35 @@ namespace bilecom.bl
 {
     public class ClienteBl : Conexion
     {
-        public List<ClienteBe> Listar(int empresaId , string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        ClienteDa clienteDa = new ClienteDa();
+
+        public List<ClienteBe> BuscarCliente(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<ClienteBe> lCliente = new List<ClienteBe>();
-            using (cn)
+            List<ClienteBe> lista = null;
+            try
             {
-                try
-                {
-                    cn.Open();
-                    lCliente = new ClienteDa().fListar(cn, empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
-                    cn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                cn.Open();
+                lista = clienteDa.Buscar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                cn.Close();
             }
-            return lCliente;
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
 
-        public bool ClienteGuardar(ClienteBe clienteBe)
+        public bool GuardarCliente(ClienteBe registro)
         {
-            bool respuesta = false;
-            using (cn)
+            bool seGuardo = false;
+            try
             {
-                try
-                {
-                    cn.Open();
-                    respuesta = new ClienteDa().ClienteGuardar(clienteBe, cn);
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-                    respuesta = false;
-                }
-                finally
-                {
-                    if (cn.State == ConnectionState.Open) cn.Close();
-                }
+                cn.Open();
+                seGuardo = clienteDa.Guardar(registro, cn);
+                cn.Close();
             }
-            return respuesta;
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
         }
     }
 }

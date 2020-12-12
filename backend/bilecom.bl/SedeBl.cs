@@ -2,6 +2,7 @@
 using bilecom.da;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -11,26 +12,22 @@ namespace bilecom.bl
 {
     public class SedeBl : Conexion
     {
-        public List<SedeBe> Listar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        SedeDa sedeDa = new SedeDa();
+
+        public List<SedeBe> BuscarSede(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<SedeBe> lSede = new List<SedeBe>();
-            using (cn)
+            List<SedeBe> lista = null;
+            try
             {
-                try
-                {
-                    cn.Open();
-                    lSede = new SedeDa().fListar(cn, empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
-                    cn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                cn.Open();
+                lista = sedeDa.Buscar(empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                cn.Close();
             }
+            catch (Exception) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
-            return lSede;
+            return lista;
         }
     }
 }

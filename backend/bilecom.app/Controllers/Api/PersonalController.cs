@@ -14,40 +14,35 @@ namespace bilecom.app.Controllers.Api
     //[Authorize]
     public class PersonalController : ApiController
     {
+        PersonalBl personalBl = new PersonalBl();
+
         [HttpGet]
-        [Route("listar")]
-        public DataPaginate<PersonalBe> Listar (int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int draw, int start, int length, string columnaOrden="PersonalId", string ordenMax="ASC")
+        [Route("buscar-personal")]
+        public DataPaginate<PersonalBe> BuscarPersonal(int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int draw, int start, int length, string columnaOrden = "PersonalId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-                var lista = new PersonalBl().Listar(empresaId, nroDocumentoIdentidad, nombresCompletos, start, length, columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<PersonalBe>
+            var lista = personalBl.BuscarPersonal(empresaId, nroDocumentoIdentidad, nombresCompletos, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<PersonalBe>
             {
                 data = lista,
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
+            return respuesta;
         }
         [HttpGet]
-        [Route("obtener")]
-        public PersonalBe PersonalObtener(int EmpresaId, int PersonalId)
+        [Route("obtener-personal")]
+        public PersonalBe ObtenerPersonal(int EmpresaId, int PersonalId)
         {
-            return new PersonalBl().PersonalObtener(EmpresaId, PersonalId);
+            return personalBl.ObtenerPersonal(EmpresaId, PersonalId);
         }
 
         [HttpPost]
-        [Route("guardar")]
-        public bool Guardar(PersonalBe personalBe)
+        [Route("guardar-personal")]
+        public bool GuardarPersonal(PersonalBe registro)
         {
-            bool respuesta = false;
-            try
-            {
-                respuesta = new PersonalBl().PersonalGuardar(personalBe);
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
+            bool respuesta = personalBl.GuardarPersonal(registro);
             return respuesta;
         }
     }

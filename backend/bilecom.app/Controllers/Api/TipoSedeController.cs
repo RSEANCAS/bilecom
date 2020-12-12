@@ -13,19 +13,22 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/tiposede")]
     public class TipoSedeController : ApiController
     {
+        TipoSedeBl tipoSedeBl = new TipoSedeBl();
+
         [HttpGet]
-        [Route("listar")]
-        public DataPaginate<TipoSedeBe> Listar(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "TipoSedeId", string ordenMax = "ASC")
+        [Route("buscar-tiposede")]
+        public DataPaginate<TipoSedeBe> BuscarTipoSede(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "TipoSedeId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = new TipoSedeBl().Listar(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<TipoSedeBe>
+            var lista = tipoSedeBl.BuscarTipoSede(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<TipoSedeBe>
             {
                 data = lista,
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
+            return respuesta;
         }
     }
 }

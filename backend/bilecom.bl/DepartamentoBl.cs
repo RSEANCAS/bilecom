@@ -11,24 +11,20 @@ namespace bilecom.bl
 {
     public class DepartamentoBl : Conexion
     {
-        public List<DepartamentoBe> DepartamentoListar()
+        DepartamentoDa departamentoDa = new DepartamentoDa();
+
+        public List<DepartamentoBe> ListarDepartamento()
         {
-            List<DepartamentoBe> respuesta = null;
+            List<DepartamentoBe> lista = null;
             try
             {
                 cn.Open();
-                respuesta = new DepartamentoDa().DepartamentoListar(cn);
+                lista = departamentoDa.Listar(cn);
                 cn.Close();
             }
-            catch(Exception ex)
-            {
-                respuesta = null;
-            }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
-            return respuesta;
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
     }
 }

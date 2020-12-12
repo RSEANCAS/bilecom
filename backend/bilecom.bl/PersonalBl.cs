@@ -11,63 +11,49 @@ namespace bilecom.bl
 {
     public class PersonalBl : Conexion
     {
-        public List<PersonalBe> Listar(int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        PersonalDa personalDa = new PersonalDa();
+
+        public List<PersonalBe> BuscarPersonal(int empresaId, string nroDocumentoIdentidad, string nombresCompletos, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<PersonalBe> lPersonal = new List<PersonalBe>();
-            using (cn)
-            {
-                try
-                {
-                    cn.Open();
-                    lPersonal = new PersonalDa().fListar(cn, empresaId, nroDocumentoIdentidad, nombresCompletos, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
-                    cn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-            }
-            return lPersonal;
-        }
-
-        public PersonalBe PersonalObtener(int EmpresaId, int PersonalId)
-        {
-            PersonalBe respuesta = null;
+            List<PersonalBe> lista = null;
             try
             {
                 cn.Open();
-                respuesta = new PersonalDa().PersonalObtener(EmpresaId, PersonalId,cn);
+                lista = personalDa.Buscar(empresaId, nroDocumentoIdentidad, nombresCompletos, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
-            catch(Exception ex)
-            {
-                respuesta = null;
-            }
-            return respuesta;
+            catch (Exception){ lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
-        public bool PersonalGuardar(PersonalBe personalBe)
+
+        public PersonalBe ObtenerPersonal(int EmpresaId, int PersonalId)
         {
-            bool respuesta = false;
-            using (cn)
+            PersonalBe item = null;
+            try
             {
+                cn.Open();
+                item = personalDa.Obtener(EmpresaId, PersonalId,cn);
+                cn.Close();
+            }
+            catch(Exception ex){item = null;}
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return item;
+        }
+
+        public bool GuardarPersonal(PersonalBe registro)
+        {
+            bool seGuardo = false;
                 try
                 {
                     cn.Open();
-                    respuesta = new PersonalDa().PersonalGuardar(personalBe, cn);
+                    seGuardo = new PersonalDa().Guardar(registro, cn);
                     cn.Close();
                 }
-                catch (Exception ex)
-                {
-                    respuesta = false;
-                }
-                finally
-                {
-                    if (cn.State == ConnectionState.Open) cn.Close();
-                }
-            }
-            return respuesta;
+                catch (Exception ex){seGuardo = false;}
+                finally {if (cn.State == ConnectionState.Open) cn.Close();}
+            return seGuardo;
         }
     }
 }

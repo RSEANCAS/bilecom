@@ -11,71 +11,36 @@ namespace bilecom.bl
 {
     public class ProductoBl : Conexion
     {
-        public List<ProductoBe> Listar(string categoriaNombre, string nombre, int empresaId, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        ProductoDa productoDa = new ProductoDa();
+
+        public List<ProductoBe> BuscarProducto(string categoriaNombre, string nombre, int empresaId, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<ProductoBe> lProducto = new List<ProductoBe>();
+            List<ProductoBe> lista = null;
 
-            using (cn)
+            try
             {
-                try
-                {
-                    cn.Open();
-                    lProducto = new ProductoDa().fListar(cn, categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, out totalRegistros);
-                    cn.Close();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                cn.Open();
+                lista = productoDa.Buscar(categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                cn.Close();
             }
-            return lProducto;
+            catch (Exception ex){lista = null;}
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
         }
 
-        public bool ProductoGuardar(ProductoBe productoBe)
+        public bool ProductoGuardar(ProductoBe registro)
         {
-            bool respuesta = false;
-            using (cn)
+            bool seGuardo = false;
+            try
             {
-                try
-                {
-                    cn.Open();
-                    respuesta = new ProductoDa().ProductoGuardar(productoBe, cn);
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-                    respuesta = false;
-                }
-                finally
-                {
-                    if (cn.State == ConnectionState.Open) cn.Close();
-                }
+                cn.Open();
+                seGuardo = productoDa.Guardar(registro, cn);
+                cn.Close();
             }
-            return respuesta;
-        }
-        public bool ProductoActualizar(ProductoBe productoBe)
-        {
-            bool respuesta = false;
-            using (cn)
-            {
-                try
-                {
-                    cn.Open();
-                    respuesta = new ProductoDa().ProductoActualizar(productoBe, cn);
-                    cn.Close();
-                }
-                catch (Exception ex)
-                {
-                    respuesta = false;
-                }
-                finally
-                {
-                    if (cn.State == ConnectionState.Open) cn.Close();
-                }
-            }
-            return respuesta;
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
         }
 
     }

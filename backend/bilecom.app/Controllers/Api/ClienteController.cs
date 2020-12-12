@@ -13,13 +13,15 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/cliente")]
     public class ClienteController : ApiController
     {
+        ClienteBl clienteBl = new ClienteBl();
+
         [HttpGet]
-        [Route("listar")]
-        public DataPaginate<ClienteBe> Listar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int draw, int start, int length, string columnaOrden = "ClienteId", string ordenMax = "ASC")
+        [Route("buscar-cliente")]
+        public DataPaginate<ClienteBe> BuscarCliente(int empresaId, string nroDocumentoIdentidad, string razonSocial, int draw, int start, int length, string columnaOrden = "ClienteId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = new ClienteBl().Listar(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
-            return new DataPaginate<ClienteBe>
+            var lista = clienteBl.BuscarCliente(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<ClienteBe>
             {
                 data = lista,
                 draw = draw,
@@ -27,21 +29,14 @@ namespace bilecom.app.Controllers.Api
                 recordsTotal = totalRegistros
             };
 
+            return respuesta;
         }
         
         [HttpPost]
-        [Route("guardar")]
-        public bool Guardar(ClienteBe clienteBe)
+        [Route("guardar-cliente")]
+        public bool GuardarCliente(ClienteBe registro)
         {
-            bool respuesta = false;
-            try
-            {
-                respuesta = new ClienteBl().ClienteGuardar(clienteBe);
-            }
-            catch (Exception ex)
-            {
-                respuesta = false;
-            }
+            bool respuesta = clienteBl.GuardarCliente(registro);
             return respuesta;
         }
     }

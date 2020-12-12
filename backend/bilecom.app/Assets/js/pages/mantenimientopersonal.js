@@ -35,11 +35,11 @@ const pageMantenimientoPersonal = {
     },
     CargarCombo: async function () {
         let promises = [
-            fetch(`${urlRoot}api/pais/listar`),
-            fetch(`${urlRoot}api/departamento/listar`),
-            fetch(`${urlRoot}api/provincia/listar`),
-            fetch(`${urlRoot}api/distrito/listar`),
-            fetch(`${urlRoot}api/tipodocumentoidentidad/listar`)]
+            fetch(`${urlRoot}api/pais/listar-pais`),
+            fetch(`${urlRoot}api/departamento/listar-departamento`),
+            fetch(`${urlRoot}api/provincia/listar-provincia`),
+            fetch(`${urlRoot}api/distrito/listar-distrito`),
+            fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))
             .then(([PaisLista,DepartamentoLista,ProvinciaLista,DistritoLista,TipoDocumentoIdentidadLista]) =>
@@ -69,7 +69,7 @@ const pageMantenimientoPersonal = {
         if (numero != 0) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-            let url = `${urlRoot}api/personal/obtener?EmpresaId=${empresaId}&PersonalId=${numero}`;
+            let url = `${urlRoot}api/personal/obtener-personal?EmpresaId=${empresaId}&PersonalId=${numero}`;
             let init = { method: 'GET' };
 
             fetch(url, init)
@@ -157,7 +157,7 @@ const pageMantenimientoPersonal = {
             Usuario: user,
             DistritoId: distritoId
         }
-        let url = `${urlRoot}api/personal/guardar`;
+        let url = `${urlRoot}api/personal/guardar-personal`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
