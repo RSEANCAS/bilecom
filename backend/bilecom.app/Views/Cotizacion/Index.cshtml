@@ -2,7 +2,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+}
 <div id="content-container">
     <div id="page-head">
 
@@ -89,36 +92,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>2</td>
-                            <td>2020</td>
-                            <td>00000002</td>
-                            <td>Pedido2</td>
-                            <td>06-10-2020</td>
-                            <td>Personal 2</td>
-                            <td>Cliente 2</td>
-                            <td>
-                                <input id="demo-form-checkbox-1" class="magic-checkbox" type="checkbox">
-                                <label for="demo-form-checkbox-1"></label>
-                                <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
-                                <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>2020</td>
-                            <td>00000003</td>
-                            <td>Pedido3</td>
-                            <td>06-10-2020</td>
-                            <td>Personal 3</td>
-                            <td>Cliente 3</td>
-                            <td>
-                                <input id="demo-form-checkbox-2" class="magic-checkbox" type="checkbox">
-                                <label for="demo-form-checkbox-2"></label>
-                                <a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a>
-                                <a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href="#" data-original-title="Delete" data-container="body"></a>
-                            </td>
-                        </tr>
+                        
                         <tr>
                             <td></td>
                             <td></td>
