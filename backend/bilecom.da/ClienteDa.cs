@@ -55,6 +55,45 @@ namespace bilecom.da
             return lista;
         }
 
+        public ClienteBe Obtener(int empresaId, int clienteId, SqlConnection cn)
+        {
+            ClienteBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_cliente_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ClienteId", clienteId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new ClienteBe();
+                                respuesta.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
+                                respuesta.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");
+                                respuesta.RazonSocial = dr.GetData<string>("RazonSocial");
+                                respuesta.NombreComercial = dr.GetData<string>("NombreComercial");
+                                respuesta.DistritoId = dr.GetData<int>("DistritoId");
+                                respuesta.Direccion = dr.GetData<string>("Direccion");
+                                respuesta.Correo = dr.GetData<string>("Correo");
+                                respuesta.FlagActivo = dr.GetData<bool>("FlagActivo");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
+
+
         public bool Guardar(ClienteBe registro, SqlConnection cn)
         {
             bool seGuardo = false;
@@ -65,7 +104,7 @@ namespace bilecom.da
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@clienteId", registro.ClienteId.GetNullable());
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@tipoDocumentoIdentidad", registro.TipoDocumentoIdentidadId.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoDocumentoIdentidadId", registro.TipoDocumentoIdentidadId.GetNullable());
                     cmd.Parameters.AddWithValue("@nroDocumentoIdentidad", registro.NroDocumentoIdentidad.GetNullable());
                     cmd.Parameters.AddWithValue("@razonSocial", registro.RazonSocial.GetNullable());
                     cmd.Parameters.AddWithValue("@nombreComercial", registro.NombreComercial.GetNullable());

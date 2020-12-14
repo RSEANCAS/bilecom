@@ -73,5 +73,37 @@ namespace bilecom.da
             }
             return seGuardo;
         }
+
+        public ProductoBe Obtener(int empresaId, int productoId, SqlConnection cn)
+        {
+            ProductoBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_producto_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ProductoId", productoId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new ProductoBe();
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.CategoriaId = dr.GetData<int>("CategoriaId");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

@@ -12,6 +12,19 @@ namespace bilecom.bl
     public class TipoSedeBl : Conexion
     {
         TipoSedeDa tipoSedeDa = new TipoSedeDa();
+        public List<TipoSedeBe> ListarTipoSede(int empresaId)
+        {
+            List<TipoSedeBe> respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = tipoSedeDa.Listar(empresaId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { respuesta = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return respuesta;
+        }
 
         public List<TipoSedeBe> BuscarTipoSede(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
@@ -26,6 +39,34 @@ namespace bilecom.bl
             catch (Exception ex) { lista = null; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
+        }
+
+        public TipoSedeBe Obtener(int EmpresaId, int TipoSedeId)
+        {
+            TipoSedeBe respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = tipoSedeDa.Obtener(EmpresaId, TipoSedeId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { respuesta = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return respuesta;
+        }
+
+        public bool Guardar(TipoSedeBe registro)
+        {
+            bool seGuardo = false;
+            try
+            {
+                cn.Open();
+                seGuardo = tipoSedeDa.Guardar(registro, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
         }
     }
 }

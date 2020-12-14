@@ -378,6 +378,7 @@
     <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
+    <Content Include="Assets\js\pages\mantenimientotiposede.js" />
     <Content Include="Assets\js\pages\personal.js" />
     <Content Include="Assets\js\pages\mantenimientocliente.js" />
     <Content Include="Assets\js\pages\mantenimientopersonal.js" />

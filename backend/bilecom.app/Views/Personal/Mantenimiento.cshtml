@@ -3,7 +3,7 @@
     ViewBag.Title = "Personal Mantenimiento";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-links_footer
+
 @section links_footer{
     <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
     
@@ -109,7 +109,7 @@ links_footer
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>
+                            <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/Personal/")">Cancelar</a>
                         </div>
                     </div>
                 </div>

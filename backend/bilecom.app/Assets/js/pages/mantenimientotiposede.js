@@ -1,16 +1,16 @@
-﻿const pageMantenimientoCategoriaProducto = {
+﻿const pageMantenimientoTipoSede = {
     Init: function () {
         this.Validar();
         this.InitEvents();
     },
     InitEvents: function () {
-        pageMantenimientoCategoriaProducto.ObtenerDatos();
+        pageMantenimientoTipoSede.ObtenerDatos();
     },
-    Validar: function (){
-        $("#frm-categoriaproducto-mantenimiento")
+    Validar: function () {
+        $("#frm-tiposede")
             .bootstrapValidator({
                 fields: {
-                    "txt-nombre": {
+                    "txt-tipo-sede": {
                         validators: {
                             notEmpty: {
                                 message: "Debe ingresar Categoria.",
@@ -25,7 +25,7 @@
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoCategoriaProducto.EnviarFormulario();
+                pageMantenimientoTipoSede.EnviarFormulario();
             });
     },
     ObtenerDatos: function () {
@@ -33,38 +33,39 @@
         if (numero != 0) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-            let url = `${urlRoot}api/categoriaproducto/obtener-categoriaproducto?empresaId=${empresaId}&categoriaproductoId=${numero}`;
+            let url = `${urlRoot}api/tiposede/obtener-tiposede?empresaId=${empresaId}&tiposedeId=${numero}`;
             let init = { method: 'GET' };
 
             fetch(url, init)
                 .then(r => r.json())
-                .then(pageMantenimientoCategoriaProducto.ResponseObtenerDatos);
+                .then(pageMantenimientoTipoSede.ResponseObtenerDatos);
         }
     },
     EnviarFormulario: function () {
-        let categoriaproductoId = $("#txt-opcion").val();
-        let nombre = $("#txt-nombre").val();
+        let tiposedeId = $("#txt-opcion").val();
+        let nombre = $("#txt-tipo-sede").val();
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
         let ObjectoJson = {
+            TipoSedeId: tiposedeId,
             EmpresaId: empresaId,
-            CategoriaProductoId: categoriaproductoId,
+            FlagActivo: 1,
             Nombre: nombre,
             Usuario: user
         }
 
-        let url = `${urlRoot}api/categoriaproducto/guardar-categoriaproducto`;
+        let url = `${urlRoot}api/tiposede/guardar-tiposede`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
-        let init = { method: 'POST',body: params , headers};
+        let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoCategoriaProducto.ResponseEnviarFormulario);
+            .then(pageMantenimientoTipoSede.ResponseEnviarFormulario);
     },
     ResponseObtenerDatos: function (data) {
-        $("#txt-nombre").val(data.Nombre);
+        $("#txt-tipo-sede").val(data.Nombre);
     },
 
     ResponseEnviarFormulario: function (data) {
@@ -89,7 +90,7 @@
             timer: 2100,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}CategoriaProducto`
+                    location.href = `${urlRoot}tiposede`
                 }
             }
         });
