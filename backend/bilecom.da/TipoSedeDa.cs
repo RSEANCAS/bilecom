@@ -17,7 +17,7 @@ namespace bilecom.da
             totalRegistros = 0;
             List<TipoSedeBe> lista = new List<TipoSedeBe>();
 
-            using (SqlCommand cmd = new SqlCommand("dbo.usp_tiposede_Listar", cn))
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_tiposede_buscar", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
