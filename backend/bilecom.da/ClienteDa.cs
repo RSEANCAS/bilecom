@@ -15,7 +15,7 @@ namespace bilecom.da
         public List<ClienteBe> Buscar(int empresaId, string nroDocumentoIdentidad, string razonSocial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<ClienteBe> lista = null;
+            List<ClienteBe> lista = new List<ClienteBe>();
             using (SqlCommand cmd = new SqlCommand("dbo.usp_cliente_buscar", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -30,7 +30,6 @@ namespace bilecom.da
                 {
                     if (dr.HasRows)
                     {
-                        lista = new List<ClienteBe>();
                         while (dr.Read())
                         {
                             ClienteBe item = new ClienteBe();
