@@ -10,7 +10,16 @@
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h2 class="page-header text-overflow">Nuevo Proveedor</h2>
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nuevo Proveedor</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Proveedor</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
         </div>
     </div>
     <form id="frm-proveedor-mantenimiento" name="frm-proveedor-mantenimiento" method="post">
@@ -101,7 +110,8 @@
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>
+                            @*<button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>*@
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Proveedor")">Cancelar</a>
                         </div>
                     </div>
                 </div>

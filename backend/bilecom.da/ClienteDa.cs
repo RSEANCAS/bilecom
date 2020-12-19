@@ -92,7 +92,6 @@ namespace bilecom.da
             return respuesta;
         }
 
-
         public bool Guardar(ClienteBe registro, SqlConnection cn)
         {
             bool seGuardo = false;

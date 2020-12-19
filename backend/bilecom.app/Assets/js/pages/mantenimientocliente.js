@@ -12,6 +12,7 @@ const pageMantenimientoCliente = {
         $("#cmb-departamento").change(pageMantenimientoCliente.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoCliente.CmbProvinciaChange);
     },
+
     Validar: function () {
         $("#frm-cliente-mantenimiento")
             .bootstrapValidator({
@@ -91,21 +92,25 @@ const pageMantenimientoCliente = {
                 pageMantenimientoCliente.EnviarFormulario();
             });
     },
+
     CmbPaisChange: function () {
         let paisId = $("#cmb-pais").val();
         let DepartamentoFiltro = departamentoLista.filter(x => x.PaisId == paisId);
         pageMantenimientoCliente.ResponseDepartamentoListar(DepartamentoFiltro);
     },
+
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-departamento").val();
         let ProvinciaFiltro = provinciaLista.filter(x => x.DepartamentoId == departamentoId);
         pageMantenimientoCliente.ResponseProvinciaListar(ProvinciaFiltro);
     },
+
     CmbProvinciaChange: function () {
         let provinciaId = $("#cmb-provincia").val();
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
         pageMantenimientoCliente.ResponseDistritoListar(DistritoFiltro);
     },
+
     CargarCombo: async function () {
         let promises = [
             fetch(`${urlRoot}api/pais/listar-pais`),
@@ -166,7 +171,7 @@ const pageMantenimientoCliente = {
         let ObjectoJson = {
             ClienteId: clienteId ,
             EmpresaId: empresaId,
-            TipoDocumento: tipodocumentoidentidadId,
+            TipoDocumentoIdentidadId: tipodocumentoidentidadId,
             NroDocumentoIdentidad: nrodocumento,
             RazonSocial: nombres,
             NombreComercial: nombrecomercial,
@@ -186,6 +191,7 @@ const pageMantenimientoCliente = {
             .then(r => r.json())
             .then(pageMantenimientoCliente.ResponseEnviarFormulario);
     },
+
     ResponseEnviarFormulario: function (data) {
         let tipo = "", mensaje = "";
         if (data == true) {
@@ -206,13 +212,26 @@ const pageMantenimientoCliente = {
                 animationOut: "fadeOut"
             },
             focus: true,
-            timer: 3000,
+            timer: 1800,
             onHide: function () {
                 if (data == true) {
                     location.href = `${urlRoot}Cliente`
                 }
             }
         });
+    },
+
+    ResponseObtenerDatos: function (data) {
+        $("#txt-numero-documento-identidad").val(data.NroDocumentoIdentidad);
+        $("#txt-nombres").val(data.RazonSocial);
+        $("#txt-nombre-comercial").val(data.NombreComercial);
+        $("#txt-correo").val(data.Correo);
+        $("#txt-direccion").val(data.Direccion);
+        $("#cmb-tipo-documento-identidad").val(data.TipoDocumentoIdentidadId);
+        $("#cmb-distrito").val(data.DistritoId);
+
+        $("#cmb-tipo-documento-identidad").prop("disabled", true);
+        $("#txt-numero-documento-identidad").prop("disabled", true);
     },
 
     ResponsePaisListar: function (data) {
@@ -234,7 +253,7 @@ const pageMantenimientoCliente = {
 
     ResponseDistritoListar: function (data) {
         $("#cmb-distrito").empty();
-        let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.ProvinciaId, text: item.Nombre }); });
+        let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
         $("#cmb-distrito").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 
@@ -242,5 +261,7 @@ const pageMantenimientoCliente = {
         $("#cmb-tipo-documento-identidad").empty();
         let datatipodocumentoidentidad = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoDocumentoIdentidadId, text: item.Descripcion }); });
         $("#cmb-tipo-documento-identidad").select2({ data: datatipodocumentoidentidad, width: '100%', placeholder: '[SELECCIONE...]' });
+        
     }
+
 }

@@ -86,7 +86,7 @@
                 animationOut: "fadeOut"
             },
             focus: true,
-            timer: 2100,
+            timer: 1800,
             onHide: function () {
                 if (data == true) {
                     location.href = `${urlRoot}CategoriaProducto`
