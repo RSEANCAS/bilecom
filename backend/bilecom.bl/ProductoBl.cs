@@ -29,6 +29,19 @@ namespace bilecom.bl
             return lista;
         }
 
+        public ProductoBe Obtener(int EmpresaId, int productoId)
+        {
+            ProductoBe respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = new ProductoDa().Obtener(EmpresaId, productoId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { respuesta = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return respuesta;
+        }
         public bool ProductoGuardar(ProductoBe registro)
         {
             bool seGuardo = false;

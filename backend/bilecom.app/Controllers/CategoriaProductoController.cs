@@ -16,10 +16,12 @@ namespace bilecom.app.Controllers
 
         public ActionResult Nuevo()
         {
+            TempData["Id"] = 0;
             return View("MantenimientoCategoria");
         }
         public ActionResult Editar(int Id)
         {
+            TempData["Id"] = Id;
             return View("MantenimientoCategoria");
         }
     }

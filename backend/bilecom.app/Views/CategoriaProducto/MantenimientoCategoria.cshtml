@@ -9,7 +9,16 @@
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h2 class="page-header text-overflow">Nueva Categoria</h2>
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nueva Categoria</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Categoria</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
         </div>
     </div>
     <form id="frm-categoriaproducto-mantenimiento">
@@ -20,7 +29,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Nombre Categoria</span>
-                                <input class="form-control" placeholder="Nombre Categoria" name="txt-nombre" id="txt-nombre" data-bv-field="txt-nombre" required>
+                                <input class="form-control" placeholder="Nombre Categoria" name="txt-nombre" id="txt-nombre" data-bv-field="txt-nombre" >
                             </div>
                         </div>
                     </div>
@@ -31,7 +40,7 @@
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/CategoriaProducto/")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -42,7 +51,6 @@
 @section scripts_footer{
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientocategoriaproducto.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
     <script>
         const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {

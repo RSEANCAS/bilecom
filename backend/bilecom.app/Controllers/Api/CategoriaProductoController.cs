@@ -22,6 +22,20 @@ namespace bilecom.app.Controllers.Api
         }
 
         [HttpGet]
+        [Route("listar-categoriaproducto")]
+        public List<CategoriaProductoBe> ListarCategoriaProducto(int empresaId)
+        {
+            return new CategoriaProductoBl().ListarCategoriaProducto(empresaId);
+        }
+
+        [HttpGet]
+        [Route("obtener-categoriaproducto")]
+        public CategoriaProductoBe ObtenerCategoriaProducto(int empresaId,int categoriaproductoId)
+        {
+            return new CategoriaProductoBl().Obtener(empresaId, categoriaproductoId);
+        }
+
+        [HttpGet]
         [Route("buscar-categoriaproducto")]
         public DataPaginate<CategoriaProductoBe> BuscarCategoriaProducto(int empresaId, string nombre, int draw, int start, int length, string columnaOrden = "CategoriaProductoId", string ordenMax = "ASC")
         {

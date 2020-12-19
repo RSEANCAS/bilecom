@@ -9,10 +9,19 @@
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h2 class="page-header text-overflow">Nuevo Tipo de Sede</h2>
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nuevo Tipo de Sede</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Tipo de Sede</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
         </div>
     </div>
-    <form action="#" id="form-personal-mantimiento" name="form-tipo-sede-mantimiento" method="post">
+    <form id="frm-tiposede" name="frm-tiposede" method="post">
         <div id="page-content">
             <div class="panel">
                 <div class="panel-body">
@@ -31,7 +40,7 @@
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar">Cancelar</button>
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/TipoSede/")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -39,5 +48,13 @@
         </div>
     </form>
 </div>
-<script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
-<script src="@Url.Content("~/Assets/js/demo/TipoSedeMantenimiento.js")"></script>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientotiposede.js")"></script>
+    <script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pageMantenimientoTipoSede.Init();
+        });
+    </script>
+}

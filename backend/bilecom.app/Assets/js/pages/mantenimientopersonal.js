@@ -8,10 +8,6 @@ const pageMantenimientoPersonal = {
         pageMantenimientoPersonal.CargarCombo();
         pageMantenimientoPersonal.ObtenerDatos();
         
-        //pageMantenimientoPersonal.CmbPaisChange
-        //$("#cmb-pais").select2("val", 145); //a lil' bit more :) 
-        //pageMantenimientoPersonal.CmbDepartamentoChange
-        //pageMantenimientoPersonal.CmbProvinciaChange
         $("#cmb-pais").change(pageMantenimientoPersonal.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoPersonal.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoPersonal.CmbProvinciaChange);
@@ -74,7 +70,7 @@ const pageMantenimientoPersonal = {
 
             fetch(url, init)
                 .then(r => r.json())
-                .then(pageMantenimientoPersonal.RespondeObtenerDatos);
+                .then(pageMantenimientoPersonal.ResponseObtenerDatos);
         }
     },
 
@@ -115,13 +111,75 @@ const pageMantenimientoPersonal = {
     },
    
     Validar: function () {
+        let tipoid=$("#cmb-tipo-documento-identidad").val();
         $("#frm-personal-mantenimiento")
             .bootstrapValidator({
                 fields: {
-                    "txt-nombre": {
+                    "cmb-tipo-documento-identidad": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria",
+                                message: "Debe seleccionar tipo de documento de identidad",
+                            }
+                        }
+                    },
+                    "cmb-departamento": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar departamento",
+                            }
+                        }
+                    },
+                    "cmb-provincia": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar provincia",
+                            }
+                        }
+                    },
+                    "cmb-distrito": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar distrito",
+                            }
+                        }
+                    },
+                    "txt-nombres": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar nombres completos",
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
+                            }
+                        }
+                    },
+                    "txt-numero-documento-identidad": {
+                        validators: {
+                        notEmpty: {
+                            message: "Debe ingresar numero de documento de identidad",
+                            }
+                        }
+                    },
+                    "txt-correo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar correo válido",
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                                message: 'Debe ingresar un correo válido'
+                            }
+                        }
+                    },
+                    "txt-direccion": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar direccion",
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
                             }
                         }
                     }
@@ -168,16 +226,36 @@ const pageMantenimientoPersonal = {
     },
 
     ResponseEnviarFormulario: function (data) {
+        let tipo = "",mensaje="";
         if (data == true) {
-            alert("Se ha guardado con éxito.");
-            location.href = "Index";
+            tipo = "success";
+            mensaje = "¡Se ha guardado con éxito!";
         } else {
-            alert("No se pudo guardar la categoria intentelo otra vez.");
+            tipo = "danger";
+            mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
         }
+
+        $.niftyNoty({
+            type: tipo,
+            container: "floating",
+            html: mensaje,
+            floating: {
+                position: "top-center",
+                animationIn: "shake",
+                animationOut: "fadeOut"
+            },
+            focus: true,
+            timer: 3000,
+            onHide: function () {
+                if (data == true) {
+                    location.href = `${urlRoot}Personal`
+                }
+            }
+        });
+        
     },
 
-    RespondeObtenerDatos: function (data) {
-        console.log(data);
+    ResponseObtenerDatos: function (data) {
         $("#txt-numero-documento-identidad").val(data.NroDocumentoIdentidad);
         $("#txt-nombres").val(data.NombresCompletos);
         $("#txt-correo").val(data.Correo);
@@ -217,5 +295,20 @@ const pageMantenimientoPersonal = {
         let datatipodocumentoidentidad = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoDocumentoIdentidadId, text: item.Descripcion }); });
         $("#cmb-tipo-documento-identidad").select2({ data: datatipodocumentoidentidad, width: '100%', placeholder: '[SELECCIONE...]' });
     }
-
 }
+
+$("#txt-numero-documento-identidad").bind('keypress', function (e) {
+    let keyCode = (e.which) ? e.which : event.keyCode;
+    let idtipodoc = $("#cmb-tipo-documento-identidad").val();
+    if (idtipodoc == 1) {
+        return ((keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91) || (keyCode > 96 && keyCode < 123));
+    }
+    if (idtipodoc == 2) {
+        return ((keyCode > 47 && keyCode < 58));
+    }
+});
+
+$("#txt-nombres").bind('keypress', function (e) {
+    let keyCode = (e.which) ? e.which : event.keyCode;
+    return (keyCode == 32 || (keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91) || (keyCode > 96 && keyCode < 123));
+});

@@ -3,14 +3,26 @@
     ViewBag.Title = "Cliente Mantenimiento";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
 
+}
 <div id="content-container">
     <div id="page-head">
 
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h2 class="page-header text-overflow">Nuevo Cliente</h2>
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nuevo Cliente</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Cliente</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
         </div>
     </div>
     <form id="frm-cliente-mantenimiento" name="frm-cliente-mantenimiento" method="post">
@@ -41,7 +53,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Nombre Comercial</span>
-                                <input class="form-control" placeholder="Nombres Comercial" name="txt-nombre-comercial" id="txt-nombre-comercial" data-bv-field="txt-nombre-comercial" >
+                                <input class="form-control" placeholder="Nombres Comercial" name="txt-nombre-comercial" id="txt-nombre-comercial" data-bv-field="txt-nombre-comercial">
                             </div>
                         </div>
                     </div>
@@ -101,7 +113,7 @@
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Cliente/")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -110,9 +122,9 @@
     </form>
 </div>
 @section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientocliente.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
     <script>
         const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {

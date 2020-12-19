@@ -30,5 +30,26 @@ namespace bilecom.app.Controllers.Api
             };
             return respuesta;
         }
+
+        [HttpGet]
+        [Route("obtener-tiposede")]
+        public TipoSedeBe ObtenerTipoSede(int empresaId, int tiposedeId)
+        {
+            return tipoSedeBl.Obtener(empresaId, tiposedeId);
+        }
+
+        [HttpGet]
+        [Route("listar-tiposede")]
+        public List<TipoSedeBe> ListarTipoSede(int empresaId)
+        {
+            return tipoSedeBl.ListarTipoSede(empresaId);
+        }
+
+        [HttpPost]
+        [Route("guardar-tiposede")]
+        public bool GuardarTipoSede(TipoSedeBe tipoSedeBe)
+        {
+            return tipoSedeBl.Guardar(tipoSedeBe);
+    }
     }
 }
