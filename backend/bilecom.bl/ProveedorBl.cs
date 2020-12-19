@@ -23,7 +23,7 @@ namespace bilecom.bl
                 lista = proveedorDa.Buscar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
-            catch (Exception) { lista = null; }
+            catch (Exception ex) { lista = null; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }

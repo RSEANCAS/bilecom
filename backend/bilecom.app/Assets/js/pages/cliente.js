@@ -20,11 +20,25 @@
         return nombres;
     },
     CreateDataTable: function (id) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
+            processing: true,
             serverSide: true,
-            ajax: `${urlRoot}api/cliente/buscar-cliente?empresaId=${empresaId}&nroDocumentoIdentidad=${pageCliente.ObtenerNroDocumentoIdentidad()}&razonSocial=${pageCliente.ObtenerNombres()}`,
+            ajax: {
+                //${urlRoot}api/cliente/buscar-cliente?empresaId=${empresaId}&nroDocumentoIdentidad=${pageCliente.ObtenerNroDocumentoIdentidad()}&razonSocial=${pageCliente.ObtenerNombres()}`,
+                url: `${urlRoot}api/cliente/buscar-cliente`,
+                data: {
+                    empresaId: empresaId,
+                    nroDocumentoIdentidad: pageCliente.ObtenerNroDocumentoIdentidad,
+                    razonSocial: pageCliente.ObtenerNombres
+                }
+            },
             columns: [
                 { data: "ClienteId" },
                 { data: "TipoDocumentoIdentidad.Descripcion" },
@@ -32,7 +46,7 @@
                 { data: "RazonSocial" },
                 {
                     data: "ClienteId", render: function (data, row) {
-                        return '<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="#" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href = "#" data - original - title="Delete" data - container="body" ></a >'
+                        return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Cliente/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" href = "#" data - original - title="Delete" data - container="body" ></a >`
                     }
                 },
             ]

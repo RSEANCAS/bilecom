@@ -35,7 +35,7 @@ namespace bilecom.da
                         {
                             ProveedorBe item = new ProveedorBe();
                             item.ProveedorId = dr.GetData<int>("Fila");
-                            item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
+                            item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumento");
                             item.TipoDocumentoIdentidad = new TipoDocumentoIdentidadBe();
                             item.TipoDocumentoIdentidad.Descripcion = dr.GetData<string>("DescripcionTipoDocumentoIdentidad");
                             item.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");

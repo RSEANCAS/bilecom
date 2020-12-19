@@ -16,11 +16,24 @@
         return nombre;
     },
     CreateDataTable: function (id) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
+            processing: true,
             serverSide: true,
-            ajax: `${urlRoot}api/categoriaproducto/buscar-categoriaproducto?empresaId=${empresaId}&nombre=${pageCategoriaProducto.ObtenerNombre()}`,
+            ajax: {
+                //`${urlRoot}api/categoriaproducto/buscar-categoriaproducto?empresaId=${empresaId}&nombre=${pageCategoriaProducto.ObtenerNombre()}`,
+                url: `${urlRoot}api/categoriaproducto/buscar-categoriaproducto`,
+                data: {
+                    empresaId: empresaId,
+                    nombre: pageCategoriaProducto.ObtenerNombre
+                }
+            },
             columns: [
                 { data: "CategoriaProductoId" },
                 { data: "Nombre" },

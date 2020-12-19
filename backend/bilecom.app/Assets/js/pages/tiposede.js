@@ -16,11 +16,24 @@
         return nombre;
     },
     CreateDataTable: function (id) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
+            processing: true,
             serverSide: true,
-            ajax: `${urlRoot}api/tiposede/buscar-tiposede?empresaId=${empresaId}&nombre=${pageTipoSede.ObtenerNombre()}`,
+            ajax: {
+                //`${urlRoot}api/tiposede/buscar-tiposede?empresaId=${empresaId}&nombre=${pageTipoSede.ObtenerNombre()}`,
+                url: `${urlRoot}api/tiposede/buscar-tiposede`,
+                data: {
+                    empresaId: empresaId,
+                    nombre:pageTipoSede.ObtenerNombre
+                }
+            },
             columns: [
                 { data: "TipoSedeId" },
                 { data: "Nombre" },
