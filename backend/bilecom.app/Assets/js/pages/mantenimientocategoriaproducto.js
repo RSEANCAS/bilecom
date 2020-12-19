@@ -89,7 +89,7 @@
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}CategoriaProducto`
+                    location.href = `${urlRoot}CategoriasProducto`
                 }
             }
         });

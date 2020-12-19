@@ -111,7 +111,7 @@
                         </div>
                         <div class="col-sm-3">
                             @*<button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" onclick="$(location).attr('href','Index');">Cancelar</button>*@
-                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Proveedor")">Cancelar</a>
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Proveedores")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -122,9 +122,7 @@
 @section scripts_footer{
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientoproveedor.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
     <script>
-        const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {
             pageMantenimientoProveedor.Init();
         });

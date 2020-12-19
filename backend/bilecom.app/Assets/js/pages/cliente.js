@@ -20,11 +20,25 @@
         return nombres;
     },
     CreateDataTable: function (id) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
+            processing: true,
             serverSide: true,
-            ajax: `${urlRoot}api/cliente/buscar-cliente?empresaId=${empresaId}&nroDocumentoIdentidad=${pageCliente.ObtenerNroDocumentoIdentidad()}&razonSocial=${pageCliente.ObtenerNombres()}`,
+            ajax: {
+                //${urlRoot}api/cliente/buscar-cliente?empresaId=${empresaId}&nroDocumentoIdentidad=${pageCliente.ObtenerNroDocumentoIdentidad()}&razonSocial=${pageCliente.ObtenerNombres()}`,
+                url: `${urlRoot}api/cliente/buscar-cliente`,
+                data: {
+                    empresaId: empresaId,
+                    nroDocumentoIdentidad: pageCliente.ObtenerNroDocumentoIdentidad,
+                    razonSocial: pageCliente.ObtenerNombres
+                }
+            },
             columns: [
                 { data: "ClienteId" },
                 { data: "TipoDocumentoIdentidad.Descripcion" },

@@ -90,7 +90,7 @@
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}tiposede`
+                    location.href = `${urlRoot}TiposSede`
                 }
             }
         });

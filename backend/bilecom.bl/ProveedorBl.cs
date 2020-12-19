@@ -23,11 +23,24 @@ namespace bilecom.bl
                 lista = proveedorDa.Buscar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
-            catch (Exception) { lista = null; }
+            catch (Exception ex) { lista = null; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
+        public ProveedorBe Obtener(int empresaId, int proveedorId)
+        {
+            ProveedorBe respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = proveedorDa.Obtener(empresaId, proveedorId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { respuesta = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return respuesta;
+        }
         public bool ProveedorGuardar(ProveedorBe registro)
         {
             bool seGuardo = false;

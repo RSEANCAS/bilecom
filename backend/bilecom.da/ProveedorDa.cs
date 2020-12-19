@@ -35,7 +35,7 @@ namespace bilecom.da
                         {
                             ProveedorBe item = new ProveedorBe();
                             item.ProveedorId = dr.GetData<int>("Fila");
-                            item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
+                            item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumento");
                             item.TipoDocumentoIdentidad = new TipoDocumentoIdentidadBe();
                             item.TipoDocumentoIdentidad.Descripcion = dr.GetData<string>("DescripcionTipoDocumentoIdentidad");
                             item.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");
@@ -51,6 +51,39 @@ namespace bilecom.da
             return lista;
         }
 
+        public ProveedorBe Obtener(int empresaId, int proveedorId,SqlConnection cn)
+        {
+
+            ProveedorBe respuesta = null;
+
+            using (SqlCommand cmd = new SqlCommand("usp_proveedor_obtener", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@ProveedorId", proveedorId.GetNullable());
+                
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        respuesta = new ProveedorBe();
+                        while (dr.Read())
+                        {
+                            respuesta.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
+                            respuesta.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");
+                            respuesta.RazonSocial = dr.GetData<string>("RazonSocial");
+                            respuesta.NombreComercial = dr.GetData<string>("NombreComercial");
+                            respuesta.PaisId = dr.GetData<int>("PaisId");
+                            respuesta.DistritoId = dr.GetData<int>("DistritoId");
+                            respuesta.Direccion = dr.GetData<string>("Direccion");
+                            respuesta.Correo = dr.GetData<string>("Correo");
+                        }
+                    }
+                }
+            }
+
+            return respuesta;
+        }
         public bool Guardar(ProveedorBe proveedorBe, SqlConnection cn)
         {
             bool seGuardo = false;
@@ -61,11 +94,15 @@ namespace bilecom.da
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@EmpresaId", proveedorBe.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@ProveedorId", proveedorBe.ProveedorId.GetNullable());
-                    cmd.Parameters.AddWithValue("@TipoDocumentoIdentidad", proveedorBe.TipoDocumentoIdentidad.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoDocumentoIdentidadId", proveedorBe.TipoDocumentoIdentidadId.GetNullable());
                     cmd.Parameters.AddWithValue("@NroDocumentoIdentidad", proveedorBe.NroDocumentoIdentidad.GetNullable());
                     cmd.Parameters.AddWithValue("@RazonSocial", proveedorBe.RazonSocial.GetNullable());
+                    cmd.Parameters.AddWithValue("@NombreComercial", proveedorBe.NombreComercial.GetNullable());
+                    cmd.Parameters.AddWithValue("@PaisId", proveedorBe.PaisId.GetNullable());
+                    cmd.Parameters.AddWithValue("@DistritoId", proveedorBe.DistritoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Direccion", proveedorBe.Direccion.GetNullable());
+                    cmd.Parameters.AddWithValue("@Correo", proveedorBe.Correo.GetNullable());
                     cmd.Parameters.AddWithValue("@Usuario", proveedorBe.Usuario.GetNullable());
-
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
                     seGuardo = filasAfectadas > 0;

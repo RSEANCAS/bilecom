@@ -64,10 +64,13 @@ namespace bilecom.app.Controllers.Api
             if (empresa == null)
                 return BadRequest($"El ruc {ruc} no se encuentra registrado.");
 
-            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId);
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true, loadListaOpcionxPerfil: true);
 
             if (user == null)
                 return BadRequest($"El usuario {usuario} no se encuentra registrado.");
+
+            if(user.ListaPerfil == null)
+                return BadRequest($"El usuario {usuario} no tiene ningún perfil asignado.");
 
             bool isCredentialValid = Seguridad.CompareMD5(contraseña, user.Contrasena);
 
@@ -88,7 +91,9 @@ namespace bilecom.app.Controllers.Api
                             empresa.Ruc,
                             empresa.NombreComercial
                         },
-                    }
+                        ListaPerfil = user.ListaPerfil
+                    },
+                    PerfilActual = user.ListaPerfil[0],
                 };
 
                 return Ok(response);

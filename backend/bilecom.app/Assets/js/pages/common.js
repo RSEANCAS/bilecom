@@ -3,9 +3,22 @@
         let token = localStorage['ls.tk'];
         return token == null ? null : atob(token);
     },
+    GuardarToken(data) {
+        localStorage['ls.tk'] = btoa(JSON.stringify(data));
+    },
     ObtenerUsuario() {
         let user = localStorage['ls.us'];
         return user == null ? null : JSON.parse(atob(user));
+    },
+    GuardarUsuario(data) {
+        localStorage['ls.us'] = btoa(JSON.stringify(data));
+    },
+    ObtenerPerfilActual() {
+        let perfilActual = localStorage['ls.pa'];
+        return perfilActual == null ? null : JSON.parse(atob(perfilActual));
+    },
+    GuardarPerfilActual(data) {
+        localStorage['ls.pa'] = btoa(JSON.stringify(data));
     },
     ResponseToJson(response) {
         debugger;

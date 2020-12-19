@@ -106,7 +106,7 @@ const pageMantenimientoProducto = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Producto`
+                    location.href = `${urlRoot}Productos`
                 }
             }
         });

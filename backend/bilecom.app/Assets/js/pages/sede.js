@@ -16,11 +16,24 @@
         return nombre;
     },
     CreateDataTable: function (id) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
         $(id).dataTable({
+            processing: true,
             serverSide: true,
-            ajax: `${urlRoot}api/sede/buscar-sede?empresaId=${empresaId}&nombre=${pageSede.ObtenerNombre()}`,
+            ajax: {
+                //`${urlRoot}api/sede/buscar-sede?empresaId=${empresaId}&nombre=${pageSede.ObtenerNombre()}`,
+                url: `${urlRoot}api/sede/buscar-sede`,
+                data: {
+                    empresaId: empresaId,
+                    nombre: pageSede.ObtenerNombre
+                }
+            },
             columns: [
                 { data: "SedeId" },
                 { data: "Nombre" },

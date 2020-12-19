@@ -170,7 +170,7 @@ const pageMantenimientoSede = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}sede`
+                    location.href = `${urlRoot}Sedes`
                 }
             }
         });

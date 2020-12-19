@@ -31,6 +31,14 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpGet]
+        [Route("obtener-proveedor")]
+        public ProveedorBe ObtenerProveedor(int empresaId, int proveedorId)
+        {
+            return proveedorBl.Obtener(empresaId, proveedorId);
+        }
+
+
         [HttpPost]
         [Route("guardar-proveedor")]
         public bool GuardarProveedor(ProveedorBe registro)

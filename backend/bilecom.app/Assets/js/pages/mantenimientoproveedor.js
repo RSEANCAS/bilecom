@@ -65,7 +65,7 @@
         if (numero != 0) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-            let url = `${urlRoot}api/proveedor/obtener-proveedor?EmpresaId=${empresaId}&ProveedorId=${numero}`;
+            let url = `${urlRoot}api/proveedor/obtener-proveedor?empresaId=${empresaId}&proveedorId=${numero}`;
             let init = { method: 'GET' };
 
             fetch(url, init)
@@ -75,26 +75,30 @@
     },
 
     EnviarFormulario: function () {
+        let proveedorId = $("#txt-opcion").val();
         let nombres = $("#txt-nombres").val();
         let nrodocumento = $("#txt-numero-documento-identidad").val();
         let nombrecomercial = $("#txt-nombre-comercial").val();
-        let direcion = $("#txt-direccion").val();
+        let direccion = $("#txt-direccion").val();
         let correo = $("#txt-correo").val();
+        let tipodocumentoidentidadId = $("#cmb-tipo-documento-identidad").val();
+        let paisId = $("#cmb-pais").val();
+        let distritoId = $("#cmb-distrito").val();
 
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
         let ObjectoJson = {
-            ClienteId: 0,
             EmpresaId: empresaId,
-            TipoDocumento: 6,
+            ProveedorId: proveedorId,
+            TipoDocumentoIdentidadId: tipodocumentoidentidadId,
             NroDocumentoIdentidad: nrodocumento,
             RazonSocial: nombres,
             NombreComercial: nombrecomercial,
-            DistritoId: '100101',
-            Direccion: direcion,
+            PaisId: paisId,
+            DistritoId: distritoId,
+            Direccion: direccion,
             Correo: correo,
-            FlagActivo: 1,
             Usuario: user
         }
 
@@ -131,7 +135,7 @@
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Proveedor`
+                    location.href = `${urlRoot}Proveedores`
                 }
             }
         });

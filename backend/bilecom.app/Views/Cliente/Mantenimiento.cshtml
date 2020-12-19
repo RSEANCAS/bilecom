@@ -113,7 +113,7 @@
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Cliente/")">Cancelar</a>
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Clientes/")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,6 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientocliente.js")"></script>
     <script>
-        const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {
             pageMantenimientoCliente.Init();
         });

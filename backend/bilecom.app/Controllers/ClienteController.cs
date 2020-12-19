@@ -6,18 +6,22 @@ using System.Web.Mvc;
 
 namespace bilecom.app.Controllers
 {
+    [RoutePrefix("Clientes")]
     public class ClienteController : Controller
     {
         // GET: Cliente
+        [Route("")]
         public ActionResult Index()
         {
             return View();
         }
+        [Route("Nuevo")]
         public ActionResult Nuevo()
         {
             TempData["Id"] = 0;
             return View("Mantenimiento");
         }
+        [Route("Editar")]
         public ActionResult Editar(int Id)
         {
             TempData["Id"] = Id;
