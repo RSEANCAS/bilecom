@@ -50,6 +50,6 @@ namespace bilecom.app.Controllers.Api
         public bool GuardarTipoSede(TipoSedeBe tipoSedeBe)
         {
             return tipoSedeBl.Guardar(tipoSedeBe);
-    }
+        }
     }
 }

@@ -3,16 +3,28 @@
     ViewBag.Title = "Sede Mantenimiento";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+}
 <div id="content-container">
     <div id="page-head">
 
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h2 class="page-header text-overflow">Nueva Sede</h2>
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nueva Sede</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Sede</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
         </div>
     </div>
-    <form action="#" id="form-personal-mantimiento" name="form-sede-mantimiento" method="post">
+    <form id="frm-sede" name="frm-sede" method="post">
         <div id="page-content">
             <div class="panel">
                 <div class="panel-body">
@@ -81,7 +93,7 @@
                             <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar">Cancelar</button>
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Sede/")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -89,5 +101,14 @@
         </div>
     </form>
 </div>
-<script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
-<script src="@Url.Content("~/Assets/js/demo/SedeMantenimiento.js")"></script>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientosede.js")"></script>
+    <script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pageMantenimientoSede.Init();
+        });
+    </script>
+}
