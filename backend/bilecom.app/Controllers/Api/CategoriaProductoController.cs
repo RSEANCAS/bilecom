@@ -43,7 +43,7 @@ namespace bilecom.app.Controllers.Api
             var lista = new CategoriaProductoBl().BuscarCategoriaProducto(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<CategoriaProductoBe>
             {
-                data = lista,
+                data = lista ?? new List<CategoriaProductoBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros

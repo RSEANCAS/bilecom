@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Api
             var lista = clienteBl.BuscarCliente(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<ClienteBe>
             {
-                data = lista,
+                data = lista ?? new List<ClienteBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
