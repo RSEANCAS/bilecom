@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Api
             var lista= proveedorBl.BuscarProveedor(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<ProveedorBe>
             {
-                data = lista,
+                data = lista ?? new List<ProveedorBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros

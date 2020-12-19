@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Api
             var lista = tipoSedeBl.BuscarTipoSede(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<TipoSedeBe>
             {
-                data = lista,
+                data = lista ?? new List<TipoSedeBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
