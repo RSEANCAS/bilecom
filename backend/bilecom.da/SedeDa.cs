@@ -51,5 +51,91 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public SedeBe Obtener(int empresaId, int sedeId, SqlConnection cn)
+        {
+            SedeBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_sede_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@SedeId", sedeId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new SedeBe();
+                                respuesta.EmpresaId = dr.GetData<int>("EmpresaId");
+                                respuesta.SedeId = dr.GetData<int>("SedeId");
+                                respuesta.TipoSedeId = dr.GetData<int>("TipoSedeId");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.DistritoId = dr.GetData<int>("DistritoId");
+                                respuesta.Direccion = dr.GetData<string>("Direccion");
+                                respuesta.FlagActivo = dr.GetData<bool>("FlagActivo");
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
+        public bool Guardar(SedeBe sedeBe, SqlConnection cn)
+        {
+            bool seGuardo = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_sede_guardar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SedeId", sedeBe.SedeId.GetNullable());
+                    cmd.Parameters.AddWithValue("@EmpresaId", sedeBe.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoSedeId", sedeBe.TipoSedeId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Nombre", sedeBe.Nombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@DistritoId", sedeBe.DistritoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Direccion", sedeBe.Direccion.GetNullable());
+                    cmd.Parameters.AddWithValue("@FlagActivo", sedeBe.FlagActivo.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", sedeBe.Usuario.GetNullable());
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seGuardo = false;
+            }
+            return seGuardo;
+        }
+
+        public bool Eliminar(int empresaId, int sedeId, string Usuario, SqlConnection cn)
+        {
+            bool seElimino = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_sede_eliminar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@sedeId", sedeId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seElimino = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seElimino = false;
+            }
+            return seElimino;
+        }
     }
 }

@@ -48,8 +48,8 @@
                         <div class="form-group text-right">
                             <label class="control-label">&nbsp;</label>
                             <div class="clear"></div>
-                            <button class="btn btn-primary" type="submit">Nuevo</button>
-                            <button class="btn btn-primary" type="submit" id="btn-buscar">Buscar</button>
+                            <a class="btn btn-primary" href="@Url.Content("~/Sedes/Nuevo")">Nuevo</a>
+                            <button class="btn btn-primary" id="btn-buscar">Buscar</button>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,6 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/sede.js")"></script>
     <script>
-        const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {
             pageSede.Init();
         });

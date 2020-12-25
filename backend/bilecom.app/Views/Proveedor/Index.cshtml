@@ -55,7 +55,8 @@
                         <div class="form-group text-right">
                             <label class="control-label">&nbsp;</label>
                             <div class="clear"></div>
-                            <button class="btn btn-primary" onclick="$(location).attr('href','Nuevo');">Nuevo</button>
+                            @*<button class="btn btn-primary" onclick="$(location).attr('href','Nuevo');">Nuevo</button>*@
+                            <a class="btn btn-primary" href="@Url.Content("~/Proveedores/Nuevo")">Nuevo</a>
                             <button class="btn btn-primary" id="btn-buscar">Buscar</button>
                         </div>
                     </div>
@@ -91,7 +92,6 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/proveedor.js")"></script>
     <script>
-        const urlRoot = "@Url.Content("~")";
         $(document).ready(function () {
             pageProveedor.Init();
         });

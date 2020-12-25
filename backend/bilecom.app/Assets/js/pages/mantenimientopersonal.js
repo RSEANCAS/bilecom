@@ -29,6 +29,7 @@ const pageMantenimientoPersonal = {
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
         pageMantenimientoPersonal.ResponseDistritoListar(DistritoFiltro);
     },
+
     CargarCombo: async function () {
         let promises = [
             fetch(`${urlRoot}api/pais/listar-pais`),
@@ -245,7 +246,7 @@ const pageMantenimientoPersonal = {
                 animationOut: "fadeOut"
             },
             focus: true,
-            timer: 3000,
+            timer: 1800,
             onHide: function () {
                 if (data == true) {
                     location.href = `${urlRoot}Personal`

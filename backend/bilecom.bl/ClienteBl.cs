@@ -55,5 +55,19 @@ namespace bilecom.bl
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
+
+        public bool EliminarCliente(int empresaId,int clienteId, string Usuario)
+        {
+            bool seGuardo = false;
+            try
+            {
+                cn.Open();
+                seGuardo = clienteDa.Eliminar(empresaId,clienteId,Usuario, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
+        }
     }
 }

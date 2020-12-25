@@ -38,13 +38,21 @@ namespace bilecom.app.Controllers.Api
             var lista = productoBl.BuscarProducto(categoriaNombre, nombre, empresaId, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<ProductoBe>
             {
-                data = lista,
+                data = lista ?? new List<ProductoBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
             return respuesta;
 
+        }
+
+        [HttpPost]
+        [Route("eliminar-producto")]
+        public bool EliminarProducto(int empresaId, int productoId, string Usuario)
+        {
+            bool respuesta = productoBl.EliminarProducto(empresaId, productoId, Usuario);
+            return respuesta;
         }
     }
 }

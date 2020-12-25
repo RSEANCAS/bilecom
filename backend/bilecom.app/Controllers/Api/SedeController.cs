@@ -23,11 +23,33 @@ namespace bilecom.app.Controllers.Api
             var lista = sedeBl.BuscarSede(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<SedeBe>
             {
-                data = lista,
+                data = lista ?? new List<SedeBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
+            return respuesta;
+        }
+        
+        [HttpGet]
+        [Route("obtener-sede")]
+        public SedeBe ObtenerSede(int empresaId, int sedeId)
+        {
+            return sedeBl.Obtener(empresaId, sedeId);
+        }
+
+        [HttpPost]
+        [Route("guardar-sede")]
+        public bool GuardarSede(SedeBe sedeBe)
+        {
+            return sedeBl.Guardar(sedeBe);
+        }
+
+        [HttpPost]
+        [Route("eliminar-sede")]
+        public bool EliminarSede(int empresaId, int sedeId, string Usuario)
+        {
+            bool respuesta = sedeBl.EliminarSede(empresaId, sedeId, Usuario);
             return respuesta;
         }
     }

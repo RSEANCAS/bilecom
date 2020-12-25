@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Api
             var lista = clienteBl.BuscarCliente(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<ClienteBe>
             {
-                data = lista,
+                data = lista ?? new List<ClienteBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
@@ -31,6 +31,7 @@ namespace bilecom.app.Controllers.Api
 
             return respuesta;
         }
+        
         [HttpGet]
         [Route("obtener-cliente")]
         public ClienteBe ObtenerCliente(int empresaId, int clienteId)
@@ -44,6 +45,14 @@ namespace bilecom.app.Controllers.Api
         public bool GuardarCliente(ClienteBe registro)
         {
             bool respuesta = clienteBl.GuardarCliente(registro);
+            return respuesta;
+        }
+
+        [HttpPost]
+        [Route("eliminar-cliente")]
+        public bool EliminarCliente(int empresaId,int clienteId, string Usuario)
+        {
+            bool respuesta = clienteBl.EliminarCliente(empresaId,clienteId,Usuario);
             return respuesta;
         }
     }

@@ -103,10 +103,10 @@ const pageMantenimientoProducto = {
                 animationOut: "fadeOut"
             },
             focus: true,
-            timer: 2100,
+            timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Producto`
+                    location.href = `${urlRoot}Productos`
                 }
             }
         });

@@ -13,7 +13,7 @@
                     "txt-tipo-sede": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria.",
+                                message: "Debe ingresar Tipo de Sede.",
                             },
                             regexp: {
                                 regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
@@ -87,12 +87,17 @@
                 animationOut: "fadeOut"
             },
             focus: true,
-            timer: 2100,
+            timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}tiposede`
+                    location.href = `${urlRoot}TiposSede`
                 }
             }
         });
     }
 }
+
+$("#txt-tipo-sede").bind('keypress', function (e) {
+    let keyCode = (e.which) ? e.which : event.keyCode;
+    return (keyCode == 32 || (keyCode > 47 && keyCode < 58) || (keyCode > 64 && keyCode < 91) || (keyCode > 96 && keyCode < 123));
+});

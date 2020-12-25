@@ -69,5 +69,20 @@ namespace bilecom.bl
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
+
+        public bool EliminarCategoriaProducto(int empresaId, int categoriaproductoId, string Usuario)
+        {
+            bool seGuardo = false;
+            try
+            {
+                cn.Open();
+                seGuardo = categoriaProductoDa.Eliminar(empresaId, categoriaproductoId, Usuario, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
+        }
+
     }
 }

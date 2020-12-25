@@ -29,5 +29,46 @@ namespace bilecom.bl
 
             return lista;
         }
+
+        public SedeBe Obtener(int empresaId, int sedeId)
+        {
+            SedeBe respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = sedeDa.Obtener(empresaId, sedeId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { respuesta = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return respuesta;
+        }
+        public bool Guardar(SedeBe sedeBe)
+        {
+            bool seGuardo = false;
+            try
+            {
+                cn.Open();
+                seGuardo = sedeDa.Guardar(sedeBe, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
+        }
+
+        public bool EliminarSede(int empresaId, int sedeId, string Usuario)
+        {
+            bool seGuardo = false;
+            try
+            {
+                cn.Open();
+                seGuardo = sedeDa.Eliminar(empresaId, sedeId, Usuario, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { seGuardo = false; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return seGuardo;
+        }
     }
 }

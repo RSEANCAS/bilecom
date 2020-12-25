@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Api
             var lista= proveedorBl.BuscarProveedor(empresaId, nroDocumentoIdentidad, razonSocial, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<ProveedorBe>
             {
-                data = lista,
+                data = lista ?? new List<ProveedorBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
@@ -31,11 +31,27 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpGet]
+        [Route("obtener-proveedor")]
+        public ProveedorBe ObtenerProveedor(int empresaId, int proveedorId)
+        {
+            return proveedorBl.Obtener(empresaId, proveedorId);
+        }
+
+
         [HttpPost]
         [Route("guardar-proveedor")]
         public bool GuardarProveedor(ProveedorBe registro)
         {
             bool respuesta = proveedorBl.ProveedorGuardar(registro);
+            return respuesta;
+        }
+
+        [HttpPost]
+        [Route("eliminar-proveedor")]
+        public bool EliminarProveedor(int empresaId, int proveedorId, string Usuario)
+        {
+            bool respuesta = proveedorBl.EliminarProveedor(empresaId, proveedorId, Usuario);
             return respuesta;
         }
 

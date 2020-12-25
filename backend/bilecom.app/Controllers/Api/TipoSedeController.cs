@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Api
             var lista = tipoSedeBl.BuscarTipoSede(empresaId, nombre, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<TipoSedeBe>
             {
-                data = lista,
+                data = lista ?? new List<TipoSedeBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
@@ -50,6 +50,14 @@ namespace bilecom.app.Controllers.Api
         public bool GuardarTipoSede(TipoSedeBe tipoSedeBe)
         {
             return tipoSedeBl.Guardar(tipoSedeBe);
-    }
+        }
+
+        [HttpPost]
+        [Route("eliminar-tiposede")]
+        public bool EliminarSede(int empresaId, int tiposedeId, string Usuario)
+        {
+            bool respuesta = tipoSedeBl.Eliminar(empresaId, tiposedeId, Usuario);
+            return respuesta;
+        }
     }
 }
