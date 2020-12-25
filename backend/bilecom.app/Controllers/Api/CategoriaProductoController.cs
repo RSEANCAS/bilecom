@@ -13,6 +13,8 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/categoriaproducto")]
     public class CategoriaProductoController : ApiController
     {
+        CategoriaProductoBl categoriaprodcutoBl = new CategoriaProductoBl();
+
         [HttpPost]
         [Route("guardar-categoriaproducto")]
         public bool GuardarCategoriaProducto(CategoriaProductoBe categoriaProducto)
@@ -48,6 +50,14 @@ namespace bilecom.app.Controllers.Api
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
             };
+            return respuesta;
+        }
+
+        [HttpPost]
+        [Route("eliminar-categoriaproducto")]
+        public bool EliminarCategoriaProducto(int empresaId, int categoriaproductoId, string Usuario)
+        {
+            bool respuesta = categoriaprodcutoBl.EliminarCategoriaProducto(empresaId, categoriaproductoId, Usuario);
             return respuesta;
         }
     }

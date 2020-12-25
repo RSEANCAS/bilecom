@@ -123,5 +123,28 @@ namespace bilecom.da
             }
             return seGuardo;
         }
+
+        public bool Eliminar(int empresaId, int personalId, string Usuario, SqlConnection cn)
+        {
+            bool seElimino = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_personal_eliminar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@personalId", personalId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seElimino = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seElimino = false;
+            }
+            return seElimino;
+        }
     }
 }

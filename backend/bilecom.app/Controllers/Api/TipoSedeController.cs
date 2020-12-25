@@ -51,5 +51,13 @@ namespace bilecom.app.Controllers.Api
         {
             return tipoSedeBl.Guardar(tipoSedeBe);
         }
+
+        [HttpPost]
+        [Route("eliminar-tiposede")]
+        public bool EliminarSede(int empresaId, int tiposedeId, string Usuario)
+        {
+            bool respuesta = tipoSedeBl.Eliminar(empresaId, tiposedeId, Usuario);
+            return respuesta;
+        }
     }
 }

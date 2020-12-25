@@ -30,6 +30,7 @@ namespace bilecom.app.Controllers.Api
             };
             return respuesta;
         }
+        
         [HttpGet]
         [Route("obtener-sede")]
         public SedeBe ObtenerSede(int empresaId, int sedeId)
@@ -42,6 +43,14 @@ namespace bilecom.app.Controllers.Api
         public bool GuardarSede(SedeBe sedeBe)
         {
             return sedeBl.Guardar(sedeBe);
+        }
+
+        [HttpPost]
+        [Route("eliminar-sede")]
+        public bool EliminarSede(int empresaId, int sedeId, string Usuario)
+        {
+            bool respuesta = sedeBl.EliminarSede(empresaId, sedeId, Usuario);
+            return respuesta;
         }
     }
 }

@@ -131,5 +131,27 @@ namespace bilecom.da
             return respuesta;
         }
 
+        public bool Eliminar(int empresaId, int categoriaproductoId, string Usuario, SqlConnection cn)
+        {
+            bool seElimino = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_categoriaproducto_eliminar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@categoriaproductoId", categoriaproductoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seElimino = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seElimino = false;
+            }
+            return seElimino;
+        }
     }
 }

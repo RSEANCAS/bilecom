@@ -74,7 +74,6 @@ namespace bilecom.da
 
             return lista;
         }
-
         public TipoSedeBe Obtener(int empresaId, int tiposedeId, SqlConnection cn)
         {
             TipoSedeBe respuesta = null;
@@ -129,6 +128,29 @@ namespace bilecom.da
                 seGuardo = false;
             }
             return seGuardo;
+        }
+
+        public bool Eliminar(int empresaId, int tiposedeId, string Usuario, SqlConnection cn)
+        {
+            bool seElimino = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tiposede_eliminar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@tiposedeId", tiposedeId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seElimino = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seElimino = false;
+            }
+            return seElimino;
         }
     }
 }

@@ -31,6 +31,7 @@ namespace bilecom.app.Controllers.Api
 
             return respuesta;
         }
+        
         [HttpGet]
         [Route("obtener-cliente")]
         public ClienteBe ObtenerCliente(int empresaId, int clienteId)
@@ -44,6 +45,14 @@ namespace bilecom.app.Controllers.Api
         public bool GuardarCliente(ClienteBe registro)
         {
             bool respuesta = clienteBl.GuardarCliente(registro);
+            return respuesta;
+        }
+
+        [HttpPost]
+        [Route("eliminar-cliente")]
+        public bool EliminarCliente(int empresaId,int clienteId, string Usuario)
+        {
+            bool respuesta = clienteBl.EliminarCliente(empresaId,clienteId,Usuario);
             return respuesta;
         }
     }

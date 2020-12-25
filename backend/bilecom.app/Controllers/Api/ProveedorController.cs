@@ -47,5 +47,13 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpPost]
+        [Route("eliminar-proveedor")]
+        public bool EliminarProveedor(int empresaId, int proveedorId, string Usuario)
+        {
+            bool respuesta = proveedorBl.EliminarProveedor(empresaId, proveedorId, Usuario);
+            return respuesta;
+        }
+
     }
 }
