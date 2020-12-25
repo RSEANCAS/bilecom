@@ -24,7 +24,7 @@ namespace bilecom.app.Controllers.Api
             var lista = personalBl.BuscarPersonal(empresaId, nroDocumentoIdentidad, nombresCompletos, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<PersonalBe>
             {
-                data = lista,
+                data = lista ?? new List<PersonalBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros

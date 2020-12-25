@@ -26,13 +26,6 @@
                     let perfil = dataPerfil.find(x => x.PerfilId == perfilId);
                     common.GuardarPerfilActual(perfil);
                     pageLayout.MostrarPerfilActual();
-                    //$.niftyNoty({
-                    //    type: 'success',
-                    //    icon: 'pli-consulting icon-2x',
-                    //    message: 'Hi ' + result,
-                    //    container: 'floating',
-                    //    timer: 5000
-                    //});
                 }
             }
         });

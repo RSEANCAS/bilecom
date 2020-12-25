@@ -13,6 +13,7 @@ namespace bilecom.be
         public int EmpresaId { get; set; }
         public DateTime FechaHoraEmision { get; set; }
         public int SerieId { get; set; }
+        public SerieBe Serie { get; set; }
         public int NroComprobante { get; set; }
         public string NroPedido { get; set; }
         public int ClienteId { get; set; }

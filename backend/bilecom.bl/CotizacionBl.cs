@@ -16,14 +16,14 @@ namespace bilecom.bl
         CotizacionDetalleDa cotizacionDetalleDa = new CotizacionDetalleDa();
 
         //Como ultimo paso definir las Reglas de negocio (listar, insertar, eliminar)
-        public List<CotizacionBe> BuscarCotizacion(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, out int totalRegistros)
+        public List<CotizacionBe> BuscarCotizacion(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
             List<CotizacionBe> lista = new List<CotizacionBe>();
             try
             {
                 cn.Open();
-                lista = cotizacionDa.Buscar(empresaId, nombresCompletosPersonal, razonSocial, fechaHoraEmisionDesde, fechaHoraEmisionHasta, cn, out totalRegistros);
+                lista = cotizacionDa.Buscar(empresaId, nombresCompletosPersonal, razonSocial, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
             catch (Exception) { lista = null; }

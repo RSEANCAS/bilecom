@@ -11,6 +11,7 @@ namespace bilecom.be
         public int TipoSedeId { get; set; }
         public int EmpresaId { get; set; }
         public string Nombre { get; set; }
+        public int CodigoEnum { get; set; }
         public bool FlagActivo { get; set; }
         public string Usuario { get; set; }
         public DateTime Fecha { get; set; }

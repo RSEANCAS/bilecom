@@ -3,5 +3,150 @@
     ViewBag.Title = "Mantenimiento";
 }
 
-<h2>Mantenimiento</h2>
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+}
 
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h2 class="page-header text-overflow">@ViewBag.Titulo</h2>
+        </div>
+    </div>
+    <form id="frm-personal-mantenimiento" name="frm-personal-mantenimiento" method="post">
+        <div id="page-content">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="panel panel-bordered panel-dark">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Datos Generales</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Fecha y Hora Emisión</span>
+                                        <input class="form-control" placeholder="Fecha y Hora Emisión" name="txt-fecha-hora-emision" id="txt-fecha-hora-emision" data-bv-field="txt-fecha-hora-emision" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Serie</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-serie" id="cmb-serie" data-bv-field="cmb-serie" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Comprobante</span>
+                                        <input class="form-control" placeholder="N° Comprobante" name="txt-nro-comprobante" id="txt-nro-comprobante" data-bv-field="txt-nro-comprobante" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-moneda" id="cmb-moneda" data-bv-field="cmb-moneda" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-bordered panel-dark">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Datos del Cliente</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-cliente" id="cmb-tipo-documento-identidad-cliente" data-bv-field="cmb-tipo-documento-identidad-cliente" tabindex="-1" aria-hidden="false" disabled></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
+                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-cliente" id="txt-numero-documento-identidad-cliente" data-bv-field="txt-numero-documento-identidad-cliente" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
+                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-cliente" id="txt-nombres-completos-cliente" data-bv-field="txt-nombres-completos-cliente" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-cliente" id="txt-direccion-cliente" data-bv-field="txt-direccion-cliente" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-bordered panel-dark">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Datos del Personal</h3>
+                            <div class="panel-control">
+                                <button class="btn btn-default">Buscar</button>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-personal" id="cmb-tipo-documento-identidad-personal" data-bv-field="cmb-tipo-documento-identidad-personal" tabindex="-1" aria-hidden="false" disabled></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
+                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-personal" id="txt-numero-documento-identidad-personal" data-bv-field="txt-numero-documento-identidad-personal" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
+                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-personal" id="txt-nombres-completos-personal" data-bv-field="txt-nombres-completos-personal" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-personal" id="txt-direccion-personal" data-bv-field="txt-direccion-personal" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-3 col-lg-offset-6">
+                            <button class="btn btn-success col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/Cotizaciones")">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientocotizacion.js")"></script>
+    <script>
+        $(document).ready(function () {
+            pageMantenimientoCotizacion.Init();
+        });
+    </script>
+}

@@ -376,6 +376,7 @@
     <Content Include="Assets\js\pages\categoriaproducto.js" />
     <Content Include="Assets\js\pages\cliente.js" />
     <Content Include="Assets\js\pages\common.js" />
+    <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -3270,6 +3271,10 @@
     <ProjectReference Include="..\bilecom.bl\bilecom.bl.csproj">
       <Project>{12CC74E5-E96C-468F-8DB7-18BE7AB7067C}</Project>
       <Name>bilecom.bl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
+      <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
+      <Name>bilecom.enums</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
       <Project>{8929A9EE-5864-4CFA-B7AE-3D6850945AB1}</Project>

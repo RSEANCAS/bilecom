@@ -13,7 +13,7 @@ namespace bilecom.da
 {
     public class CotizacionDa
     {
-        public List<CotizacionBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, SqlConnection cn, out int totalRegistros)
+        public List<CotizacionBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
             List<CotizacionBe> lista = null;
@@ -26,6 +26,10 @@ namespace bilecom.da
                 cmd.Parameters.AddWithValue("@cliente", razonSocial.GetNullable());
                 cmd.Parameters.AddWithValue("@fechaHoraEmisionDesde", fechaHoraEmisionDesde.GetNullable());
                 cmd.Parameters.AddWithValue("@fechaHoraEmisionHasta", fechaHoraEmisionHasta.GetNullable());
+                cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());
+                cmd.Parameters.AddWithValue("@cantidadRegistros", cantidadRegistros.GetNullable());
+                cmd.Parameters.AddWithValue("@columnaOrden", columnaOrden.GetNullable());
+                cmd.Parameters.AddWithValue("@ordenMax", ordenMax.GetNullable());
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)
@@ -37,6 +41,9 @@ namespace bilecom.da
                             CotizacionBe item = new CotizacionBe();
                             item.Fila = dr.GetData<int>("Fila");
                             item.SerieId = dr.GetData<int>("SerieId");
+                            item.Serie = new SerieBe();
+                            item.Serie.SerieId = dr.GetData<int>("SerieId");
+                            item.Serie.Serial = dr.GetData<string>("SerialSerie");
                             item.NroComprobante = dr.GetData<int>("NroComprobante");
                             item.NroPedido = dr.GetData<string>("NroPedido");
                             item.FechaHoraEmision = dr.GetData<DateTime>("FechaHoraEmision");
