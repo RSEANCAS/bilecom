@@ -63,6 +63,8 @@
     <Compile Include="ProvinciaBe.cs" />
     <Compile Include="SedeBe.cs" />
     <Compile Include="SedeUsuarioBe.cs" />
+    <Compile Include="SerieBe.cs" />
+    <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
     <Compile Include="TipoSedeBe.cs" />
     <Compile Include="UsuarioBe.cs" />
