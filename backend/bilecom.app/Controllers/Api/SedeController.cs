@@ -47,7 +47,7 @@ namespace bilecom.app.Controllers.Api
 
         [HttpPost]
         [Route("eliminar-sede")]
-        public bool EliminarSede(int empresaId, int sedeId, string Usuario)
+        public bool Eliminar(int empresaId, int sedeId, string Usuario)
         {
             bool respuesta = sedeBl.EliminarSede(empresaId, sedeId, Usuario);
             return respuesta;

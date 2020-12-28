@@ -380,6 +380,7 @@
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
+    <Content Include="Assets\js\pages\mantenimientoserie.js" />
     <Content Include="Assets\js\pages\mantenimientotiposede.js" />
     <Content Include="Assets\js\pages\personal.js" />
     <Content Include="Assets\js\pages\mantenimientocliente.js" />
@@ -3255,6 +3256,7 @@
     <Content Include="Views\Cotizacion\Index.cshtml" />
     <Content Include="Views\Cotizacion\Mantenimiento.cshtml" />
     <Content Include="Views\Serie\Index.cshtml" />
+    <Content Include="Views\Serie\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

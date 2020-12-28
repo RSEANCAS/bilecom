@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Serie Mantenimiento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+}
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            @if (Convert.ToInt32(TempData["id"]) == 0)
+            {
+                <h2 class="page-header text-overflow">Nueva Serie</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+            else
+            {
+                <h2 class="page-header text-overflow">Editar Serie</h2>
+                <input name="txt-opcion" id="txt-opcion" hidden value=@TempData["id"] />
+            }
+        </div>
+    </div>
+    <form id="frm-serie" name="frm-serie" method="post">
+        <div id="page-content">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo Comprobante</font></font></span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-comprobante" id="cmb-tipo-comprobante" data-bv-field="cmb-tipo-comprobante" tabindex="-1" aria-hidden="false">
+                                </select>
+                                <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-tipo-comprobante" style=""></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Serial</span>
+                                <input class="form-control" placeholder="Serial" name="txt-serial" id="txt-serial" data-bv-field="txt-serial" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Valor Inicial</span>
+                                <input class="form-control" placeholder="Valor Inicial" name="txt-valor-inicial" id="txt-valor-inicial" data-bv-field="txt-valor-inicial">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Valor Final</span>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <input id="chk-flag-sin-final" name="chk-flag-sin-final" class="magic-checkbox" type="checkbox">
+                                        <label for="chk-flag-sin-final"></label>
+                                    </div>
+                                    <input class="form-control" placeholder="Valor Final" name="txt-valor-final" id="txt-valor-final" data-bv-field="txt-valor-final">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Valor Actual</span>
+                                <input class="form-control" placeholder="Valor Actual" name="txt-valor-actual" id="txt-valor-actual" data-bv-field="txt-valor-actual">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary col-sm-12" id="btn-guardar" name="btn-guardar" submit>Guardar</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-danger col-sm-12" href="@Url.Content("~/Series/")">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientoserie.js")"></script>
+    <script>
+        $(document).ready(function () {
+            pageMantenimientoSerie.Init();
+        });
+    </script>
+}

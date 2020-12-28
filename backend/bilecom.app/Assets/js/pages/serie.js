@@ -73,4 +73,60 @@
 
     },
 
+    btnEliminaClick: function (id) {
+        $.niftyNoty({
+            icon: "danger",
+            type: "danger",
+            container: "floating",
+            floating: {
+                position: "top-center",
+                animationIn: "shake",
+                animationOut: "fadeOut",
+            },
+            closeBtn: false,
+            html: `<h4 class="alert-title" align="center">¿Desea eliminar registro?</h4><div class="mar-top" align="center"><button type="button" onclick="pageSerie.EliminaRegistro(${id})" class="btn btn-primary" data-dismiss="noty">Si</button><button type="button" class="btn btn-info" data-dismiss="noty">No</button></div>`
+
+        });
+    },
+
+    EliminaRegistro: function (id) {
+        let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
+        let user = common.ObtenerUsuario().Nombre;
+
+        let url = `${urlRoot}api/serie/eliminar-serie?empresaId=${empresaId}&serieId=${id}&usuario=${user}`;
+        let init = { method: 'POST' };
+
+        fetch(url, init)
+            .then(r => r.json())
+            .then(pageSerie.ResponseEliminaRegistro);
+    },
+
+    ResponseEliminaRegistro: function (data) {
+        let tipo = "", mensaje = "";
+        if (data == true) {
+            tipo = "success";
+            mensaje = "¡Se ha eliminado con éxito!";
+        } else {
+            tipo = "danger";
+            mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
+        }
+
+        $.niftyNoty({
+            type: tipo,
+            container: "floating",
+            html: mensaje,
+            floating: {
+                position: "top-center",
+                animationIn: "shake",
+                animationOut: "fadeOut"
+            },
+            focus: true,
+            timer: 1800,
+            onHide: function () {
+                if (data == true) {
+                    location.href = `${urlRoot}Series`
+                }
+            }
+        });
+    },
 }

@@ -51,5 +51,94 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public bool Guardar(SerieBe serieBe, SqlConnection cn)
+        {
+            bool seGuardo = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_guardar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", serieBe.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@SerieId", serieBe.SerieId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoComprobanteId", serieBe.TipoComprobanteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Serial", serieBe.Serial.GetNullable());
+                    cmd.Parameters.AddWithValue("@ValorInicial", serieBe.ValorInicial.GetNullable());
+                    cmd.Parameters.AddWithValue("@ValorFinal", serieBe.ValorFinal.GetNullable());
+                    cmd.Parameters.AddWithValue("@FlagSinFinal", serieBe.FlagSinFinal.GetNullable());
+                    cmd.Parameters.AddWithValue("@ValorActual", serieBe.ValorActual.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", serieBe.Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seGuardo = false;
+            }
+            return seGuardo;
+        }
+
+        public SerieBe Obtener(int empresaId, int serieId, SqlConnection cn)
+        {
+            SerieBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@SerieId", serieId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new SerieBe();
+                                respuesta.SerieId = dr.GetData<int>("SerieId");
+                                respuesta.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
+                                respuesta.Serial = dr.GetData<string>("Serial");
+                                respuesta.ValorInicial = dr.GetData<int>("ValorInicial");
+                                respuesta.ValorFinal = dr.GetData<int>("ValorFinal");
+                                respuesta.FlagSinFinal = dr.GetData<bool>("FlagSinFinal");
+                                respuesta.ValorActual = dr.GetData<int>("ValorActual");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
+
+        public bool Eliminar(int empresaId, int serieId, string Usuario, SqlConnection cn)
+        {
+            bool seElimino = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_eliminar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@serieId", serieId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seElimino = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seElimino = false;
+            }
+            return seElimino;
+        }
     }
 }

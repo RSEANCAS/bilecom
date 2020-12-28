@@ -30,5 +30,26 @@ namespace bilecom.app.Controllers.Api
 
             return respuesta;
         }
+
+        [HttpGet]
+        [Route("obtener-serie")]
+        public SerieBe Obtener(int empresaId, int serieId)
+        {
+            return serieBl.Obtener(empresaId, serieId);
+        }
+
+        [HttpPost]
+        [Route("guardar-serie")]
+        public bool Guardar(SerieBe serieBe)
+        {
+            return serieBl.Guardar(serieBe);
+        }
+
+        [HttpPost]
+        [Route("eliminar-serie")]
+        public bool Eliminar(int empresaId, int serieId, string Usuario)
+        {
+            return serieBl.Eliminar(empresaId, serieId, Usuario);
+        }
     }
 }
