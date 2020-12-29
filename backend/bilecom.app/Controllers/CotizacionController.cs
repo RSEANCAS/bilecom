@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static bilecom.enums.Enums;
 
 namespace bilecom.app.Controllers
 {
@@ -20,6 +21,7 @@ namespace bilecom.app.Controllers
         public ActionResult Nuevo()
         {
             ViewBag.Titulo = "Nueva Cotización";
+            ViewBag.Accion = (int)Accion.Nuevo;
             return View("Mantenimiento");
         }
 
@@ -27,6 +29,7 @@ namespace bilecom.app.Controllers
         public ActionResult Editar(int cotizacionId)
         {
             ViewBag.Titulo = "Editar Cotización";
+            ViewBag.Accion = (int)Accion.Editar;
             return View("Mantenimiento");
         }
     }

@@ -52,6 +52,7 @@
     <Compile Include="DepartamentoBe.cs" />
     <Compile Include="DistritoBe.cs" />
     <Compile Include="EmpresaBe.cs" />
+    <Compile Include="MonedaBe.cs" />
     <Compile Include="OpcionBe.cs" />
     <Compile Include="PaisBe.cs" />
     <Compile Include="PerfilBe.cs" />
