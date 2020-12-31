@@ -120,6 +120,19 @@
     <Content Include="Assets\css\demo\nifty-demo-icons.min.css" />
     <Content Include="Assets\css\demo\nifty-demo.css" />
     <Content Include="Assets\css\demo\nifty-demo.min.css" />
+    <Content Include="Assets\css\images\ui-bg_glass_20_555555_1x400.png" />
+    <Content Include="Assets\css\images\ui-bg_glass_40_0078a3_1x400.png" />
+    <Content Include="Assets\css\images\ui-bg_glass_40_ffc73d_1x400.png" />
+    <Content Include="Assets\css\images\ui-bg_gloss-wave_25_333333_500x100.png" />
+    <Content Include="Assets\css\images\ui-bg_highlight-soft_80_eeeeee_1x100.png" />
+    <Content Include="Assets\css\images\ui-bg_inset-soft_25_000000_1x100.png" />
+    <Content Include="Assets\css\images\ui-bg_inset-soft_30_f58400_1x100.png" />
+    <Content Include="Assets\css\images\ui-icons_222222_256x240.png" />
+    <Content Include="Assets\css\images\ui-icons_4b8e0b_256x240.png" />
+    <Content Include="Assets\css\images\ui-icons_a83300_256x240.png" />
+    <Content Include="Assets\css\images\ui-icons_cccccc_256x240.png" />
+    <Content Include="Assets\css\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Assets\css\jquery-ui.min.css" />
     <Content Include="Assets\css\nifty.css" />
     <Content Include="Assets\css\nifty.min.css" />
     <Content Include="Assets\css\themes\type-a\theme-coffee.css" />
@@ -370,6 +383,7 @@
     <Content Include="Assets\js\demo\ui-panels.js" />
     <Content Include="Assets\js\demo\widgets.js" />
     <Content Include="Assets\js\demo\x-editable-data.js" />
+    <Content Include="Assets\js\jquery-ui.min.js" />
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\nifty.js" />
     <Content Include="Assets\js\nifty.min.js" />
@@ -382,6 +396,7 @@
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\mantenimientocotizacion.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
+    <Content Include="Assets\js\pages\mantenimientoserie.js" />
     <Content Include="Assets\js\pages\mantenimientotiposede.js" />
     <Content Include="Assets\js\pages\personal.js" />
     <Content Include="Assets\js\pages\mantenimientocliente.js" />
@@ -391,6 +406,7 @@
     <Content Include="Assets\js\pages\producto.js" />
     <Content Include="Assets\js\pages\proveedor.js" />
     <Content Include="Assets\js\pages\sede.js" />
+    <Content Include="Assets\js\pages\serie.js" />
     <Content Include="Assets\js\pages\tiposede.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
@@ -2813,6 +2829,7 @@
     <Compile Include="Controllers\Api\ProvinciaController.cs" />
     <Compile Include="Controllers\Api\SedeController.cs" />
     <Compile Include="Controllers\Api\SerieController.cs" />
+    <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
@@ -2826,6 +2843,7 @@
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProveedorController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
+    <Compile Include="Controllers\SerieController.cs" />
     <Compile Include="Controllers\TipoSedeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -3128,6 +3146,8 @@
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
     <Content Include="Views\Cotizacion\Index.cshtml" />
     <Content Include="Views\Cotizacion\Mantenimiento.cshtml" />
+    <Content Include="Views\Serie\Index.cshtml" />
+    <Content Include="Views\Serie\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3142,11 +3162,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
-      <Project>{E9F1604B-36AF-4C5D-A7A1-0F5125CD30AB}</Project>
+      <Project>{e9f1604b-36af-4c5d-a7a1-0f5125cd30ab}</Project>
       <Name>bilecom.be</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.bl\bilecom.bl.csproj">
-      <Project>{12CC74E5-E96C-468F-8DB7-18BE7AB7067C}</Project>
+      <Project>{12cc74e5-e96c-468f-8db7-18be7ab7067c}</Project>
       <Name>bilecom.bl</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">

@@ -28,12 +28,13 @@ const pageMantenimientoCotizacion = {
         $("#btn-buscar-personal").click(pageMantenimientoCotizacion.BtnBuscarPersonalClick);
         $("#chk-obtener-datos-personal-usuario").change(pageMantenimientoCotizacion.ChkObtenerDatosPersonalUsuarioChange);
         $("#chk-obtener-datos-personal-usuario").trigger("click");
+        $("#btn-agregar-detalle").click(pageMantenimientoCotizacion.BtnAgregarDetalleClick);
     },
 
     BtnBuscarClienteClick: function () {
         bootbox.dialog({
-            message: 
-                    `<p class='text-semibold text-main'>Buscar Cliente</p>
+            message:
+                `<p class='text-semibold text-main'>Buscar Cliente</p>
                     <hr>
                     <div class="row">
                         <div class="col-sm-4">
@@ -107,7 +108,6 @@ const pageMantenimientoCotizacion = {
     },
 
     BtnSeleccionarClienteClick: function (data) {
-        pageMantenimientoCotizacion.LimpiarDatosCliente();
         pageMantenimientoCotizacion.LlenarDatosCliente(data);
         $("#modal-busqueda-cliente").modal('hide');
     },
@@ -179,7 +179,7 @@ const pageMantenimientoCotizacion = {
                         }
                     },
                 ];
-                
+
                 $("#btn-buscar-personal-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-personal", ajax, columns));
                 $("#btn-buscar-personal-dialog").trigger("click");
             },
@@ -189,7 +189,6 @@ const pageMantenimientoCotizacion = {
     },
 
     BtnSeleccionarPersonalClick: function (data) {
-        pageMantenimientoCotizacion.LimpiarDatosPersonal();
         pageMantenimientoCotizacion.LlenarDatosPersonal(data);
         $("#modal-busqueda-personal").modal('hide');
     },
@@ -206,31 +205,91 @@ const pageMantenimientoCotizacion = {
         }
     },
 
-    LlenarDatosPersonal(data) {
-        let user = common.ObtenerUsuario();
-        let flagObtenerDatosPersonalUsuario = user.Personal.PersonalId == data.PersonalId;
-        console.log(flagObtenerDatosPersonalUsuario);
-        $("#chk-obtener-datos-personal-usuario").prop("checked", flagObtenerDatosPersonalUsuario);
-        //if (flagObtenerDatosPersonalUsuario == false) {
-            $("#hdn-personal-id").val(data.PersonalId);
-            $("#cmb-tipo-documento-identidad-personal").val(data.TipoDocumentoIdentidadId).trigger('change');
-            $("#txt-numero-documento-identidad-personal").val(data.NroDocumentoIdentidad);
-            $("#txt-nombres-completos-personal").val(data.NombresCompletos);
-            $("#txt-direccion-personal").val(data.Direccion);
-        //} else {
-        //    pageMantenimientoCotizacion.ChkObtenerDatosPersonalUsuarioChange();
-        //}
+    BtnAgregarDetalleClick: function () {
+        bootbox.dialog({
+            message:
+                `<p class='text-semibold text-main'>Agregar Detalle</p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="autocomplete-detalle-descripcion">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Descripción</span>
+                                <input class="form-control" name="txt-detalle-descripcion" id="txt-detalle-descripcion" placeholder="Descripción">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Cantidad</span>
+                                <input class="form-control" name="txt-detalle-cantidad" id="txt-detalle-cantidad" placeholder="Cantidad">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Precio Unitario</span>
+                                <input class="form-control" name="txt-detalle-precio-unitario" id="txt-detalle-precio-unitario" placeholder="Precio Unitario">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Importe Total</span>
+                                <input class="form-control" name="txt-detalle-importe-total" id="txt-detalle-importe-total" placeholder="Importe Total">
+                            </div>
+                        </div>
+                    </div>`,
+            buttons: {
+                guardar: {
+                    label: 'Guardar',
+                    className: 'btn-primary',
+                    callback: function () {
+
+                    },
+                    
+                }
+            },
+            closeButton: true,
+            onShow: function (e) {
+                $(e.currentTarget).attr("id", "modal-busqueda-personal");
+                let user = common.ObtenerUsuario();
+                let empresaId = user.Empresa.EmpresaId;
+                $("#txt-detalle-descripcion").autocomplete(pageMantenimientoCotizacion.TxtDetalleDescripcionAutoComplete);
+            },
+            animateIn: 'zoomInDown',
+            animateOut: 'zoomOutUp'
+        });
     },
 
-    LimpiarDatosPersonal() {
-        $("#hdn-personal-id").val("");
-        $("#cmb-tipo-documento-identidad-personal").val("").trigger('change');
-        $("#txt-numero-documento-identidad-personal").val("");
-        $("#txt-nombres-completos-personal").val("");
-        $("#txt-direccion-personal").val("");
+    TxtDetalleDescripcionAutoComplete: {
+        appendTo: "#autocomplete-detalle-descripcion",
+        minLength: 3,
+        source: async (req, res) => {
+            let user = common.ObtenerUsuario();
+            let nombre = $("#txt-detalle-descripcion").val();
+            let url = `${urlRoot}api/producto/buscar-producto-por-nombre?empresaId=${user.Empresa.EmpresaId}&nombre=${nombre}`;
+            let headers = { 'Content-Type': 'application/json' };
+            //let data = { empresaId: user.Empresa.EmpresaId, nombre: $("#txt-detalle-descripcion").val() };
+            //let data = new URLSearchParams();
+            //data.append("empresaId", user.Empresa.EmpresaId);
+            //data.append("nombre", $("#txt-detalle-descripcion").val());
+            //let init = { method: 'GET', body: data, headers }
+            //let init = { method: 'GET', body: JSON.stringify(data), headers }
+            await fetch(url)
+                .then(common.ResponseToJson)
+                .then(json => res(json));
+        },
+        select: function (event, ui) {
+            //$("#project").val(ui.item.label);
+            //$("#project-id").val(ui.item.value);
+            //$("#project-description").html(ui.item.desc);
+            //$("#project-icon").attr("src", "images/" + ui.item.icon);
+
+            return false;
+        }
     },
 
     LlenarDatosCliente(data) {
+        pageMantenimientoCotizacion.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
         $("#cmb-tipo-documento-identidad-cliente").val(data.TipoDocumentoIdentidadId).trigger('change');
         $("#txt-numero-documento-identidad-cliente").val(data.NroDocumentoIdentidad);
@@ -244,6 +303,26 @@ const pageMantenimientoCotizacion = {
         $("#txt-numero-documento-identidad-cliente").val("");
         $("#txt-nombres-completos-cliente").val("");
         $("#txt-direccion-cliente").val("");
+    },
+
+    LlenarDatosPersonal(data) {
+        pageMantenimientoCotizacion.LimpiarDatosPersonal();
+        let user = common.ObtenerUsuario();
+        let flagObtenerDatosPersonalUsuario = user.Personal.PersonalId == data.PersonalId;
+        $("#chk-obtener-datos-personal-usuario").prop("checked", flagObtenerDatosPersonalUsuario);
+        $("#hdn-personal-id").val(data.PersonalId);
+        $("#cmb-tipo-documento-identidad-personal").val(data.TipoDocumentoIdentidadId).trigger('change');
+        $("#txt-numero-documento-identidad-personal").val(data.NroDocumentoIdentidad);
+        $("#txt-nombres-completos-personal").val(data.NombresCompletos);
+        $("#txt-direccion-personal").val(data.Direccion);
+    },
+
+    LimpiarDatosPersonal() {
+        $("#hdn-personal-id").val("");
+        $("#cmb-tipo-documento-identidad-personal").val("").trigger('change');
+        $("#txt-numero-documento-identidad-personal").val("");
+        $("#txt-nombres-completos-personal").val("");
+        $("#txt-direccion-personal").val("");
     },
 
     ListarDetalle: function () {
@@ -278,13 +357,13 @@ const pageMantenimientoCotizacion = {
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
             .then(([SerieLista, MonedaLista, TipoDocumentoIdentidadLista]) => {
-                serieLista = SerieLista;
-                monedaLista = MonedaLista;
-                tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista;
+                serieLista = SerieLista || [];
+                monedaLista = MonedaLista || [];
+                tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
 
-                pageMantenimientoCotizacion.ResponseSerieListar(SerieLista);
-                pageMantenimientoCotizacion.ResponseMonedaListar(MonedaLista);
-                pageMantenimientoCotizacion.ResponseTipoDocumentoIdentidadListar(TipoDocumentoIdentidadLista);
+                pageMantenimientoCotizacion.ResponseSerieListar(serieLista);
+                pageMantenimientoCotizacion.ResponseMonedaListar(monedaLista);
+                pageMantenimientoCotizacion.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
                 if (typeof fnNext == "function") fnNext();
             })
     },

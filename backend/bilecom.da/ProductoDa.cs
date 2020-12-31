@@ -49,6 +49,44 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn)
+        {
+            List<ProductoBe> lista = null;
+
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_producto_buscar_x_nombre", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        lista = new List<ProductoBe>();
+                        while (dr.Read())
+                        {
+                            ProductoBe item = new ProductoBe();
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.ProductoId = dr.GetData<int>("ProductoId");
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.CategoriaId = dr.GetData<int>("CategoriaId");
+                            item.Nombre = dr.GetData<string>("NombreProducto");
+                            item.Stock = dr.GetData<int>("Stock");
+                            //item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                            //item.UnidadMedidaId = dr.GetData<int>("UnidadMedidaId");
+                            //item.categoriaProducto = new CategoriaProductoBe();
+                            //item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
+                            //item.Stock = dr.GetData<int>("Stock");
+                            lista.Add(item);
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
         public bool Guardar(ProductoBe productoBe, SqlConnection cn)
         {
             bool seGuardo = false;

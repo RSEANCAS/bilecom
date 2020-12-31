@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@{
+    ViewBag.Title = "Serie";
+}
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+}
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h1 class="page-header text-overflow">Lista de Series</h1>
+        </div>
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End page title-->
+        <!--Breadcrumb-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        @*<ol class="breadcrumb">
+                <li><a href="#"><i class="demo-pli-home"></i></a></li>
+                <li><a href="#">Pages</a></li>
+                <li class="active">Blank page</li>
+            </ol>*@
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End breadcrumb-->
+
+    </div>
+
+
+    <!--Page content-->
+    <!--===================================================-->
+    <div id="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Filtros de búsqueda</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-tipo-comprobante" style=""></i>
+                            <label class="control-label">Tipo de Comprobante</label>
+                            <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-comprobante" id="cmb-tipo-comprobante" data-bv-field="cmb-tipo-comprobantepais" tabindex="-1" aria-hidden="false">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">Serial</label>
+                            <input type="text" class="form-control" id="txt-serial">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group text-right">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="clear"></div>
+                            <a class="btn btn-primary" href="@Url.Content("~/Series/Nuevo")">Nuevo</a>
+                            <button class="btn btn-primary" id="btn-buscar">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <table id="tbl-lista" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th rowspan="1" colspan="1" style="width:25px">N°</th>
+                            <th>Tipo Comprobante</th>
+                            <th class="min-tablet" rowspan="1" colspan="1" style="width:50px">Serial</th>
+                            <th class="min-tablet">Valor Inicial</th>
+                            <th class="min-tablet">Valor Final</th>
+                            <th class="min-desktop" rowspan="1" colspan="1" style="width:130px">Valor Actual</th>
+                            <th class="min-desktop" rowspan="1" colspan="1" style="width:130px">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!--===================================================-->
+    <!--End page content-->
+
+</div>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/serie.js")"></script>
+    <script>
+        $(document).ready(function () {
+            pageSerie.Init();
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

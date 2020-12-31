@@ -11,6 +11,8 @@
     <!--=================================================-->
     <!--Open Sans Font [ OPTIONAL ]-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <!--jQuery UI Stylesheet [ REQUIRED ]-->
+    <link href="@Url.Content("~/Assets/css/jquery-ui.min.css")" rel="stylesheet">
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="@Url.Content("~/Assets/css/bootstrap.min.css")" rel="stylesheet">
     <!--Nifty Stylesheet [ REQUIRED ]-->
@@ -347,6 +349,7 @@
     <!--=================================================-->
     <!--jQuery [ REQUIRED ]-->
     <script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/jquery-ui.min.js")"></script>
     <!--BootstrapJS [ RECOMMENDED ]-->
     <script src="@Url.Content("~/Assets/js/bootstrap.min.js")"></script>
     <!--NiftyJS [ RECOMMENDED ]-->
@@ -371,7 +374,7 @@
         const urlRoot = "@Url.Content("~")";
         pageLayout.Init();
     </script>
-    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>
+@*    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>*@
 
     @RenderSection("scripts_footer", false)
 </body>

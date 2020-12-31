@@ -29,6 +29,21 @@ namespace bilecom.bl
             return lista;
         }
 
+        public List<ProductoBe> BuscarProductoPorNombre(string nombre, int empresaId)
+        {
+            List<ProductoBe> lista = null;
+
+            try
+            {
+                cn.Open();
+                lista = productoDa.BuscarPorNombre(nombre, empresaId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
+        }
+
         public ProductoBe Obtener(int EmpresaId, int productoId)
         {
             ProductoBe respuesta = null;
