@@ -48,7 +48,7 @@ namespace bilecom.bl
                     if (conMoneda) item.Moneda = monedaDa.Obtener(item.MonedaId, cn);
                     if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
                     if (conPersonal) item.Personal = personalDa.Obtener(empresaId, item.PersonalId, cn);
-                    if (conListaDetalleCotizacion) item.ListaCotizacionDetalle = cotizacionDetalleDa.Listar(empresaId, item.SerieId, cn);
+                    if (conListaDetalleCotizacion) item.ListaCotizacionDetalle = cotizacionDetalleDa.Listar(empresaId, item.CotizacionId, cn);
                 }
                 cn.Close();
             }

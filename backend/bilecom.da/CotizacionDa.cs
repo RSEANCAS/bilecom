@@ -40,6 +40,7 @@ namespace bilecom.da
                         {
                             CotizacionBe item = new CotizacionBe();
                             item.Fila = dr.GetData<int>("Fila");
+                            item.CotizacionId = dr.GetData<int>("CotizacionId");
                             item.SerieId = dr.GetData<int>("SerieId");
                             item.Serie = new SerieBe();
                             item.Serie.SerieId = dr.GetData<int>("SerieId");
@@ -52,7 +53,8 @@ namespace bilecom.da
                             item.Personal.NombresCompletos = dr.GetData<string>("NombresCompletosPersonal");
                             item.Cliente = new ClienteBe();
                             item.Cliente.RazonSocial = dr.GetData<string>("RazonSocialCliente");
-                            item.CotizacionId = dr.GetData<int>("CotizacionId");
+                            item.TotalImporte = dr.GetData<decimal>("TotalImporte");
+                            item.FlagAnulado = dr.GetData<bool>("FlagAnulado");
                             lista.Add(item);
 
                             totalRegistros = dr.GetData<int>("Total");

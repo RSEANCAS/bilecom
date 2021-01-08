@@ -380,6 +380,12 @@ const pageMantenimientoCotizacion = {
         detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
         $("#hdn-detalle").val(detalleLista.length);
+        pageMantenimientoCotizacion.MostrarTotales();
+    },
+
+    MostrarTotales: function () {
+        let totalImporte = detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0);
+        $("#lbl-total-importe").text(totalImporte.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
 
     Validar: function () {
