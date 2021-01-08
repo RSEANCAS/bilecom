@@ -5449,7 +5449,8 @@ if (typeof jQuery === 'undefined') {
 	$.fn.bootstrapValidator.validators.numeric = {
 		html5Attributes: {
 			message: 'message',
-			separator: 'separator'
+			separator: 'separator',
+			thousands: 'thousands'
 		},
 
 		enableByHtml5: function($field) {
@@ -5478,6 +5479,12 @@ if (typeof jQuery === 'undefined') {
 			var separator = options.separator || '.';
 			if (separator !== '.') {
 				value = value.replace(separator, '.');
+			}
+			
+			var thousands = options.thousands || ',';
+			let regexp = new RegExp(`${thousands}`, "g");
+			if (value.includes(thousands)) {
+				value = value.replace(regexp, '');
 			}
 
 			return !isNaN(parseFloat(value)) && isFinite(value);

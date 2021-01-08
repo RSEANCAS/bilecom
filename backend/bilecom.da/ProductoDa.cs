@@ -72,7 +72,7 @@ namespace bilecom.da
                             item.ProductoId = dr.GetData<int>("ProductoId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.CategoriaId = dr.GetData<int>("CategoriaId");
-                            item.Nombre = dr.GetData<string>("NombreProducto");
+                            item.Nombre = dr.GetData<string>("Nombre");
                             item.Stock = dr.GetData<int>("Stock");
                             //item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
                             //item.UnidadMedidaId = dr.GetData<int>("UnidadMedidaId");

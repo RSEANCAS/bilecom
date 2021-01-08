@@ -31,6 +31,12 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpGet]
+        [Route("obtener-cotizacion")]
+        public CotizacionBe ObtenerCotizacion(int empresaId, int cotizacionId)
+        {
+            return cotizacionBl.ObtenerCotizacion(empresaId, cotizacionId, conCliente: true, conPersonal: true, conListaDetalleCotizacion: true);
+        }
 
         [HttpPost]
         [Route("guardar-cotizacion")]
@@ -41,5 +47,12 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpPut]
+        [Route("anular-cotizacion")]
+        public bool AnularCotizacion(CotizacionBe registro)
+        {
+            bool respuesta = cotizacionBl.AnularCotizacion(registro);
+            return respuesta;
+        }
     }
 }

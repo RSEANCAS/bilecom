@@ -21,13 +21,11 @@ namespace bilecom.be
         public int PersonalId { get; set; }
         public PersonalBe Personal { get; set; }
         public int MonedaId { get; set; }
-        public float TotalImporte { get; set; }
-        public bool FlagEliminado { get; set; }
-        public string CreadoPor { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public string ModificadoPor { get; set; }
-        public DateTime FechaModificacion { get; set; }
+        public MonedaBe Moneda { get; set; }
+        public decimal TotalImporte { get; set; }
+        public bool FlagAnulado { get; set; }
         public List<CotizacionDetalleBe> ListaCotizacionDetalle { get; set; }
+        public int[] ListaCotizacionDetalleEliminados { get; set; }
     }
     
 }

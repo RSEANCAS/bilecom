@@ -91,35 +91,6 @@ namespace bilecom.da
             return lista;
         }
 
-        public bool Guardar(SerieBe serieBe, SqlConnection cn)
-        {
-            bool seGuardo = false;
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_guardar", cn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@EmpresaId", serieBe.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@SerieId", serieBe.SerieId.GetNullable());
-                    cmd.Parameters.AddWithValue("@TipoComprobanteId", serieBe.TipoComprobanteId.GetNullable());
-                    cmd.Parameters.AddWithValue("@Serial", serieBe.Serial.GetNullable());
-                    cmd.Parameters.AddWithValue("@ValorInicial", serieBe.ValorInicial.GetNullable());
-                    cmd.Parameters.AddWithValue("@ValorFinal", serieBe.ValorFinal.GetNullable());
-                    cmd.Parameters.AddWithValue("@FlagSinFinal", serieBe.FlagSinFinal.GetNullable());
-                    cmd.Parameters.AddWithValue("@ValorActual", serieBe.ValorActual.GetNullable());
-                    cmd.Parameters.AddWithValue("@Usuario", serieBe.Usuario.GetNullable());
-
-                    int filasAfectadas = cmd.ExecuteNonQuery();
-                    seGuardo = filasAfectadas > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                seGuardo = false;
-            }
-            return seGuardo;
-        }
-
         public SerieBe Obtener(int empresaId, int serieId, SqlConnection cn)
         {
             SerieBe respuesta = null;
@@ -155,6 +126,35 @@ namespace bilecom.da
                 respuesta = null;
             }
             return respuesta;
+        }
+
+        public bool Guardar(SerieBe serieBe, SqlConnection cn)
+        {
+            bool seGuardo = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_guardar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", serieBe.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@SerieId", serieBe.SerieId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoComprobanteId", serieBe.TipoComprobanteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@Serial", serieBe.Serial.GetNullable());
+                    cmd.Parameters.AddWithValue("@ValorInicial", serieBe.ValorInicial.GetNullable());
+                    cmd.Parameters.AddWithValue("@ValorFinal", serieBe.ValorFinal.GetNullable());
+                    cmd.Parameters.AddWithValue("@FlagSinFinal", serieBe.FlagSinFinal.GetNullable());
+                    cmd.Parameters.AddWithValue("@ValorActual", serieBe.ValorActual.GetNullable());
+                    cmd.Parameters.AddWithValue("@Usuario", serieBe.Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seGuardo = false;
+            }
+            return seGuardo;
         }
 
         public bool Eliminar(int empresaId, int serieId, string Usuario, SqlConnection cn)

@@ -61,7 +61,9 @@
     CreateDataTableFromData: function (id, data, columns) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
-            $(id).DataTable().ajax.reload();
+            $(id).DataTable().clear()
+            $(id).DataTable().rows.add(data);
+            $(id).DataTable().draw();
             return;
         }
         $(id).dataTable({

@@ -8,7 +8,7 @@ using static bilecom.enums.Enums;
 namespace bilecom.app.Controllers
 {
     [RoutePrefix("Cotizaciones")]
-    public class CotizacionController : Controller
+    public class CotizacionController : _BaseController
     {
         [Route("")]
         // GET: Cotizacion
@@ -26,7 +26,7 @@ namespace bilecom.app.Controllers
         }
 
         [Route("Editar")]
-        public ActionResult Editar(int cotizacionId)
+        public ActionResult Editar(int id)
         {
             ViewBag.Titulo = "Editar Cotización";
             ViewBag.Accion = (int)Accion.Editar;

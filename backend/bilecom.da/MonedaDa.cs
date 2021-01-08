@@ -46,5 +46,40 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public MonedaBe Obtener(int monedaId, SqlConnection cn)
+        {
+            MonedaBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_moneda_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@monedaId", monedaId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            respuesta = new MonedaBe();
+
+                            if (dr.Read())
+                            {
+                                respuesta.MonedaId = dr.GetData<int>("MonedaId");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.Simbolo = dr.GetData<string>("Simbolo");
+                                respuesta.Codigo = dr.GetData<string>("Codigo");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

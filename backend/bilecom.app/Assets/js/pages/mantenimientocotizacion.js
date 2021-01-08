@@ -1,34 +1,35 @@
-﻿var serieLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [];
+﻿var serieLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [];
 
 const columnsDetalle = [
-    { data: "CotizacionDetalleId" },
+    { data: "Fila" },
     { data: "Descripcion" },
-    { data: "Cantidad" },
-    { data: "PrecioUnitario" },
-    { data: "PrecioVenta" },
+    { data: "Cantidad", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
+    { data: "PrecioUnitario", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
+    { data: "TotalImporte", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     {
         data: "CotizacionDetalleId", render: function (data, type, row) {
-            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoCotizacion.BtnSeleccionarPersonalClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
+            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoCotizacion.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
+                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoCotizacion.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
         }
     },
 ];
 const pageMantenimientoCotizacion = {
     Init: function () {
         common.ConfiguracionDataTable();
-        this.Validar();
         this.CargarCombo(this.InitEvents);
+        this.Validar();
         this.ListarDetalle();
         //this.InitEvents();
     },
 
     InitEvents: function () {
-        pageMantenimientoCotizacion.ObtenerDatos();
-
         $("#btn-buscar-cliente").click(pageMantenimientoCotizacion.BtnBuscarClienteClick);
         $("#btn-buscar-personal").click(pageMantenimientoCotizacion.BtnBuscarPersonalClick);
         $("#chk-obtener-datos-personal-usuario").change(pageMantenimientoCotizacion.ChkObtenerDatosPersonalUsuarioChange);
         $("#chk-obtener-datos-personal-usuario").trigger("click");
         $("#btn-agregar-detalle").click(pageMantenimientoCotizacion.BtnAgregarDetalleClick);
+
+        pageMantenimientoCotizacion.ObtenerDatos();
     },
 
     BtnBuscarClienteClick: function () {
@@ -75,6 +76,11 @@ const pageMantenimientoCotizacion = {
                     </div>`,
             onShow: function (e) {
                 $(e.currentTarget).attr("id", "modal-busqueda-cliente");
+
+                $("#modal-busqueda-cliente").on("hide.bs.modal", function () {
+                    $("#frm-cotizacion-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                })
+
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
@@ -110,6 +116,23 @@ const pageMantenimientoCotizacion = {
     BtnSeleccionarClienteClick: function (data) {
         pageMantenimientoCotizacion.LlenarDatosCliente(data);
         $("#modal-busqueda-cliente").modal('hide');
+    },
+
+    LlenarDatosCliente(data) {
+        pageMantenimientoCotizacion.LimpiarDatosCliente();
+        $("#hdn-cliente-id").val(data.ClienteId);
+        $("#cmb-tipo-documento-identidad-cliente").val(data.TipoDocumentoIdentidadId).trigger('change');
+        $("#txt-numero-documento-identidad-cliente").val(data.NroDocumentoIdentidad);
+        $("#txt-nombres-completos-cliente").val(data.RazonSocial);
+        $("#txt-direccion-cliente").val(data.Direccion);
+    },
+
+    LimpiarDatosCliente() {
+        $("#hdn-cliente-id").val("");
+        $("#cmb-tipo-documento-identidad-cliente").val("").trigger('change');
+        $("#txt-numero-documento-identidad-cliente").val("");
+        $("#txt-nombres-completos-cliente").val("");
+        $("#txt-direccion-cliente").val("");
     },
 
     BtnBuscarPersonalClick: function () {
@@ -156,6 +179,9 @@ const pageMantenimientoCotizacion = {
                     </div>`,
             onShow: function (e) {
                 $(e.currentTarget).attr("id", "modal-busqueda-personal");
+                $("#modal-busqueda-personal").on("hide.bs.modal", function () {
+                    $("#frm-cotizacion-mantenimiento").data('bootstrapValidator').revalidateField("hdn-personal-id");
+                })
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
@@ -193,118 +219,6 @@ const pageMantenimientoCotizacion = {
         $("#modal-busqueda-personal").modal('hide');
     },
 
-    ChkObtenerDatosPersonalUsuarioChange: function () {
-        let flagObtenerDatosPersonalUsuario = $("#chk-obtener-datos-personal-usuario").prop("checked");
-
-        if (flagObtenerDatosPersonalUsuario == true) {
-            let user = common.ObtenerUsuario();
-            if (user.Personal == null) return;
-            pageMantenimientoCotizacion.LlenarDatosPersonal(user.Personal);
-        } else {
-            pageMantenimientoCotizacion.LimpiarDatosPersonal();
-        }
-    },
-
-    BtnAgregarDetalleClick: function () {
-        bootbox.dialog({
-            message:
-                `<p class='text-semibold text-main'>Agregar Detalle</p>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group" id="autocomplete-detalle-descripcion">
-                                <span class="bg-dark box-block pad-lft pad-rgt">Descripción</span>
-                                <input class="form-control" name="txt-detalle-descripcion" id="txt-detalle-descripcion" placeholder="Descripción">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <span class="bg-dark box-block pad-lft pad-rgt">Cantidad</span>
-                                <input class="form-control" name="txt-detalle-cantidad" id="txt-detalle-cantidad" placeholder="Cantidad">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <span class="bg-dark box-block pad-lft pad-rgt">Precio Unitario</span>
-                                <input class="form-control" name="txt-detalle-precio-unitario" id="txt-detalle-precio-unitario" placeholder="Precio Unitario">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <span class="bg-dark box-block pad-lft pad-rgt">Importe Total</span>
-                                <input class="form-control" name="txt-detalle-importe-total" id="txt-detalle-importe-total" placeholder="Importe Total">
-                            </div>
-                        </div>
-                    </div>`,
-            buttons: {
-                guardar: {
-                    label: 'Guardar',
-                    className: 'btn-primary',
-                    callback: function () {
-
-                    },
-                    
-                }
-            },
-            closeButton: true,
-            onShow: function (e) {
-                $(e.currentTarget).attr("id", "modal-busqueda-personal");
-                let user = common.ObtenerUsuario();
-                let empresaId = user.Empresa.EmpresaId;
-                $("#txt-detalle-descripcion").autocomplete(pageMantenimientoCotizacion.TxtDetalleDescripcionAutoComplete);
-            },
-            animateIn: 'zoomInDown',
-            animateOut: 'zoomOutUp'
-        });
-    },
-
-    TxtDetalleDescripcionAutoComplete: {
-        appendTo: "#autocomplete-detalle-descripcion",
-        minLength: 3,
-        source: async (req, res) => {
-            let user = common.ObtenerUsuario();
-            let nombre = $("#txt-detalle-descripcion").val();
-            let url = `${urlRoot}api/producto/buscar-producto-por-nombre?empresaId=${user.Empresa.EmpresaId}&nombre=${nombre}`;
-            let headers = { 'Content-Type': 'application/json' };
-            //let data = { empresaId: user.Empresa.EmpresaId, nombre: $("#txt-detalle-descripcion").val() };
-            //let data = new URLSearchParams();
-            //data.append("empresaId", user.Empresa.EmpresaId);
-            //data.append("nombre", $("#txt-detalle-descripcion").val());
-            //let init = { method: 'GET', body: data, headers }
-            //let init = { method: 'GET', body: JSON.stringify(data), headers }
-            await fetch(url)
-                .then(common.ResponseToJson)
-                .then(json => res(json));
-        },
-        select: function (event, ui) {
-            //$("#project").val(ui.item.label);
-            //$("#project-id").val(ui.item.value);
-            //$("#project-description").html(ui.item.desc);
-            //$("#project-icon").attr("src", "images/" + ui.item.icon);
-
-            return false;
-        }
-    },
-
-    LlenarDatosCliente(data) {
-        pageMantenimientoCotizacion.LimpiarDatosCliente();
-        $("#hdn-cliente-id").val(data.ClienteId);
-        $("#cmb-tipo-documento-identidad-cliente").val(data.TipoDocumentoIdentidadId).trigger('change');
-        $("#txt-numero-documento-identidad-cliente").val(data.NroDocumentoIdentidad);
-        $("#txt-nombres-completos-cliente").val(data.RazonSocial);
-        $("#txt-direccion-cliente").val(data.Direccion);
-    },
-
-    LimpiarDatosCliente() {
-        $("#hdn-cliente-id").val("");
-        $("#cmb-tipo-documento-identidad-cliente").val("").trigger('change');
-        $("#txt-numero-documento-identidad-cliente").val("");
-        $("#txt-nombres-completos-cliente").val("");
-        $("#txt-direccion-cliente").val("");
-    },
-
     LlenarDatosPersonal(data) {
         pageMantenimientoCotizacion.LimpiarDatosPersonal();
         let user = common.ObtenerUsuario();
@@ -325,19 +239,171 @@ const pageMantenimientoCotizacion = {
         $("#txt-direccion-personal").val("");
     },
 
+    ChkObtenerDatosPersonalUsuarioChange: function () {
+        let flagObtenerDatosPersonalUsuario = $("#chk-obtener-datos-personal-usuario").prop("checked");
+
+        if (flagObtenerDatosPersonalUsuario == true) {
+            let user = common.ObtenerUsuario();
+            if (user.Personal == null) return;
+            pageMantenimientoCotizacion.LlenarDatosPersonal(user.Personal);
+        } else {
+            pageMantenimientoCotizacion.LimpiarDatosPersonal();
+        }
+
+        $("#frm-cotizacion-mantenimiento").data('bootstrapValidator').revalidateField("hdn-personal-id");
+    },
+
+    BtnAgregarDetalleClick: function (e, id = null) {
+        bootbox.dialog({
+            title: id == null ? 'Agregar Detalle' : 'Editar Detalle',
+            message:
+                `<form id="frm-cotizacion-detalle" autocomplete="off">
+                    ${(id == null ? "" :  `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Descripción</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-descripcion" id="cmb-detalle-descripcion" aria-hidden="false" style="width: 100%"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Cantidad</span>
+                                <input class="form-control" name="txt-detalle-cantidad" id="txt-detalle-cantidad" placeholder="Cantidad">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Precio Unitario</span>
+                                <input class="form-control" name="txt-detalle-precio-unitario" id="txt-detalle-precio-unitario" placeholder="Precio Unitario">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Importe Total</span>
+                                <input class="form-control" name="txt-detalle-importe-total" id="txt-detalle-importe-total" placeholder="Importe Total" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </form>`,
+            closeButton: true,
+            buttons: {
+                guardar: {
+                    label: 'Guardar',
+                    className: 'btn-primary',
+                    callback: function () {
+                        $("#frm-cotizacion-detalle").trigger("submit");
+                        return false;
+                    },
+                    
+                }
+            },
+            onShow: function (e) {
+                $(e.currentTarget).attr("id", "modal-detalle-agregar");
+
+                $("#modal-detalle-agregar").on("hide.bs.modal", function () {
+                    $("#frm-cotizacion-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                })
+
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario").change(pageMantenimientoCotizacion.CalcularImporteTotal);
+
+                $("#cmb-detalle-descripcion").select2({
+                    allowClear: true,
+                    dropdownParent: $("#modal-detalle-agregar"),
+                    placeholder: '[Seleccione...]',
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: `${urlRoot}api/producto/buscar-producto-por-nombre`,
+                        data: function (params) {
+                            let user = common.ObtenerUsuario();
+                            let nombre = params.term;
+                            return { empresaId: user.Empresa.EmpresaId, nombre };
+                        },
+                        processResults: function (data) {
+                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre }));
+                            return { results };
+                        }
+                    }
+                });
+
+                let registroExiste = id != null;
+
+                if (registroExiste == true) {
+                    let index = detalleLista.findIndex(x => x.CotizacionDetalleId == id);
+                    let data = detalleLista[index];
+
+                    let optionDefault = new Option(data.Descripcion, data.ProductoId, true, true);
+
+                    $("#cmb-detalle-descripcion").append(optionDefault).trigger("change");
+                    $("#txt-detalle-cantidad").val(data.Cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    $("#txt-detalle-precio-unitario").val(data.PrecioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    $("#txt-detalle-importe-total").val(data.TotalImporte.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                }
+                pageMantenimientoCotizacion.ValidarDetalle();
+            },
+            animateIn: 'zoomInDown',
+            animateOut: 'zoomOutUp'
+        });
+    },
+
+    BtnEliminarDetalleClick: function (id) {
+        bootbox.confirm({
+            title: 'Eliminar Registro',
+            message: '¿Está seguro de eliminar el registro?',
+            closeButton: true,
+            buttons: {
+                confirm: {
+                    label: 'Sí',
+                    className: 'btn-danger'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-default'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    debugger;
+                    let index = detalleLista.findIndex(x => x.CotizacionDetalleId == id);
+                    if (detalleLista[index].CotizacionDetalleId > 0) detalleListaEliminados.push(detalleLista[index].CotizacionDetalleId);
+                    detalleLista.splice(index, 1);
+                    pageMantenimientoCotizacion.ListarDetalle();
+                    $("#frm-cotizacion-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                }
+            }
+        })
+    },
+
     ListarDetalle: function () {
+        detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
+        $("#hdn-detalle").val(detalleLista.length);
     },
 
     Validar: function () {
         $("#frm-cotizacion-mantenimiento")
             .bootstrapValidator({
+                excluded: [],
                 fields: {
-                    "txt-nombre": {
+                    "hdn-cliente-id": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria.",
+                                message: "Debe seleccionar un cliente.",
                             }
+                        }
+                    },
+                    "hdn-personal-id": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar un personal.",
+                            }
+                        }
+                    },
+                    "hdn-detalle": {
+                        validators: {
+                            greaterThan: { value: 0, inclusive: false, message: "Debe ingresar mínimmo un detalle." }
                         }
                     }
                 }
@@ -346,6 +412,93 @@ const pageMantenimientoCotizacion = {
                 e.preventDefault();
                 pageMantenimientoCotizacion.EnviarFormulario();
             });
+    },
+
+    ValidarDetalle: function () {
+        $("#frm-cotizacion-detalle")
+            .bootstrapValidator({
+                fields: {
+                    "cmb-detalle-descripcion": {
+                        validators: {
+                            notEmpty: { message: "Debe seleccionar descripción." },
+                        }
+                    },
+                    "txt-detalle-cantidad": {
+                        validators: {
+                            notEmpty: { message: "Debe ingresar cantidad." },
+                            numeric: { message: "Debe ingresar valor numérico." },
+                            greaterThan: { value: 0, inclusive: false, message: "Debe ingresar valor mayor a cero (0)." }
+                        }
+                    },
+                    "txt-detalle-precio-unitario": {
+                        validators: {
+                            notEmpty: { message: "Debe ingresar precio unitario." },
+                            numeric: { message: "Debe ingresar valor numérico." },
+                        }
+                    },
+                    "txt-detalle-importe-total": {
+                        validators: {
+                            notEmpty: { message: "Debe ingresar importe total." },
+                            numeric: { message: "Debe ingresar valor numérico." },
+                        }
+                    }
+                }
+            })
+            .on('success.form.bv', function (e) {
+                e.preventDefault();
+                pageMantenimientoCotizacion.GuardarDetalle();
+                $("#modal-detalle-agregar").modal('hide');
+            });
+    },
+
+    GuardarDetalle: function () {
+        let cotizacionDetalleId = pageMantenimientoCotizacion.ObtenerCotizacionDetalleId();
+        let detalleExiste = detalleLista.some(x => x.CotizacionDetalleId == cotizacionDetalleId);
+        let productoId = parseInt($("#cmb-detalle-descripcion").val());
+        let descripcion = $("#cmb-detalle-descripcion option:selected").text();
+        let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
+        let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
+        let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
+
+        let data = {
+            CotizacionDetalleId: cotizacionDetalleId,
+            ProductoId: productoId,
+            Descripcion: descripcion,
+            Cantidad: cantidad,
+            PrecioUnitario: precioUnitario,
+            TotalImporte: totalImporte
+        }
+
+        if (detalleExiste == true) {
+            let index = detalleLista.findIndex(x => x.CotizacionDetalleId == cotizacionDetalleId);
+            detalleLista[index] = Object.assign(detalleLista[index], data);
+        }
+        else detalleLista.push(data);
+
+        pageMantenimientoCotizacion.ListarDetalle();
+    },
+
+    ObtenerCotizacionDetalleId: function () {
+        let cotizacionDetalleId = $("#hdn-detalle-id").val();
+        if (cotizacionDetalleId != null) return Number(cotizacionDetalleId);
+
+        let listaIdNegativos = detalleLista.filter(x => x.CotizacionDetalleId < 0);
+        cotizacionDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.CotizacionDetalleId).sort((a, b) => a - b)[0];
+        cotizacionDetalleId--;
+        return cotizacionDetalleId;
+    },
+
+    CalcularImporteTotal: function () {
+        let cantidadString = $("#txt-detalle-cantidad").val().replace(/,/g, '')
+        let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '')
+
+        let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
+        let precioUnitario = isNaN(Number(precioUnitarioString)) ? 0 : Number(precioUnitarioString);
+        let importeTotal = cantidad * precioUnitario;
+        
+        $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#txt-detalle-precio-unitario").val(precioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#txt-detalle-importe-total").val(importeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
 
     CargarCombo: async function (fnNext) {
@@ -376,7 +529,7 @@ const pageMantenimientoCotizacion = {
             let init = { method: 'GET' };
 
             fetch(url, init)
-                .then(r => r.json())
+                .then(common.ResponseToJson)
                 .then(pageMantenimientoCotizacion.ResponseObtenerDatos);
         }
     },
@@ -387,24 +540,23 @@ const pageMantenimientoCotizacion = {
         let clienteId = $("#hdn-cliente-id").val();
         let personalId = $("#hdn-personal-id").val();
 
-        let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
-        let user = common.ObtenerUsuario().Nombre;
+        let user = common.ObtenerUsuario();
+        let empresaId = user.Empresa.EmpresaId;
 
         let ObjectoJson = {
             EmpresaId: empresaId,
             CotizacionId: cotizacionId,
-            TipoDocumentoIdentidadId: tipodocumentoidentidadId,
-            NroDocumentoIdentidad: nrodocumento,
-            RazonSocial: nombres,
-            NombreComercial: nombrecomercial,
-            PaisId: paisId,
-            DistritoId: distritoId,
-            Direccion: direccion,
-            Correo: correo,
-            Usuario: user
+            SerieId: serieId,
+            ClienteId: clienteId,
+            PersonalId: personalId,
+            MonedaId: monedaId,
+            TotalImporte: detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0),
+            Usuario: user.Nombre,
+            ListaCotizacionDetalle: detalleLista,
+            ListaCotizacionDetalleEliminados: detalleListaEliminados
         }
 
-        let url = `${urlRoot}api/proveedor/guardar-proveedor`;
+        let url = `${urlRoot}api/cotizacion/guardar-cotizacion`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
@@ -444,16 +596,14 @@ const pageMantenimientoCotizacion = {
     },
 
     ResponseObtenerDatos: function (data) {
-        $("#txt-numero-documento-identidad").val(data.NroDocumentoIdentidad);
-        $("#txt-nombres").val(data.RazonSocial);
-        $("#txt-nombre-comercial").val(data.NombreComercial);
-        $("#txt-correo").val(data.Correo);
-        $("#txt-direccion").val(data.Direccion);
-        $("#cmb-tipo-documento-identidad").val(data.TipoDocumentoIdentidadId);
-        $("#cmb-distrito").val(data.DistritoId);
-
-        $("#cmb-tipo-documento-identidad").prop("disabled", true);
-        $("#txt-numero-documento-identidad").prop("disabled", true);
+        $("#txt-fecha-hora-emision").val((new Date(data.FechaHoraEmision)).toLocaleDateString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" }));
+        $("#cmb-serie").val(data.SerieId).trigger("change");
+        $("#cmb-moneda").val(data.MonedaId).trigger("change");
+        $("#txt-nro-comprobante").val(data.NroComprobante.toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, ''));
+        pageMantenimientoCotizacion.LlenarDatosCliente(data.Cliente);
+        pageMantenimientoCotizacion.LlenarDatosPersonal(data.Personal);
+        detalleLista = data.ListaCotizacionDetalle;
+        pageMantenimientoCotizacion.ListarDetalle();
     },
 
     ResponseSerieListar: function (data) {
