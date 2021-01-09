@@ -1,4 +1,9 @@
-﻿var CategoriaProductoLista = [];
+﻿var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [];
+TipoCalculo = [{
+    Id: "VALORUNITARIO",
+    Descripcion: "Valor Unitario (monto sin igv)"
+}, { Id: "PRECIOUNITARIO", Descripcion: "Precio Unitario (monto con igv)" }, { Id: "IMPORTETOTAL", Descripcion: "Importe Total" }]
+
 const pageMantenimientoProducto = {
     Init: function () {
         this.Validar();
@@ -30,6 +35,7 @@ const pageMantenimientoProducto = {
                 pageMantenimientoProducto.EnviarFormulario();
             });
     },
+
     ObtenerDatos: function () {
         let numero = $("#txt-opcion").val();
         if (numero != 0) {
@@ -43,23 +49,39 @@ const pageMantenimientoProducto = {
                 .then(pageMantenimientoProducto.ResponseObtenerDatos);
         }
     },
+
     CargarCombo: async function () {
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let promises = [
-            fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`)]
+            fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`),
+            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`),
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`)
+        ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))
-            .then(([CategoriaProductoLista]) => {
+            .then(([CategoriaProductoLista, TipoAfectacionLista, UnidadMedidaLista]) => {
                 CategoriaProductoLista = CategoriaProductoLista;
-                
+                TipoAfectacionLista = TipoAfectacionLista;
+                UnidadMedidaLista = UnidadMedidaLista;
+
                 pageMantenimientoProducto.ResponseCategoriaProductoListar(CategoriaProductoLista);
+                pageMantenimientoProducto.ResponseTipoAfectacionIgvListar(TipoAfectacionLista);
+                pageMantenimientoProducto.ResponseUnidadMedidaListar(UnidadMedidaLista);
+                pageMantenimientoProducto.ResponseTipoCalculoListar(TipoCalculo);
                 //$("#cmb-categoria").val(1).trigger('change');
             })
     },
+
     EnviarFormulario: function () {
         let productoId = $("#txt-opcion").val();
         let nombre = $("#txt-nombre").val();
         let categoriaId = $("#cmb-categoria").val();
+        let tipoAfectacionIgvId = $("#cmb-tipo-afectacion").val();
+        let unidadMedidaId = $("#cmb-unidad-medida").val();
+        let tipoProducto = $("#cmb-tipo-producto").val();
+        let tipoCalculo = $("#cmb-tipo-calculo").val();
+        let monto = $("#txt-monto").val();
+        let stockMinimo = $("#txt-stock-minimo").val();
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
@@ -68,6 +90,12 @@ const pageMantenimientoProducto = {
             ProductoId :productoId,
             CategoriaId: categoriaId,
             Nombre: nombre,
+            TipoAfectacionIgvId: tipoAfectacionIgvId ,
+            UnidadMedidaId: unidadMedidaId,
+            TipoProducto: tipoProducto ,
+            TipoCalculo: tipoCalculo,
+            Monto: monto ,
+            StockMinimo: stockMinimo ,
             Usuario : user
         }
 
@@ -111,8 +139,21 @@ const pageMantenimientoProducto = {
             }
         });
     },
+
     ResponseCategoriaProductoListar: function (data) {
         let datacategoriaproducto = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.CategoriaProductoId, text: item.Nombre }); });
         $("#cmb-categoria").select2({ data: datacategoriaproducto, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseTipoAfectacionIgvListar: function (data) {
+        let datatipoafectacionigv = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
+        $("#cmb-tipo-afectacion").select2({ data: datatipoafectacionigv, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseUnidadMedidaListar: function (data) {
+        let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
+        $("#cmb-unidad-medida").select2({ data: dataunidadmedida, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseTipoCalculoListar: function (data) {
+        let datatipocalculo = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
+        $("#cmb-tipo-calculo").select2({ data: datatipocalculo, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 }
