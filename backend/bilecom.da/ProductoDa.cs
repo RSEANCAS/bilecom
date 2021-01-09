@@ -54,9 +54,6 @@ namespace bilecom.da
             }
             return lista;
         }
-<<<<<<< HEAD
-        
-=======
 
         public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn)
         {
@@ -81,12 +78,7 @@ namespace bilecom.da
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.CategoriaId = dr.GetData<int>("CategoriaId");
                             item.Nombre = dr.GetData<string>("Nombre");
-                            item.Stock = dr.GetData<int>("Stock");
-                            //item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
-                            //item.UnidadMedidaId = dr.GetData<int>("UnidadMedidaId");
-                            //item.categoriaProducto = new CategoriaProductoBe();
-                            //item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
-                            //item.Stock = dr.GetData<int>("Stock");
+                            item.StockMinimo = dr.GetData<int>("StockMinimo");
                             lista.Add(item);
                         }
                     }
@@ -95,7 +87,6 @@ namespace bilecom.da
             return lista;
         }
 
->>>>>>> 324dc3857da6da3f15abe78312f2231f7c7adadd
         public bool Guardar(ProductoBe productoBe, SqlConnection cn)
         {
             bool seGuardo = false;
