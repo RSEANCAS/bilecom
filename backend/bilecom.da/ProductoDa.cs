@@ -37,9 +37,14 @@ namespace bilecom.da
                             ProductoBe item = new ProductoBe();
                             item.ProductoId = dr.GetData<int>("Fila");
                             item.Nombre = dr.GetData<string>("NombreProducto");
+                            item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                            item.UnidadMedidaId = dr.GetData<string>("UnidadMedidaId");
+                            item.TipoCalculo = dr.GetData<string>("TipoCalculo");
+                            item.Monto = dr.GetData<decimal>("Monto");
+                            item.StockMinimo = dr.GetData<decimal>("StockMinimo");
                             item.categoriaProducto = new CategoriaProductoBe();
                             item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
-                            item.Stock = dr.GetData<int>("Stock");
+                            item.StockMinimo = dr.GetData<decimal>("StockMinimo");
                             lista.Add(item);
 
                             totalRegistros = dr.GetData<int>("Total");
@@ -49,6 +54,7 @@ namespace bilecom.da
             }
             return lista;
         }
+        
         public bool Guardar(ProductoBe productoBe, SqlConnection cn)
         {
             bool seGuardo = false;
@@ -61,6 +67,11 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@ProductoId", productoBe.ProductoId.GetNullable());
                     cmd.Parameters.AddWithValue("@CategoriaId", productoBe.CategoriaId.GetNullable());
                     cmd.Parameters.AddWithValue("@Nombre", productoBe.Nombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoAfectacionIgvId", productoBe.TipoAfectacionIgvId.GetNullable());
+                    cmd.Parameters.AddWithValue("@UnidadMedidaId", productoBe.UnidadMedidaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoCalculo", productoBe.TipoCalculo.GetNullable());
+                    cmd.Parameters.AddWithValue("@Monto", productoBe.Monto.GetNullable());
+                    cmd.Parameters.AddWithValue("@StockMinimo", productoBe.StockMinimo.GetNullable());
                     cmd.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable());
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
@@ -94,6 +105,11 @@ namespace bilecom.da
                                 respuesta = new ProductoBe();
                                 respuesta.Nombre = dr.GetData<string>("Nombre");
                                 respuesta.CategoriaId = dr.GetData<int>("CategoriaId");
+                                respuesta.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                                respuesta.UnidadMedidaId = dr.GetData<string>("UnidadMedidaId");
+                                respuesta.TipoCalculo = dr.GetData<string>("TipoCalculo");
+                                respuesta.Monto = dr.GetData<decimal>("Monto");
+                                respuesta.StockMinimo = dr.GetData<decimal>("StockMinimo");
                             }
                         }
                     }
@@ -128,5 +144,6 @@ namespace bilecom.da
             }
             return seElimino;
         }
+
     }
 }

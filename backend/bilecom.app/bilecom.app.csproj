@@ -2930,9 +2930,11 @@
     <Compile Include="Controllers\Api\ProvinciaController.cs" />
     <Compile Include="Controllers\Api\SedeController.cs" />
     <Compile Include="Controllers\Api\SerieController.cs" />
+    <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
+    <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
