@@ -14,6 +14,14 @@ namespace bilecom.app.Controllers.Api
     public class SerieController : ApiController
     {
         SerieBl serieBl = new SerieBl();
+
+        [HttpGet]
+        [Route("listar-serie-por-tipocomprobante")]
+        public List<SerieBe> ListarSeriePorTipoComprobante(int tipoComprobanteId)
+        {
+            return serieBl.ListarSeriePorTipoComprobante(tipoComprobanteId);
+        }
+        
         [HttpGet]
         [Route("buscar-serie")]
         public DataPaginate<SerieBe> BuscarSerie(int empresaId, int? tipoComprobanteId, string serial, int draw, int start, int length, string columnaOrden = "SerieId", string ordenMax = "ASC")

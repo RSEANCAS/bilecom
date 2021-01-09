@@ -72,6 +72,7 @@ namespace bilecom.da
                             if (dr.Read())
                             {
                                 respuesta = new ClienteBe();
+                                respuesta.ClienteId = dr.GetData<int>("ClienteId");
                                 respuesta.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
                                 respuesta.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");
                                 respuesta.RazonSocial = dr.GetData<string>("RazonSocial");

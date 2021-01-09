@@ -1,4 +1,5 @@
 ﻿using bilecom.be;
+using bilecom.be.Custom;
 using bilecom.bl;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,31 @@ namespace bilecom.app.Controllers.Api
     {
         CotizacionBl cotizacionBl = new CotizacionBl();
 
+        [HttpGet]
+        [Route("buscar-cotizacion")]
+        public DataPaginate<CotizacionBe> BuscarCotizacion(int empresaId, string nombresCompletosPersonal, string razonSocialCliente, DateTime fechaEmisionDesde, DateTime fechaEmisionHasta, int draw, int start, int length, string columnaOrden = "CotizacionId", string ordenMax = "ASC")
+        {
+            int totalRegistros = 0;
+            var lista = cotizacionBl.BuscarCotizacion(empresaId, nombresCompletosPersonal, razonSocialCliente, fechaEmisionDesde, fechaEmisionHasta, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<CotizacionBe>
+            {
+                data = lista ?? new List<CotizacionBe>(),
+                draw = draw,
+                recordsFiltered = totalRegistros,
+                recordsTotal = totalRegistros
+            };
+            return respuesta;
+        }
+
+        [HttpGet]
+        [Route("obtener-cotizacion")]
+        public CotizacionBe ObtenerCotizacion(int empresaId, int cotizacionId)
+        {
+            return cotizacionBl.ObtenerCotizacion(empresaId, cotizacionId, conCliente: true, conPersonal: true, conListaDetalleCotizacion: true);
+        }
+
         [HttpPost]
         [Route("guardar-cotizacion")]
-
         public bool GuardarCotizacion(CotizacionBe registro)
         {
             //Cada parámetro que tiene un "out int?" tiene que que inicializarse con nulo, porque el "int?" acepta valores nulos
@@ -24,5 +47,12 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpPut]
+        [Route("anular-cotizacion")]
+        public bool AnularCotizacion(CotizacionBe registro)
+        {
+            bool respuesta = cotizacionBl.AnularCotizacion(registro);
+            return respuesta;
+        }
     }
 }

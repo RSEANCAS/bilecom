@@ -12,6 +12,21 @@ namespace bilecom.bl
     public class SerieBl : Conexion
     {
         SerieDa serieDa = new SerieDa();
+
+        public List<SerieBe> ListarSeriePorTipoComprobante(int tipoComprobanteId)
+        {
+            List<SerieBe> lista = new List<SerieBe>();
+            try
+            {
+                cn.Open();
+                lista = serieDa.ListarPorTipoComprobante(tipoComprobanteId, cn);
+                cn.Close();
+            }
+            catch (Exception) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
+        }
+        
         public List<SerieBe> BuscarSerie(int empresaId, int? tipoComprobanteId, string serial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;

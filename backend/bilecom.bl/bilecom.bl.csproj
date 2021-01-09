@@ -50,6 +50,7 @@
     <Compile Include="DistritoBl.cs" />
     <Compile Include="CotizacionBl.cs" />
     <Compile Include="EmpresaBl.cs" />
+    <Compile Include="MonedaBl.cs" />
     <Compile Include="PaisBl.cs" />
     <Compile Include="PersonalBl.cs" />
     <Compile Include="ProductoBl.cs" />

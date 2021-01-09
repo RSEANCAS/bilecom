@@ -5,6 +5,7 @@
 @section links_footer{
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
 }
 <div id="content-container">
     <div id="page-head">
@@ -38,29 +39,29 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label class="control-label">Personal</label>
-                            <input type="text" class="form-control">
+                            <input type="text" id="txt-nombres-completos-personal" class="form-control">
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label class="control-label">Cliente</label>
-                            <input type="text" class="form-control">
+                            <input type="text" id="txt-razon-social-cliente" class="form-control">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <label class="control-label">Fech. Emis. Desde</label>
                         <div class="input-group date">
-                            <input type="text" class="form-control">
+                            <input type="text" id="txt-fecha-emision-desde" class="form-control">
                             <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <label class="control-label">Fec. Emis. Hasta</label>
                         <div class="input-group date">
-                            <input type="text" class="form-control">
+                            <input type="text" id="txt-fecha-emision-hasta" class="form-control">
                             <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
                         </div>
                     </div>
@@ -68,8 +69,8 @@
                         <div class="form-group text-right">
                             <label class="control-label">&nbsp;</label>
                             <div class="clear"></div>
-                            <button class="btn btn-primary" type="submit">Nuevo</button>
-                            <button class="btn btn-primary" type="submit">Buscar</button>
+                            <a class="btn btn-dark" href="@Url.Content("~/Cotizaciones/Nuevo")">Nuevo</a>
+                            <button id="btn-buscar" class="btn btn-primary" type="button">Buscar</button>
                         </div>
                     </div>
                 </div>
@@ -78,43 +79,21 @@
 
         <div class="panel">
             <div class="panel-body">
-                <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="tbl-lista" class="table table-striped table-bordered small" cellspacing="0" width="100%">
                     <thead>
-                        <tr>
+                        <tr class="bg-primary">
                             <th rowspan="1" colspan="1" style="width:25px">N°</th>
                             <th>Serie</th>
                             <th class="min-tablet">N° Cotización</th>
-                            <th class="min-tablet">N° Pedido</th>
+                            @* <th class="min-tablet">N° Pedido</th>*@
                             <th class="min-tablet">Fecha Emisión</th>
                             <th class="min-tablet">Personal</th>
                             <th class="min-tablet">Cliente</th>
+                            <th class="min-tablet">Total</th>
                             <th class="min-desktop" rowspan="1" colspan="1" style="width:130px">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -125,5 +104,14 @@
     <!--End page content-->
 
 </div>
-
-
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/cotizacion.js")"></script>
+    <script>
+        $(document).ready(function () {
+            pageCotizacion.Init();
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ namespace bilecom.be
         public TipoComprobanteBe TipoComprobante { get; set; }
         public string Serial { get; set; }
         public int ValorInicial { get; set; }
-        public int ValorFinal { get; set; }
+        public int? ValorFinal { get; set; }
         public int ValorActual { get; set; }
         public bool FlagSinFinal { get; set; }
         public string Usuario { get; set; }

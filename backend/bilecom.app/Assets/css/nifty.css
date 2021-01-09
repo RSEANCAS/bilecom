@@ -5517,6 +5517,11 @@ hr {
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
   color: #4d627b;
 }
+#container .table thead tr.bg-dark th,
+#container .table thead tr.bg-primary th {
+    color: #fff;
+}
+
 #container .table td {
   border-top: 1px solid rgba(0, 0, 0, 0.07);
 }
@@ -8205,7 +8210,7 @@ blockquote {
   color: #fff;
 }
 .bg-danger {
-  background-color: #f44336;
+  background-color: #f44336 !important;
 }
 .bg-danger,
 .bg-danger a {

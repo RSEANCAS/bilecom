@@ -21,7 +21,6 @@
         localStorage['ls.pa'] = btoa(JSON.stringify(data));
     },
     ResponseToJson(response) {
-        debugger;
         if (response.status == 200) return response.json();
         else if (response.status == 401) return (async() => "La contraseña es incorrecta")();
         else new Error("");
@@ -44,6 +43,32 @@
                     previous: "Anterior"
                 }
             }
+        })
+    },
+    CreateDataTableFromAjax: function (id, ajax, columns) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().ajax.reload();
+            return;
+        }
+        $(id).dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: ajax,
+            columns: columns
+        })
+    },
+    CreateDataTableFromData: function (id, data, columns) {
+        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        if (estaInicializado == true) {
+            $(id).DataTable().clear()
+            $(id).DataTable().rows.add(data);
+            $(id).DataTable().draw();
+            return;
+        }
+        $(id).dataTable({
+            data: data,
+            columns: columns
         })
     }
 }

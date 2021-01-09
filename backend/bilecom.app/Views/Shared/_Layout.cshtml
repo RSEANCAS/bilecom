@@ -1,4 +1,4 @@
-﻿<html>
+﻿<html lang="es-pe">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,19 +11,21 @@
     <!--=================================================-->
     <!--Open Sans Font [ OPTIONAL ]-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <!--jQuery UI Stylesheet [ REQUIRED ]-->
+    <link href="@Url.Content("~/Assets/css/jquery-ui.min.css")" rel="stylesheet">
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="@Url.Content("~/Assets/css/bootstrap.min.css")" rel="stylesheet">
     <!--Nifty Stylesheet [ REQUIRED ]-->
-    <link href="@Url.Content("~/Assets/css/nifty.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/css/nifty.css")" rel="stylesheet">
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
     <link href="@Url.Content("~/Assets/css/demo/nifty-demo-icons.min.css")" rel="stylesheet">
-
 
     <!--=================================================-->
     <!--Pace - Page Load Progress Par [OPTIONAL]-->
     <link href="@Url.Content("~/Assets/plugins/pace/pace.min.css")" rel="stylesheet">
     <script src="@Url.Content("~/Assets/plugins/pace/pace.min.js")"></script>
 
+    <link href="@Url.Content("~/Assets/plugins/font-awesome/css/font-awesome.min.css")" rel="stylesheet">
 
     <!--Demo [ DEMONSTRATION ]-->
     <link href="@Url.Content("~/Assets/css/demo/nifty-demo.min.css")" rel="stylesheet">
@@ -364,14 +366,14 @@
     <!--Specify page [ SAMPLE ]-->
     <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
     <!--Bootbox Modals [ OPTIONAL ]-->
-    <script src="@Url.Content("~/Assets/plugins/bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootbox/lasted/bootbox.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/common.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/layout.js")"></script>
     <script>
         const urlRoot = "@Url.Content("~")";
         pageLayout.Init();
     </script>
-    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>
+@*    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>*@
 
     @RenderSection("scripts_footer", false)
 </body>

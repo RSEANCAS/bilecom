@@ -47,6 +47,15 @@ namespace bilecom.app.Controllers.Api
 
         }
 
+        [HttpGet]
+        [Route("buscar-producto-por-nombre")]
+        public List<ProductoBe> BuscarProductoPorNombre(int empresaId, string nombre)
+        {
+            var respuesta = productoBl.BuscarProductoPorNombre(nombre, empresaId); ;
+            return respuesta;
+
+        }
+
         [HttpPost]
         [Route("eliminar-producto")]
         public bool EliminarProducto(int empresaId, int productoId, string Usuario)

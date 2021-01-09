@@ -18,6 +18,7 @@ namespace bilecom.app.Controllers.Api
     {
         EmpresaBl empresaBl = new EmpresaBl();
         UsuarioBl usuarioBl = new UsuarioBl();
+        PersonalBl personalBl = new PersonalBl();
 
         [HttpGet]
         [Route("validar-usuario")]
@@ -68,6 +69,10 @@ namespace bilecom.app.Controllers.Api
 
             if (user == null)
                 return BadRequest($"El usuario {usuario} no se encuentra registrado.");
+            else
+            {
+                if (user.PersonalId.HasValue) user.Personal = personalBl.ObtenerPersonal(empresa.EmpresaId, user.PersonalId.Value);
+            }
 
             if(user.ListaPerfil == null)
                 return BadRequest($"El usuario {usuario} no tiene ningún perfil asignado.");
@@ -91,6 +96,7 @@ namespace bilecom.app.Controllers.Api
                             empresa.Ruc,
                             empresa.NombreComercial
                         },
+                        Personal = user.Personal,
                         ListaPerfil = user.ListaPerfil
                     },
                     PerfilActual = user.ListaPerfil[0],
