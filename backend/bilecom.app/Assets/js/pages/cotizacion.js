@@ -130,8 +130,20 @@
                 {
                     data: "CotizacionId", render: function (data, type, row) {
                         return `${row.FlagAnulado == true ? "" :
-                                `<a class="btn btn-sm btn-${row.FlagAnulado == false ? "default" : "dark"} btn-hover-dark fa fa-pencil add-tooltip" href="${urlRoot}Cotizaciones/Editar?id=${data}" data-original-title="Editar" data-container="body"></a>
-                                 <a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageCotizacion.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>`}`;
+                            `<a class="btn btn-sm btn-${row.FlagAnulado == false ? "default" : "dark"} btn-hover-dark fa fa-pencil add-tooltip" href="${urlRoot}Cotizaciones/Editar?id=${data}" data-original-title="Editar" data-container="body"></a>
+                            <a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageCotizacion.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-success btn-hover-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <!--Más <span class="caret"></span>-->
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" class="small">Generar Boleta</a></li>
+                                    <li><a href="#" class="small">Generar Factura</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" class="small">Generar Nota de Venta</a></li>
+                                </ul>
+                            </div>`}`;
                     }
                 },
             ],
