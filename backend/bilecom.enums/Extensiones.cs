@@ -10,7 +10,13 @@ namespace bilecom.enums
 {
     public static class Extensiones
     {
-
+        public static T GetAttributeOfType<T>(this Enum enumVal) where T : Attribute
+        {
+            var type = enumVal.GetType();
+            var memInfo = type.GetMember(enumVal.ToString());
+            var attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
+            return (attributes.Length > 0) ? (T)attributes[0] : null;
+        }
     }
 
     public class Enum<T> where T : struct, IConvertible

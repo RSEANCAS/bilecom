@@ -12,6 +12,7 @@ namespace bilecom.app.Controllers.Api
     [RoutePrefix("api/common")]
     public class CommonController : ApiController
     {
+        [HttpGet]
         [Route("listar-enum-tipo-sede")]
         public List<dynamic> ListarEnumTipoSede()
         {
