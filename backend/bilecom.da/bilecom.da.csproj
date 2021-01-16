@@ -48,6 +48,8 @@
     <Compile Include="DistritoDa.cs" />
     <Compile Include="CotizacionDetalleDa.cs" />
     <Compile Include="EmpresaDa.cs" />
+    <Compile Include="FacturaDa.cs" />
+    <Compile Include="FacturaDetalleDa.cs" />
     <Compile Include="MonedaDa.cs" />
     <Compile Include="OpcionDa.cs" />
     <Compile Include="PaisDa.cs" />

@@ -390,10 +390,12 @@
     <Content Include="Assets\js\pages\cliente.js" />
     <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
+    <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\mantenimientocotizacion.js" />
+    <Content Include="Assets\js\pages\mantenimientofactura.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
     <Content Include="Assets\js\pages\mantenimientoserie.js" />
     <Content Include="Assets\js\pages\mantenimientotiposede.js" />
@@ -2814,9 +2816,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\Api\CommonController.cs" />
     <Compile Include="Controllers\Api\CotizacionController.cs" />
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
+    <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
     <Compile Include="Controllers\Api\PersonalController.cs" />
@@ -2837,6 +2841,7 @@
     <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
+    <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -3150,6 +3155,8 @@
     <Content Include="Views\Cotizacion\Mantenimiento.cshtml" />
     <Content Include="Views\Serie\Index.cshtml" />
     <Content Include="Views\Serie\Mantenimiento.cshtml" />
+    <Content Include="Views\Factura\Index.cshtml" />
+    <Content Include="Views\Factura\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3161,7 +3168,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\_Base\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
@@ -3180,6 +3186,9 @@
       <Project>{8929A9EE-5864-4CFA-B7AE-3D6850945AB1}</Project>
       <Name>bilecom.ut</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

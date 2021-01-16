@@ -6,11 +6,12 @@ using System.Web.Mvc;
 
 namespace bilecom.app.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : _BaseController
     {
         // GET: Login
         public ActionResult Index()
         {
+            if (estaLogueado) return RedirectToAction("Index", "Inicio");
             return View();
         }
     }

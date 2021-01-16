@@ -81,11 +81,15 @@ const pageMantenimientoSede = {
                     "txt-direccion": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar dirección"
+                                message: "Debe ingresar direccion",
                             },
                             regexp: {
                                 regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
                                 message: 'Solo puede ingresar caracteres alfabéticos'
+                            },
+                            stringLength: {
+                                min: 5,
+                                message: 'Dirección no válida'
                             }
                         }
                     }

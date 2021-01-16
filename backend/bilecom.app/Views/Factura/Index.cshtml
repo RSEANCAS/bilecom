@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
+}
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h1 class="page-header text-overflow">Lista de Facturas</h1>
+        </div>
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End page title-->
+        <!--Breadcrumb-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        @*<ol class="breadcrumb">
+                <li><a href="#"><i class="demo-pli-home"></i></a></li>
+                <li><a href="#">Pages</a></li>
+                <li class="active">Blank page</li>
+            </ol>*@
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End breadcrumb-->
+
+    </div>
+
+
+    <!--Page content-->
+    <!--===================================================-->
+    <div id="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Filtros de búsqueda</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">N° Doc. Identidad Cliente</label>
+                            <input type="text" id="txt-nro-documento-identidad-cliente" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">Razón Social Cliente</label>
+                            <input type="text" id="txt-razon-social-cliente" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="control-label">Fech. Emis. Desde</label>
+                        <div class="input-group date">
+                            <input type="text" id="txt-fecha-emision-desde" class="form-control">
+                            <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="control-label">Fec. Emis. Hasta</label>
+                        <div class="input-group date">
+                            <input type="text" id="txt-fecha-emision-hasta" class="form-control">
+                            <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group text-right">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="clear"></div>
+                            <a class="btn btn-dark" href="@Url.Content("~/Facturas/Nuevo")">Nuevo</a>
+                            <button id="btn-buscar" class="btn btn-primary" type="button">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <table id="tbl-lista" class="table table-striped table-bordered small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-primary">
+                            <th rowspan="1" colspan="1" style="width:25px">N°</th>
+                            <th>Serie</th>
+                            <th class="min-tablet">N° Factura</th>
+                            @* <th class="min-tablet">N° Pedido</th>*@
+                            <th class="min-tablet">Fecha Emisión</th>
+                            <th class="min-tablet">Fecha Vencimiento</th>
+                            <th class="min-tablet">N° Doc. Identidad Cliente</th>
+                            <th class="min-tablet">Razón Social Cliente</th>
+                            <th class="min-tablet">Total</th>
+                            <th class="min-desktop" rowspan="1" colspan="1" style="width:130px">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!--===================================================-->
+    <!--End page content-->
+
+</div>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/factura.js")"></script>
+    <script>
+        $(document).ready(function () {
+            pageFactura.Init();
+        });
+    </script>
+}

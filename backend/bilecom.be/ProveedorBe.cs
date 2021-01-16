@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class ProveedorBe
+    public class ProveedorBe : Base
     {
         public int EmpresaId { get; set; }
         public int ProveedorId { get; set; }
@@ -19,7 +19,5 @@ namespace bilecom.be
         public int DistritoId { get; set; }
         public string Direccion { get; set; }
         public string Correo{ get; set; }
-        public string Usuario { get; set; }
-        public DateTime Fecha { get; set; }
     }
 }
