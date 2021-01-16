@@ -138,10 +138,10 @@
                                     <i class="fa fa-ellipsis-v"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" class="small">Generar Boleta</a></li>
-                                    <li><a href="#" class="small">Generar Factura</a></li>
+                                    <li><a href="javascript:void(0)" class="small">Generar Boleta</a></li>
+                                    <li><a href="javascript:void(0)" class="small">Generar Factura</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="#" class="small">Generar Nota de Venta</a></li>
+                                    <li><a href="javascript:void(0)" class="small">Generar Nota de Venta</a></li>
                                 </ul>
                             </div>`}`;
                     }

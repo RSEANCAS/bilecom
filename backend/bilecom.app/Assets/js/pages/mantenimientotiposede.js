@@ -1,11 +1,15 @@
-﻿const pageMantenimientoTipoSede = {
+﻿var plantillaTipoSedeLista = []
+const pageMantenimientoTipoSede = {
     Init: function () {
+        this.CargarCombo();
         this.Validar();
         this.InitEvents();
     },
+
     InitEvents: function () {
         pageMantenimientoTipoSede.ObtenerDatos();
     },
+
     Validar: function () {
         $("#frm-tiposede")
             .bootstrapValidator({
@@ -28,6 +32,22 @@
                 pageMantenimientoTipoSede.EnviarFormulario();
             });
     },
+
+    CargarCombo: async function (fnNext) {
+        let user = common.ObtenerUsuario();
+        let promises = [
+            fetch(`${urlRoot}api/common/listar-tipo-sede`)
+        ];
+        Promise.all(promises)
+            .then(r => Promise.all(r.map(common.ResponseToJson)))
+            .then(([PlantillaTipoSedeLista]) => {
+                plantillaTipoSedeLista = PlantillaTipoSedeLista || [];
+
+                pageMantenimientoTipoSede.ResponsePlantillaTipoSedeListar(plantillaTipoSedeLista);
+                if (typeof fnNext == "function") fnNext();
+            })
+    },
+
     ObtenerDatos: function () {
         let numero = $("#txt-opcion").val();
         if (numero != 0) {
@@ -41,6 +61,7 @@
                 .then(pageMantenimientoTipoSede.ResponseObtenerDatos);
         }
     },
+
     EnviarFormulario: function () {
         let tiposedeId = $("#txt-opcion").val();
         let nombre = $("#txt-tipo-sede").val();
@@ -64,8 +85,14 @@
             .then(r => r.json())
             .then(pageMantenimientoTipoSede.ResponseEnviarFormulario);
     },
+
     ResponseObtenerDatos: function (data) {
         $("#txt-tipo-sede").val(data.Nombre);
+    },
+
+    ResponsePlantillaTipoSedeListar: function (data) {
+        let dataPlantillaTipoSede = data.map(x => Object.assign(x, { id: x.Value, text: x.Text }));
+        $("#cmb-codigo-plantilla").select2({ data: dataPlantillaTipoSede, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 
     ResponseEnviarFormulario: function (data) {

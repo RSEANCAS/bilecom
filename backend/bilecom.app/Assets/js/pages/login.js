@@ -1,7 +1,7 @@
 ﻿const pageLogin = {
     Init: function () {
         this.RecordarCuenta();
-        this.ValidarCuentaLogueada();
+        //this.ValidarCuentaLogueada();
         this.Validar();
         this.InitEvents();
     },
@@ -116,11 +116,8 @@
     ResponseThenEnviarFormulario: function (data) {
         if (data != null && typeof (data) == "object") {
             common.GuardarUsuario(data.Usuario);
-            //localStorage['ls.us'] = btoa(JSON.stringify(data.Usuario));
             common.GuardarToken(data.Token);
-            //localStorage['ls.tk'] = btoa(data.Token);
             common.GuardarPerfilActual(data.PerfilActual);
-            //localStorage['ls.pa'] = btoa(JSON.stringify(data.PerfilActual));
         }
         else if(typeof(data) == "string") {
             $.niftyNoty({

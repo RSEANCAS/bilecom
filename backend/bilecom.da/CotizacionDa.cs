@@ -13,7 +13,7 @@ namespace bilecom.da
 {
     public class CotizacionDa
     {
-        public List<CotizacionBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
+        public List<CotizacionBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
             List<CotizacionBe> lista = null;
@@ -23,7 +23,7 @@ namespace bilecom.da
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
                 cmd.Parameters.AddWithValue("@nombresCompletosPersonal", nombresCompletosPersonal.GetNullable());
-                cmd.Parameters.AddWithValue("@razonSocialCliente", razonSocial.GetNullable());
+                cmd.Parameters.AddWithValue("@razonSocialCliente", razonSocialCliente.GetNullable());
                 cmd.Parameters.AddWithValue("@fechaHoraEmisionDesde", fechaHoraEmisionDesde.GetNullable());
                 cmd.Parameters.AddWithValue("@fechaHoraEmisionHasta", fechaHoraEmisionHasta.GetNullable());
                 cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());

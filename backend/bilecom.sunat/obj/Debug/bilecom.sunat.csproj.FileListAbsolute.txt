@@ -1,0 +1,2 @@
+D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csprojAssemblyReference.cache
+D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csproj.CoreCompileInputs.cache

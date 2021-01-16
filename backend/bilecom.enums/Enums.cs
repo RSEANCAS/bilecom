@@ -17,6 +17,7 @@ namespace bilecom.enums
 
         public enum TipoSede
         {
+            [Description("Almacén")]
             Almacen = 1
         }
 
