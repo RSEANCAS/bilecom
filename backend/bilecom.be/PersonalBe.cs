@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class PersonalBe
+    public class PersonalBe : Base
     {
         // Definir los atributos que tiene la clase
         public int PersonalId { get; set; }
@@ -18,8 +18,8 @@ namespace bilecom.be
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
-        public string Usuario { get; set; }
-        public DateTime Fecha { get; set; }
+        //public string Usuario { get; set; }
+        //public DateTime Fecha { get; set; }
         public int DistritoId { get; set; }
     }
 }

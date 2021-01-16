@@ -1,6 +1,5 @@
 D:\JARE\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.dll
 D:\JARE\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.pdb
 D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csprojAssemblyReference.cache
-D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csproj.CoreCompileInputs.cache
 D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.dll
 D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.pdb

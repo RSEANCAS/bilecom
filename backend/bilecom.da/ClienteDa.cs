@@ -33,7 +33,8 @@ namespace bilecom.da
                         while (dr.Read())
                         {
                             ClienteBe item = new ClienteBe();
-                            item.ClienteId = dr.GetData<int>("Fila");
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.ClienteId = dr.GetData<int>("ClienteId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
                             item.TipoDocumentoIdentidad = new TipoDocumentoIdentidadBe();

@@ -28,6 +28,7 @@ namespace bilecom.da
                             while (dr.Read())
                             {
                                 TipoDocumentoIdentidadBe item = new TipoDocumentoIdentidadBe();
+                                item.CodigoTipoDocumentoIdentidad = dr.GetData<int>("CodigoTipoDocumentoIdentidad");
                                 item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
                                 item.Descripcion = dr.GetData<string>("Descripcion");
                                 lista.Add(item);

@@ -41,5 +41,10 @@ namespace bilecom.enums
             [Description("Cotizacion")]
             Cotizacion = 6
         }
+        public enum TipoDocumentoIdentidad
+        {
+            DNI = 1,
+            RUC = 2
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@using bilecom.enums;
 @{
     ViewBag.Title = "Personal Mantenimiento";
 }
@@ -121,6 +121,8 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientopersonal.js")"></script>
     <script>
+            const tdiDNI = "@((int)Enums.TipoDocumentoIdentidad.DNI)"
+            const tdiRUC = "@((int)Enums.TipoDocumentoIdentidad.RUC)"
         $(document).ready(function () {
             pageMantenimientoPersonal.Init();
         });

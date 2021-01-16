@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class ClienteBe
+    public class ClienteBe : Base
     {
         // Definir los atributos que tiene la clase o tabla
         public int ClienteId { get; set; }
@@ -20,7 +20,6 @@ namespace bilecom.be
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public bool FlagActivo { get; set; }
-        public string Usuario { get; set; }
 
     }
 }
