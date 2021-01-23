@@ -40,6 +40,7 @@ namespace bilecom.da
                             item.TipoDocumentoIdentidad.Descripcion = dr.GetData<string>("DescripcionTipoDocumentoIdentidad");
                             item.NroDocumentoIdentidad = dr.GetData<string>("NroDocumentoIdentidad");
                             item.RazonSocial = dr.GetData<string>("RazonSocial");
+                            item.Direccion = dr.GetData<string>("Direccion");
                             lista.Add(item);
 
                             totalRegistros = dr.GetData<int>("Total");

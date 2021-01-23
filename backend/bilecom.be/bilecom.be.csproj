@@ -53,11 +53,14 @@
     <Compile Include="DistritoBe.cs" />
     <Compile Include="EmpresaBe.cs" />
     <Compile Include="MonedaBe.cs" />
+    <Compile Include="MovimientoBe.cs" />
+    <Compile Include="MovimientoDetalleBe.cs" />
     <Compile Include="OpcionBe.cs" />
     <Compile Include="PaisBe.cs" />
     <Compile Include="PerfilBe.cs" />
     <Compile Include="PerfilOpcionBe.cs" />
     <Compile Include="PersonalBe.cs" />
+    <Compile Include="ProductoAlmacenBe.cs" />
     <Compile Include="ProductoBe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProveedorBe.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="TipoAfectacionIgvBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
+    <Compile Include="TipoMovimientoBe.cs" />
     <Compile Include="TipoSedeBe.cs" />
     <Compile Include="UnidadMedidaBe.cs" />
     <Compile Include="UsuarioBe.cs" />

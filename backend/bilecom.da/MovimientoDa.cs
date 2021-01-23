@@ -8,16 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// En el DA van los métodos a ser llamados por el BL
 namespace bilecom.da
 {
-    public class CotizacionDa
+    public class MovimientoDa
     {
-        public List<CotizacionBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
+        public List<MovimientoBe> Buscar(int empresaId, string nombresCompletosPersonal, string razonSocial, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<CotizacionBe> lista = null;
-            using (SqlCommand cmd = new SqlCommand("usp_cotizacion_buscar", cn))
+            List<MovimientoBe> lista = null;
+            using (SqlCommand cmd = new SqlCommand("web.usp_movimiento_buscar", cn))
             {
                 // Instanciando a la funcion CommandType
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -34,18 +33,25 @@ namespace bilecom.da
                 {
                     if (dr.HasRows)
                     {
-                        lista = new List<CotizacionBe>();
+                        lista = new List<MovimientoBe>();
 
                         while (dr.Read())
                         {
-                            CotizacionBe item = new CotizacionBe();
+                            MovimientoBe item = new MovimientoBe();
                             item.Fila = dr.GetData<int>("Fila");
-                            item.CotizacionId = dr.GetData<int>("CotizacionId");
+                            item.MovimientoId = dr.GetData<int>("MovimientoId");
+
+                            item.TipoMovimientoId = dr.GetData<int>("TipoMovimientoId");
+                            item.TipoMovimiento = new TipoMovimientoBe();
+                            item.TipoMovimiento.Id = dr.GetData<int>("TipoMovimientoId");
+                            item.TipoMovimiento.Descripcion= dr.GetData<string>("TipoMovimientoDescripcion");
+
                             item.SerieId = dr.GetData<int>("SerieId");
                             item.Serie = new SerieBe();
                             item.Serie.SerieId = dr.GetData<int>("SerieId");
                             item.Serie.Serial = dr.GetData<string>("SerialSerie");
-                            item.NroComprobante = dr.GetData<int>("NroComprobante");
+
+                            item.NroMovimiento = dr.GetData<int>("NroMovimiento");
                             //item.NroPedido = dr.GetData<string>("NroPedido");
                             item.FechaHoraEmision = dr.GetData<DateTime>("FechaHoraEmision");
                             //Para personal antes de asignarlo hay que instanciar
@@ -53,6 +59,8 @@ namespace bilecom.da
                             item.Personal.NombresCompletos = dr.GetData<string>("NombresCompletosPersonal");
                             item.Cliente = new ClienteBe();
                             item.Cliente.RazonSocial = dr.GetData<string>("RazonSocialCliente");
+                            item.Proveedor = new ProveedorBe();
+                            item.Proveedor.RazonSocial = dr.GetData<string>("RazonSocialProveedor");
                             item.TotalImporte = dr.GetData<decimal>("TotalImporte");
                             item.FlagAnulado = dr.GetData<bool>("FlagAnulado");
                             lista.Add(item);
@@ -65,28 +73,29 @@ namespace bilecom.da
             return lista;
         }
 
-        public CotizacionBe Obtener(int empresaId, int cotizacionId, SqlConnection cn)
+        public MovimientoBe Obtener(int empresaId, int movimientoId, SqlConnection cn)
         {
-            CotizacionBe item = null;
-            using (SqlCommand cmd = new SqlCommand("dbo.usp_cotizacion_obtener", cn))
+            MovimientoBe item = null;
+            using (SqlCommand cmd = new SqlCommand("web.usp_movimiento_obtener", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
-                cmd.Parameters.AddWithValue("@cotizacionId", cotizacionId.GetNullable());
+                cmd.Parameters.AddWithValue("@movimientoId", movimientoId.GetNullable());
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)
                     {
-                        item = new CotizacionBe();
+                        item = new MovimientoBe();
 
-                        if(dr.Read())
+                        if (dr.Read())
                         {
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
-                            item.CotizacionId = dr.GetData<int>("CotizacionId");
+                            item.MovimientoId = dr.GetData<int>("MovimientoId");
                             item.FechaHoraEmision = dr.GetData<DateTime>("FechaHoraEmision");
                             item.SerieId = dr.GetData<int>("SerieId");
-                            item.NroComprobante = dr.GetData<int>("NroComprobante");
+                            item.NroMovimiento = dr.GetData<int>("NroMovimiento");
                             item.ClienteId = dr.GetData<int>("ClienteId");
+                            item.ProveedorId = dr.GetData<int>("ProveedorId");
                             item.PersonalId = dr.GetData<int>("PersonalId");
                             item.MonedaId = dr.GetData<int>("MonedaId");
                             item.TotalImporte = dr.GetData<decimal>("TotalImporte");
@@ -97,29 +106,32 @@ namespace bilecom.da
             }
             return item;
         }
-
-        public bool Guardar(CotizacionBe registro, SqlConnection cn, out int? cotizacionId)
+        public bool Guardar(MovimientoBe registro, SqlConnection cn, out int? movimientoId)
         {
-            cotizacionId = null;
+            movimientoId = null;
             bool seGuardo = false;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_cotizacion_guardar", cn))
+                using (SqlCommand cmd = new SqlCommand("web.usp_movimiento_guardar", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter { ParameterName = "@cotizacionId", SqlDbType = SqlDbType.Int, Value = registro.CotizacionId.GetNullable(), Direction = ParameterDirection.InputOutput });
-                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@serieId", registro.SerieId.GetNullable());
-                    cmd.Parameters.AddWithValue("@nroComprobante", registro.NroComprobante.GetNullable());
-                    cmd.Parameters.AddWithValue("@monedaId", registro.MonedaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@clienteID", registro.ClienteId.GetNullable());
-                    cmd.Parameters.AddWithValue("@personalId", registro.PersonalId.GetNullable());
-                    cmd.Parameters.AddWithValue("@totalImporte", registro.TotalImporte.GetNullable());
+                    cmd.Parameters.Add(new SqlParameter { ParameterName = "@MovimientoId", SqlDbType = SqlDbType.Int, Value = registro.MovimientoId.GetNullable(), Direction = ParameterDirection.InputOutput });
+                    cmd.Parameters.AddWithValue("@EmpresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@SedeId", registro.SedeId.GetNullable());
+                    cmd.Parameters.AddWithValue("@SerieId", registro.SerieId.GetNullable());
+                    cmd.Parameters.AddWithValue("@NroMovimiento", registro.NroMovimiento.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoMovimientoId", registro.TipoMovimientoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ClienteId", registro.ClienteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@PersonalId", registro.PersonalId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ProveedorId", registro.ProveedorId.GetNullable());
+                    cmd.Parameters.AddWithValue("@MonedaId", registro.MonedaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@FlagAnulado", registro.FlagAnulado.GetNullable());
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
-                    
+
+
                     int filasAfectadas = cmd.ExecuteNonQuery();
                     seGuardo = filasAfectadas > 0;
-                    if (seGuardo) cotizacionId = (int?)cmd.Parameters["@cotizacionId"].Value;
+                    if (seGuardo) movimientoId = (int?)cmd.Parameters["@MovimientoId"].Value;
                 }
             }
             catch (Exception ex)
@@ -128,31 +140,5 @@ namespace bilecom.da
             }
             return seGuardo;
         }
-
-        public bool Anular(CotizacionBe registro, SqlConnection cn)
-        {
-            bool seGuardo = false;
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_cotizacion_anular", cn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@cotizacionId", registro.CotizacionId.GetNullable());
-                    cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
-
-                    int filasAfectadas = cmd.ExecuteNonQuery();
-                    seGuardo = filasAfectadas > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                seGuardo = false;
-            }
-            return seGuardo;
-        }
-
-
     }
-
 }

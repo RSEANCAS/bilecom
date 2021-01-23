@@ -49,10 +49,13 @@
     <Compile Include="CotizacionDetalleDa.cs" />
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="MonedaDa.cs" />
+    <Compile Include="MovimientoDa.cs" />
+    <Compile Include="MovimientoDetalleDa.cs" />
     <Compile Include="OpcionDa.cs" />
     <Compile Include="PaisDa.cs" />
     <Compile Include="PerfilDa.cs" />
     <Compile Include="PersonalDa.cs" />
+    <Compile Include="ProductoAlmacenDa.cs" />
     <Compile Include="ProductoDa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvinciaDa.cs" />
@@ -60,6 +63,7 @@
     <Compile Include="TipoAfectacionIgvDa.cs" />
     <Compile Include="TipoComprobanteDa.cs" />
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
+    <Compile Include="TipoMovimientoDa.cs" />
     <Compile Include="UnidadMedidaDa.cs" />
     <Compile Include="UsuarioDa.cs" />
     <Compile Include="ProveedorDa.cs" />

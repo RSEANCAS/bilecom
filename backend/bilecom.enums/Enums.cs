@@ -39,7 +39,11 @@ namespace bilecom.enums
             GuiaRemisionRemitente = 5,
             [DefaultValue("CT")]
             [Description("Cotizacion")]
-            Cotizacion = 6
+            Cotizacion = 6,
+            [DefaultValue("MV")]
+            [Description("Movimiento")]
+            Movimiento = 7
+
         }
     }
 }

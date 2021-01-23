@@ -51,6 +51,7 @@
     <Compile Include="CotizacionBl.cs" />
     <Compile Include="EmpresaBl.cs" />
     <Compile Include="MonedaBl.cs" />
+    <Compile Include="MovimientoBl.cs" />
     <Compile Include="PaisBl.cs" />
     <Compile Include="PersonalBl.cs" />
     <Compile Include="ProductoBl.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="TipoAfectacionIgvBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
+    <Compile Include="TipoMovimientoBl.cs" />
     <Compile Include="UnidadMedidaBl.cs" />
     <Compile Include="UsuarioBl.cs" />
     <Compile Include="ProveedorBl.cs" />
