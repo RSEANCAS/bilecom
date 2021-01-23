@@ -20,6 +20,7 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("usp_productoalmacen_guardar",cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmpresaId", registro.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@ProductoId", registro.ProductoId.GetNullable());
                     cmd.Parameters.AddWithValue("@AlmacenId", registro.AlmacenId.GetNullable());
                     cmd.Parameters.AddWithValue("@TipoMovimiento", registro.TipoMovimientoId.GetNullable());

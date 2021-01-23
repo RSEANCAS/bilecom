@@ -15,6 +15,7 @@ namespace bilecom.be
         public int TipoAfectacionIgvId { get; set; }
         public string UnidadMedidaId { get; set; }
         public string TipoCalculo { get; set; }
+        public decimal StockActual { get; set; }
         public decimal StockMinimo { get; set; }
         public decimal Monto { get; set; }
         public string Usuario { get; set; }

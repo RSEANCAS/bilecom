@@ -8,6 +8,7 @@ namespace bilecom.be
 {
     public class ProductoAlmacenBe
     {
+        public int EmpresaId { get; set; }
         public int ProductoId { get; set; }
         public int AlmacenId { get; set; }
         public decimal Monto { get; set; }

@@ -122,6 +122,7 @@
                 { data: "Fila" },
                 { data: "Serie.Serial" },
                 { data: "NroMovimiento", render: (data) => Number(data).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '') },
+                { data: "TipoMovimiento.Descripcion" },
                 { data: "FechaHoraEmision", render: (data) => (new Date(data)).toLocaleDateString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" }) },
                 { data: "Personal.NombresCompletos" },
                 { data: "Cliente.RazonSocial" },

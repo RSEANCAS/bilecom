@@ -1,4 +1,4 @@
-﻿var serieLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [],tipoMovimientoLista=[];
+﻿var serieLista = [], sedealmacenLista=[],monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [],tipoMovimientoLista=[];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -370,6 +370,7 @@ const pageMantenimientoMovimiento = {
     },
 
     BtnAgregarDetalleClick: function (e, id = null) {
+        
         bootbox.dialog({
             title: id == null ? 'Agregar Detalle' : 'Editar Detalle',
             message:
@@ -379,10 +380,25 @@ const pageMantenimientoMovimiento = {
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Descripción</span>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-descripcion" id="cmb-detalle-descripcion" aria-hidden="false" style="width: 100%"></select>
+                                <select onchange="pageMantenimientoMovimiento.changeProducto()" class="form-control val-exc select2-show-accessible" name="cmb-detalle-descripcion" id="cmb-detalle-descripcion" aria-hidden="false" style="width: 100%"></select>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Cantidad Actual</span>
+                                <input class="form-control" name="txt-detalle-cantidad-actual" id="txt-detalle-cantidad-actual" placeholder="Cantidad Actual" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Almacen</span>
+                                <input class="form-control" name="txt-detalle-almacen" id="txt-detalle-almacen" placeholder="Almacen" readonly>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -403,6 +419,7 @@ const pageMantenimientoMovimiento = {
                             </div>
                         </div>
                     </div>
+
                 </form>`,
             closeButton: true,
             buttons: {
@@ -417,6 +434,8 @@ const pageMantenimientoMovimiento = {
                 }
             },
             onShow: function (e) {
+                $("#txt-detalle-almacen").val($("#cmb-almacen").text());
+
                 $(e.currentTarget).attr("id", "modal-detalle-agregar");
 
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
@@ -438,10 +457,11 @@ const pageMantenimientoMovimiento = {
                             return { empresaId: user.Empresa.EmpresaId, nombre };
                         },
                         processResults: function (data) {
-                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre }));
+                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre , stock:x.Stock}));
                             return { results };
                         }
                     }
+                    
                 });
 
                 let registroExiste = id != null;
@@ -555,19 +575,26 @@ const pageMantenimientoMovimiento = {
                         validators: {
                             notEmpty: { message: "Debe ingresar cantidad." },
                             numeric: { message: "Debe ingresar valor numérico." },
-                            greaterThan: { value: 0, inclusive: false, message: "Debe ingresar valor mayor a cero (0)." }
+                            greaterThan: { value: 0, inclusive: false, message: "Debe ingresar valor mayor a cero (0)." },
+                            callback: {
+                                message: "La cantidad de salida no puede ser mayor a la cantidad actual.",
+                                callback: function (value, validator, $field) {
+                                    return pageMantenimientoMovimiento.CondicionCantidad();
+                                }
+                            }
                         }
                     },
                     "txt-detalle-precio-unitario": {
                         validators: {
                             notEmpty: { message: "Debe ingresar precio unitario." },
                             numeric: { message: "Debe ingresar valor numérico." },
+                            greaterThan: { value: 0, inclusive: false, message: "Debe ingresar valor mayor a cero (0)." }
                         }
                     },
                     "txt-detalle-importe-total": {
                         validators: {
-                            notEmpty: { message: "Debe ingresar importe total." },
                             numeric: { message: "Debe ingresar valor numérico." },
+                            greaterThan: { value: 0, inclusive: false, message: "Debe ingresar valor mayor a cero (0)." }
                         }
                     }
                 }
@@ -632,6 +659,7 @@ const pageMantenimientoMovimiento = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
+            fetch(`${urlRoot}api/sede/listar-sedealmacen?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdMovimiento}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
@@ -640,12 +668,14 @@ const pageMantenimientoMovimiento = {
 
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoDocumentoIdentidadLista,TipoMovimientoLista]) => {
+            .then(([SedeAlmacenLista, SerieLista, MonedaLista, TipoDocumentoIdentidadLista, TipoMovimientoLista]) => {
+                sedealmacenLista = SedeAlmacenLista|| [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 tipoMovimientoLista = TipoMovimientoLista || [];
 
+                pageMantenimientoMovimiento.ResponseSedeAlmacen(sedealmacenLista);
                 pageMantenimientoMovimiento.ResponseSerieListar(serieLista);
                 pageMantenimientoMovimiento.ResponseMonedaListar(monedaLista);
                 pageMantenimientoMovimiento.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
@@ -674,12 +704,14 @@ const pageMantenimientoMovimiento = {
         let monedaId = $("#cmb-moneda").val();
         let clienteId = $("#hdn-cliente-id").val();
         let personalId = $("#hdn-personal-id").val();
+        let sedeAlmacenId = $("#cmb-almacen").val();
 
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
 
         let ObjectoJson = {
             EmpresaId: empresaId,
+            SedeAlmacenId : sedeAlmacenId,
             MovimientoId: movimientoId,
             TipoMovimientoId : tipoMovimientoId,
             SerieId: serieId,
@@ -730,7 +762,12 @@ const pageMantenimientoMovimiento = {
             }
         });
     },
-
+    changeProducto: function () {
+        var s = $("#cmb-detalle-descripcion").select2("data");
+        if (s.length > 0) {
+            $("#txt-detalle-cantidad-actual").val(s[0].StockActual);
+        }
+    },
     ResponseObtenerDatos: function (data) {
         $("#cmb-tipo-movimiento").val(data.TipoMovimientoId);
         $("#cmb-tipo-movimiento").prop("disabled", true);
@@ -744,7 +781,10 @@ const pageMantenimientoMovimiento = {
         detalleLista = data.ListaMovimientoDetalle;
         pageMantenimientoMovimiento.ListarDetalle();
     },
-
+    ResponseSedeAlmacen: function (data) {
+        let dataAlmacen = data.map(x => Object.assign(x, { id: x.SedeId, text: x.Nombre +' - '+ x.Direccion}));
+        $("#cmb-almacen").select2({ data: dataAlmacen, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
     ResponseSerieListar: function (data) {
         let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
         $("#cmb-serie").select2({ data: dataSerie, width: '100%', placeholder: '[SELECCIONE...]' });
@@ -791,6 +831,17 @@ const pageMantenimientoMovimiento = {
     ObtenerFiltroPersonalNombresCompletos: function () {
         return $("#txt-filtro-personal-nombres-completos").val();
 
+    },
+    CondicionCantidad: function () {
+        let l = $("#cmb-tipo-movimiento").val();
+        if ( l== 2) {
+            if ($("#txt-detalle-cantidad").val() > $("#txt-detalle-cantidad-actual").val()) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        } else { return true;}
     }
     
 }

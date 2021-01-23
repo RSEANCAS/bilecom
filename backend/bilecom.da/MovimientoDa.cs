@@ -51,6 +51,9 @@ namespace bilecom.da
                             item.Serie.SerieId = dr.GetData<int>("SerieId");
                             item.Serie.Serial = dr.GetData<string>("SerialSerie");
 
+                            item.Moneda = new MonedaBe();
+                            item.Moneda.Simbolo = dr.GetData<string>("MonedaSimbolo");
+
                             item.NroMovimiento = dr.GetData<int>("NroMovimiento");
                             //item.NroPedido = dr.GetData<string>("NroPedido");
                             item.FechaHoraEmision = dr.GetData<DateTime>("FechaHoraEmision");
@@ -125,6 +128,7 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@PersonalId", registro.PersonalId.GetNullable());
                     cmd.Parameters.AddWithValue("@ProveedorId", registro.ProveedorId.GetNullable());
                     cmd.Parameters.AddWithValue("@MonedaId", registro.MonedaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TotalImporte", registro.TotalImporte.GetNullable());
                     cmd.Parameters.AddWithValue("@FlagAnulado", registro.FlagAnulado.GetNullable());
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
 

@@ -98,9 +98,9 @@ namespace bilecom.bl
                                     //seGuardo = new 
                                     if (!seGuardo) break;
 
-                                    
                                     ProductoAlmacenBe paBe = new ProductoAlmacenBe();
-                                    paBe.AlmacenId = registro.SedeId;
+                                    paBe.EmpresaId = registro.EmpresaId;
+                                    paBe.AlmacenId = registro.SedeAlmacenId;
                                     paBe.ProductoId = item.ProductoId;
                                     paBe.Monto = item.Cantidad;
                                     paBe.TipoMovimientoId = registro.TipoMovimientoId;
