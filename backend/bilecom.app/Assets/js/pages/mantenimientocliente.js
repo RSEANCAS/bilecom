@@ -140,6 +140,44 @@ const pageMantenimientoCliente = {
                                             }
                                         }
                                     }
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiCE) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 11) {
+                                            return {
+                                                valid: false,
+                                                message: "Carnet de Extranjería inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "Carnet de Extranjería inválido"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiPasaporte) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 7) {
+                                            return {
+                                                valid: false,
+                                                message: "Pasaporte inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "Pasaporte inválido"
+                                                }
+                                            }
+                                        }
+                                    }
                                     return true;
                                 }
                             }

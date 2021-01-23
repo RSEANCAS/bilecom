@@ -126,8 +126,11 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientocliente.js")"></script>
     <script>
-            const tdiDNI = "@((int)Enums.TipoDocumentoIdentidad.DNI)"
-            const tdiRUC = "@((int)Enums.TipoDocumentoIdentidad.RUC)"
+        const tdiDNI = "@((int)Enums.TipoDocumentoIdentidad.DNI)"
+        const tdiRUC = "@((int)Enums.TipoDocumentoIdentidad.RUC)"
+        const tdiCE = "@((int)Enums.TipoDocumentoIdentidad.CarnetExtranjeria)"
+        const tdiPasaporte = "@((int)Enums.TipoDocumentoIdentidad.Pasaporte)"
+
         $(document).ready(function () {
             pageMantenimientoCliente.Init();
         });

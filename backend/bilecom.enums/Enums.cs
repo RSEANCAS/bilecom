@@ -45,7 +45,9 @@ namespace bilecom.enums
         public enum TipoDocumentoIdentidad
         {
             DNI = 1,
-            RUC = 2
+            RUC = 2,
+            CarnetExtranjeria = 3,
+            Pasaporte = 4
         }
     }
 }
