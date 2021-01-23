@@ -5,6 +5,7 @@
     },
     GuardarToken(data) {
         localStorage['ls.tk'] = btoa(JSON.stringify(data));
+        document.cookie = `ls.tk=${localStorage['ls.tk']}`
     },
     ObtenerUsuario() {
         let user = localStorage['ls.us'];
@@ -12,6 +13,7 @@
     },
     GuardarUsuario(data) {
         localStorage['ls.us'] = btoa(JSON.stringify(data));
+        document.cookie = `ls.us=${localStorage['ls.us']}`;
     },
     ObtenerPerfilActual() {
         let perfilActual = localStorage['ls.pa'];
@@ -45,7 +47,7 @@
             }
         })
     },
-    CreateDataTableFromAjax: function (id, ajax, columns) {
+    CreateDataTableFromAjax: function (id, ajax, columns, aditional = {}) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
             $(id).DataTable().ajax.reload();
@@ -55,7 +57,8 @@
             processing: true,
             serverSide: true,
             ajax: ajax,
-            columns: columns
+            columns: columns,
+            ...aditional
         })
     },
     CreateDataTableFromData: function (id, data, columns) {

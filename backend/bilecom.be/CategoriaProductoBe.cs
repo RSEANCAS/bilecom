@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class CategoriaProductoBe
+    public class CategoriaProductoBe : Base
     {
         public int EmpresaId { get; set; }
         public int CategoriaProductoId { get; set; }
         public string Nombre { get; set; }
-        public string Usuario { get; set; }
-        public DateTime Fecha { get; set; }
+        public bool FlagActivo { get; set; }
     }
 }

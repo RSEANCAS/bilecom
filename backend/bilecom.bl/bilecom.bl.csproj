@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoletaBl.cs" />
     <Compile Include="CategoriaProductoBl.cs" />
     <Compile Include="ClienteBl.cs" />
     <Compile Include="Conexion.cs" />
@@ -50,8 +51,13 @@
     <Compile Include="DistritoBl.cs" />
     <Compile Include="CotizacionBl.cs" />
     <Compile Include="EmpresaBl.cs" />
+    <Compile Include="FacturaBl.cs" />
+    <Compile Include="GuiaRemisionRemitenteBl.cs" />
+    <Compile Include="GuiaRemisionTransportistaBl.cs" />
     <Compile Include="MonedaBl.cs" />
     <Compile Include="MovimientoBl.cs" />
+    <Compile Include="NotaCreditoBl.cs" />
+    <Compile Include="NotaDebitoBl.cs" />
     <Compile Include="PaisBl.cs" />
     <Compile Include="PersonalBl.cs" />
     <Compile Include="ProductoBl.cs" />

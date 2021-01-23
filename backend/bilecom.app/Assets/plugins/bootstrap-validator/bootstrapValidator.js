@@ -2994,7 +2994,8 @@ if (typeof jQuery === 'undefined') {
 		html5Attributes: {
 			message: 'message',
 			value: 'value',
-			inclusive: 'inclusive'
+			inclusive: 'inclusive',
+			thousands: 'thousands'
 		},
 
 		enableByHtml5: function($field) {
@@ -3029,6 +3030,11 @@ if (typeof jQuery === 'undefined') {
 			var value = $field.val();
 			if (value === '') {
 				return true;
+			}
+			var thousands = options.thousands || ',';
+			let regexp = new RegExp(`${thousands}`, "g");
+			if (value.includes(thousands)) {
+				value = value.replace(regexp, '');
 			}
 			if (!$.isNumeric(value)) {
 				return false;

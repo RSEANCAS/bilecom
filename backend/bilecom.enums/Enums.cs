@@ -17,6 +17,7 @@ namespace bilecom.enums
 
         public enum TipoSede
         {
+            [Description("Almacén")]
             Almacen = 1
         }
 
@@ -44,6 +45,13 @@ namespace bilecom.enums
             [Description("Movimiento")]
             Movimiento = 7
 
+        }
+        public enum TipoDocumentoIdentidad
+        {
+            DNI = 1,
+            RUC = 2,
+            CarnetExtranjeria = 3,
+            Pasaporte = 4
         }
     }
 }

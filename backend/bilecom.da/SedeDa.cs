@@ -32,8 +32,8 @@ namespace bilecom.da
                         while (dr.Read())
                         {
                             SedeBe item = new SedeBe();
-                            item.SedeId = dr.GetData<int>("Fila");
-                            //item.SedeId = dr.GetData<int>("SedeId");
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.SedeId = dr.GetData<int>("SedeId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.TipoSedeId = dr.GetData<int>("TipoSedeId");
                             item.TipoSede = new TipoSedeBe();

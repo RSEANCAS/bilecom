@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,19 +10,22 @@ namespace bilecom.app.Controllers
     public class _BaseController : Controller
     {
         protected bool estaLogueado;
-        protected int empresaId;
+        protected string token;
+        protected dynamic user;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string empresaIdString = Request == null ? null : Request.Cookies["ep.ky"] == null ? null : Request.Cookies["ep.ky"].Value;
-            estaLogueado = int.TryParse(empresaIdString, out empresaId);
-            base.OnActionExecuting(filterContext);
-        }
+            token = Request == null ? null : Request.Cookies["ls.tk"] == null ? null : Request.Cookies["ls.tk"].Value;
+            estaLogueado = !string.IsNullOrEmpty(token);
+            string userString = Request == null ? null : Request.Cookies["ls.us"] == null ? null : Request.Cookies["ls.us"].Value;
+            if (!string.IsNullOrEmpty(userString))
+            {
+                byte[] userByte = System.Convert.FromBase64String(userString);
+                string user64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(userByte);
+                user = JsonConvert.DeserializeObject<dynamic>(user64Decoded);
+            }
 
-        // GET: _Base
-        public ActionResult Index()
-        {
-            return View();
+            base.OnActionExecuting(filterContext);
         }
     }
 }

@@ -31,6 +31,8 @@ namespace bilecom.da
                             item.TipoSedeId = dr.GetData<int>("TipoSedeId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.Nombre = dr.GetData<string>("Nombre");
+                            item.CodigoPlantilla = dr.GetData<int?>("CodigoPlantilla");
+                            item.FlagEditable = dr.GetData<bool>("FlagEditable");
                             item.FlagActivo = dr.GetData<bool>("FlagActivo");
                             respuesta.Add(item);
                         }
@@ -63,6 +65,8 @@ namespace bilecom.da
                             item.TipoSedeId = dr.GetData<int>("Fila");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.Nombre = dr.GetData<string>("Nombre");
+                            item.CodigoPlantilla = dr.GetData<int?>("CodigoPlantilla");
+                            item.FlagEditable = dr.GetData<bool>("FlagEditable");
                             item.FlagActivo = dr.GetData<bool>("FlagActivo");
                             lista.Add(item);
 
@@ -93,6 +97,8 @@ namespace bilecom.da
                             {
                                 respuesta = new TipoSedeBe();
                                 respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.CodigoPlantilla = dr.GetData<int?>("CodigoPlantilla");
+                                respuesta.FlagEditable = dr.GetData<bool>("FlagEditable");
                                 respuesta.FlagActivo = dr.GetData<bool>("FlagActivo");
                             }
                         }
@@ -114,11 +120,13 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_tiposede_guardar", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@TipoSedeId", tipoSedeBe.TipoSedeId.GetNullable());
-                    cmd.Parameters.AddWithValue("@EmpresaId", tipoSedeBe.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@Nombre", tipoSedeBe.Nombre.GetNullable());
-                    cmd.Parameters.AddWithValue("@FlagActivo", tipoSedeBe.FlagActivo.GetNullable());
-                    cmd.Parameters.AddWithValue("@Usuario", tipoSedeBe.Usuario.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoSedeId", tipoSedeBe.TipoSedeId.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", tipoSedeBe.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@nombre", tipoSedeBe.Nombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@codigoPlantilla", tipoSedeBe.CodigoPlantilla.GetNullable());
+                    cmd.Parameters.AddWithValue("@flagEditable", tipoSedeBe.FlagEditable.GetNullable());
+                    cmd.Parameters.AddWithValue("@flagActivo", tipoSedeBe.FlagActivo.GetNullable());
+                    cmd.Parameters.AddWithValue("@usuario", tipoSedeBe.Usuario.GetNullable());
                     int filasAfectadas = cmd.ExecuteNonQuery();
                     seGuardo = filasAfectadas > 0;
                 }

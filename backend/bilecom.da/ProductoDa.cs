@@ -79,12 +79,16 @@ namespace bilecom.da
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.CategoriaId = dr.GetData<int>("CategoriaId");
                             item.Nombre = dr.GetData<string>("Nombre");
+<<<<<<< HEAD
                             item.StockMinimo = dr.GetData<int>("Stock");
                             //item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
                             //item.UnidadMedidaId = dr.GetData<int>("UnidadMedidaId");
                             //item.categoriaProducto = new CategoriaProductoBe();
                             //item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
                             //item.Stock = dr.GetData<int>("Stock");
+=======
+                            item.StockMinimo = dr.GetData<int>("StockMinimo");
+>>>>>>> c81c185549b08a1dfc104d2036aa3416c88ae2f7
                             lista.Add(item);
                         }
                     }

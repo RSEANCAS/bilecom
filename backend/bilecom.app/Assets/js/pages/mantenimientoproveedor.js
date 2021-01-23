@@ -15,10 +15,128 @@
         $("#frm-proveedor-mantenimiento")
             .bootstrapValidator({
                 fields: {
-                    "txt-nombre": {
+                    "txt-nombres": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria.",
+                                message: "Debe ingresar nombres o razón social",
+                            },
+                            callback: {
+                                message: 'El nombre o razón social no es válido',
+                                callback: function (value, validator, $field) {
+                                    let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (!(/^[a-zA-ZñÑá-úÁ-Ú ]*$/).test(value)) {
+                                            return {
+                                                valid: false,
+                                                message: "Nombre o razón social inválido"
+                                            }
+                                        }
+                                    }
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (!(/^[a-zA-Z0-9ñÑá-úÁ-Ú ]+$/)) {
+                                            return {
+                                                valid: false,
+                                                message: "Nombre o razón social inválido"
+                                            }
+                                        }
+                                    }
+                                    return true;
+                                }
+                            },
+
+                        }
+                    },
+                    "txt-numero-documento-identidad": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar un número de documento de identidad",
+                            },
+                            callback: {
+                                message: 'El número de documento de identidad no es válido',
+                                callback: function (value, validator, $field) {
+                                    let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 8) {
+                                            return {
+                                                valid: false,
+                                                message: "DNI inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "DNI inválido"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 11) {
+                                            return {
+                                                valid: false,
+                                                message: "RUC inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "RUC inválido"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                    },
+                    "txt-nombre-comercial": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar nombre comercial",
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-ñÑá-úÁ-Ú ]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
+                            }
+                        }
+                    },
+                    "txt-correo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar correo válido",
+                            },
+                            emailAddress: {
+                                message: 'La dirección de correo no es válido'
+                            }
+                        }
+                    },
+                    "txt-direccion": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar direccion",
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
+                            },
+                            stringLength: {
+                                min: 5,
+                                message: 'Dirección no válida'
                             }
                         }
                     }

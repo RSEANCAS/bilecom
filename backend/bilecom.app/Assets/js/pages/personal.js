@@ -40,7 +40,7 @@
                 }
             },
             columns: [
-                {data: "PersonalId"},
+                {data: "Fila"},
                 {data: "TipoDocumentoIdentidad.Descripcion"},
                 {data: "NroDocumentoIdentidad"},
                 {data: "NombresCompletos"},

@@ -51,6 +51,7 @@
             EmpresaId: empresaId,
             CategoriaProductoId: categoriaproductoId,
             Nombre: nombre,
+            FlagActivo: 1,
             Usuario: user
         }
 

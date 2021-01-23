@@ -88,6 +88,7 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@categoriaProductoId", registro.CategoriaProductoId.GetNullable());
                     cmd.Parameters.AddWithValue("@nombre", registro.Nombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@flagActivo", registro.FlagActivo.GetNullable());
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
                     int filasAfectadas = cmd.ExecuteNonQuery();
                     seGuardo = filasAfectadas > 0;

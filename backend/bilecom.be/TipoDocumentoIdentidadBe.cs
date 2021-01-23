@@ -8,6 +8,7 @@ namespace bilecom.be
 {
     public class TipoDocumentoIdentidadBe
     {
+        public int CodigoTipoDocumentoIdentidad { get; set; }
         public int TipoDocumentoIdentidadId { get; set; }
         public string Descripcion { get; set; }
     }
