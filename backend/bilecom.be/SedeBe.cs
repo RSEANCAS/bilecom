@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class SedeBe
+    public class SedeBe : Base
     {
         public int SedeId { get; set; }
         public int EmpresaId { get; set; }
@@ -20,9 +20,5 @@ namespace bilecom.be
         public string Direccion { get; set; }
         public string Ubigeo { get; set; }
         public bool FlagActivo { get; set; }
-        public string Usuario { get; set; }
-        public DateTime Fecha { get; set; }
-
-        
     }
 }

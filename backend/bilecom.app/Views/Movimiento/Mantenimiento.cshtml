@@ -1,0 +1,312 @@
+﻿@using bilecom.enums
+@{
+    ViewBag.Title = "Mantenimiento";
+}
+
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/ionicons/css/ionicons.min.css")" rel="stylesheet">
+}
+
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h2 class="page-header text-overflow">@ViewBag.Titulo</h2>
+        </div>
+    </div>
+    <form id="frm-movimiento-mantenimiento" name="frm-movimiento-mantenimiento" method="post">
+        <div id="page-content">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="panel panel-bordered panel-dark">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Datos Generales</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                @if (ViewBag.Accion == (int)Enums.Accion.Editar)
+                                {
+                                    <div class="col-sm-3">
+                                        <div class="form-group mar-no">
+                                            <span class="bg-dark box-block pad-lft pad-rgt">Fecha y Hora Emisión</span>
+                                            <input class="form-control" placeholder="Fecha y Hora Emisión" name="txt-fecha-hora-emision" id="txt-fecha-hora-emision" data-bv-field="txt-fecha-hora-emision" readonly>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-sm-2">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Movimiento</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento" id="cmb-tipo-movimiento" data-bv-field="cmb-tipo-movimiento" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Almacen</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-almacen" id="cmb-almacen" data-bv-field="cmb-almacen" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Serie</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-serie" id="cmb-serie" data-bv-field="cmb-serie" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                @if (ViewBag.Accion == (int)Enums.Accion.Editar)
+                                {
+                                    <div class="col-sm-3">
+                                        <div class="form-group mar-no">
+                                            <span class="bg-dark box-block pad-lft pad-rgt">N° Movimiento</span>
+                                            <input class="form-control" placeholder="N° Movimiento" name="txt-nro-movimiento" id="txt-nro-movimiento" data-bv-field="txt-nro-movimiento" readonly>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-sm-2">
+                                    <div class="form-group mar-no">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-moneda" id="cmb-moneda" data-bv-field="cmb-moneda" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-bordered panel-dark" id="panel-cliente" name="panel-cliente">
+                        <div class="panel-heading">
+                            <div class="panel-control">
+                                <button id="btn-buscar-cliente" class="btn btn-default" type="button">
+                                    <i class="ion-search"></i>
+                                    <span>Buscar</span>
+                                </button>
+                            </div>
+                            <h3 class="panel-title">Datos del Cliente</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-cliente" id="cmb-tipo-documento-identidad-cliente" data-bv-field="cmb-tipo-documento-identidad-cliente" tabindex="-1" aria-hidden="false" disabled></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
+                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-cliente" id="txt-numero-documento-identidad-cliente" data-bv-field="txt-numero-documento-identidad-cliente" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
+                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-cliente" id="txt-nombres-completos-cliente" data-bv-field="txt-nombres-completos-cliente" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-cliente" id="txt-direccion-cliente" data-bv-field="txt-direccion-cliente" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group pad-no mar-no">
+                                        <input type="hidden" id="hdn-cliente-id" name="hdn-cliente-id" data-bv-field="hdn-cliente-id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-bordered panel-dark" id="panel-proveedor" name="panel-proveedor">
+                        <div class="panel-heading">
+                            <div class="panel-control">
+                                <button id="btn-buscar-proveedor" class="btn btn-default" type="button">
+                                    <i class="ion-search"></i>
+                                    <span>Buscar</span>
+                                </button>
+                            </div>
+                            <h3 class="panel-title">Datos del Proveedor</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-proveedor" id="cmb-tipo-documento-identidad-proveedor" data-bv-field="cmb-tipo-documento-identidad-proveedor" tabindex="-1" aria-hidden="false" disabled></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
+                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-proveedor" id="txt-numero-documento-identidad-proveedor" data-bv-field="txt-numero-documento-identidad-proveedor" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
+                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-proveedor" id="txt-nombres-completos-proveedor" data-bv-field="txt-nombres-completos-proveedor" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-proveedor" id="txt-direccion-proveedor" data-bv-field="txt-direccion-proveedor" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group pad-no mar-no">
+                                        <input type="hidden" id="hdn-proveedor-id" name="hdn-proveedor-id" data-bv-field="hdn-proveedor-id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="panel panel-bordered panel-dark" >
+                        <div class="panel-heading">
+                            <div class="panel-control">
+                                <label>
+                                    <input type="checkbox" id="chk-obtener-datos-personal-usuario" name="chk-obtener-datos-personal-usuario" />
+                                    Completar con mis datos
+                                </label>
+                                <button id="btn-buscar-personal" class="btn btn-default" type="button">
+                                    <i class="ion-search"></i>
+                                    <span>Buscar</span>
+                                </button>
+                            </div>
+                            <h3 class="panel-title">Datos del Personal</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-personal" id="cmb-tipo-documento-identidad-personal" data-bv-field="cmb-tipo-documento-identidad-personal" tabindex="-1" aria-hidden="false" disabled></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
+                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-personal" id="txt-numero-documento-identidad-personal" data-bv-field="txt-numero-documento-identidad-personal" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
+                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-personal" id="txt-nombres-completos-personal" data-bv-field="txt-nombres-completos-personal" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-personal" id="txt-direccion-personal" data-bv-field="txt-direccion-personal" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group pad-no mar-no">
+                                        <input type="hidden" id="hdn-personal-id" name="hdn-personal-id" data-bv-field="hdn-personal-id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-bordered panel-dark">
+                        <div class="panel-heading">
+                            <div class="panel-control">
+                                <button id="btn-agregar-detalle" class="btn btn-default" type="button">
+                                    <i class="ion-plus"></i>
+                                    <span>Agregar</span>
+                                </button>
+                            </div>
+                            <h3 class="panel-title">Lista de Detalles</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="tbl-lista-detalle" class="table table-striped table-bordered small" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr class="bg-dark">
+                                                <th style="width:25px">N°</th>
+                                                <th>Descripción</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio Unit.</th>
+                                                <th>Precio Venta</th>
+                                                <th>Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <table class="table invoice-total">
+                                    <tbody>
+                                        @*<tr>
+                                <td><strong>Sub Total :</strong></td>
+                                <td>$538.06</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TAX :</strong></td>
+                                <td>$73.98</td>
+                            </tr>*@
+                                        <tr>
+                                            <td><strong>TOTAL :</strong></td>
+                                            <td id="lbl-total-importe" class="text-bold h4">0.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group pad-no mar-no">
+                                        <input type="hidden" id="hdn-detalle" name="hdn-detalle" data-bv-field="hdn-detalle" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-3 col-sm-offset-6">
+                            <button class="btn btn-success col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/Movimientos")">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientomovimiento.js")"></script>
+    <script>
+        const tipoComprobanteIdMovimiento = @((int)Enums.TipoComprobante.Movimiento);
+        const movimientoId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
+        $(document).ready(function () {
+            pageMantenimientoMovimiento.Init();
+        });
+    </script>
+}

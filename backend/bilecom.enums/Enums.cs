@@ -40,7 +40,18 @@ namespace bilecom.enums
             GuiaRemisionRemitente = 5,
             [DefaultValue("CT")]
             [Description("Cotizacion")]
-            Cotizacion = 6
+            Cotizacion = 6,
+            [DefaultValue("MV")]
+            [Description("Movimiento")]
+            Movimiento = 7
+
+        }
+        public enum TipoDocumentoIdentidad
+        {
+            DNI = 1,
+            RUC = 2,
+            CarnetExtranjeria = 3,
+            Pasaporte = 4
         }
     }
 }

@@ -40,13 +40,14 @@
                 }
             },
             columns: [
-                { data: "ClienteId" },
+                { data: "Fila" },
                 { data: "TipoDocumentoIdentidad.Descripcion" },
                 { data: "NroDocumentoIdentidad" },
                 { data: "RazonSocial" },
                 {
                     data: "ClienteId", render: function (data, row) {
-                        return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Clientes/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><button class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageCliente.btnEliminaClick(${data})" data-original-title="Delete" data-container="body" ></button >`
+                        return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Clientes/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a>
+                                <button class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageCliente.btnEliminaClick(${data})" data-original-title="Delete" data-container="body" ></button >`
                     }
                 },
             ]

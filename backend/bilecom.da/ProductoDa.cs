@@ -1,4 +1,4 @@
-﻿using bilecom.be;
+using bilecom.be;
 using bilecom.ut;
 using System;
 using System.Collections.Generic;
@@ -54,8 +54,9 @@ namespace bilecom.da
             }
             return lista;
         }
+        
 
-        public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn)
+        public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn, int sedeAlmacenId = 0)
         {
             List<ProductoBe> lista = null;
 
@@ -64,7 +65,7 @@ namespace bilecom.da
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
-
+                cmd.Parameters.AddWithValue("@SedeAlmacenId", sedeAlmacenId.GetNullable());
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)
@@ -78,6 +79,12 @@ namespace bilecom.da
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.CategoriaId = dr.GetData<int>("CategoriaId");
                             item.Nombre = dr.GetData<string>("Nombre");
+                            item.StockActual = dr.GetData<decimal>("Stock");
+                            item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                            item.UnidadMedidaId = dr.GetData<string>("UnidadMedidaId");
+                            //item.categoriaProducto = new CategoriaProductoBe();
+                            //item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
+                            //item.Stock = dr.GetData<int>("Stock");
                             item.StockMinimo = dr.GetData<decimal>("StockMinimo");
                             lista.Add(item);
                         }

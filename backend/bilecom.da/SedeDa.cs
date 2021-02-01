@@ -32,8 +32,8 @@ namespace bilecom.da
                         while (dr.Read())
                         {
                             SedeBe item = new SedeBe();
-                            item.SedeId = dr.GetData<int>("Fila");
-                            //item.SedeId = dr.GetData<int>("SedeId");
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.SedeId = dr.GetData<int>("SedeId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.TipoSedeId = dr.GetData<int>("TipoSedeId");
                             item.TipoSede = new TipoSedeBe();
@@ -45,6 +45,34 @@ namespace bilecom.da
                             lista.Add(item);
 
                             totalRegistros = dr.GetData<int>("Total");
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public List<SedeBe> SedeAlmacenListar(int empresaId,SqlConnection cn)
+        {
+            List<SedeBe> lista = new List<SedeBe>();
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_sedealmacen_listar", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            SedeBe item = new SedeBe();
+                            item.SedeId = dr.GetData<int>("SedeId");
+                            item.TipoSedeId = dr.GetData<int>("TipoSedeId");
+                            item.Nombre = dr.GetData<string>("NombreSede");
+                            item.DistritoId = dr.GetData<int>("DistritoId");
+                            item.Direccion = dr.GetData<string>("Direccion");
+                            lista.Add(item);
                         }
                     }
                 }

@@ -49,11 +49,10 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("buscar-producto-por-nombre")]
-        public List<ProductoBe> BuscarProductoPorNombre(int empresaId, string nombre)
+        public List<ProductoBe> BuscarProductoPorNombre(int empresaId, string nombre, int sedeAlmacenId=0)
         {
-            var respuesta = productoBl.BuscarProductoPorNombre(nombre, empresaId); ;
+            var respuesta = productoBl.BuscarProductoPorNombre(nombre, empresaId, sedeAlmacenId);
             return respuesta;
-
         }
 
         [HttpPost]

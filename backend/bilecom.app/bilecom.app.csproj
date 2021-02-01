@@ -395,10 +395,12 @@
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\mantenimientocotizacion.js" />
+    <Content Include="Assets\js\pages\mantenimientomovimiento.js" />
     <Content Include="Assets\js\pages\mantenimientofactura.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
     <Content Include="Assets\js\pages\mantenimientoserie.js" />
     <Content Include="Assets\js\pages\mantenimientotiposede.js" />
+    <Content Include="Assets\js\pages\movimiento.js" />
     <Content Include="Assets\js\pages\personal.js" />
     <Content Include="Assets\js\pages\mantenimientocliente.js" />
     <Content Include="Assets\js\pages\mantenimientopersonal.js" />
@@ -2822,6 +2824,7 @@
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
+    <Compile Include="Controllers\Api\MovimientoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
     <Compile Include="Controllers\Api\PersonalController.cs" />
     <Compile Include="Controllers\Api\EmpresaController.cs" />
@@ -2836,6 +2839,7 @@
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
+    <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
     <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
@@ -2846,6 +2850,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\MovimientoController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProveedorController.cs" />
@@ -3156,6 +3161,8 @@
     <Content Include="Views\Cotizacion\Mantenimiento.cshtml" />
     <Content Include="Views\Serie\Index.cshtml" />
     <Content Include="Views\Serie\Mantenimiento.cshtml" />
+    <Content Include="Views\Movimiento\Index.cshtml" />
+    <Content Include="Views\Movimiento\Mantenimiento.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Factura\Mantenimiento.cshtml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />

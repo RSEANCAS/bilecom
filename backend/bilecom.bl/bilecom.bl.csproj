@@ -55,6 +55,7 @@
     <Compile Include="GuiaRemisionRemitenteBl.cs" />
     <Compile Include="GuiaRemisionTransportistaBl.cs" />
     <Compile Include="MonedaBl.cs" />
+    <Compile Include="MovimientoBl.cs" />
     <Compile Include="NotaCreditoBl.cs" />
     <Compile Include="NotaDebitoBl.cs" />
     <Compile Include="PaisBl.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="TipoComprobanteBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
     <Compile Include="TipoOperacionVentaBl.cs" />
+    <Compile Include="TipoMovimientoBl.cs" />
     <Compile Include="UnidadMedidaBl.cs" />
     <Compile Include="UsuarioBl.cs" />
     <Compile Include="ProveedorBl.cs" />
@@ -75,11 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
-      <Project>{E9F1604B-36AF-4C5D-A7A1-0F5125CD30AB}</Project>
+      <Project>{e9f1604b-36af-4c5d-a7a1-0f5125cd30ab}</Project>
       <Name>bilecom.be</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.da\bilecom.da.csproj">
-      <Project>{EDCAFCB6-48A5-4E7C-8892-973FB2153823}</Project>
+      <Project>{edcafcb6-48a5-4e7c-8892-973fb2153823}</Project>
       <Name>bilecom.da</Name>
     </ProjectReference>
   </ItemGroup>
