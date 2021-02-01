@@ -1,4 +1,4 @@
-﻿var serieLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [];
+﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -13,6 +13,10 @@ const columnsDetalle = [
         }
     },
 ];
+
+const fechaActual = new Date();
+var chkExportacion, chkGratuito, chkAnticipo;
+
 const pageMantenimientoFactura = {
     Init: function () {
         common.ConfiguracionDataTable();
@@ -24,12 +28,52 @@ const pageMantenimientoFactura = {
 
     InitEvents: function () {
         $("#btn-buscar-cliente").click(pageMantenimientoFactura.BtnBuscarClienteClick);
-        $("#btn-buscar-personal").click(pageMantenimientoFactura.BtnBuscarPersonalClick);
-        $("#chk-obtener-datos-personal-usuario").change(pageMantenimientoFactura.ChkObtenerDatosPersonalUsuarioChange);
-        $("#chk-obtener-datos-personal-usuario").trigger("click");
         $("#btn-agregar-detalle").click(pageMantenimientoFactura.BtnAgregarDetalleClick);
 
+        $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
+
+        $("#chk-exportacion").change(pageMantenimientoFactura.ChkExportacionChange);
+        $("#chk-gratuito").change(pageMantenimientoFactura.ChkGratuitoChange);
+        $("#chk-anticipo").change(pageMantenimientoFactura.ChkAnticipoChange);
+
+        chkExportacion = new Switchery(document.getElementById('chk-exportacion'));
+        chkGratuito = new Switchery(document.getElementById('chk-gratuito'));
+        chkAnticipo = new Switchery(document.getElementById('chk-anticipo'));
+
         pageMantenimientoFactura.ObtenerDatos();
+    },
+
+    ChkExportacionChange: function () {
+        let checked = $("#chk-exportacion").prop("checked");
+        if (checked) {
+            chkGratuito.disable();
+            chkAnticipo.disable();
+        } else {
+            chkGratuito.enable();
+            chkAnticipo.enable();
+        }
+    },
+
+    ChkGratuitoChange: function () {
+        let checked = $("#chk-gratuito").prop("checked");
+        if (checked) {
+            chkExportacion.disable();
+            chkAnticipo.disable();
+        } else {
+            chkExportacion.enable();
+            chkAnticipo.enable();
+        }
+    },
+
+    ChkAnticipoChange: function () {
+        let checked = $("#chk-anticipo").prop("checked");
+        if (checked) {
+            chkExportacion.disable();
+            chkGratuito.disable();
+        } else {
+            chkExportacion.enable();
+            chkGratuito.enable();
+        }
     },
 
     BtnBuscarClienteClick: function () {
@@ -133,124 +177,6 @@ const pageMantenimientoFactura = {
         $("#txt-numero-documento-identidad-cliente").val("");
         $("#txt-nombres-completos-cliente").val("");
         $("#txt-direccion-cliente").val("");
-    },
-
-    BtnBuscarPersonalClick: function () {
-        bootbox.dialog({
-            message:
-                `<p class='text-semibold text-main'>Buscar Personal</p>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label">N° Doc. Identidad</label>
-                                <input class="form-control" name="txt-filtro-personal-nro-documento-identidad" id="txt-filtro-personal-nro-documento-identidad">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label">Nombres Completos</label>
-                                <input class="form-control" name="txt-filtro-personal-nombres-completos" id="txt-filtro-personal-nombres-completos">
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <label class="control-label">&nbsp;</label>
-                                <button id="btn-buscar-personal-dialog" class="btn btn-dark" type="button"><i class="ion-search"></i> Buscar</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table id="tbl-busqueda-personal" class="table table-striped table-bordered small" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr class="bg-dark">
-                                        <th>N°</th>
-                                        <th>Tipo Doc. Identidad</th>
-                                        <th>N° Doc. Identidad</th>
-                                        <th>Nombres Completos</th>
-                                        <th>Opción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>`,
-            onShow: function (e) {
-                $(e.currentTarget).attr("id", "modal-busqueda-personal");
-                $("#modal-busqueda-personal").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-personal-id");
-                })
-                let user = common.ObtenerUsuario();
-                let empresaId = user.Empresa.EmpresaId;
-
-                let ajax = {
-                    url: `${urlRoot}api/personal/buscar-personal`,
-                    data: {
-                        empresaId: empresaId,
-                        nroDocumentoIdentidad: pageMantenimientoFactura.ObtenerFiltroPersonalNroDocumentoIdentidad,
-                        nombresCompletos: pageMantenimientoFactura.ObtenerFiltroPersonalNombresCompletos
-                    }
-                };
-
-                let columns = [
-                    { data: "PersonalId" },
-                    { data: "TipoDocumentoIdentidad.Descripcion" },
-                    { data: "NroDocumentoIdentidad" },
-                    { data: "NombresCompletos" },
-                    {
-                        data: "PersonalId", render: function (data, type, row) {
-                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoFactura.BtnSeleccionarPersonalClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
-                        }
-                    },
-                ];
-
-                $("#btn-buscar-personal-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-personal", ajax, columns));
-                $("#btn-buscar-personal-dialog").trigger("click");
-            },
-            animateIn: 'zoomInDown',
-            animateOut: 'zoomOutUp'
-        });
-    },
-
-    BtnSeleccionarPersonalClick: function (data) {
-        pageMantenimientoFactura.LlenarDatosPersonal(data);
-        $("#modal-busqueda-personal").modal('hide');
-    },
-
-    LlenarDatosPersonal(data) {
-        pageMantenimientoFactura.LimpiarDatosPersonal();
-        let user = common.ObtenerUsuario();
-        let flagObtenerDatosPersonalUsuario = user.Personal.PersonalId == data.PersonalId;
-        $("#chk-obtener-datos-personal-usuario").prop("checked", flagObtenerDatosPersonalUsuario);
-        $("#hdn-personal-id").val(data.PersonalId);
-        $("#cmb-tipo-documento-identidad-personal").val(data.TipoDocumentoIdentidadId).trigger('change');
-        $("#txt-numero-documento-identidad-personal").val(data.NroDocumentoIdentidad);
-        $("#txt-nombres-completos-personal").val(data.NombresCompletos);
-        $("#txt-direccion-personal").val(data.Direccion);
-    },
-
-    LimpiarDatosPersonal() {
-        $("#hdn-personal-id").val("");
-        $("#cmb-tipo-documento-identidad-personal").val("").trigger('change');
-        $("#txt-numero-documento-identidad-personal").val("");
-        $("#txt-nombres-completos-personal").val("");
-        $("#txt-direccion-personal").val("");
-    },
-
-    ChkObtenerDatosPersonalUsuarioChange: function () {
-        let flagObtenerDatosPersonalUsuario = $("#chk-obtener-datos-personal-usuario").prop("checked");
-
-        if (flagObtenerDatosPersonalUsuario == true) {
-            let user = common.ObtenerUsuario();
-            if (user.Personal == null) return;
-            pageMantenimientoFactura.LlenarDatosPersonal(user.Personal);
-        } else {
-            pageMantenimientoFactura.LimpiarDatosPersonal();
-        }
-
-        $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-personal-id");
     },
 
     BtnAgregarDetalleClick: function (e, id = null) {
@@ -512,16 +438,19 @@ const pageMantenimientoFactura = {
         let promises = [
             fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
+            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoDocumentoIdentidadLista]) => {
+            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista]) => {
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
+                tipoOperacionVentaLista = TipoOperacionVentaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
 
                 pageMantenimientoFactura.ResponseSerieListar(serieLista);
                 pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
+                pageMantenimientoFactura.ResponseTipoOperacionVentaListar(tipoOperacionVentaLista);
                 pageMantenimientoFactura.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
                 if (typeof fnNext == "function") fnNext();
             })
@@ -620,6 +549,11 @@ const pageMantenimientoFactura = {
     ResponseMonedaListar: function (data) {
         let dataMoneda = data.map(x => Object.assign(x, { id: x.MonedaId, text: x.Nombre }));
         $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+
+    ResponseTipoOperacionVentaListar: function (data) {
+        let dataTipoOperacionVenta = data.map(x => Object.assign(x, { id: x.TipoOperacionVentaId, text: x.Nombre }));
+        $("#cmb-tipo-operacion-venta").select2({ data: dataTipoOperacionVenta, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 
     ResponseTipoDocumentoIdentidadListar: function (data) {

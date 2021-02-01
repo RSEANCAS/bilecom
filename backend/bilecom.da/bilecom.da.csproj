@@ -62,6 +62,7 @@
     <Compile Include="TipoAfectacionIgvDa.cs" />
     <Compile Include="TipoComprobanteDa.cs" />
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
+    <Compile Include="TipoOperacionVentaDa.cs" />
     <Compile Include="UnidadMedidaDa.cs" />
     <Compile Include="UsuarioDa.cs" />
     <Compile Include="ProveedorDa.cs" />

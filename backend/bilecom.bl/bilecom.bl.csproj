@@ -66,6 +66,7 @@
     <Compile Include="TipoAfectacionIgvBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
+    <Compile Include="TipoOperacionVentaBl.cs" />
     <Compile Include="UnidadMedidaBl.cs" />
     <Compile Include="UsuarioBl.cs" />
     <Compile Include="ProveedorBl.cs" />

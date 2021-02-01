@@ -76,6 +76,7 @@
     <Compile Include="TipoAfectacionIgvBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
+    <Compile Include="TipoOperacionVentaBe.cs" />
     <Compile Include="TipoProductoBe.cs" />
     <Compile Include="TipoSedeBe.cs" />
     <Compile Include="UnidadMedidaBe.cs" />

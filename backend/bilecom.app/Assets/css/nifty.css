@@ -5644,8 +5644,10 @@ hr {
 .has-error.checkbox-inline label,
 .has-error.radio label,
 .has-error.radio-inline label {
-  color: #f55a4e;
-  font-weight: 700;
+    color: #f55a4e;
+    font-weight: 700;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 .has-success .form-control {
   border-color: #b0d683;
@@ -7673,7 +7675,10 @@ blockquote {
   margin-right: -20px;
 }
 .panel-body {
-  padding: 15px 20px 25px;
+  padding: 15px 20px 15px;
+}
+.panel-body .row:not(.hidden):last-of-type .form-group {
+    margin-bottom: 0px
 }
 .panel-trans {
   border-color: transparent;

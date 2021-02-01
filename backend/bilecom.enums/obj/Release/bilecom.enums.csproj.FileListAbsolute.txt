@@ -1,0 +1,6 @@
+D:\JARE\bilecom\backend\bilecom.enums\bin\Release\bilecom.enums.dll
+D:\JARE\bilecom\backend\bilecom.enums\bin\Release\bilecom.enums.pdb
+D:\JARE\bilecom\backend\bilecom.enums\obj\Release\bilecom.enums.csprojAssemblyReference.cache
+D:\JARE\bilecom\backend\bilecom.enums\obj\Release\bilecom.enums.csproj.CoreCompileInputs.cache
+D:\JARE\bilecom\backend\bilecom.enums\obj\Release\bilecom.enums.dll
+D:\JARE\bilecom\backend\bilecom.enums\obj\Release\bilecom.enums.pdb

@@ -78,7 +78,7 @@ namespace bilecom.da
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.CategoriaId = dr.GetData<int>("CategoriaId");
                             item.Nombre = dr.GetData<string>("Nombre");
-                            item.StockMinimo = dr.GetData<int>("StockMinimo");
+                            item.StockMinimo = dr.GetData<decimal>("StockMinimo");
                             lista.Add(item);
                         }
                     }
