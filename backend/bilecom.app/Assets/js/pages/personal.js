@@ -43,9 +43,9 @@
                 {data: "Fila"},
                 {data: "TipoDocumentoIdentidad.Descripcion"},
                 {data: "NroDocumentoIdentidad"},
-                {data: "NombresCompletos"},
+                { data: "NombresCompletos" },
                 {
-                    data: "PersonalId", render: function (data, row) {
+                    data: "PersonalId", render: function (data, type, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Personal/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pagePersonal.btnEliminaClick(${data})" data - original - title="Delete" data - container="body" ></a >`
                     }
                 },
