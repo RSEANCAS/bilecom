@@ -35,7 +35,7 @@ namespace bilecom.bl
             return lista;
         }
 
-        public MovimientoBe Obtener(int empresaId, int movimientoId, bool conSerie = false, bool conMoneda = false, bool conCliente = false, bool conPersonal = false, bool conListaDetalleMovimiento = false)
+        public MovimientoBe Obtener(int empresaId, int movimientoId, bool conSerie = false, bool conMoneda = false, bool conCliente = false, bool conPersonal = false, bool conListaDetalleMovimiento = false,bool conProveedor =false)
         {
             MovimientoBe item = null;
             try
@@ -48,6 +48,7 @@ namespace bilecom.bl
                     if (conMoneda) item.Moneda = monedaDa.Obtener(item.MonedaId, cn);
                     if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
                     if (conPersonal) item.Personal = personalDa.Obtener(empresaId, item.PersonalId, cn);
+                    if (conProveedor) item.Proveedor = proveedorDa.Obtener(empresaId, item.ProveedorId, cn);
                     if (conListaDetalleMovimiento) item.ListaMovimientoDetalle = movimientoDetalleDa.Listar(empresaId, item.MovimientoId, cn);
                 }
                 cn.Close();

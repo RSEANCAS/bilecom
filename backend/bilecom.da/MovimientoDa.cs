@@ -103,6 +103,7 @@ namespace bilecom.da
                             item.MonedaId = dr.GetData<int>("MonedaId");
                             item.TotalImporte = dr.GetData<decimal>("TotalImporte");
                             item.FlagAnulado = dr.GetData<bool>("FlagAnulado");
+                            item.TipoMovimientoId = dr.GetData<int>("TipoMovimientoId");
                         }
                     }
                 }

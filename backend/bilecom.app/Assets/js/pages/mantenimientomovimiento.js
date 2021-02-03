@@ -530,15 +530,39 @@ const pageMantenimientoMovimiento = {
                 fields: {
                     "hdn-cliente-id": {
                         validators: {
-                            notEmpty: {
+                            callback: {
                                 message: "Debe seleccionar un cliente.",
+                                callback: function (value, validator, $field) {
+                                    let l = $("#cmb-tipo-movimiento").val();
+                                    if (l == 2) {
+                                        if ($("#hdn-cliente-id").val() == "") {
+                                            return false;
+                                        }
+                                        else { return true; }
+                                    }
+                                    else { return true; }
+                                    //return pageMantenimientoMovimiento.CondicionCantidad();
+                                }
                             }
                         }
                     },
                     "hdn-proveedor-id": {
                         validators: {
-                            notEmpty: {
+                            callback: {
                                 message: "Debe seleccionar un proveedor.",
+                                callback: function (value, validator, $field) {
+                                    let l = $("#cmb-tipo-movimiento").val();
+                                    if (l == 1)
+                                    {
+                                        if ($("#hdn-proveedor-id").val() == "") {
+                                            return false;
+                                        }
+                                        else { return true; }
+                                    }
+                                    else
+                                    { return true; }
+                                    //return pageMantenimientoMovimiento.CondicionCantidad();
+                                }
                             }
                         }
                     },
@@ -699,10 +723,12 @@ const pageMantenimientoMovimiento = {
     },
 
     EnviarFormulario: function () {
+        $("#btn-guardar").prop("disabled", true);
         let tipoMovimientoId = $("#cmb-tipo-movimiento").val();
         let serieId = $("#cmb-serie").val();
         let monedaId = $("#cmb-moneda").val();
         let clienteId = $("#hdn-cliente-id").val();
+        let proveedorId = $("#hdn-proveedor-id").val();
         let personalId = $("#hdn-personal-id").val();
         let sedeAlmacenId = $("#cmb-almacen").val();
 
@@ -716,6 +742,7 @@ const pageMantenimientoMovimiento = {
             TipoMovimientoId : tipoMovimientoId,
             SerieId: serieId,
             ClienteId: clienteId,
+            ProveedorId: proveedorId,
             PersonalId: personalId,
             MonedaId: monedaId,
             TotalImporte: detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0),
@@ -735,6 +762,7 @@ const pageMantenimientoMovimiento = {
     },
 
     ResponseEnviarFormulario: function (data) {
+
         let tipo = "", mensaje = "";
         if (data == true) {
             tipo = "success";
@@ -761,6 +789,7 @@ const pageMantenimientoMovimiento = {
                 }
             }
         });
+
     },
     changeProducto: function () {
         var s = $("#cmb-detalle-descripcion").select2("data");
@@ -769,15 +798,18 @@ const pageMantenimientoMovimiento = {
         }
     },
     ResponseObtenerDatos: function (data) {
-        $("#cmb-tipo-movimiento").val(data.TipoMovimientoId);
         $("#cmb-tipo-movimiento").prop("disabled", true);
+        $("#cmb-serie").prop("disabled", true);
+        $("#cmb-serie").prop("disabled", true);
+        $("#cmb-almacen").prop("disabled", true);
         $("#txt-fecha-hora-emision").val((new Date(data.FechaHoraEmision)).toLocaleDateString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" }));
         $("#cmb-serie").val(data.SerieId).trigger("change");
         $("#cmb-moneda").val(data.MonedaId).trigger("change");
         $("#txt-nro-movimiento").val(data.NroMovimiento.toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, ''));
-        pageMantenimientoMovimiento.LlenarDatosCliente(data.Cliente);
+        $("#cmb-tipo-movimiento").val(data.TipoMovimientoId).trigger("change");
+        if (data.Cliente != null) { pageMantenimientoMovimiento.LlenarDatosCliente(data.Cliente); }
         pageMantenimientoMovimiento.LlenarDatosPersonal(data.Personal);
-        pageMantenimientoMovimiento.LlenarDatosProveedor(data.Proveedor);
+        if (data.Proveedor != null) { pageMantenimientoMovimiento.LlenarDatosProveedor(data.Proveedor); }
         detalleLista = data.ListaMovimientoDetalle;
         pageMantenimientoMovimiento.ListarDetalle();
     },
