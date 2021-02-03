@@ -15,15 +15,19 @@ namespace bilecom.app.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            token = Request == null ? null : Request.Cookies["ls.tk"] == null ? null : Request.Cookies["ls.tk"].Value;
-            estaLogueado = !string.IsNullOrEmpty(token);
-            string userString = Request == null ? null : Request.Cookies["ls.us"] == null ? null : Request.Cookies["ls.us"].Value;
-            if (!string.IsNullOrEmpty(userString))
-            {
-                byte[] userByte = System.Convert.FromBase64String(userString);
-                string user64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(userByte);
-                user = JsonConvert.DeserializeObject<dynamic>(user64Decoded);
-            }
+            //token = Request == null ? null : Request.Cookies["ls.tk"] == null ? null : Request.Cookies["ls.tk"].Value;
+            //estaLogueado = !string.IsNullOrEmpty(token);
+            //string userString = Request == null ? null : Request.Cookies["ls.us"] == null ? null : Request.Cookies["ls.us"].Value;
+            //if (!string.IsNullOrEmpty(userString))
+            //{
+            //    byte[] userByte = System.Convert.FromBase64String(userString);
+            //    string user64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(userByte);
+            //    user = JsonConvert.DeserializeObject<dynamic>(user64Decoded);
+            //}
+            //else
+            //{
+            //    filterContext.Result = RedirectToAction("Index", "Login");
+            //}
 
             base.OnActionExecuting(filterContext);
         }

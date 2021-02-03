@@ -31,7 +31,6 @@
             processing: true,
             serverSide: true,
             ajax: {
-                //`${urlRoot}api/tiposede/buscar-tiposede?empresaId=${empresaId}&nombre=${pageTipoSede.ObtenerNombre()}`,
                 url: `${urlRoot}api/tiposede/buscar-tiposede`,
                 data: {
                     empresaId: empresaId,

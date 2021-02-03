@@ -1,4 +1,5 @@
-﻿const pageFactura = {
+﻿const fechaActual = new Date();
+const pageFactura = {
     Init: function () {
         common.ConfiguracionDataTable();
         this.InitEvents();
@@ -8,7 +9,6 @@
     InitEvents: function () {
         $("#btn-buscar").click(pageFactura.BtnBuscarClick);
 
-        let fechaActual = new Date();
         $("#txt-fecha-emision-desde").datepicker({ format: "dd/mm/yyyy", autoclose: true });
         $("#txt-fecha-emision-desde").datepicker("setDate", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
         $("#txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true });
