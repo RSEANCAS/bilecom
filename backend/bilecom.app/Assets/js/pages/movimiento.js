@@ -125,7 +125,7 @@
                 { data: "TipoMovimiento.Descripcion" },
                 { data: "FechaHoraEmision", render: (data) => (new Date(data)).toLocaleDateString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" }) },
                 { data: "Personal.NombresCompletos" },
-                { data: "Cliente.RazonSocial" },
+                { data: "Cliente.RazonSocial", render: function (data, type, row) { return `${row.Cliente.RazonSocial}${row.Proveedor.RazonSocial}` }},
                 { data: "TotalImporte", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
                 {
                     data: "MovimientoId", render: function (data, type, row) {
@@ -134,7 +134,7 @@
                     }
                 },
             ],
-            rowCallback: function (row, data) {
+            rowCallback: function (row, data) { 
                 if (data.FlagAnulado == true) $(row).addClass('bg-danger');
             }
         })

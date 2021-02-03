@@ -34,9 +34,8 @@ namespace bilecom.app.Controllers.Api
         [Route("obtener-movimiento")]
         public MovimientoBe ObtenerCotizacion(int empresaId, int movimientoId)
         {
-            return movimientoBl.Obtener(empresaId, movimientoId, conCliente: true, conPersonal: true, conListaDetalleMovimiento: true);
+            return movimientoBl.Obtener(empresaId, movimientoId, conCliente: true, conPersonal: true, conListaDetalleMovimiento: true, conProveedor: true);
         }
-
 
         [HttpPost]
         [Route("guardar-movimiento")]
