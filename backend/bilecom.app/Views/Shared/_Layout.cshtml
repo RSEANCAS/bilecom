@@ -1,4 +1,7 @@
-﻿@using bilecom.be;
+﻿@{
+    ViewBag.Title = "Dashboard - BileCom";
+}
+@using bilecom.be;
 @{
     int perfilId = ViewBag.Data.PerfilActual.PerfilId;
     List<PerfilBe> listaPerfil = ViewBag.ListaPerfil == null ? null : (List<PerfilBe>)ViewBag.ListaPerfil;
@@ -10,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dashboard | Nifty - Admin Template</title>
+    <title>@ViewBag.Title</title>
 
 
     <!--STYLESHEET-->

@@ -29,7 +29,7 @@ namespace bilecom.bl
             return lista;
         }
 
-        public List<ProductoBe> BuscarProductoPorNombre(string nombre, int empresaId, int sedeAlmacenId = 0)
+        public List<ProductoBe> BuscarProductoPorNombre(string nombre, int empresaId, int sedeAlmacenId)
         {
             List<ProductoBe> lista = null;
 

@@ -56,7 +56,7 @@ namespace bilecom.da
         }
         
 
-        public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn, int sedeAlmacenId = 0)
+        public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn, int sedeAlmacenId)
         {
             List<ProductoBe> lista = null;
 

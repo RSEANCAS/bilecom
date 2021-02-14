@@ -9,7 +9,7 @@
             var listaMenu = listaGeneral.Where(x => x.OpcionPadreId == data.OpcionId).ToList();
             bool tieneListaMenu = listaMenu.Count > 0;
             <li>
-                <a href="@Url.Content(data.Enlace))">
+                <a href="@Url.Content(data.Enlace)">
                     <i class="demo-pli-tactic"></i>
                     <span class="menu-title">@data.Nombre</span>
                     @if (tieneListaMenu == true)

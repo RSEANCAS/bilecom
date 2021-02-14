@@ -8,8 +8,11 @@ const columnsDetalle = [
     { data: "TotalImporte", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     {
         data: "MovimientoDetalleId", render: function (data, type, row) {
-            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoMovimiento.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
+            let nromov = parseInt($("#txt-nro-movimiento").val());
+            if (nromov == 0) {
+                return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoMovimiento.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
                     <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoMovimiento.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
+            } else { return "" }
         }
     },
 ];
