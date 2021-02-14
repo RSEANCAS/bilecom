@@ -863,7 +863,8 @@ h6,
 @media (min-width: 768px) {
   #navbar {
     background-color: transparent;
-    z-index: 10000;
+    z-index: 9999;
+/*    z-index: 10000;*/
   }
   .navbar-header {
     display: block;

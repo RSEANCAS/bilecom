@@ -2848,6 +2848,9 @@
     <Compile Include="Controllers\CategoriaProductoController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
+    <Compile Include="Controllers\Filters\IsLogoutFilter.cs" />
+    <Compile Include="Controllers\Filters\IsLoginFilter.cs" />
+    <Compile Include="Controllers\Filters\_BaseFilter.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -3168,6 +3171,7 @@
     <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Factura\Mantenimiento.cshtml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
+    <Content Include="Views\Shared\_Menu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

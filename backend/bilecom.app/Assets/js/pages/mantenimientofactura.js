@@ -15,7 +15,7 @@ const columnsDetalle = [
 ];
 
 const fechaActual = new Date();
-var chkExportacion, chkGratuito, chkAnticipo;
+var chkGratuito;
 
 const pageMantenimientoFactura = {
     Init: function () {
@@ -32,26 +32,11 @@ const pageMantenimientoFactura = {
 
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
 
-        $("#chk-exportacion").change(pageMantenimientoFactura.ChkExportacionChange);
         $("#chk-gratuito").change(pageMantenimientoFactura.ChkGratuitoChange);
-        $("#chk-anticipo").change(pageMantenimientoFactura.ChkAnticipoChange);
 
-        chkExportacion = new Switchery(document.getElementById('chk-exportacion'));
         chkGratuito = new Switchery(document.getElementById('chk-gratuito'));
-        chkAnticipo = new Switchery(document.getElementById('chk-anticipo'));
 
         pageMantenimientoFactura.ObtenerDatos();
-    },
-
-    ChkExportacionChange: function () {
-        let checked = $("#chk-exportacion").prop("checked");
-        if (checked) {
-            chkGratuito.disable();
-            chkAnticipo.disable();
-        } else {
-            chkGratuito.enable();
-            chkAnticipo.enable();
-        }
     },
 
     ChkGratuitoChange: function () {
@@ -62,17 +47,6 @@ const pageMantenimientoFactura = {
         } else {
             chkExportacion.enable();
             chkAnticipo.enable();
-        }
-    },
-
-    ChkAnticipoChange: function () {
-        let checked = $("#chk-anticipo").prop("checked");
-        if (checked) {
-            chkExportacion.disable();
-            chkGratuito.disable();
-        } else {
-            chkExportacion.enable();
-            chkGratuito.enable();
         }
     },
 
@@ -186,14 +160,37 @@ const pageMantenimientoFactura = {
                 `<form id="frm-factura-detalle" autocomplete="off">
                     ${(id == null ? "" : `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
                     <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Tipo Producto</span>
+                                <label class="radio-inline"><input type="radio" id="rbt-tipo-producto-bien" name="rbt-tipo-producto" /> Bien</label>
+                                <label class="radio-inline"><input type="radio" id="rbt-tipo-producto-servicio" name="rbt-tipo-producto" /> Servicio</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Código</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-codigo" id="cmb-detalle-codigo" aria-hidden="false" style="width: 100%"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Código SUNAT</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-codigo-sunat" id="cmb-detalle-codigo-sunat" aria-hidden="false" style="width: 100%" disabled></select>
+                            </div>
+                        </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Descripción</span>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-descripcion" id="cmb-detalle-descripcion" aria-hidden="false" style="width: 100%"></select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Unidad Medida</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-unidad-medida" id="cmb-detalle-unidad-medida" aria-hidden="false" style="width: 100%"></select>
+                            </div>
+                        </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Cantidad</span>
@@ -204,6 +201,36 @@ const pageMantenimientoFactura = {
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Precio Unitario</span>
                                 <input class="form-control" name="txt-detalle-precio-unitario" id="txt-detalle-precio-unitario" placeholder="Precio Unitario">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Descuento</span>
+                                <input class="form-control" name="txt-detalle-descuento" id="txt-detalle-descuento" placeholder="Descuento">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">ISC %</span>
+                                <input class="form-control" name="txt-detalle-isc" id="txt-detalle-isc" placeholder="ISC %">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">ISC</span>
+                                <input class="form-control" name="txt-detalle-isc" id="txt-detalle-isc" placeholder="ISC">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Otros Cargos</span>
+                                <input class="form-control" name="txt-detalle-otros-cargos" id="txt-detalle-otros-cargos" placeholder="Otros Cargos">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Otros Tributos</span>
+                                <input class="form-control" name="txt-detalle-otros-tributos" id="txt-detalle-otros-tributos" placeholder="Otros Tributos">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -242,6 +269,27 @@ const pageMantenimientoFactura = {
                     minimumInputLength: 3,
                     ajax: {
                         url: `${urlRoot}api/producto/buscar-producto-por-nombre`,
+                        data: function (params) {
+                            let user = common.ObtenerUsuario();
+                            let nombre = params.term;
+                            return { empresaId: user.Empresa.EmpresaId, nombre };
+                        },
+                        processResults: function (data) {
+                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre }));
+                            return { results };
+                        }
+                    }
+                });
+
+                $("#cmb-detalle-codigo-sunat").select2();
+
+                $("#cmb-detalle-codigo").select2({
+                    allowClear: true,
+                    dropdownParent: $("#modal-detalle-agregar"),
+                    placeholder: '[Seleccione...]',
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: `${urlRoot}api/producto/buscar-producto-por-codigo`,
                         data: function (params) {
                             let user = common.ObtenerUsuario();
                             let nombre = params.term;
