@@ -9,9 +9,35 @@ namespace bilecom.app.Controllers
 {
     public class _BaseController : Controller
     {
-        protected bool estaLogueado;
-        protected string token;
-        protected dynamic user;
+        protected dynamic Data
+        {
+            get
+            {
+                dynamic data = null;
+
+                try
+                {
+                    HttpCookie cookie = Request.Cookies.Get("ss");
+                    if (cookie != null) data = JsonConvert.DeserializeObject<dynamic>(cookie.Value);
+                }
+                catch (Exception ex)
+                {
+                    data = null;
+                }
+
+                return data;
+            }
+        }
+
+        protected bool IsLogin
+        {
+            get
+            {
+                bool existe = Data != null;
+
+                return existe;
+            }
+        }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {

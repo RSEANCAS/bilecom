@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bilecom.app.Controllers.Filters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ using static bilecom.enums.Enums;
 namespace bilecom.app.Controllers
 {
     [RoutePrefix("Cotizaciones")]
+    [IsLogoutFilter]
     public class CotizacionController : _BaseController
     {
         [Route("")]

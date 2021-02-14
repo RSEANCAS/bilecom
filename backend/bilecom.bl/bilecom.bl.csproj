@@ -58,7 +58,9 @@
     <Compile Include="MovimientoBl.cs" />
     <Compile Include="NotaCreditoBl.cs" />
     <Compile Include="NotaDebitoBl.cs" />
+    <Compile Include="OpcionBl.cs" />
     <Compile Include="PaisBl.cs" />
+    <Compile Include="PerfilBl.cs" />
     <Compile Include="PersonalBl.cs" />
     <Compile Include="ProductoBl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
