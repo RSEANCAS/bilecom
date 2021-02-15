@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace bilecom.bl
 {
-    public class UnidadMedidaBl : Conexion
+    public class TipoProductoBl : Conexion
     {
-        UnidadMedidaDa unidadMedidaDa = new UnidadMedidaDa();
+        TipoProductoDa tipoProductoDa = new TipoProductoDa();
 
-        public List<UnidadMedidaBe> Listar ()
+        public List<TipoProductoBe> Listar()
         {
-            List<UnidadMedidaBe> respuesta = null;
+            List<TipoProductoBe> respuesta = null;
             try
             {
                 cn.Open();
-                respuesta = unidadMedidaDa.Listar(cn);
+                respuesta = tipoProductoDa.Listar(cn);
                 cn.Close();
             }
             catch (Exception ex)

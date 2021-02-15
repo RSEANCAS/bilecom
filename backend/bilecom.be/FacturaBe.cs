@@ -34,5 +34,8 @@ namespace bilecom.be
         public decimal TotalDescuentos { get; set; }
         public decimal ImporteTotal { get; set; }
         public bool FlagAnulado { get; set; }
+
+        public int[] ListaFacturaDetalleEliminados { get; set; }
+        public List<FacturaDetalleBe> ListaFacturaDetalle { get; set; }
     }
 }

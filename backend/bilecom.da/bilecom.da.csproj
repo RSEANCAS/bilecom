@@ -67,6 +67,7 @@
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
     <Compile Include="TipoOperacionVentaDa.cs" />
     <Compile Include="TipoMovimientoDa.cs" />
+    <Compile Include="TipoProductoDa.cs" />
     <Compile Include="UnidadMedidaDa.cs" />
     <Compile Include="UsuarioDa.cs" />
     <Compile Include="ProveedorDa.cs" />

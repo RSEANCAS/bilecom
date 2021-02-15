@@ -29,14 +29,29 @@ namespace bilecom.bl
             return lista;
         }
 
-        public List<ProductoBe> BuscarProductoPorNombre(string nombre, int empresaId, int sedeAlmacenId = 0)
+        public List<ProductoBe> BuscarProductoPorCodigo(int? tipoProductoId, string codigo, int empresaId, int sedeAlmacenId = 0)
         {
             List<ProductoBe> lista = null;
 
             try
             {
                 cn.Open();
-                lista = productoDa.BuscarPorNombre(nombre, empresaId,  cn, sedeAlmacenId);
+                lista = productoDa.BuscarPorCodigo(tipoProductoId, codigo, empresaId,  cn, sedeAlmacenId);
+                cn.Close();
+            }
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
+        }
+
+        public List<ProductoBe> BuscarProductoPorNombre(int? tipoProductoId, string nombre, int empresaId, int sedeAlmacenId = 0)
+        {
+            List<ProductoBe> lista = null;
+
+            try
+            {
+                cn.Open();
+                lista = productoDa.BuscarPorNombre(tipoProductoId, nombre, empresaId, cn, sedeAlmacenId);
                 cn.Close();
             }
             catch (Exception ex) { lista = null; }

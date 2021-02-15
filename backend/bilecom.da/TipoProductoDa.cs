@@ -1,43 +1,42 @@
-﻿using bilecom.ut;
-using bilecom.be;
+﻿using bilecom.be;
+using bilecom.ut;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data;
 
 namespace bilecom.da
 {
-    public class UnidadMedidaDa
+    public class TipoProductoDa
     {
-        public List<UnidadMedidaBe> Listar (SqlConnection cn)
+        public List<TipoProductoBe> Listar(SqlConnection cn)
         {
-            List<UnidadMedidaBe> respuesta = null;
+            List<TipoProductoBe> respuesta = null;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_unidadmedida_listar",cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tipoproducto_listar", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.HasRows)
                         {
-                            respuesta = new List<UnidadMedidaBe>();
-                            while(dr.Read())
+                            respuesta = new List<TipoProductoBe>();
+                            while (dr.Read())
                             {
-                                UnidadMedidaBe item = new UnidadMedidaBe();
-                                item.Id = dr.GetData<string>("Id");
+                                TipoProductoBe item = new TipoProductoBe();
                                 item.TipoProductoId = dr.GetData<int>("TipoProductoId");
-                                item.Descripcion = dr.GetData<string>("Descripcion");
+                                item.Nombre = dr.GetData<string>("Nombre");
                                 respuesta.Add(item);
                             }
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 respuesta = null;
             }

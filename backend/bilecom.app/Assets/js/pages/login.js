@@ -38,7 +38,7 @@
             common.GuardarToken(data.Token);
             common.GuardarUsuario(data.Usuario);
             common.GuardarFechaExpiracion(data.FechaExpiracion);
-            debugger;
+            
             let dataString = JSON.stringify(data);
             let fechaExpires = common.ObtenerFechaExpiracion();
             let cookieSession = `ss=${dataString}; expires=${fechaExpires.toUTCString()}`;

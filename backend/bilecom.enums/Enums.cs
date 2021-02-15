@@ -12,7 +12,8 @@ namespace bilecom.enums
         public enum Accion
         {
             Nuevo = 1,
-            Editar = 2
+            Editar = 2,
+            Lectura = 3
         }
 
         public enum TipoSede

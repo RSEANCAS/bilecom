@@ -2841,6 +2841,7 @@
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
+    <Compile Include="Controllers\Api\TipoProductoController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
     <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />

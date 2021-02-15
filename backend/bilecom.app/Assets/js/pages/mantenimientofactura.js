@@ -1,11 +1,11 @@
-﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [];
+﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista, tipoAfectacionIgvLista, detalleLista = [], detalleListaEliminados = [];
 
 const columnsDetalle = [
     { data: "Fila" },
     { data: "Descripcion" },
     { data: "Cantidad", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     { data: "PrecioUnitario", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
-    { data: "TotalImporte", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
+    { data: "ImporteTotal", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     {
         data: "FacturaDetalleId", render: function (data, type, row) {
             return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoFactura.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
@@ -41,13 +41,13 @@ const pageMantenimientoFactura = {
 
     ChkGratuitoChange: function () {
         let checked = $("#chk-gratuito").prop("checked");
-        if (checked) {
-            chkExportacion.disable();
-            chkAnticipo.disable();
-        } else {
-            chkExportacion.enable();
-            chkAnticipo.enable();
-        }
+        //if (checked) {
+        //    chkExportacion.disable();
+        //    chkAnticipo.disable();
+        //} else {
+        //    chkExportacion.enable();
+        //    chkAnticipo.enable();
+        //}
     },
 
     BtnBuscarClienteClick: function () {
@@ -155,7 +155,13 @@ const pageMantenimientoFactura = {
 
     BtnAgregarDetalleClick: function (e, id = null) {
         bootbox.dialog({
-            title: id == null ? 'Agregar Detalle' : 'Editar Detalle',
+            title: (id == null ? 'Agregar Detalle' : 'Editar Detalle') + `<div class="panel-control" style="height: fit-content">
+                                <label class="small" style="display: flex; align-items: center">
+                                    <input type="checkbox" id="chk-detalle-avanzado" name="chk-detalle-avanzado" style="margin-top: 0" />
+                                    &nbsp;
+                                    Avanzado
+                                </label>
+                            </div>`,
             message:
                 `<form id="frm-factura-detalle" autocomplete="off">
                     ${(id == null ? "" : `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
@@ -163,8 +169,7 @@ const pageMantenimientoFactura = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Tipo Producto</span>
-                                <label class="radio-inline"><input type="radio" id="rbt-tipo-producto-bien" name="rbt-tipo-producto" /> Bien</label>
-                                <label class="radio-inline"><input type="radio" id="rbt-tipo-producto-servicio" name="rbt-tipo-producto" /> Servicio</label>
+                                <div id="div-detalle-tipo-producto"></div>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -193,6 +198,12 @@ const pageMantenimientoFactura = {
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Tipo Afectación al IGV</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-tipo-afectacion-igv" id="cmb-detalle-tipo-afectacion-igv" aria-hidden="false" style="width: 100%"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Cantidad</span>
                                 <input class="form-control" name="txt-detalle-cantidad" id="txt-detalle-cantidad" placeholder="Cantidad">
                             </div>
@@ -211,23 +222,35 @@ const pageMantenimientoFactura = {
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <span class="bg-dark box-block pad-lft pad-rgt">ISC %</span>
-                                <input class="form-control" name="txt-detalle-isc" id="txt-detalle-isc" placeholder="ISC %">
+                                <span class="bg-dark box-block pad-lft pad-rgt">IGV %</span>
+                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly value="18.00">
                             </div>
                         </div>
                         <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">IGV</span>
+                                <input class="form-control" name="txt-detalle-igv" id="txt-detalle-igv" placeholder="IGV" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 hidden" id="col-txt-detalle-porcentaje-isc">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">ISC %</span>
+                                <input class="form-control" name="txt-detalle-porcentaje-isc" id="txt-detalle-porcentaje-isc" placeholder="ISC %">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 hidden" id="col-txt-detalle-isc">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">ISC</span>
                                 <input class="form-control" name="txt-detalle-isc" id="txt-detalle-isc" placeholder="ISC">
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 hidden" id="col-txt-detalle-otros-cargos">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Otros Cargos</span>
                                 <input class="form-control" name="txt-detalle-otros-cargos" id="txt-detalle-otros-cargos" placeholder="Otros Cargos">
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 hidden" id="col-txt-detalle-otros-tributos">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Otros Tributos</span>
                                 <input class="form-control" name="txt-detalle-otros-tributos" id="txt-detalle-otros-tributos" placeholder="Otros Tributos">
@@ -256,11 +279,40 @@ const pageMantenimientoFactura = {
             onShow: function (e) {
                 $(e.currentTarget).attr("id", "modal-detalle-agregar");
 
+                pageMantenimientoFactura.ResponseTipoProductoListar(tipoProductoLista);
+                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoFactura.RbtDetalleTipoProductoChange);
+
+                $("#chk-detalle-avanzado").change(pageMantenimientoFactura.ChkDetalleAvanzado);
+
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
                     $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
 
-                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario").change(pageMantenimientoFactura.CalcularImporteTotal);
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoFactura.CalcularImporteTotal);
+
+                $("#cmb-detalle-codigo").select2({
+                    allowClear: true,
+                    dropdownParent: $("#modal-detalle-agregar"),
+                    placeholder: '[Seleccione...]',
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: `${urlRoot}api/producto/buscar-producto-por-codigo`,
+                        data: function (params) {
+                            let user = common.ObtenerUsuario();
+                            let codigo = params.term;
+                            let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
+                            return { empresaId: user.Empresa.EmpresaId, codigo, tipoProductoId };
+                        },
+                        processResults: function (data) {
+                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Codigo }));
+                            return { results };
+                        }
+                    }
+                });
+
+                $("#cmb-detalle-codigo").change(pageMantenimientoFactura.CmbDetalleCodigoChange);
+
+                $("#cmb-detalle-codigo-sunat").select2({ tags: true, placeholder: 'Ingrese Código Sunat', dropdownParent: $("#modal-detalle-agregar") });
 
                 $("#cmb-detalle-descripcion").select2({
                     allowClear: true,
@@ -272,7 +324,8 @@ const pageMantenimientoFactura = {
                         data: function (params) {
                             let user = common.ObtenerUsuario();
                             let nombre = params.term;
-                            return { empresaId: user.Empresa.EmpresaId, nombre };
+                            let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
+                            return { empresaId: user.Empresa.EmpresaId, nombre, tipoProductoId };
                         },
                         processResults: function (data) {
                             let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre }));
@@ -281,26 +334,11 @@ const pageMantenimientoFactura = {
                     }
                 });
 
-                $("#cmb-detalle-codigo-sunat").select2();
+                $("#cmb-detalle-descripcion").change(pageMantenimientoFactura.CmbDetalleDescripcionChange);
 
-                $("#cmb-detalle-codigo").select2({
-                    allowClear: true,
-                    dropdownParent: $("#modal-detalle-agregar"),
-                    placeholder: '[Seleccione...]',
-                    minimumInputLength: 3,
-                    ajax: {
-                        url: `${urlRoot}api/producto/buscar-producto-por-codigo`,
-                        data: function (params) {
-                            let user = common.ObtenerUsuario();
-                            let nombre = params.term;
-                            return { empresaId: user.Empresa.EmpresaId, nombre };
-                        },
-                        processResults: function (data) {
-                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre }));
-                            return { results };
-                        }
-                    }
-                });
+                pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+                //$("input[name='rbt-detalle-tipo-producto']").trigger("change");
+                pageMantenimientoFactura.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
 
                 let registroExiste = id != null;
 
@@ -348,6 +386,69 @@ const pageMantenimientoFactura = {
                 }
             }
         })
+    },
+
+    ChkDetalleAvanzado: function () {
+        let flagAvanzado = $("#chk-detalle-avanzado").prop("checked");
+
+        if (flagAvanzado) {
+            $("#col-txt-detalle-porcentaje-isc").removeClass("hidden");
+            $("#col-txt-detalle-isc").removeClass("hidden");
+            $("#col-txt-detalle-otros-cargos").removeClass("hidden");
+            $("#col-txt-detalle-otros-tributos").removeClass("hidden");
+        } else {
+            $("#col-txt-detalle-porcentaje-isc").addClass("hidden");
+            $("#col-txt-detalle-isc").addClass("hidden");
+            $("#col-txt-detalle-otros-cargos").addClass("hidden");
+            $("#col-txt-detalle-otros-tributos").addClass("hidden");
+        }
+    },
+
+    CmbDetalleCodigoChange: function () {
+        let data = $("#cmb-detalle-codigo").select2('data');
+        if (data.length == 0) {
+            $("#cmb-detalle-codigo")
+            return;
+        }
+        data = data[0];
+
+        //$("#cmb-detalle-descripcion").select2('data', data);
+        let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
+        $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
+
+        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+    },
+
+    CmbDetalleDescripcionChange: function () {
+        let data = $("#cmb-detalle-descripcion").select2('data');
+        if (data.length == 0) {
+            $("#cmb-detalle-descripcion")
+            return;
+        }
+        data = data[0];
+
+        //$("#cmb-detalle-codigo").select2('data', data);
+        let optionDefaultCodigo = new Option(data.Codigo, data.ProductoId, true, true);
+        $("#cmb-detalle-codigo").append(optionDefaultCodigo);
+
+        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+    },
+
+    CargarOtrosCamposProducto(data) {
+        let existeCodigoSunat = data.CodigoSunat != null;
+        $("#cmb-detalle-codigo-sunat").prop("disabled", existeCodigoSunat);
+        if (existeCodigoSunat) {
+            let optionDefaultCodigoSunat = new Option(data.CodigoSunat, data.CodigoSunat, true, true);
+            $("#cmb-detalle-codigo-sunat").append(optionDefaultCodigoSunat);
+        }
+
+        //pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        $("#cmb-detalle-unidad-medida").val(data.UnidadMedidaId).trigger("change");
+        $("#cmb-detalle-tipo-afectacion-igv").val(data.TipoAfectacionIgvId).trigger("change");
+    },
+
+    RbtDetalleTipoProductoChange: function () {
+        pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
     },
 
     ListarDetalle: function () {
@@ -434,19 +535,45 @@ const pageMantenimientoFactura = {
     GuardarDetalle: function () {
         let facturaDetalleId = pageMantenimientoFactura.ObtenerFacturaDetalleId();
         let detalleExiste = detalleLista.some(x => x.FacturaDetalleId == facturaDetalleId);
-        let productoId = parseInt($("#cmb-detalle-descripcion").val());
-        let descripcion = $("#cmb-detalle-descripcion option:selected").text();
+        let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
+        let unidadMedidaId = $("#cmb-detalle-unidad-medida").val();
+        let productoId = parseInt($("#cmb-detalle-descripcion").val());
+        let codigo = $("#cmb-detalle-codigo option:selected").text();
+        let codigoSunat = $("#cmb-detalle-codigo-sunat").val();
+        let descripcion = $("#cmb-detalle-descripcion option:selected").text();
+        let tipoAfectacionIgvId = $("#cmb-detalle-tipo-afectacion-igv").val();
+        let descuento = Number($("#txt-detalle-descuento").val().replace(/,/g, ""));
+        let isc = Number($("#txt-detalle-isc").val().replace(/,/g, ""));
+        let porcentajeIgv = Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
+        let igv = Number($("#txt-detalle-igv").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
+        let valorUnitario = Math.round(precioUnitario * 0.18, 2);
+        let valorVenta = Math.round(valorUnitario * cantidad, 2);
         let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
         let data = {
             FacturaDetalleId: facturaDetalleId,
-            ProductoId: productoId,
-            Descripcion: descripcion,
+            TipoProductoId: tipoProductoId,
             Cantidad: cantidad,
+            UnidadMedidaId: unidadMedidaId,
+            ProductoId: productoId,
+            CodigoSunat: codigoSunat,
+            Codigo: codigo,
+            Descripcion: descripcion,
+            FlagAplicaICPBER: false,
+            TipoAfectacionIgvId: tipoAfectacionIgvId,
+            Descuento: descuento,
+            ISC: isc,
+            PorcentajeIGV: porcentajeIgv,
+            IGV: igv,
+            ICPBER: 0,
+            PorcentajeICPBER: 0,
+            ValorUnitario: valorUnitario,
             PrecioUnitario: precioUnitario,
-            TotalImporte: totalImporte
+            ValorVenta: valorUnitario,
+            PrecioVenta: totalImporte,
+            ImporteTotal: totalImporte
         }
 
         if (detalleExiste == true) {
@@ -469,15 +596,21 @@ const pageMantenimientoFactura = {
     },
 
     CalcularImporteTotal: function () {
-        let cantidadString = $("#txt-detalle-cantidad").val().replace(/,/g, '')
-        let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '')
-
+        let cantidadString = $("#txt-detalle-cantidad").val().replace(/,/g, '');
+        let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '');
+        let descuentoString = $("#txt-detalle-descuento").val().replace(/,/g, '');
+        
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
         let precioUnitario = isNaN(Number(precioUnitarioString)) ? 0 : Number(precioUnitarioString);
-        let importeTotal = cantidad * precioUnitario;
+        let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
+        let importeTotal = cantidad * precioUnitario - descuento;
+        let igv = importeTotal * 0.18;
+
 
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#txt-detalle-precio-unitario").val(precioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#txt-detalle-descuento").val(descuento.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#txt-detalle-igv").val(igv.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#txt-detalle-importe-total").val(importeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
 
@@ -487,14 +620,20 @@ const pageMantenimientoFactura = {
             fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`)]
+            fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
+            fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto`),
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`),
+            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista]) => {
+            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista]) => {
+                tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
                 tipoOperacionVentaLista = TipoOperacionVentaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
+                unidadMedidaLista = UnidadMedidaLista || [];
+                tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
 
                 pageMantenimientoFactura.ResponseSerieListar(serieLista);
                 pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
@@ -519,9 +658,17 @@ const pageMantenimientoFactura = {
 
     EnviarFormulario: function () {
         let serieId = $("#cmb-serie").val();
+        let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
         let monedaId = $("#cmb-moneda").val();
+        let flagGratuito = $("#chk-gratuito").prop("checked");
         let clienteId = $("#hdn-cliente-id").val();
-        let personalId = $("#hdn-personal-id").val();
+        let totalIGV = detalleLista.map(x => x.IGV).reduce((a, b) => a + b, 0);
+        let totalISC = detalleLista.map(x => x.ISC).reduce((a, b) => a + b, 0);
+        let totalOtrosCargos = 0;
+        let totalOtrosTributos = 0;
+        let totalBaseImponible = detalleLista.map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalDescuentoDetalle = detalleLista.map(x => x.Descuento).reduce((a, b) => a + b, 0);
+        let importeTotal = detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0);
 
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
@@ -530,10 +677,23 @@ const pageMantenimientoFactura = {
             EmpresaId: empresaId,
             FacturaId: facturaId,
             SerieId: serieId,
-            ClienteId: clienteId,
-            PersonalId: personalId,
+            FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
-            TotalImporte: detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0),
+            FlagExportacion: false,
+            FlagGratuito: flagGratuito,
+            FlagEmisorItinerante: false,
+            FlagAnticipo: false,
+            FlagISC: false,
+            FlagOtrosCargos: false,
+            FlagOtrosTributos: false,
+            ClienteId: clienteId,
+            TotalIgv: totalIGV,
+            TotalIsc: totalISC,
+            TotalOtrosCargos: totalOtrosCargos,
+            TotalOtrosTributos: totalOtrosTributos,
+            TotalBaseImponible: totalBaseImponible,
+            TotaDescuentos: totalDescuentoDetalle,
+            ImporteTotal: detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0),
             Usuario: user.Nombre,
             ListaFacturaDetalle: detalleLista,
             ListaFacturaDetalleEliminados: detalleListaEliminados
@@ -572,7 +732,7 @@ const pageMantenimientoFactura = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Facturaes`
+                    location.href = `${urlRoot}Facturas`
                 }
             }
         });
@@ -591,25 +751,46 @@ const pageMantenimientoFactura = {
 
     ResponseSerieListar: function (data) {
         let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
-        $("#cmb-serie").select2({ data: dataSerie, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-serie").select2({ data: dataSerie, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseMonedaListar: function (data) {
         let dataMoneda = data.map(x => Object.assign(x, { id: x.MonedaId, text: x.Nombre }));
-        $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseTipoOperacionVentaListar: function (data) {
         let dataTipoOperacionVenta = data.map(x => Object.assign(x, { id: x.TipoOperacionVentaId, text: x.Nombre }));
-        $("#cmb-tipo-operacion-venta").select2({ data: dataTipoOperacionVenta, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-tipo-operacion-venta").select2({ data: dataTipoOperacionVenta, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseTipoDocumentoIdentidadListar: function (data) {
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
-        $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]' });
         $("#cmb-tipo-documento-identidad-cliente").val("").trigger("change");
-        $("#cmb-tipo-documento-identidad-personal").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[SELECCIONE...]' });
-        $("#cmb-tipo-documento-identidad-personal").val("").trigger("change");
+    },
+
+    ResponseTipoProductoListar: function (data) {
+        let dataTipoProducto = data.map((x, i) => `<label class="radio-inline"><input type="radio" ${(i == 0 ? "checked" : "")} id="rbt-detalle-tipo-producto-${x.TipoProductoId}" name="rbt-detalle-tipo-producto" value="${x.TipoProductoId}" /> ${x.Nombre}</label>`).join('');
+        $("#div-detalle-tipo-producto").html(dataTipoProducto);
+    },
+
+    ResponseUnidadMedidaListar: function (data, dropdownParent = null) {
+        let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
+
+        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        $("#cmb-detalle-unidad-medida").empty();
+        $("#cmb-detalle-unidad-medida").select2({ data: dataUnidadMedida, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
+        $("#cmb-detalle-unidad-medida").val("").trigger("change");
+    },
+
+    ResponseTipoAfectacionIgvListar: function (data, dropdownParent = null) {
+        let flagGratuito = $("#chk-gratuito").prop("checked");
+
+        let dataTipoAfectacionIgv = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        $("#cmb-detalle-tipo-afectacion-igv").empty();
+        $("#cmb-detalle-tipo-afectacion-igv").select2({ data: dataTipoAfectacionIgv, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
+        $("#cmb-detalle-tipo-afectacion-igv").val("").trigger("change");
     },
 
     ObtenerFiltroClienteNroDocumentoIdentidad: function () {

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bilecom.enums", "bilecom.en
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bilecom.sunat", "bilecom.sunat\bilecom.sunat.csproj", "{EF83C0F1-8397-48AC-B610-EB90F282369C}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "bilecom.bd", "bilecom.bd\bilecom.bd.sqlproj", "{998F02AC-0267-4124-91E1-1B6095B041AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,12 @@ Global
 		{EF83C0F1-8397-48AC-B610-EB90F282369C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF83C0F1-8397-48AC-B610-EB90F282369C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF83C0F1-8397-48AC-B610-EB90F282369C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998F02AC-0267-4124-91E1-1B6095B041AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998F02AC-0267-4124-91E1-1B6095B041AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998F02AC-0267-4124-91E1-1B6095B041AF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{998F02AC-0267-4124-91E1-1B6095B041AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998F02AC-0267-4124-91E1-1B6095B041AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998F02AC-0267-4124-91E1-1B6095B041AF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
