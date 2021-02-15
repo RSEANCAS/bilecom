@@ -1,4 +1,4 @@
-﻿@using bilecom.be;
+﻿@using bilecom.be
 @model List<OpcionBe>
 @helper RenderMenu(List<OpcionBe> lista, List<OpcionBe> listaGeneral)
 {
@@ -10,7 +10,7 @@
             bool tieneListaMenu = listaMenu.Count > 0;
             <li>
                 <a href="@Url.Content(data.Enlace)">
-                    <i class="demo-pli-tactic"></i>
+                    <i class="@data.Icono"></i>
                     <span class="menu-title">@data.Nombre</span>
                     @if (tieneListaMenu == true)
                     {
@@ -31,4 +31,4 @@
     List<OpcionBe> listaPadre = Model.Where(x => x.OpcionPadreId == null).ToList();
 }
 
-@RenderMenu(listaPadre, Model);
+@RenderMenu(listaPadre, Model)
