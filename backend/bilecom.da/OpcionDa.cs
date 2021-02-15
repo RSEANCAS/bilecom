@@ -34,6 +34,7 @@ namespace bilecom.da
                                 item.OpcionId = dr.GetData<int>("OpcionId");
                                 item.Nombre = dr.GetData<string>("Nombre");
                                 item.Enlace = dr.GetData<string>("Enlace");
+                                item.Icono = dr.GetData<string>("Icono");
                                 item.OpcionPadreId = dr.GetData<int?>("OpcionPadreId");
                                 item.FlagActivo = dr.GetData<bool>("FlagActivo");
                                 lista.Add(item);
