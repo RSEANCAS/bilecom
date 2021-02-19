@@ -84,7 +84,7 @@ namespace bilecom.app.Controllers.Api
                 return msg;
             }
 
-            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true, loadListaOpcionxPerfil: true);
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true);
 
             if (user == null)
             {

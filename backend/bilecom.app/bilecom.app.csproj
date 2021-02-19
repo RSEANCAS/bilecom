@@ -2868,7 +2868,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\AppSettings.cs" />
     <Compile Include="Helper\ComprobanteSunat.cs" />
     <Compile Include="Helper\Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -71,6 +71,7 @@ namespace bilecom.da
                             {
                                 TipoAfectacionIgvBe item = new TipoAfectacionIgvBe();
                                 item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                                item.TipoTributoId = dr.GetData<int>("TipoTributoId");
                                 item.Id = dr.GetData<string>("Id");
                                 item.Codigo = dr.GetData<string>("Codigo");
                                 item.Descripcion = dr.GetData<string>("Descripcion");

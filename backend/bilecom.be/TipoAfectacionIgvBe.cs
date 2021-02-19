@@ -9,6 +9,8 @@ namespace bilecom.be
     public class TipoAfectacionIgvBe
     {
         public int TipoAfectacionIgvId { get; set; }
+        public int TipoTributoId { get; set; }
+        public TipoTributoBe TipoTributo { get; set; }
         public string Id { get; set; }
         public string Codigo { get; set; }
         public string Descripcion { get; set; }

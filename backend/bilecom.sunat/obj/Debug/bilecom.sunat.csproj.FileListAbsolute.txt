@@ -10,3 +10,4 @@ D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.pdb
 D:\JARE\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll.config
 D:\JARE\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll
 D:\JARE\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.pdb
+D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csprojAssemblyReference.cache

@@ -15,7 +15,6 @@ const columnsDetalle = [
 ];
 
 const fechaActual = new Date();
-var chkGratuito;
 
 const pageMantenimientoFactura = {
     Init: function () {
@@ -338,7 +337,7 @@ const pageMantenimientoFactura = {
                     $("#cmb-detalle-descripcion").append(optionDefault).trigger("change");
                     $("#txt-detalle-cantidad").val(data.Cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     $("#txt-detalle-precio-unitario").val(data.PrecioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-                    $("#txt-detalle-importe-total").val(data.TotalImporte.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    $("#txt-detalle-importe-total").val(data.ImporteTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 }
                 pageMantenimientoFactura.ValidarDetalle();
             },
@@ -440,8 +439,6 @@ const pageMantenimientoFactura = {
 
     ListarDetalle: function () {
         detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
-        if (detalleLista.length > 0) chkGratuito.disable();
-        else chkGratuito.enable();
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
         $("#hdn-detalle").val(detalleLista.length);
         pageMantenimientoFactura.MostrarTotales();
@@ -527,11 +524,17 @@ const pageMantenimientoFactura = {
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let unidadMedidaId = $("#cmb-detalle-unidad-medida").val();
+        let unidadMedida = $("#cmb-detalle-unidad-medida").select2("data")[0];
+        unidadMedida = { UnidadMedidaId: unidadMedida.UnidadMedidaId, Id: unidadMedida.Id };
         let productoId = parseInt($("#cmb-detalle-descripcion").val());
         let codigo = $("#cmb-detalle-codigo option:selected").text();
         let codigoSunat = $("#cmb-detalle-codigo-sunat").val();
         let descripcion = $("#cmb-detalle-descripcion option:selected").text();
         let tipoAfectacionIgvId = $("#cmb-detalle-tipo-afectacion-igv").val();
+        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
+        tipoAfectacionIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Id: tipoAfectacionIgv.Id, FlagGratuito: tipoAfectacionIgv.FlagGratuito, TipoTributo: tipoAfectacionIgv.TipoTributo };
+        let tipoTributoIgvId = tipoAfectacionIgv.TipoTributoId;
+        let tipoTributoIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Codigo: tipoAfectacionIgv.TipoTributo.Codigo, Nombre: tipoAfectacionIgv.TipoTributo.Nombre, CodigoNombre: tipoAfectacionIgv.TipoTributo.CodigoNombre };
         let descuento = Number($("#txt-detalle-descuento").val().replace(/,/g, ""));
         let isc = Number($("#txt-detalle-isc").val().replace(/,/g, ""));
         let porcentajeIgv = Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
@@ -546,12 +549,16 @@ const pageMantenimientoFactura = {
             TipoProductoId: tipoProductoId,
             Cantidad: cantidad,
             UnidadMedidaId: unidadMedidaId,
+            UnidadMedida: unidadMedida,
             ProductoId: productoId,
             CodigoSunat: codigoSunat,
             Codigo: codigo,
             Descripcion: descripcion,
             FlagAplicaICPBER: false,
             TipoAfectacionIgvId: tipoAfectacionIgvId,
+            TipoAfectacionIgv: tipoAfectacionIgv,
+            TipoTributoIdIGV: tipoTributoIgvId,
+            TipoTributoIGV: tipoTributoIgv,
             Descuento: descuento,
             ISC: isc,
             PorcentajeIGV: porcentajeIgv,
@@ -606,13 +613,13 @@ const pageMantenimientoFactura = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}`)]
+            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
             .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista]) => {
@@ -653,8 +660,16 @@ const pageMantenimientoFactura = {
     EnviarFormulario: function () {
         let serieId = $("#cmb-serie").val();
         let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
+        let moneda = $("#cmb-moneda").select2("data")[0];
+        moneda = { MonedaId: moneda.MonedaId, Nombre: moneda.Nombre, Simbolo: moneda.Simbolo, Codigo: moneda.Codigo };
         let monedaId = $("#cmb-moneda").val();
         let clienteId = $("#hdn-cliente-id").val();
+        let tipoDocumentoIdentidadCliente = $("#cmb-tipo-documento-identidad-cliente").select2("data")[0];
+        let cliente = {
+            TipoDocumentoIdentidad: { TipoDocumentoIdentidadId: tipoDocumentoIdentidadCliente.TipoDocumentoIdentidadId, Descripcion: tipoDocumentoIdentidadCliente.Descripcion, Codigo: tipoDocumentoIdentidadCliente.Codigo },
+            NroDocumentoIdentidad: $("#txt-numero-documento-identidad-cliente").val(),
+            RazonSocial: $("#txt-nombres-completos-cliente").val()
+        };
         let totalGravado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalInafecto = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
@@ -678,6 +693,7 @@ const pageMantenimientoFactura = {
             SerieId: serieId,
             FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
+            Moneda: moneda,
             FlagExportacion: false,
             FlagGratuito: false,
             FlagEmisorItinerante: false,
@@ -686,6 +702,7 @@ const pageMantenimientoFactura = {
             FlagOtrosCargos: false,
             FlagOtrosTributos: false,
             ClienteId: clienteId,
+            Cliente: cliente,
             TotalGravado: totalGravado,
             TotalExonerado: totalExonerado,
             TotalInafecto: totalInafecto,
@@ -698,7 +715,7 @@ const pageMantenimientoFactura = {
             TotalOtrosTributos: totalOtrosTributos,
             TotalBaseImponible: totalBaseImponible,
             TotaDescuentos: totalDescuentoDetalle,
-            ImporteTotal: detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0),
+            ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
             Usuario: user.Nombre,
             ListaFacturaDetalle: detalleLista,
             ListaFacturaDetalleEliminados: detalleListaEliminados

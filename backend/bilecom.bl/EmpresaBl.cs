@@ -10,9 +10,13 @@ namespace bilecom.bl
 {
     public class EmpresaBl : Conexion
     {
+        DistritoDa distritoDa = new DistritoDa();
+        ProvinciaDa provinciaDa = new ProvinciaDa();
+        DepartamentoDa departamentoDa = new DepartamentoDa();
+        PaisDa paisDa = new PaisDa();
         EmpresaDa empresaDa = new EmpresaDa();
 
-        public EmpresaBe ObtenerEmpresa(int empresaId)
+        public EmpresaBe ObtenerEmpresa(int empresaId, bool withUbigeo = false)
         {
             EmpresaBe item = null;
 
@@ -20,6 +24,16 @@ namespace bilecom.bl
             {
                 cn.Open();
                 item = empresaDa.Obtener(empresaId, cn);
+                if(item != null)
+                {
+                    if (withUbigeo)
+                    {
+                        item.Distrito = distritoDa.Obtener(item.DistritoId, cn);
+                        item.Distrito.Provincia = provinciaDa.Obtener(item.Distrito.ProvinciaId, cn);
+                        item.Distrito.Provincia.Departamento = departamentoDa.Obtener(item.Distrito.Provincia.DepartamentoId, cn);
+                        item.Distrito.Provincia.Departamento.Pais = paisDa.Obtener(item.Distrito.Provincia.Departamento.PaisId, cn);
+                    }
+                }
                 cn.Close();
             }
             catch (Exception ex) { throw ex; }

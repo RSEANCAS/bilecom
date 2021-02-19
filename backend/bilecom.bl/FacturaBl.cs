@@ -30,10 +30,11 @@ namespace bilecom.bl
             return lista;
         }
 
-        public bool GuardarFactura(FacturaBe registro)
+        public bool GuardarFactura(FacturaBe registro, out int? facturaId, out int? nroComprobante, out DateTime? fechaHoraEmision)
         {
-            int? facturaId = null, nroComprobante = null;
-            DateTime? fechaHoraEmision = null;
+            facturaId = null;
+            nroComprobante = null;
+            fechaHoraEmision = null;
             bool seGuardo = false;
             {
                 try

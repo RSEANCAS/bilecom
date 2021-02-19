@@ -4,6 +4,7 @@
     },
     InitEvents: function () {
         $('#btn-cambiar-perfil').click(pageLayout.BtnCambiarPerfilClick);
+        $('#btn-cerrar-sesion').click(pageLayout.BtnCerrarSesionClick);
     },
     CargarComboUsuarioPerfil: function () {
 
@@ -26,6 +27,11 @@
                 }
             }
         });
+    },
+    BtnCerrarSesionClick(e) {
+        e.preventDefault();
+        document.cookie = "ss=;expires=" + (new Date()).toISOString();
+        location.reload();
     },
     MostrarPerfilActual: function () {
         let perfilActual = common.ObtenerPerfilActual();

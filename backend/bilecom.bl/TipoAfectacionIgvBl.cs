@@ -11,13 +11,16 @@ namespace bilecom.bl
 {
     public class TipoAfectacionIgvBl:Conexion
     {
+        TipoAfectacionIgvDa tipoAfectacionIgvDa = new TipoAfectacionIgvDa();
+        TipoTributoDa tipoTributoDa = new TipoTributoDa();
+
         public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgv()
         {
             List<TipoAfectacionIgvBe> respuesta = null;
             try
             {
                 cn.Open();
-                respuesta = new TipoAfectacionIgvDa().Listar(cn);
+                respuesta = tipoAfectacionIgvDa.Listar(cn);
                 cn.Close();
             }
             catch(Exception ex)
@@ -31,13 +34,20 @@ namespace bilecom.bl
             return respuesta;
         }
 
-        public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgvPorEmpresa(int empresaId)
+        public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgvPorEmpresa(int empresaId, bool withTipoTributo = false)
         {
             List<TipoAfectacionIgvBe> respuesta = null;
             try
             {
                 cn.Open();
                 respuesta = new TipoAfectacionIgvDa().ListarPorEmpresa(empresaId, cn);
+                if(respuesta != null)
+                {
+                    foreach(var item in respuesta)
+                    {
+                        item.TipoTributo = tipoTributoDa.Obtener(item.TipoTributoId, cn);
+                    }
+                }
                 cn.Close();
             }
             catch (Exception ex)
