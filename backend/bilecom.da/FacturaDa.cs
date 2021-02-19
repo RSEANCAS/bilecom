@@ -87,6 +87,12 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@flagISC", registro.FlagISC.GetNullable());
                     cmd.Parameters.AddWithValue("@flagOtrosCargos", registro.FlagOtrosCargos.GetNullable());
                     cmd.Parameters.AddWithValue("@flagOtrosTributos", registro.FlagOtrosTributos.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalGravado", registro.TotalGravado.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalExonerado", registro.TotalExonerado.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalInafecto", registro.TotalInafecto.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalExportacion", registro.TotalExportacion.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalGratuito", registro.TotalGratuito.GetNullable());
+                    cmd.Parameters.AddWithValue("@totalVentaArrozPilado", registro.TotalVentaArrozPilado.GetNullable());
                     cmd.Parameters.AddWithValue("@totalIgv", registro.TotalIgv.GetNullable());
                     cmd.Parameters.AddWithValue("@totalIsc", registro.TotalIsc.GetNullable());
                     cmd.Parameters.AddWithValue("@totalOtrosTributos", registro.TotalOtrosTributos.GetNullable());

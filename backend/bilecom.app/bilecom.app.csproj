@@ -2847,6 +2847,7 @@
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\Filters\IsLogoutFilter.cs" />
@@ -2868,6 +2869,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\AppSettings.cs" />
+    <Compile Include="Helper\ComprobanteSunat.cs" />
     <Compile Include="Helper\Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -3173,6 +3175,7 @@
     <Content Include="Views\Factura\Mantenimiento.cshtml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
+    <Content Include="Views\Configuracion\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3197,6 +3200,10 @@
     <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
       <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
       <Name>bilecom.enums</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.sunat\bilecom.sunat.csproj">
+      <Project>{ef83c0f1-8397-48ac-b610-eb90f282369c}</Project>
+      <Name>bilecom.sunat</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
       <Project>{8929A9EE-5864-4CFA-B7AE-3D6850945AB1}</Project>

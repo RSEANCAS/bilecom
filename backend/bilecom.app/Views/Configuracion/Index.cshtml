@@ -1,0 +1,71 @@
+﻿@using bilecom.enums
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/switchery/switchery.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/ionicons/css/ionicons.min.css")" rel="stylesheet">
+}
+
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h2 class="page-header text-overflow">@ViewBag.Titulo</h2>
+        </div>
+    </div>
+    <div id="page-content">
+        <div class="tab-base">
+
+            <!--Nav Tabs-->
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#demo-lft-tab-1">Home <span class="badge badge-purple">27</span></a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#demo-lft-tab-2">Profile</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#demo-lft-tab-3">Setting</a>
+                </li>
+            </ul>
+
+            <!--Tabs Content-->
+            <div class="tab-content">
+                <div id="demo-lft-tab-1" class="tab-pane fade active in">
+                    <p class="text-main text-semibold">First Tab Content</p>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                </div>
+                <div id="demo-lft-tab-2" class="tab-pane fade">
+                    <p class="text-main text-semibold">Second Tab Content</p>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                </div>
+                <div id="demo-lft-tab-3" class="tab-pane fade">
+                    <p class="text-main text-semibold">Third Tab Content</p>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/switchery/switchery.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientofactura.js")"></script>
+    <script>
+        const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
+        const facturaId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
+        $(document).ready(function () {
+            pageMantenimientoFactura.Init();
+        });
+    </script>
+}

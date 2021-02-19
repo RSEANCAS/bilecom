@@ -16,9 +16,16 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("listar-tipoproducto")]
-        public List<TipoProductoBe> Listar()
+        public List<TipoProductoBe> ListarTipoProducto()
         {
-            return tipoProductoBl.Listar();
+            return tipoProductoBl.ListarTipoProducto();
+        }
+
+        [HttpGet]
+        [Route("listar-tipoproducto-por-empresa")]
+        public List<TipoProductoBe> ListarTipoProductoPorEmpresa(int empresaId)
+        {
+            return tipoProductoBl.ListarTipoProductoPorEmpresa(empresaId);
         }
     }
 }

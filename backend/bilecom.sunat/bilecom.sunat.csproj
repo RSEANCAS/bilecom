@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="comprobante\UBL-CreditNote-2_1.cs" />
+    <Compile Include="comprobante\UBL-DebitNote-2_1.cs" />
+    <Compile Include="comprobante\UBL-Invoice-2_1.cs" />
     <Compile Include="Connected Services\bilecom.sunat.ws.beta.guia\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -74,6 +77,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Emitir.cs" />
+    <Compile Include="Generar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

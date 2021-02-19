@@ -16,9 +16,16 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("listar-tipoafectacionigv")]
-        public List<TipoAfectacionIgvBe> Listar()
+        public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgv()
         {
-            return tipoAfectacionIgvBl.Listar();
+            return tipoAfectacionIgvBl.ListarTipoAfectacionIgv();
+        }
+
+        [HttpGet]
+        [Route("listar-tipoafectacionigv-por-empresa")]
+        public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgvPorEmpresa(int empresaId)
+        {
+            return tipoAfectacionIgvBl.ListarTipoAfectacionIgvPorEmpresa(empresaId);
         }
 
     }

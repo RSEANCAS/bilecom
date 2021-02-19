@@ -11,5 +11,6 @@ namespace bilecom.be
         public int CodigoTipoDocumentoIdentidad { get; set; }
         public int TipoDocumentoIdentidadId { get; set; }
         public string Descripcion { get; set; }
+        public string Codigo { get; set; }
     }
 }

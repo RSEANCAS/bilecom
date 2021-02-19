@@ -1,4 +1,4 @@
-﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista, tipoAfectacionIgvLista, detalleLista = [], detalleListaEliminados = [];
+﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], detalleLista = [], detalleListaEliminados = [];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -20,10 +20,11 @@ var chkGratuito;
 const pageMantenimientoFactura = {
     Init: function () {
         common.ConfiguracionDataTable();
-        this.CargarCombo(this.InitEvents);
-        this.Validar();
-        this.ListarDetalle();
-        //this.InitEvents();
+        this.CargarCombo(() => {
+            this.InitEvents();
+            this.Validar();
+            this.ListarDetalle();
+        });
     },
 
     InitEvents: function () {
@@ -32,22 +33,7 @@ const pageMantenimientoFactura = {
 
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
 
-        $("#chk-gratuito").change(pageMantenimientoFactura.ChkGratuitoChange);
-
-        chkGratuito = new Switchery(document.getElementById('chk-gratuito'));
-
         pageMantenimientoFactura.ObtenerDatos();
-    },
-
-    ChkGratuitoChange: function () {
-        let checked = $("#chk-gratuito").prop("checked");
-        //if (checked) {
-        //    chkExportacion.disable();
-        //    chkAnticipo.disable();
-        //} else {
-        //    chkExportacion.enable();
-        //    chkAnticipo.enable();
-        //}
     },
 
     BtnBuscarClienteClick: function () {
@@ -338,6 +324,7 @@ const pageMantenimientoFactura = {
 
                 pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
                 //$("input[name='rbt-detalle-tipo-producto']").trigger("change");
+
                 pageMantenimientoFactura.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
 
                 let registroExiste = id != null;
@@ -377,7 +364,7 @@ const pageMantenimientoFactura = {
             },
             callback: function (result) {
                 if (result == true) {
-                    debugger;
+                    //debugger;
                     let index = detalleLista.findIndex(x => x.FacturaDetalleId == id);
                     if (detalleLista[index].FacturaDetalleId > 0) detalleListaEliminados.push(detalleLista[index].FacturaDetalleId);
                     detalleLista.splice(index, 1);
@@ -453,13 +440,15 @@ const pageMantenimientoFactura = {
 
     ListarDetalle: function () {
         detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
+        if (detalleLista.length > 0) chkGratuito.disable();
+        else chkGratuito.enable();
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
         $("#hdn-detalle").val(detalleLista.length);
         pageMantenimientoFactura.MostrarTotales();
     },
 
     MostrarTotales: function () {
-        let totalImporte = detalleLista.map(x => x.TotalImporte).reduce((a, b) => a + b, 0);
+        let totalImporte = detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0);
         $("#lbl-total-importe").text(totalImporte.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
 
@@ -619,11 +608,11 @@ const pageMantenimientoFactura = {
         let promises = [
             fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
+            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
-            fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto`),
-            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`),
-            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`)]
+            fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
+            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
             .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista]) => {
@@ -656,12 +645,22 @@ const pageMantenimientoFactura = {
         }
     },
 
+    ObtenerTipoAfectacionIgv: function (tipoAfectacionIgvId) {
+        let obj = tipoAfectacionIgvLista.find(x => x.TipoAfectacionIgvId == tipoAfectacionIgvId);
+        return obj;
+    },
+
     EnviarFormulario: function () {
         let serieId = $("#cmb-serie").val();
         let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
         let monedaId = $("#cmb-moneda").val();
-        let flagGratuito = $("#chk-gratuito").prop("checked");
         let clienteId = $("#hdn-cliente-id").val();
+        let totalGravado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalInafecto = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExportacion = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGratuito = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalIGV = detalleLista.map(x => x.IGV).reduce((a, b) => a + b, 0);
         let totalISC = detalleLista.map(x => x.ISC).reduce((a, b) => a + b, 0);
         let totalOtrosCargos = 0;
@@ -680,13 +679,19 @@ const pageMantenimientoFactura = {
             FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
             FlagExportacion: false,
-            FlagGratuito: flagGratuito,
+            FlagGratuito: false,
             FlagEmisorItinerante: false,
             FlagAnticipo: false,
             FlagISC: false,
             FlagOtrosCargos: false,
             FlagOtrosTributos: false,
             ClienteId: clienteId,
+            TotalGravado: totalGravado,
+            TotalExonerado: totalExonerado,
+            TotalInafecto: totalInafecto,
+            TotalExportacion: totalExportacion,
+            TotalGratuito: totalGratuito,
+            TotalVentaArrozPilado: totalVentaArrozPilado,
             TotalIgv: totalIGV,
             TotalIsc: totalISC,
             TotalOtrosCargos: totalOtrosCargos,
@@ -785,8 +790,6 @@ const pageMantenimientoFactura = {
     },
 
     ResponseTipoAfectacionIgvListar: function (data, dropdownParent = null) {
-        let flagGratuito = $("#chk-gratuito").prop("checked");
-
         let dataTipoAfectacionIgv = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
         $("#cmb-detalle-tipo-afectacion-igv").empty();
         $("#cmb-detalle-tipo-afectacion-igv").select2({ data: dataTipoAfectacionIgv, width: '100%', placeholder: '[Seleccione...]', dropdownParent });

@@ -13,13 +13,33 @@ namespace bilecom.bl
     {
         TipoProductoDa tipoProductoDa = new TipoProductoDa();
 
-        public List<TipoProductoBe> Listar()
+        public List<TipoProductoBe> ListarTipoProducto()
         {
             List<TipoProductoBe> respuesta = null;
             try
             {
                 cn.Open();
                 respuesta = tipoProductoDa.Listar(cn);
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            finally
+            {
+                if (cn.State == ConnectionState.Open) cn.Close();
+            }
+            return respuesta;
+        }
+
+        public List<TipoProductoBe> ListarTipoProductoPorEmpresa(int empresaId)
+        {
+            List<TipoProductoBe> respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = tipoProductoDa.ListarPorEmpresa(empresaId, cn);
                 cn.Close();
             }
             catch (Exception ex)

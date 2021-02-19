@@ -11,7 +11,7 @@
 // 
 // Este código fuente fue generado automáticamente por xsd, Versión=4.8.3928.0.
 // 
-namespace bilecom.sunat.comprobante {
+namespace bilecom.sunat.comprobante.invoice {
     using System.Xml.Serialization;
     
     
