@@ -28,7 +28,7 @@ namespace bilecom.app.Helper
 
             switch (version)
             {
-                case VersionUBL._2_1: invoiceType = ObtenerComprobante_2_1(item, version);
+                case VersionUBL._2_1: invoiceType = ObtenerComprobante_2_1(item, null,version);
                     break;
             }
 

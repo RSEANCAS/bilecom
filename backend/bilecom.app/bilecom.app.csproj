@@ -2839,6 +2839,7 @@
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
+    <Compile Include="Controllers\Api\TipoOperacionAlmacenController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
     <Compile Include="Controllers\Api\TipoProductoController.cs" />

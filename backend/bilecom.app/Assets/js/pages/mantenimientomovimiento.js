@@ -1,4 +1,4 @@
-﻿var serieLista = [], sedealmacenLista=[],monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [],tipoMovimientoLista=[];
+﻿var serieLista = [], sedealmacenLista=[],monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [],tipoMovimientoLista=[],tipoOperacionAlmacen=[];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -486,6 +486,9 @@ const pageMantenimientoMovimiento = {
             animateOut: 'zoomOutUp'
         });
     },
+    CmbTipoOperacionAlmacenChange: function () {
+        pageMantenimientoMovimiento.CargaTipoOperacionAlmacen();
+    },
 
     BtnEliminarDetalleClick: function (id) {
         bootbox.confirm({
@@ -580,7 +583,43 @@ const pageMantenimientoMovimiento = {
                         validators: {
                             greaterThan: { value: 0, inclusive: false, message: "Debe ingresar mínimmo un detalle." }
                         }
+                    },
+                    "txt-referencia-serie": {
+                        validators: {
+                            stringLength: {
+                                min: 4,
+                                max: 4,
+                                message:"La serie consta de 4 dígitos."
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9_]+$/,
+                                message: "Solo se acepta caracteres alfanumericos."
+                            }
+                        }
+                    },
+                    "txt-referencia-numero": {
+                        validators: {
+                            regexp: {
+                                regexp: /^[0-9_]+$/,
+                                message: "Solo se acepta números."
+                            },
+                            callback: {
+                                message: "Debe de ingresar numero de referencia.",
+                                callback: function (value, validator, $field) {
+                                    let l = $("#txt-referencia-serie").length;
+                                    if (l > 0) {
+                                        if ($("#txt-referencia-numero").val() == "") {
+                                            return false;
+                                        }
+                                        else { return true; }
+                                    }
+                                    else { return true; }
+                                    //return pageMantenimientoMovimiento.CondicionCantidad();
+                                }
+                            }
+                        }
                     }
+
                 }
             })
             .on('success.form.bv', function (e) {
@@ -711,6 +750,18 @@ const pageMantenimientoMovimiento = {
             })
     },
 
+    CargaTipoOperacionAlmacen: async function () {
+        let promises = [
+            fetch(`${urlRoot}api/tipooperacionalmacen/listar-tipooperacionalmacen`)
+        ]
+        Promise.all(promises)
+            .then(r => Promise.all(r.map(common.ResponseToJson)))
+            .then(([TipoOperacionAlmacenLista]) => {
+                tipoOperacionAlmacen = TipoOperacionAlmacenLista|| [];
+                pageMantenimientoMovimiento.ResponseTipoOperacionAlmacenListar(tipoOperacionAlmacen);
+            })
+    },
+
     ObtenerDatos: function () {
         if (movimientoId != null) {
 
@@ -734,6 +785,10 @@ const pageMantenimientoMovimiento = {
         let proveedorId = $("#hdn-proveedor-id").val();
         let personalId = $("#hdn-personal-id").val();
         let sedeAlmacenId = $("#cmb-almacen").val();
+        let tipoOperacionAlmacenId = $("#cmb-tipo-operacion-almacen").val();
+        let referenciaTipo = $("#cmb-referencia-tipo").val();
+        let referenciaSerie = $("#txt-referencia-serie").val();
+        let referenciaNumero = $("#txt-referencia-numero").val();
 
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
@@ -742,7 +797,11 @@ const pageMantenimientoMovimiento = {
             EmpresaId: empresaId,
             SedeAlmacenId : sedeAlmacenId,
             MovimientoId: movimientoId,
-            TipoMovimientoId : tipoMovimientoId,
+            TipoMovimientoId: tipoMovimientoId,
+            TipoOperacionAlmacenId: tipoOperacionAlmacenId,
+            ReferenciaTipo: referenciaTipo,
+            ReferenciaSerie: referenciaSerie,
+            ReferenciaNumero: referenciaNumero,
             SerieId: serieId,
             ClienteId: clienteId,
             ProveedorId: proveedorId,
@@ -843,7 +902,15 @@ const pageMantenimientoMovimiento = {
         $("#cmb-tipo-documento-identidad-proveedor").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[SELECCIONE...]' });
         $("#cmb-tipo-documento-identidad-proveedor").val("").trigger("change");
     },
+    ResponseTipoOperacionAlmacenListar: function (data) {
+        $("#cmb-tipo-operacion-almacen").select2();
 
+        let tipoMovimientoId = $("#cmb-tipo-movimiento").val();
+        data = data.filter(x => x.TipoMovimientoId == tipoMovimientoId);
+        let dataTipoOperacionAlmacen = [];
+        dataTipoOperacionAlmacen = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        $("#cmb-tipo-operacion-almacen").select2({ data: dataTipoOperacionAlmacen, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
     ObtenerFiltroClienteNroDocumentoIdentidad: function () {
         return $("#txt-filtro-cliente-nro-documento-identidad").val();
     },

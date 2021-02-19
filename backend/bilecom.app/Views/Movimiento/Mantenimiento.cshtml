@@ -42,7 +42,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Movimiento</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento" id="cmb-tipo-movimiento" data-bv-field="cmb-tipo-movimiento" tabindex="-1" aria-hidden="false"></select>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento" id="cmb-tipo-movimiento" data-bv-field="cmb-tipo-movimiento" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoMovimiento.CmbTipoOperacionAlmacenChange()"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -51,6 +51,13 @@
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-almacen" id="cmb-almacen" data-bv-field="cmb-almacen" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Operación Sunat</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-operacion-almacen" id="cmb-tipo-operacion-almacen" data-bv-field="cmb-tipo-operacion-almacen" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Serie</span>
@@ -72,17 +79,23 @@
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-moneda" id="cmb-moneda" data-bv-field="cmb-moneda" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
+
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Tipo Comprobante Ref.</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-comprobante-ref" id="cmb-tipo-comprobante-ref" data-bv-field="cmb-tipo-documento-ref" tabindex="-1" aria-hidden="false"></select>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-referencia-tipo" id="cmb-referencia-tipo" data-bv-field="cmb-referencia-tipo" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Serie Ref.</span>
+                                        <input class="form-control" placeholder="Serie Ref." name="txt-referencia-serie" id="txt-referencia-serie" data-bv-field="txt-referencia-serie" maxlength="4" >
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Comprobante Ref.</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-nro-comprobante-ref" id="cmb-nro-comprobante-ref" data-bv-field="cmb-nro-comprobante-ref" tabindex="-1" aria-hidden="false"></select>
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Número Ref.</span>
+                                        <input class="form-control" placeholder="N° Ref." name="txt-referencia-numero" id="txt-referencia-numero" data-bv-field="txt-referencia-numero" >
                                     </div>
                                 </div>
                             </div>
