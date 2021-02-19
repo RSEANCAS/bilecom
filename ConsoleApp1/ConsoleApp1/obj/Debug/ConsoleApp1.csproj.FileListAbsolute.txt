@@ -1,0 +1,10 @@
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.exe.config
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.exe
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\bin\Debug\ConsoleApp1.pdb
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\bin\Debug\Select.HtmlToPdf.dll
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\bin\Debug\Select.HtmlToPdf.xml
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\bin\Debug\Select.Html.dep
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csprojAssemblyReference.cache
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csproj.CopyComplete
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.exe
+D:\jare\bilecom\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.pdb
