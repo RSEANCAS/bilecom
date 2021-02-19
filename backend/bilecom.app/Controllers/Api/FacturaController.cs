@@ -31,5 +31,14 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+
+        [HttpPost]
+        [Route("guardar-factura")]
+        public bool GuardarFactura(FacturaBe registro)
+        {
+            //Cada parámetro que tiene un "out int?" tiene que que inicializarse con nulo, porque el "int?" acepta valores nulos
+            bool respuesta = facturaBl.GuardarFactura(registro);
+            return respuesta;
+        }
     }
 }

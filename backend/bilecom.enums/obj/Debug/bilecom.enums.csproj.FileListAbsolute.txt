@@ -7,3 +7,4 @@ C:\Jare\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.dll
 C:\Jare\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.pdb
 C:\Jare\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.dll
 C:\Jare\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.pdb
+D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csproj.CoreCompileInputs.cache

@@ -54,6 +54,7 @@
     <Compile Include="DepartamentoBe.cs" />
     <Compile Include="DistritoBe.cs" />
     <Compile Include="EmpresaBe.cs" />
+    <Compile Include="EmpresaTipoAfectacionIgvBe.cs" />
     <Compile Include="FacturaBe.cs" />
     <Compile Include="FacturaDetalleBe.cs" />
     <Compile Include="MonedaBe.cs" />
@@ -87,20 +88,7 @@
     <Compile Include="UsuarioBe.cs" />
     <Compile Include="UsuarioPerfilBe.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\bilecom.be.dll" />
-    <Content Include="bin\Debug\bilecom.be.pdb" />
-    <Content Include="obj\Debug\bilecom.be.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\bilecom.be.dll" />
-    <Content Include="obj\Debug\bilecom.be.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="obj\Debug\bilecom.be.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\Debug\TempPE\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
       <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>

@@ -26,6 +26,12 @@ namespace bilecom.be
         public bool FlagISC { get; set; }
         public bool FlagOtrosCargos { get; set; }
         public bool FlagOtrosTributos { get; set; }
+        public decimal TotalGravado { get; set; }
+        public decimal TotalExonerado { get; set; }
+        public decimal TotalInafecto { get; set; }
+        public decimal TotalExportacion { get; set; }
+        public decimal TotalGratuito { get; set; }
+        public decimal TotalVentaArrozPilado { get; set; }
         public decimal TotalIgv { get; set; }
         public decimal TotalIsc { get; set; }
         public decimal TotalOtrosCargos { get; set; }
@@ -34,5 +40,8 @@ namespace bilecom.be
         public decimal TotalDescuentos { get; set; }
         public decimal ImporteTotal { get; set; }
         public bool FlagAnulado { get; set; }
+
+        public int[] ListaFacturaDetalleEliminados { get; set; }
+        public List<FacturaDetalleBe> ListaFacturaDetalle { get; set; }
     }
 }

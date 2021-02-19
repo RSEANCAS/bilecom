@@ -16,9 +16,16 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("listar-unidadmedida")]
-        public List<UnidadMedidaBe> Listar()
+        public List<UnidadMedidaBe> ListarUnidaMedida()
         {
-            return unidadMedidaBl.Listar();
+            return unidadMedidaBl.ListarUnidaMedida();
+        }
+
+        [HttpGet]
+        [Route("listar-unidadmedida-por-empresa")]
+        public List<UnidadMedidaBe> ListarUnidaMedidaPorEmpresa(int empresaId)
+        {
+            return unidadMedidaBl.ListarUnidaMedidaPorEmpresa(empresaId);
         }
     }
 }

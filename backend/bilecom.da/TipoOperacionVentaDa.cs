@@ -12,13 +12,14 @@ namespace bilecom.da
 {
     public class TipoOperacionVentaDa
     {
-        public List<TipoOperacionVentaBe> ListarPorEmpresa(int empresaId, SqlConnection cn)
+        public List<TipoOperacionVentaBe> ListarPorEmpresaTipoComprobante(int empresaId, int tipoComprobanteId, SqlConnection cn)
         {
             List<TipoOperacionVentaBe> lista = null;
-            using (SqlCommand cmd = new SqlCommand("dbo.usp_tipooperacionventa_listar_x_empresa", cn))
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_tipooperacionventa_listar_x_empresa_tipocomprobante", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@tipoComprobanteId", tipoComprobanteId.GetNullable());
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)

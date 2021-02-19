@@ -11,7 +11,7 @@ namespace bilecom.bl
 {
     public class TipoAfectacionIgvBl:Conexion
     {
-        public List<TipoAfectacionIgvBe> Listar()
+        public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgv()
         {
             List<TipoAfectacionIgvBe> respuesta = null;
             try
@@ -21,6 +21,26 @@ namespace bilecom.bl
                 cn.Close();
             }
             catch(Exception ex)
+            {
+                respuesta = null;
+            }
+            finally
+            {
+                if (cn.State == ConnectionState.Open) cn.Close();
+            }
+            return respuesta;
+        }
+
+        public List<TipoAfectacionIgvBe> ListarTipoAfectacionIgvPorEmpresa(int empresaId)
+        {
+            List<TipoAfectacionIgvBe> respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = new TipoAfectacionIgvDa().ListarPorEmpresa(empresaId, cn);
+                cn.Close();
+            }
+            catch (Exception ex)
             {
                 respuesta = null;
             }

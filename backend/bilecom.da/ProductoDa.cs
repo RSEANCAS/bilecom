@@ -54,15 +54,58 @@ namespace bilecom.da
             }
             return lista;
         }
-        
 
-        public List<ProductoBe> BuscarPorNombre(string nombre, int empresaId, SqlConnection cn, int sedeAlmacenId)
+        public List<ProductoBe> BuscarPorCodigo(int? tipoProductoId, string codigo, int empresaId, SqlConnection cn, int sedeAlmacenId = 0)
+        {
+            List<ProductoBe> lista = null;
+
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_producto_buscar_x_codigo", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@tipoProductoId", tipoProductoId.GetNullable());
+                cmd.Parameters.AddWithValue("@codigo", codigo.GetNullable());
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@SedeAlmacenId", sedeAlmacenId.GetNullable());
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        lista = new List<ProductoBe>();
+                        while (dr.Read())
+                        {
+                            ProductoBe item = new ProductoBe();
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.ProductoId = dr.GetData<int>("ProductoId");
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.CategoriaId = dr.GetData<int>("CategoriaId");
+                            item.TipoProductoId = dr.GetData<int>("TipoProductoId");
+                            item.Codigo = dr.GetData<string>("Codigo");
+                            item.CodigoSunat = dr.GetData<string>("CodigoSunat");
+                            item.Nombre = dr.GetData<string>("Nombre");
+                            item.StockActual = dr.GetData<decimal>("Stock");
+                            item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                            item.UnidadMedidaId = dr.GetData<string>("UnidadMedidaId");
+                            item.TipoCalculo = dr.GetData<string>("TipoCalculo");
+                            //item.categoriaProducto = new CategoriaProductoBe();
+                            //item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
+                            //item.Stock = dr.GetData<int>("Stock");
+                            item.StockMinimo = dr.GetData<decimal>("StockMinimo");
+                            lista.Add(item);
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public List<ProductoBe> BuscarPorNombre(int? tipoProductoId, string nombre, int empresaId, SqlConnection cn, int sedeAlmacenId = 0)
         {
             List<ProductoBe> lista = null;
 
             using (SqlCommand cmd = new SqlCommand("dbo.usp_producto_buscar_x_nombre", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@tipoProductoId", tipoProductoId.GetNullable());
                 cmd.Parameters.AddWithValue("@nombre", nombre.GetNullable());
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
                 cmd.Parameters.AddWithValue("@SedeAlmacenId", sedeAlmacenId.GetNullable());
@@ -78,10 +121,14 @@ namespace bilecom.da
                             item.ProductoId = dr.GetData<int>("ProductoId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.CategoriaId = dr.GetData<int>("CategoriaId");
+                            item.TipoProductoId = dr.GetData<int>("TipoProductoId");
+                            item.Codigo = dr.GetData<string>("Codigo");
+                            item.CodigoSunat = dr.GetData<string>("CodigoSunat");
                             item.Nombre = dr.GetData<string>("Nombre");
                             item.StockActual = dr.GetData<decimal>("Stock");
                             item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
                             item.UnidadMedidaId = dr.GetData<string>("UnidadMedidaId");
+                            item.TipoCalculo = dr.GetData<string>("TipoCalculo");
                             //item.categoriaProducto = new CategoriaProductoBe();
                             //item.categoriaProducto.Nombre = dr.GetData<string>("NombreCategoria");
                             //item.Stock = dr.GetData<int>("Stock");

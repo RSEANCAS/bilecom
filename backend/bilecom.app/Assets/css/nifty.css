@@ -7678,9 +7678,9 @@ blockquote {
 .panel-body {
   padding: 15px 20px 15px;
 }
-.panel-body .row:not(.hidden):last-of-type .form-group {
+/*.panel-body .row:not(.hidden):last-of-type .form-group {
     margin-bottom: 0px
-}
+}*/
 .panel-trans {
   border-color: transparent;
   box-shadow: none;

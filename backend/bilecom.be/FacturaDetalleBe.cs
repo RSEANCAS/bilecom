@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class FacturaDetalleBe
+    public class FacturaDetalleBe : Base
     {
         public int EmpresaId { get; set; }
         public int FacturaId { get; set; }
@@ -18,6 +18,8 @@ namespace bilecom.be
         public UnidadMedidaBe UnidadMedida { get; set; }
         public int ProductoId { get; set; }
         public ProductoBe Producto { get; set; }
+        public string CodigoSunat { get; set; }
+        public string Codigo { get; set; }
         public string Descripcion { get; set; }
         public bool FlagAplicaICPBER { get; set; }
         public int TipoAfectacionIgvId { get; set; }

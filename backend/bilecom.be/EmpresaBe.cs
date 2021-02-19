@@ -12,6 +12,9 @@ namespace bilecom.be
         public string Ruc { get; set; }
         public string RazonSocial { get; set; }
         public string NombreComercial { get; set; }
+        public int DistritoId { get; set; }
+        public DistritoBe Distrito { get; set; }
+        public string Direccion { get; set; }
         public string CreadoPor { get; set; }
     }
 }

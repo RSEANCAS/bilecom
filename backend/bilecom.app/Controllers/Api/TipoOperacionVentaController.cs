@@ -15,10 +15,10 @@ namespace bilecom.app.Controllers.Api
         TipoOperacionVentaBl tipoOperacionVentaBl = new TipoOperacionVentaBl();
 
         [HttpGet]
-        [Route("listar-tipooperacionventa-por-empresa")]
-        public List<TipoOperacionVentaBe> ListarTipoOperacionVentaPorEmpresa(int empresaId)
+        [Route("listar-tipooperacionventa-por-empresa-tipocomprobante")]
+        public List<TipoOperacionVentaBe> ListarTipoOperacionVentaPorEmpresaTipoComprobante(int empresaId, int tipoComprobanteId)
         {
-            return tipoOperacionVentaBl.ListarTipoOperacionVentaPorEmpresa(empresaId);
+            return tipoOperacionVentaBl.ListarTipoOperacionVentaPorEmpresaTipoComprobante(empresaId, tipoComprobanteId);
         }
     }
 }

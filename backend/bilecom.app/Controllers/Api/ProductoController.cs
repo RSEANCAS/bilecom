@@ -48,10 +48,18 @@ namespace bilecom.app.Controllers.Api
         }
 
         [HttpGet]
-        [Route("buscar-producto-por-nombre")]
-        public List<ProductoBe> BuscarProductoPorNombre(int empresaId, string nombre, int sedeAlmacenId=0)
+        [Route("buscar-producto-por-codigo")]
+        public List<ProductoBe> BuscarProductoPorCodigo(int empresaId, string codigo, int sedeAlmacenId = 0, int? tipoProductoId = null)
         {
-            var respuesta = productoBl.BuscarProductoPorNombre(nombre, empresaId, sedeAlmacenId);
+            var respuesta = productoBl.BuscarProductoPorCodigo(tipoProductoId, codigo, empresaId, sedeAlmacenId);
+            return respuesta;
+        }
+
+        [HttpGet]
+        [Route("buscar-producto-por-nombre")]
+        public List<ProductoBe> BuscarProductoPorNombre(int empresaId, string nombre, int sedeAlmacenId=0, int? tipoProductoId = null)
+        {
+            var respuesta = productoBl.BuscarProductoPorNombre(tipoProductoId, nombre, empresaId, sedeAlmacenId);
             return respuesta;
         }
 

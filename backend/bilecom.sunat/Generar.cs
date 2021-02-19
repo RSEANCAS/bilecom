@@ -1,4 +1,6 @@
-﻿using bilecom.sunat.comprobante;
+﻿using bilecom.sunat.comprobante.creditnote;
+using bilecom.sunat.comprobante.debitnote;
+using bilecom.sunat.comprobante.invoice;
 using System;
 using System.Collections.Generic;
 using System.Linq;

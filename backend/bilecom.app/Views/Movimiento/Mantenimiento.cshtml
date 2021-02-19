@@ -33,26 +33,26 @@
                                 @if (ViewBag.Accion == (int)Enums.Accion.Editar)
                                 {
                                     <div class="col-sm-3">
-                                        <div class="form-group mar-no">
+                                        <div class="form-group">
                                             <span class="bg-dark box-block pad-lft pad-rgt">Fecha y Hora Emisión</span>
                                             <input class="form-control" placeholder="Fecha y Hora Emisión" name="txt-fecha-hora-emision" id="txt-fecha-hora-emision" data-bv-field="txt-fecha-hora-emision" readonly>
                                         </div>
                                     </div>
                                 }
                                 <div class="col-sm-2">
-                                    <div class="form-group mar-no">
+                                    <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Movimiento</span>
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento" id="cmb-tipo-movimiento" data-bv-field="cmb-tipo-movimiento" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group mar-no">
+                                    <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Almacen</span>
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-almacen" id="cmb-almacen" data-bv-field="cmb-almacen" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
-                                    <div class="form-group mar-no">
+                                    <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Serie</span>
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-serie" id="cmb-serie" data-bv-field="cmb-serie" tabindex="-1" aria-hidden="false"></select>
                                     </div>
@@ -60,16 +60,29 @@
                                 @if (ViewBag.Accion == (int)Enums.Accion.Editar)
                                 {
                                     <div class="col-sm-3">
-                                        <div class="form-group mar-no">
+                                        <div class="form-group">
                                             <span class="bg-dark box-block pad-lft pad-rgt">N° Movimiento</span>
                                             <input class="form-control" placeholder="N° Movimiento" name="txt-nro-movimiento" id="txt-nro-movimiento" data-bv-field="txt-nro-movimiento" readonly>
                                         </div>
                                     </div>
                                 }
                                 <div class="col-sm-2">
-                                    <div class="form-group mar-no">
+                                    <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-moneda" id="cmb-moneda" data-bv-field="cmb-moneda" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Comprobante Ref.</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-comprobante-ref" id="cmb-tipo-comprobante-ref" data-bv-field="cmb-tipo-documento-ref" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Comprobante Ref.</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-nro-comprobante-ref" id="cmb-nro-comprobante-ref" data-bv-field="cmb-nro-comprobante-ref" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                             </div>

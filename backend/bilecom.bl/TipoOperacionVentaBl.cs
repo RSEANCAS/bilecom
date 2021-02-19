@@ -13,14 +13,14 @@ namespace bilecom.bl
     {
         TipoOperacionVentaDa tipoOperacionVentaDa = new TipoOperacionVentaDa();
 
-        public List<TipoOperacionVentaBe> ListarTipoOperacionVentaPorEmpresa(int empresaId)
+        public List<TipoOperacionVentaBe> ListarTipoOperacionVentaPorEmpresaTipoComprobante(int empresaId, int tipoComprobanteId)
         {
             List<TipoOperacionVentaBe> lista = null;
 
             try
             {
                 cn.Open();
-                lista = tipoOperacionVentaDa.ListarPorEmpresa(empresaId, cn);
+                lista = tipoOperacionVentaDa.ListarPorEmpresaTipoComprobante(empresaId, tipoComprobanteId, cn);
                 cn.Close();
             }
             catch (Exception ex) { lista = null; }

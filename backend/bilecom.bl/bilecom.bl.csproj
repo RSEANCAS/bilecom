@@ -71,6 +71,7 @@
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
     <Compile Include="TipoOperacionVentaBl.cs" />
     <Compile Include="TipoMovimientoBl.cs" />
+    <Compile Include="TipoProductoBl.cs" />
     <Compile Include="UnidadMedidaBl.cs" />
     <Compile Include="UsuarioBl.cs" />
     <Compile Include="ProveedorBl.cs" />

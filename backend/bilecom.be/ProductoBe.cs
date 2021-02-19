@@ -11,6 +11,9 @@ namespace bilecom.be
         public int EmpresaId { get; set; }
         public int ProductoId { get; set; }
         public int CategoriaId { get; set; }
+        public int TipoProductoId { get; set; }
+        public string Codigo { get; set; }
+        public string CodigoSunat { get; set; }
         public string Nombre { get; set; }
         public int TipoAfectacionIgvId { get; set; }
         public string UnidadMedidaId { get; set; }

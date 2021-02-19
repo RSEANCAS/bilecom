@@ -11,13 +11,15 @@ namespace bilecom.bl
 {
     public class UnidadMedidaBl : Conexion
     {
-        public List<UnidadMedidaBe> Listar ()
+        UnidadMedidaDa unidadMedidaDa = new UnidadMedidaDa();
+
+        public List<UnidadMedidaBe> ListarUnidaMedida()
         {
             List<UnidadMedidaBe> respuesta = null;
             try
             {
                 cn.Open();
-                respuesta = new UnidadMedidaDa().Listar(cn);
+                respuesta = unidadMedidaDa.Listar(cn);
                 cn.Close();
             }
             catch (Exception ex)
@@ -31,5 +33,24 @@ namespace bilecom.bl
             return respuesta;
         }
 
+        public List<UnidadMedidaBe> ListarUnidaMedidaPorEmpresa(int empresaId)
+        {
+            List<UnidadMedidaBe> respuesta = null;
+            try
+            {
+                cn.Open();
+                respuesta = unidadMedidaDa.ListarPorEmpresa(empresaId, cn);
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            finally
+            {
+                if (cn.State == ConnectionState.Open) cn.Close();
+            }
+            return respuesta;
+        }
     }
 }

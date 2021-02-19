@@ -8,7 +8,9 @@ namespace bilecom.be
 {
     public class UnidadMedidaBe
     {
+        public int UnidadMedidaId { get; set; }
         public string Id { get; set; }
+        public int TipoProductoId { get; set; }
         public string Descripcion { get; set; }
 
     }

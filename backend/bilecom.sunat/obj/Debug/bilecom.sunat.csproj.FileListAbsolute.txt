@@ -1,4 +1,3 @@
-D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csprojAssemblyReference.cache
 D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csproj.CoreCompileInputs.cache
 C:\Jare\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csprojAssemblyReference.cache
 C:\Jare\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll.config
@@ -6,3 +5,8 @@ C:\Jare\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll
 C:\Jare\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.pdb
 C:\Jare\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.dll
 C:\Jare\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.pdb
+D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.dll
+D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.pdb
+D:\JARE\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll.config
+D:\JARE\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll
+D:\JARE\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.pdb
