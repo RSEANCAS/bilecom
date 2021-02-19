@@ -10,5 +10,6 @@ namespace bilecom.be
     {
         public int PaisId { get; set; }
         public string Nombre { get; set; }
+        public string CodigoSunat { get; set; }
     }
 }

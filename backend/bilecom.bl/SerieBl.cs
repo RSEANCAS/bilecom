@@ -13,13 +13,13 @@ namespace bilecom.bl
     {
         SerieDa serieDa = new SerieDa();
 
-        public List<SerieBe> ListarSeriePorTipoComprobante(int tipoComprobanteId)
+        public List<SerieBe> ListarSeriePorTipoComprobante(int empresaId, int tipoComprobanteId)
         {
             List<SerieBe> lista = new List<SerieBe>();
             try
             {
                 cn.Open();
-                lista = serieDa.ListarPorTipoComprobante(tipoComprobanteId, cn);
+                lista = serieDa.ListarPorTipoComprobante(empresaId, tipoComprobanteId, cn);
                 cn.Close();
             }
             catch (Exception) { lista = null; }

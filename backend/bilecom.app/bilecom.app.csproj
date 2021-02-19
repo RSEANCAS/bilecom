@@ -282,6 +282,7 @@
     <Content Include="Assets\img\bg-img\thumbs\bg-img-6.jpg" />
     <Content Include="Assets\img\bg-img\thumbs\bg-img-7.jpg" />
     <Content Include="Assets\img\bg-img\thumbs\bg-trns.jpg" />
+    <Content Include="Assets\img\bg-img\thumbs\log_jare.jpg" />
     <Content Include="Assets\img\blog-img-1.jpg" />
     <Content Include="Assets\img\color-schemes-a.png" />
     <Content Include="Assets\img\color-schemes-b.png" />
@@ -395,10 +396,12 @@
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\mantenimientocotizacion.js" />
+    <Content Include="Assets\js\pages\mantenimientomovimiento.js" />
     <Content Include="Assets\js\pages\mantenimientofactura.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
     <Content Include="Assets\js\pages\mantenimientoserie.js" />
     <Content Include="Assets\js\pages\mantenimientotiposede.js" />
+    <Content Include="Assets\js\pages\movimiento.js" />
     <Content Include="Assets\js\pages\personal.js" />
     <Content Include="Assets\js\pages\mantenimientocliente.js" />
     <Content Include="Assets\js\pages\mantenimientopersonal.js" />
@@ -2822,6 +2825,7 @@
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
+    <Compile Include="Controllers\Api\MovimientoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
     <Compile Include="Controllers\Api\PersonalController.cs" />
     <Compile Include="Controllers\Api\EmpresaController.cs" />
@@ -2835,16 +2839,24 @@
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
+    <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
+    <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
+    <Compile Include="Controllers\Api\TipoProductoController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
     <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
+    <Compile Include="Controllers\Filters\IsLogoutFilter.cs" />
+    <Compile Include="Controllers\Filters\IsLoginFilter.cs" />
+    <Compile Include="Controllers\Filters\_BaseFilter.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\MovimientoController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProveedorController.cs" />
@@ -2852,10 +2864,11 @@
     <Compile Include="Controllers\SerieController.cs" />
     <Compile Include="Controllers\TipoSedeController.cs" />
     <Compile Include="Controllers\_BaseController.cs" />
+    <Compile Include="Controllers\_FilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\AppSettings.cs" />
+    <Compile Include="Helper\ComprobanteSunat.cs" />
     <Compile Include="Helper\Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -3155,8 +3168,13 @@
     <Content Include="Views\Cotizacion\Mantenimiento.cshtml" />
     <Content Include="Views\Serie\Index.cshtml" />
     <Content Include="Views\Serie\Mantenimiento.cshtml" />
+    <Content Include="Views\Movimiento\Index.cshtml" />
+    <Content Include="Views\Movimiento\Mantenimiento.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Factura\Mantenimiento.cshtml" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
+    <Content Include="Views\Shared\_Menu.cshtml" />
+    <Content Include="Views\Configuracion\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3181,6 +3199,10 @@
     <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
       <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
       <Name>bilecom.enums</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.sunat\bilecom.sunat.csproj">
+      <Project>{ef83c0f1-8397-48ac-b610-eb90f282369c}</Project>
+      <Name>bilecom.sunat</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
       <Project>{8929A9EE-5864-4CFA-B7AE-3D6850945AB1}</Project>

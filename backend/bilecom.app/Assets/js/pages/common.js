@@ -4,8 +4,8 @@
         return token == null ? null : atob(token);
     },
     GuardarToken(data) {
-        localStorage['ls.tk'] = btoa(JSON.stringify(data));
-        document.cookie = `ls.tk=${localStorage['ls.tk']}`
+        localStorage['ls.tk'] = btoa(data);
+        //document.cookie = `ls.tk=${localStorage['ls.tk']}`
     },
     ObtenerUsuario() {
         let user = localStorage['ls.us'];
@@ -13,14 +13,14 @@
     },
     GuardarUsuario(data) {
         localStorage['ls.us'] = btoa(JSON.stringify(data));
-        document.cookie = `ls.us=${localStorage['ls.us']}`;
+        //document.cookie = `ls.us=${localStorage['ls.us']}`;
     },
-    ObtenerPerfilActual() {
-        let perfilActual = localStorage['ls.pa'];
-        return perfilActual == null ? null : JSON.parse(atob(perfilActual));
+    ObtenerFechaExpiracion() {
+        let fechaExpiracion = localStorage['ls.fe'];
+        return fechaExpiracion == null ? null : new Date(atob(fechaExpiracion));
     },
-    GuardarPerfilActual(data) {
-        localStorage['ls.pa'] = btoa(JSON.stringify(data));
+    GuardarFechaExpiracion(data) {
+        localStorage['ls.fe'] = btoa(data);
     },
     ResponseToJson(response) {
         if (response.status == 200) return response.json();

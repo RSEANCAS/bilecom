@@ -9,6 +9,7 @@ namespace bilecom.be
     public class FacturaBe : Base
     {
         public int EmpresaId { get; set; }
+        public EmpresaBe Empresa { get; set; }
         public int FacturaId { get; set; }
         public int SerieId { get; set; }
         public SerieBe Serie { get; set; }
@@ -26,13 +27,46 @@ namespace bilecom.be
         public bool FlagISC { get; set; }
         public bool FlagOtrosCargos { get; set; }
         public bool FlagOtrosTributos { get; set; }
+        public decimal TotalGravado { get; set; }
+        public decimal TotalExonerado { get; set; }
+        public int TipoTributoIdExonerado { get; set; }
+        public TipoTributoBe TipoTributoExonerado { get; set; }
+        public decimal TotalInafecto { get; set; }
+        public int TipoTributoIdInafecto { get; set; }
+        public TipoTributoBe TipoTributoInafecto { get; set; }
+        public decimal TotalExportacion { get; set; }
+        public int TipoTributoIdExportacion { get; set; }
+        public TipoTributoBe TipoTributoExportacion { get; set; }
+        public decimal TotalGratuito { get; set; }
+        public int TipoTributoIdGratuito { get; set; }
+        public TipoTributoBe TipoTributoGratuito { get; set; }
+        public decimal TotalVentaArrozPilado { get; set; }
         public decimal TotalIgv { get; set; }
+        public int TipoTributoIdIgv { get; set; }
+        public TipoTributoBe TipoTributoIgv { get; set; }
         public decimal TotalIsc { get; set; }
+        public int TipoTributoIdIsc { get; set; }
+        public TipoTributoBe TipoTributoIsc { get; set; }
         public decimal TotalOtrosCargos { get; set; }
         public decimal TotalOtrosTributos { get; set; }
+        public int TipoTributoIdOtrosTributos { get; set; }
+        public TipoTributoBe TipoTributoOtrosTributos { get; set; }
         public decimal TotalBaseImponible { get; set; }
         public decimal TotalDescuentos { get; set; }
+        public decimal PorcentajeOtrosCargosGlobal { get; set; }
+        public decimal TotalOtrosCargosGlobal { get; set; }
+        public decimal PorcentajeDescuentosGlobal { get; set; }
+        public decimal TotalDescuentosGlobal { get; set; }
         public decimal ImporteTotal { get; set; }
         public bool FlagAnulado { get; set; }
+
+        public int[] ListaFacturaGuiaRemisionEliminados { get; set; }
+        public List<FacturaGuiaRemisionBe> ListaFacturaGuiaRemision { get; set; }
+
+        public List<KeyValuePair<int, string>> ListaFacturaDocumentoEliminados { get; set; }
+        public List<FacturaDocumentoBe> ListaFacturaDocumento { get; set; }
+
+        public int[] ListaFacturaDetalleEliminados { get; set; }
+        public List<FacturaDetalleBe> ListaFacturaDetalle { get; set; }
     }
 }

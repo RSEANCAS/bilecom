@@ -12,7 +12,8 @@ namespace bilecom.enums
         public enum Accion
         {
             Nuevo = 1,
-            Editar = 2
+            Editar = 2,
+            Lectura = 3
         }
 
         public enum TipoSede
@@ -40,14 +41,36 @@ namespace bilecom.enums
             GuiaRemisionRemitente = 5,
             [DefaultValue("CT")]
             [Description("Cotizacion")]
-            Cotizacion = 6
+            Cotizacion = 6,
+            [DefaultValue("MV")]
+            [Description("Movimiento")]
+            Movimiento = 7
+
         }
         public enum TipoDocumentoIdentidad
         {
+            [DefaultValue("1")]
             DNI = 1,
+            [DefaultValue("6")]
             RUC = 2,
+            [DefaultValue("3")]
             CarnetExtranjeria = 3,
+            [DefaultValue("4")]
             Pasaporte = 4
+        }
+
+        public enum TipoOperacionVenta
+        {
+            VentaInterna = 1,
+            Exportacion = 2,
+            NoDomiciliados = 3,
+            VentaInternaAnticipos = 4,
+            VentaItinerante = 5,
+            FacturaGuia = 6,
+            VentaArrozPilado = 7,
+            FacturaComprobantePercepcion = 8,
+            FacturaGuiaRemitente = 9,
+            FacturaGuiaTransportista = 10,
         }
     }
 }

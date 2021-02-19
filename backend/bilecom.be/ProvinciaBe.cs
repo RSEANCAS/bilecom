@@ -10,6 +10,7 @@ namespace bilecom.be
     {
         public int ProvinciaId { get; set; }
         public int DepartamentoId { get; set; }
+        public DepartamentoBe Departamento { get; set; }
         public string CodigoUbigeo { get; set; }
         public string Nombre { get; set; }
     }

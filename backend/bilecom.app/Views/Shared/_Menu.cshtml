@@ -1,0 +1,34 @@
+﻿@using bilecom.be
+@model List<OpcionBe>
+@helper RenderMenu(List<OpcionBe> lista, List<OpcionBe> listaGeneral)
+{
+    if (lista != null)
+    {
+        foreach (var data in lista)
+        {
+            var listaMenu = listaGeneral.Where(x => x.OpcionPadreId == data.OpcionId).ToList();
+            bool tieneListaMenu = listaMenu.Count > 0;
+            <li>
+                <a href="@Url.Content(data.Enlace)">
+                    <i class="@data.Icono"></i>
+                    <span class="menu-title">@data.Nombre</span>
+                    @if (tieneListaMenu == true)
+                    {
+                        <i class="arrow"></i>
+                    }
+                </a>
+                @if (tieneListaMenu == true)
+                {
+                    <ul class="collapse">
+                        @RenderMenu(listaMenu, listaGeneral)
+                    </ul>
+                }
+            </li>
+        }
+    }
+}
+@{ 
+    List<OpcionBe> listaPadre = Model.Where(x => x.OpcionPadreId == null).ToList();
+}
+
+@RenderMenu(listaPadre, Model)

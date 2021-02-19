@@ -1,4 +1,5 @@
-﻿const pageFactura = {
+﻿const fechaActual = new Date();
+const pageFactura = {
     Init: function () {
         common.ConfiguracionDataTable();
         this.InitEvents();
@@ -8,7 +9,6 @@
     InitEvents: function () {
         $("#btn-buscar").click(pageFactura.BtnBuscarClick);
 
-        let fechaActual = new Date();
         $("#txt-fecha-emision-desde").datepicker({ format: "dd/mm/yyyy", autoclose: true });
         $("#txt-fecha-emision-desde").datepicker("setDate", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
         $("#txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true });
@@ -131,20 +131,7 @@
             {
                 data: "FacturaId", render: function (data, type, row) {
                     return `${row.FlagAnulado == true ? "" :
-                        `<a class="btn btn-sm btn-${row.FlagAnulado == false ? "default" : "dark"} btn-hover-dark fa fa-pencil add-tooltip" href="${urlRoot}Facturaes/Editar?id=${data}" data-original-title="Editar" data-container="body"></a>
-                            <a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageFactura.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-success btn-hover-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <!--Más <span class="caret"></span>-->
-                                    <i class="fa fa-ellipsis-v"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="javascript:void(0)" class="small">Generar Boleta</a></li>
-                                    <li><a href="javascript:void(0)" class="small">Generar Factura</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="javascript:void(0)" class="small">Generar Nota de Venta</a></li>
-                                </ul>
-                            </div>`}`;
+                        `<a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageFactura.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>`}`;
                 }
             }
         ];

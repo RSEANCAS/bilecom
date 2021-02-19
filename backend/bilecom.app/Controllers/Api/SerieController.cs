@@ -17,9 +17,9 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("listar-serie-por-tipocomprobante")]
-        public List<SerieBe> ListarSeriePorTipoComprobante(int tipoComprobanteId)
+        public List<SerieBe> ListarSeriePorTipoComprobante(int empresaId, int tipoComprobanteId)
         {
-            return serieBl.ListarSeriePorTipoComprobante(tipoComprobanteId);
+            return serieBl.ListarSeriePorTipoComprobante(empresaId, tipoComprobanteId);
         }
         
         [HttpGet]

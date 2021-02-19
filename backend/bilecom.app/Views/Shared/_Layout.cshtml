@@ -1,10 +1,19 @@
-﻿<html lang="es-pe">
+﻿@{
+    ViewBag.Title = "Dashboard - BileCom";
+}
+@using bilecom.be;
+@{
+    int perfilId = ViewBag.Data.PerfilActual.PerfilId;
+    List<PerfilBe> listaPerfil = ViewBag.ListaPerfil == null ? null : (List<PerfilBe>)ViewBag.ListaPerfil;
+    List<OpcionBe> listaOpcion = (List<OpcionBe>)listaPerfil.FirstOrDefault(x => x.PerfilId == perfilId).ListaOpcion;
+}
+<html lang="es-pe">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dashboard | Nifty - Admin Template</title>
+    <title>@ViewBag.Title</title>
 
 
     <!--STYLESHEET-->
@@ -180,19 +189,7 @@
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                 <ul class="head-list">
                                     <li>
-                                        <a href="#"><i class="demo-pli-male icon-lg icon-fw"></i> Profile</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="badge badge-danger pull-right">9</span><i class="demo-pli-mail icon-lg icon-fw"></i> Messages</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="label label-success pull-right">New</span><i class="demo-pli-gear icon-lg icon-fw"></i> Settings</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="demo-pli-computer-secure icon-lg icon-fw"></i> Lock screen</a>
-                                    </li>
-                                    <li>
-                                        <a href="pages-login.html"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a>
+                                        <a href="#" id="btn-cerrar-sesion"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a>
                                     </li>
                                 </ul>
                             </div>
@@ -251,10 +248,21 @@
                                             <span class="pull-right dropdown-toggle">
                                                 <i class="dropdown-caret"></i>
                                             </span>
-                                            <p class="mnp-name data-user-nombre">Aaron Chavez</p>
-                                            <span class="mnp-desc data-user-perfil-nombre">aaron.cha@themeon.net</span>
+                                            <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.Ruc</p>
+                                            @if (!string.IsNullOrEmpty((string)ViewBag.Data.Usuario.Empresa.NombreComercial))
+                                            {
+                                                <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.NombreComercial</p>
+                                                <span class="mnp-desc data-user-perfil-nombre">@ViewBag.Data.Usuario.Empresa.RazonSocial</span>
+                                            }
+                                            else
+                                            {
+                                                <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.RazonSocial</p>
+                                            }
                                         </a>
-                                        <a id="btn-cambiar-perfil" href="#" class="btn btn-xs btn-primary">Cambiar Perfil</a>
+                                        @if (listaPerfil.Count > 1)
+                                        {
+                                            <a id="btn-cambiar-perfil" href="#" class="btn btn-xs btn-primary">Cambiar Perfil</a>
+                                        }
                                     </div>
                                     <div id="profile-nav" class="collapse list-group bg-trans">
                                         <a href="#" class="list-group-item">
@@ -281,22 +289,22 @@
                                     <!--Category name-->
                                     <li class="list-header">Opciones</li>
 
+                                    @Html.Partial("_Menu", listaOpcion);
                                     <!--Menu list item-->
-                                    <li class="active-sub">
-                                        <a href="#">
-                                            <i class="demo-pli-home"></i>
-                                            <span class="menu-title">Dashboard</span>
-                                            <i class="arrow"></i>
-                                        </a>
+                                    @*<li class="active-sub">
+                                            <a href="#">
+                                                <i class="demo-pli-home"></i>
+                                                <span class="menu-title">Dashboard</span>
+                                                <i class="arrow"></i>
+                                            </a>
 
-                                        <!--Submenu-->
-                                        <ul class="collapse in">
-                                            <li class="active-link"><a href="index.html">Dashboard 1</a></li>
-                                            <li><a href="dashboard-2.html">Dashboard 2</a></li>
-                                            <li><a href="dashboard-3.html">Dashboard 3</a></li>
+                                            <ul class="collapse in">
+                                                <li class="active-link"><a href="index.html">Dashboard 1</a></li>
+                                                <li><a href="dashboard-2.html">Dashboard 2</a></li>
+                                                <li><a href="dashboard-3.html">Dashboard 3</a></li>
 
-                                        </ul>
-                                    </li>
+                                            </ul>
+                                        </li>*@
 
                                 </ul>
                                 <!--================================-->
@@ -371,9 +379,11 @@
     <script src="@Url.Content("~/Assets/js/pages/layout.js")"></script>
     <script>
         const urlRoot = "@Url.Content("~")";
+        const listaPerfil = @(Html.Raw(Json.Encode(listaPerfil)));
+        const perfilId = @perfilId;
         pageLayout.Init();
     </script>
-@*    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>*@
+    @*    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>*@
 
     @RenderSection("scripts_footer", false)
 </body>

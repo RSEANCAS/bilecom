@@ -1,25 +1,23 @@
 ﻿const pageLayout = {
     Init: function () {
         this.InitEvents();
-        this.MostrarDatosUsuario();
     },
     InitEvents: function () {
         $('#btn-cambiar-perfil').click(pageLayout.BtnCambiarPerfilClick);
+        $('#btn-cerrar-sesion').click(pageLayout.BtnCerrarSesionClick);
     },
     CargarComboUsuarioPerfil: function () {
 
     },
     BtnCambiarPerfilClick: function (e) {
         e.preventDefault();
-        let user = common.ObtenerUsuario();
-        let dataPerfil = user.ListaPerfil.map(x => { let item = Object.assign(x, { value: x.PerfilId, text: x.Nombre }); return item; });
-        let perfilActual = common.ObtenerPerfilActual();
+        let dataPerfil = listaPerfil.map(x => { let item = Object.assign(x, { value: x.PerfilId, text: x.Nombre }); return item; });
 
         bootbox.prompt({
             title: "Seleccione perfil",
             inputType: "select",
             inputOptions: dataPerfil,
-            value: perfilActual.PerfilId,
+            value: perfilId,
             callback: function (result) {
                 if (result != null) {
                     let perfilId = Number(result);
@@ -30,12 +28,10 @@
             }
         });
     },
-    MostrarDatosUsuario: function () {
-        let user = common.ObtenerUsuario();
-        if (user != null) {
-            $('.data-user-nombre').text(user.Nombre);
-            pageLayout.MostrarPerfilActual();
-        }
+    BtnCerrarSesionClick(e) {
+        e.preventDefault();
+        document.cookie = "ss=;expires=" + (new Date()).toISOString();
+        location.reload();
     },
     MostrarPerfilActual: function () {
         let perfilActual = common.ObtenerPerfilActual();

@@ -42,5 +42,38 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public PaisBe Obtener(int paisId, SqlConnection cn)
+        {
+            PaisBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_pais_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@paisId", paisId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            respuesta = new PaisBe();
+
+                            if (dr.Read())
+                            {
+                                respuesta.PaisId = dr.GetData<int>("PaisId");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.CodigoSunat = dr.GetData<string>("CodigoSunat");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

@@ -7,7 +7,7 @@
 //     se vuelve a generar el código.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+/*
 namespace bilecom.sunat.bilecom.sunat.ws.beta.otros {
     
     
@@ -404,3 +404,4 @@ namespace bilecom.sunat.bilecom.sunat.ws.beta.otros {
         }
     }
 }
+*/

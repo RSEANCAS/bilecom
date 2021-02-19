@@ -3,11 +3,14 @@ using bilecom.be;
 using bilecom.be.Custom;
 using bilecom.bl;
 using bilecom.ut;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace bilecom.app.Controllers.Api
@@ -49,33 +52,57 @@ namespace bilecom.app.Controllers.Api
 
         [HttpPost]
         [Route("autenticar-usuario")]
-        public IHttpActionResult AutenticarUsuario(string ruc, string usuario, string contraseña)
+        public HttpResponseMessage AutenticarUsuario(string ruc, string usuario, string contraseña)
         {
             if (string.IsNullOrEmpty((ruc ?? "").Trim()))
-                return BadRequest("El ruc está vacío.");
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent("El ruc está vacío.");
+                return msg;
+            }
 
             if (string.IsNullOrEmpty((usuario ?? "").Trim()))
-                return BadRequest("El usuario está vacío.");
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent("El usuario está vacío.");
+                return msg;
+            }
 
             if (string.IsNullOrEmpty((contraseña ?? "").Trim()))
-                return BadRequest("La contraseña está vacía.");
-
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent("La contraseña está vacía.");
+                return msg;
+            }
+            
             var empresa = empresaBl.ObtenerEmpresaPorRuc(ruc);
 
             if (empresa == null)
-                return BadRequest($"El ruc {ruc} no se encuentra registrado.");
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent($"El ruc {ruc} no se encuentra registrado.");
+                return msg;
+            }
 
-            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true, loadListaOpcionxPerfil: true);
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true);
 
             if (user == null)
-                return BadRequest($"El usuario {usuario} no se encuentra registrado.");
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent($"El usuario {usuario} no se encuentra registrado.");
+                return msg;
+            }
             else
             {
                 if (user.PersonalId.HasValue) user.Personal = personalBl.ObtenerPersonal(empresa.EmpresaId, user.PersonalId.Value);
             }
 
             if(user.ListaPerfil == null)
-                return BadRequest($"El usuario {usuario} no tiene ningún perfil asignado.");
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent($"El usuario {usuario} no tiene ningún perfil asignado.");
+                return msg;
+            }
 
             bool isCredentialValid = Seguridad.CompareMD5(contraseña, user.Contrasena);
 
@@ -83,11 +110,16 @@ namespace bilecom.app.Controllers.Api
             {
                 var token = TokenGenerator.GenerateTokenJwt(user);
 
+                var handler = new JwtSecurityTokenHandler();
+                var payload = handler.ReadJwtToken(token).Payload;
+
                 var response = new
                 {
                     Token = token,
+                    FechaExpiracion = DateTimeOffset.FromUnixTimeSeconds(payload.Exp.Value),
                     Usuario = new
                     {
+                        Id = user.UsuarioId,
                         Nombre = user.Nombre,
                         Empresa = new
                         {
@@ -97,16 +129,23 @@ namespace bilecom.app.Controllers.Api
                             empresa.NombreComercial
                         },
                         Personal = user.Personal,
-                        ListaPerfil = user.ListaPerfil
+                        //ListaPerfil = user.ListaPerfil
                     },
                     PerfilActual = user.ListaPerfil[0],
                 };
 
-                return Ok(response);
+                string responseString = JsonConvert.SerializeObject(response);
+
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+                message.Content = new StringContent(responseString);
+
+                message.Headers.Add("ls.ss", responseString);
+
+                return message;
             }
             else
             {
-                return Unauthorized();
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
             }
         }
     }

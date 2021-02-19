@@ -30,7 +30,14 @@ namespace bilecom.app.Controllers.Api
             };
             return respuesta;
         }
-        
+
+        [HttpGet]
+        [Route("listar-sedealmacen")]
+        public List<SedeBe> SedeAlmacenListar(int empresaId)
+        {
+            return sedeBl.SedeAlmacenListar(empresaId);
+        }
+
         [HttpGet]
         [Route("obtener-sede")]
         public SedeBe ObtenerSede(int empresaId, int sedeId)

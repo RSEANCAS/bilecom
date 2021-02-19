@@ -52,6 +52,34 @@ namespace bilecom.da
             return lista;
         }
 
+        public List<SedeBe> SedeAlmacenListar(int empresaId,SqlConnection cn)
+        {
+            List<SedeBe> lista = new List<SedeBe>();
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_sedealmacen_listar", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
+                
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            SedeBe item = new SedeBe();
+                            item.SedeId = dr.GetData<int>("SedeId");
+                            item.TipoSedeId = dr.GetData<int>("TipoSedeId");
+                            item.Nombre = dr.GetData<string>("NombreSede");
+                            item.DistritoId = dr.GetData<int>("DistritoId");
+                            item.Direccion = dr.GetData<string>("Direccion");
+                            lista.Add(item);
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
         public SedeBe Obtener(int empresaId, int sedeId, SqlConnection cn)
         {
             SedeBe respuesta = null;

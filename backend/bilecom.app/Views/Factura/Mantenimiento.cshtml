@@ -1,13 +1,11 @@
 ﻿@using bilecom.enums
-@{
-    ViewBag.Title = "Mantenimiento";
-}
-
 @section links_footer{
     <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/switchery/switchery.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/ionicons/css/ionicons.min.css")" rel="stylesheet">
 }
 
@@ -63,9 +61,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            @*<br class="" />*@
-                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Operación</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-operacion-venta" id="cmb-tipo-operacion-venta" data-bv-field="cmb-tipo-operacion-venta" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
@@ -126,57 +127,6 @@
                     <div class="panel panel-bordered panel-dark">
                         <div class="panel-heading">
                             <div class="panel-control">
-                                <label>
-                                    <input type="checkbox" id="chk-obtener-datos-personal-usuario" name="chk-obtener-datos-personal-usuario" />
-                                    Completar con mis datos
-                                </label>
-                                <button id="btn-buscar-personal" class="btn btn-default" type="button">
-                                    <i class="ion-search"></i>
-                                    <span>Buscar</span>
-                                </button>
-                            </div>
-                            <h3 class="panel-title">Datos del Personal</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-personal" id="cmb-tipo-documento-identidad-personal" data-bv-field="cmb-tipo-documento-identidad-personal" tabindex="-1" aria-hidden="false" disabled></select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
-                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-personal" id="txt-numero-documento-identidad-personal" data-bv-field="txt-numero-documento-identidad-personal" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
-                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-personal" id="txt-nombres-completos-personal" data-bv-field="txt-nombres-completos-personal" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
-                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-personal" id="txt-direccion-personal" data-bv-field="txt-direccion-personal" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group pad-no mar-no">
-                                        <input type="hidden" id="hdn-personal-id" name="hdn-personal-id" data-bv-field="hdn-personal-id" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-bordered panel-dark">
-                        <div class="panel-heading">
-                            <div class="panel-control">
                                 <button id="btn-agregar-detalle" class="btn btn-default" type="button">
                                     <i class="ion-plus"></i>
                                     <span>Agregar</span>
@@ -207,13 +157,13 @@
                                 <table class="table invoice-total">
                                     <tbody>
                                         @*<tr>
-                                            <td><strong>Sub Total :</strong></td>
-                                            <td>$538.06</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>TAX :</strong></td>
-                                            <td>$73.98</td>
-                                        </tr>*@
+                                                <td><strong>Sub Total :</strong></td>
+                                                <td>$538.06</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>TAX :</strong></td>
+                                                <td>$73.98</td>
+                                            </tr>*@
                                         <tr>
                                             <td><strong>TOTAL :</strong></td>
                                             <td id="lbl-total-importe" class="text-bold h4">0.00</td>
@@ -251,6 +201,8 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/switchery/switchery.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientofactura.js")"></script>
     <script>
         const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);

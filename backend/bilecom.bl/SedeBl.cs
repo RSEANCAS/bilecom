@@ -30,6 +30,21 @@ namespace bilecom.bl
             return lista;
         }
 
+        public List<SedeBe> SedeAlmacenListar(int empresaId)
+        {
+            List<SedeBe> lista = null;
+            try
+            {
+                cn.Open();
+                lista = sedeDa.SedeAlmacenListar(empresaId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+
+            return lista;
+        }
+
         public SedeBe Obtener(int empresaId, int sedeId)
         {
             SedeBe respuesta = null;
