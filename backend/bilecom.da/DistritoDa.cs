@@ -44,5 +44,39 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public DistritoBe Obtener(int distritoId, SqlConnection cn)
+        {
+            DistritoBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_distrito_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@distritoId", distritoId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            respuesta = new DistritoBe();
+
+                            if (dr.Read())
+                            {
+                                respuesta.DistritoId = dr.GetData<int>("DistritoId");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.ProvinciaId = dr.GetData<int>("ProvinciaId");
+                                respuesta.CodigoUbigeo = dr.GetData<string>("CodigoUbigeo");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

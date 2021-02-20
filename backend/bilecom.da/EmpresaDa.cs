@@ -34,6 +34,8 @@ namespace bilecom.da
                                 item.Ruc = dr.GetData<string>("Ruc");
                                 item.RazonSocial = dr.GetData<string>("RazonSocial");
                                 item.NombreComercial = dr.GetData<string>("NombreComercial");
+                                item.Direccion = dr.GetData<string>("Direccion");
+                                item.DistritoId = dr.GetData<int>("DistritoId");
                             }
                         }
                     }

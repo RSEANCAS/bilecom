@@ -1,4 +1,5 @@
-﻿var serieLista = [], sedealmacenLista=[],monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [], detalleListaEliminados = [],tipoMovimientoLista=[],tipoOperacionAlmacen=[];
+﻿var serieLista = [], sedealmacenLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [],
+    detalleListaEliminados = [], tipoMovimientoLista = [], tipoOperacionAlmacen = [], tipoComprobanteLista = [];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -31,9 +32,14 @@ const pageMantenimientoMovimiento = {
             if (tipomov == 1) {
                 $("#panel-cliente").css("display", "none");
                 $("#panel-proveedor").css("display", "block");
+                $("#hdn-cliente-id").val("").trigger("change");
+                pageMantenimientoMovimiento.LimpiarDatosCliente();
+
             } else if (tipomov == 2) {
                 $("#panel-cliente").css("display", "block");
                 $("#panel-proveedor").css("display", "none");
+                $("#hdn-proveedor-id").val("").trigger("change");
+                pageMantenimientoMovimiento.LimpiarDatosProveedor();
             }
         });
         //this.InitEvents();
@@ -48,6 +54,7 @@ const pageMantenimientoMovimiento = {
         $("#btn-agregar-detalle").click(pageMantenimientoMovimiento.BtnAgregarDetalleClick);
 
         pageMantenimientoMovimiento.ObtenerDatos();
+        pageMantenimientoMovimiento.CmbReferenciaTipoChange();
     },
 
     BtnBuscarClienteClick: function () {
@@ -594,6 +601,20 @@ const pageMantenimientoMovimiento = {
                             regexp: {
                                 regexp: /^[a-zA-Z0-9_]+$/,
                                 message: "Solo se acepta caracteres alfanumericos."
+                            },
+                            callback: {
+                                message: "Debe ingresar serie.",
+                                callback: function (value, validator, $field) {
+                                    let l = $("#cmb-referencia-tipo").val();
+                                    if (l != 0) {
+                                        if ($("#txt-referencia-serie").val().trim() == "") {
+                                            return false;
+                                        }
+                                        else { return true; }
+                                    }
+                                    else { return true; }
+                                    //return pageMantenimientoMovimiento.CondicionCantidad();
+                                }
                             }
                         }
                     },
@@ -606,9 +627,9 @@ const pageMantenimientoMovimiento = {
                             callback: {
                                 message: "Debe de ingresar numero de referencia.",
                                 callback: function (value, validator, $field) {
-                                    let l = $("#txt-referencia-serie").length;
-                                    if (l > 0) {
-                                        if ($("#txt-referencia-numero").val() == "") {
+                                    let l = $("#cmb-referencia-tipo").val();
+                                    if (l != 0) {
+                                        if ($("#txt-referencia-numero").val() <= 0) {
                                             return false;
                                         }
                                         else { return true; }
@@ -726,26 +747,30 @@ const pageMantenimientoMovimiento = {
         let user = common.ObtenerUsuario();
         let promises = [
             fetch(`${urlRoot}api/sede/listar-sedealmacen?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdMovimiento}`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdMovimiento}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
-            fetch(`${urlRoot}api/tipomovimiento/listar-tipomovimiento`)
+            fetch(`${urlRoot}api/tipomovimiento/listar-tipomovimiento`),
+            fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`)
         ]
 
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SedeAlmacenLista, SerieLista, MonedaLista, TipoDocumentoIdentidadLista, TipoMovimientoLista]) => {
+            .then(([SedeAlmacenLista, SerieLista, MonedaLista, TipoDocumentoIdentidadLista, TipoMovimientoLista,TipoComprobanteLista]) => {
                 sedealmacenLista = SedeAlmacenLista|| [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 tipoMovimientoLista = TipoMovimientoLista || [];
+                tipoComprobanteLista = TipoComprobanteLista || [];
 
                 pageMantenimientoMovimiento.ResponseSedeAlmacen(sedealmacenLista);
                 pageMantenimientoMovimiento.ResponseSerieListar(serieLista);
                 pageMantenimientoMovimiento.ResponseMonedaListar(monedaLista);
                 pageMantenimientoMovimiento.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
                 pageMantenimientoMovimiento.ResponseTipoMovimientoListar(tipoMovimientoLista);
+                pageMantenimientoMovimiento.ResponseTipoComprobanteListar(tipoComprobanteLista);
+
                 if (typeof fnNext == "function") fnNext();
             })
     },
@@ -778,6 +803,7 @@ const pageMantenimientoMovimiento = {
 
     EnviarFormulario: function () {
         $("#btn-guardar").prop("disabled", true);
+
         let tipoMovimientoId = $("#cmb-tipo-movimiento").val();
         let serieId = $("#cmb-serie").val();
         let monedaId = $("#cmb-moneda").val();
@@ -859,6 +885,19 @@ const pageMantenimientoMovimiento = {
             $("#txt-detalle-cantidad-actual").val(s[0].StockActual);
         }
     },
+    CmbReferenciaTipoChange: function () {
+        let tipoDocumentoId = $("#cmb-referencia-tipo").val();
+
+        if (tipoDocumentoId > 0) {
+            $("#txt-referencia-serie").prop("readonly", false);
+            $("#txt-referencia-numero").prop("readonly", false);
+        } else {
+            $("#txt-referencia-serie").prop("readonly", true);
+            $("#txt-referencia-numero").prop("readonly", true);
+            $("#txt-referencia-serie").val("");
+            $("#txt-referencia-numero").val("");
+        }
+    },
     ResponseObtenerDatos: function (data) {
         $("#cmb-tipo-movimiento").prop("disabled", true);
         $("#cmb-serie").prop("disabled", true);
@@ -903,13 +942,26 @@ const pageMantenimientoMovimiento = {
         $("#cmb-tipo-documento-identidad-proveedor").val("").trigger("change");
     },
     ResponseTipoOperacionAlmacenListar: function (data) {
-        $("#cmb-tipo-operacion-almacen").select2();
+        $("#cmb-tipo-operacion-almacen").empty();
 
         let tipoMovimientoId = $("#cmb-tipo-movimiento").val();
         data = data.filter(x => x.TipoMovimientoId == tipoMovimientoId);
         let dataTipoOperacionAlmacen = [];
         dataTipoOperacionAlmacen = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
         $("#cmb-tipo-operacion-almacen").select2({ data: dataTipoOperacionAlmacen, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseTipoComprobanteListar: function (data) {
+        let sindoc = {
+                Codigo: "00",
+                Nombre: "Sin Documento Referencia",
+                TipoComprobanteId: 0
+            }
+
+        data.unshift(sindoc);
+
+        data = data.filter(x => x.TipoComprobanteId == 0 || x.TipoComprobanteId == 1 || x.TipoComprobanteId == 2);
+        let dataTipoComprobante = data.map(x => Object.assign(x, { id: x.TipoComprobanteId, text: x.Nombre }));
+        $("#cmb-referencia-tipo").select2({ data: dataTipoComprobante, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ObtenerFiltroClienteNroDocumentoIdentidad: function () {
         return $("#txt-filtro-cliente-nro-documento-identidad").val();

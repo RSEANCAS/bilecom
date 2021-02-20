@@ -44,5 +44,39 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public ProvinciaBe Obtener(int provinciaId, SqlConnection cn)
+        {
+            ProvinciaBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_provincia_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@provinciaId", provinciaId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            respuesta = new ProvinciaBe();
+
+                            if (dr.Read())
+                            {
+                                respuesta.ProvinciaId = dr.GetData<int>("ProvinciaId");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                                respuesta.DepartamentoId = dr.GetData<int>("DepartamentoId");
+                                respuesta.CodigoUbigeo = dr.GetData<string>("CodigoUbigeo");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

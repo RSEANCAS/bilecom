@@ -12,7 +12,7 @@ namespace bilecom.da
 {
     public class SerieDa
     {
-        public List<SerieBe> ListarPorTipoComprobante(int tipoComprobanteId, SqlConnection cn)
+        public List<SerieBe> ListarPorTipoComprobante(int empresaId, int tipoComprobanteId, SqlConnection cn)
         {
             List<SerieBe> lista = null;
             try
@@ -20,6 +20,7 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_listar_x_tipocomprobante", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId);
                     cmd.Parameters.AddWithValue("@tipoComprobanteId", tipoComprobanteId);
 
                     using (SqlDataReader dr = cmd.ExecuteReader())

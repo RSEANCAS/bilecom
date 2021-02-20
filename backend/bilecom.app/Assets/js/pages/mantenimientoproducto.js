@@ -1,4 +1,4 @@
-﻿var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [];
+﻿var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [], TipoProductoLista = [];
 TipoCalculo = [{
     Id: "VALORUNITARIO",
     Descripcion: "Valor Unitario (monto sin igv)"
@@ -20,11 +20,34 @@ const pageMantenimientoProducto = {
                     "txt-nombre": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria.",
+                                message: "Debe ingresar nombre.",
                             },
                             regexp: {
                                 regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
                                 message: 'Solo puede ingresar caracteres alfabéticos'
+                            }
+                        }
+                    },
+                    "txt-codigo": {
+                        validators: {
+                            notEmpty: {
+                                message:"Debe ingresar código de producto."
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                                message: 'Solo puede ingresar caracteres alfanumericos.'
+                            }
+                        }
+                    },
+                    "txt-codigo-sunat": {
+                        validators: {
+                            stringLength: {
+                                min: 8,
+                                max: 8,
+                                message:"Código Sunat consta de 8 dígitos."
+                            },
+                            notEmpty: {
+                                message:"Debe de ingresar código sunat."
                             }
                         }
                     }
@@ -55,19 +78,22 @@ const pageMantenimientoProducto = {
         let promises = [
             fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`),
-            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`)
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`),
+            fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))
-            .then(([CategoriaProductoLista, TipoAfectacionLista, UnidadMedidaLista]) => {
+            .then(([CategoriaProductoLista, TipoAfectacionLista, UnidadMedidaLista, tipoProductoLista]) => {
                 CategoriaProductoLista = CategoriaProductoLista;
                 TipoAfectacionLista = TipoAfectacionLista;
                 UnidadMedidaLista = UnidadMedidaLista;
+                TipoProductoLista = tipoProductoLista;
 
                 pageMantenimientoProducto.ResponseCategoriaProductoListar(CategoriaProductoLista);
                 pageMantenimientoProducto.ResponseTipoAfectacionIgvListar(TipoAfectacionLista);
                 pageMantenimientoProducto.ResponseUnidadMedidaListar(UnidadMedidaLista);
                 pageMantenimientoProducto.ResponseTipoCalculoListar(TipoCalculo);
+                pageMantenimientoProducto.ResponseTipoProductoListar(TipoProductoLista);
                 //$("#cmb-categoria").val(1).trigger('change');
             })
     },
@@ -78,7 +104,9 @@ const pageMantenimientoProducto = {
         let categoriaId = $("#cmb-categoria").val();
         let tipoAfectacionIgvId = $("#cmb-tipo-afectacion").val();
         let unidadMedidaId = $("#cmb-unidad-medida").val();
-        let tipoProducto = $("#cmb-tipo-producto").val();
+        let tipoProductoId = $("#cmb-tipo-producto").val();
+        let codigoSunat = $("#txt-codigo-sunat").val();
+        let codigo = $("#txt-codigo").val();
         let tipoCalculo = $("#cmb-tipo-calculo").val();
         let monto = $("#txt-monto").val();
         let stockMinimo = $("#txt-stock-minimo").val();
@@ -92,11 +120,14 @@ const pageMantenimientoProducto = {
             Nombre: nombre,
             TipoAfectacionIgvId: tipoAfectacionIgvId ,
             UnidadMedidaId: unidadMedidaId,
-            TipoProducto: tipoProducto ,
+            TipoProducto: tipoProductoId ,
             TipoCalculo: tipoCalculo,
             Monto: monto ,
             StockMinimo: stockMinimo ,
-            Usuario : user
+            Usuario: user,
+            TipoProductoId: tipoProductoId,
+            CodigoSunat: codigoSunat,
+            Codigo:codigo
         }
 
         let url = `${urlRoot}api/producto/guardar-producto`;
@@ -155,5 +186,9 @@ const pageMantenimientoProducto = {
     ResponseTipoCalculoListar: function (data) {
         let datatipocalculo = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
         $("#cmb-tipo-calculo").select2({ data: datatipocalculo, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseTipoProductoListar: function (data) {
+        let datatipoproducto = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoProductoId, text: item.Nombre }); });
+        $("#cmb-tipo-producto").select2({ data: datatipoproducto, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 }
