@@ -70,6 +70,7 @@
     <Compile Include="TipoCambioBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
+    <Compile Include="TipoOperacionAlmacenBl.cs" />
     <Compile Include="TipoOperacionVentaBl.cs" />
     <Compile Include="TipoMovimientoBl.cs" />
     <Compile Include="TipoProductoBl.cs" />

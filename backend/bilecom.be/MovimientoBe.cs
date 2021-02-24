@@ -14,6 +14,11 @@ namespace bilecom.be
         public int SedeAlmacenId { get; set; }
         public int TipoMovimientoId { get; set; }
         public TipoMovimientoBe TipoMovimiento { get; set; }
+        public int TipoOperacionAlmacenId { get; set; }
+        public TipoOperacionAlmacenBe TipoOperacionAlmacen { get; set; }
+        public string ReferenciaTipo { get; set; }
+        public string ReferenciaSerie { get; set; }
+        public string ReferenciaNumero { get; set; }
         public DateTime FechaHoraEmision { get; set; }
         public int SerieId { get; set; }
         public SerieBe Serie { get; set; }

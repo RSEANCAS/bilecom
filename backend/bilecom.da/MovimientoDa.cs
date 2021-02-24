@@ -125,6 +125,10 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@SerieId", registro.SerieId.GetNullable());
                     cmd.Parameters.AddWithValue("@NroMovimiento", registro.NroMovimiento.GetNullable());
                     cmd.Parameters.AddWithValue("@TipoMovimientoId", registro.TipoMovimientoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoOperacionAlmacenId", registro.TipoOperacionAlmacenId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ReferenciaTipo", registro.ReferenciaTipo.GetNullable());
+                    cmd.Parameters.AddWithValue("@ReferenciaSerie", registro.ReferenciaSerie.GetNullable());
+                    cmd.Parameters.AddWithValue("@ReferenciaNumero", registro.ReferenciaNumero.GetNullable());
                     cmd.Parameters.AddWithValue("@ClienteId", registro.ClienteId.GetNullable());
                     cmd.Parameters.AddWithValue("@PersonalId", registro.PersonalId.GetNullable());
                     cmd.Parameters.AddWithValue("@ProveedorId", registro.ProveedorId.GetNullable());

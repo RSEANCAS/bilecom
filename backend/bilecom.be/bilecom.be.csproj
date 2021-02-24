@@ -84,6 +84,7 @@
     <Compile Include="TipoCambioBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
+    <Compile Include="TipoOperacionAlmacenBe.cs" />
     <Compile Include="TipoOperacionVentaBe.cs" />
     <Compile Include="TipoMovimientoBe.cs" />
     <Compile Include="TipoProductoBe.cs" />

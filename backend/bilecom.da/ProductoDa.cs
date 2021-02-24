@@ -159,6 +159,10 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@Monto", productoBe.Monto.GetNullable());
                     cmd.Parameters.AddWithValue("@StockMinimo", productoBe.StockMinimo.GetNullable());
                     cmd.Parameters.AddWithValue("@Usuario", productoBe.Usuario.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoProductoId", productoBe.TipoProductoId.GetNullable());
+                    cmd.Parameters.AddWithValue("@CodigoSunat", productoBe.CodigoSunat.GetNullable());
+                    cmd.Parameters.AddWithValue("@Codigo", productoBe.Codigo.GetNullable());
+
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
                     seGuardo = filasAfectadas > 0;
