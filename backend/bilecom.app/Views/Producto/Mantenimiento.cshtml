@@ -40,6 +40,12 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Código</span>
+                                <input class="form-control" placeholder="Codigo" name="txt-codigo" id="txt-codigo" data-bv-field="txt-codigo" maxlength="50" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Nombre</span>
                                 <input class="form-control" placeholder="Nombre" name="txt-nombre" id="txt-nombre" data-bv-field="txt-nombre" required>
                             </div>
@@ -47,15 +53,19 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Stock Minimo</span>
-                                <input class="form-control" placeholder="Stock Minimo" name="txt-stock-minimo" id="txt-stock-minimo" data-bv-field="txt-stock-minimo" required>
+                                <input class="form-control" placeholder="Stock Minimo" name="txt-stock-minimo" id="txt-stock-minimo" data-bv-field="txt-stock-minimo">
                             </div>
                         </div>
                     </div>
                     <div class="row">
-
-
-                    </div>
-                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo Producto</font></font></span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-producto" id="cmb-tipo-producto" data-bv-field="cmb-tipo-producto" tabindex="-1" aria-hidden="false">
+                                </select>
+                                <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-tipo-producto" style=""></i>
+                            </div>
+                        </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Unidad de Medida</font></font></span>
@@ -66,12 +76,22 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Código Sunat</span>
+                                <input class="form-control" placeholder="Código Sunat" name="txt-codigo-sunat" id="txt-codigo-sunat" data-bv-field="txt-codigo-sunat" maxlength="8" >
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo de Afectación al IGV</font></font></span>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-afectacion" id="cmb-tipo-afectacion" data-bv-field="cmb-tipo-afectacion" tabindex="-1" aria-hidden="false">
                                 </select>
                                 <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-tipo-afectacion" style=""></i>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        
+                        
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo de Cálculo</font></font></span>

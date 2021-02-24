@@ -80,9 +80,13 @@
     <Compile Include="SedeBe.cs" />
     <Compile Include="SedeUsuarioBe.cs" />
     <Compile Include="SerieBe.cs" />
+    <Compile Include="TableroConteo_x_DocumentoBe.cs" />
+    <Compile Include="TableroUltimosDocumentosBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />
+    <Compile Include="TipoCambioBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
+    <Compile Include="TipoOperacionAlmacenBe.cs" />
     <Compile Include="TipoOperacionVentaBe.cs" />
     <Compile Include="TipoMovimientoBe.cs" />
     <Compile Include="TipoProductoBe.cs" />

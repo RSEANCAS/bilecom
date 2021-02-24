@@ -393,6 +393,7 @@
     <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\factura.js" />
+    <Content Include="Assets\js\pages\inicio.js" />
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -2837,9 +2838,13 @@
     <Compile Include="Controllers\Api\ProvinciaController.cs" />
     <Compile Include="Controllers\Api\SedeController.cs" />
     <Compile Include="Controllers\Api\SerieController.cs" />
+    <Compile Include="Controllers\Api\TableroConteo_x_DocumentoController.cs" />
+    <Compile Include="Controllers\Api\TableroUltimosDocumentosController.cs" />
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
+    <Compile Include="Controllers\Api\TipoCambioController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
+    <Compile Include="Controllers\Api\TipoOperacionAlmacenController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
     <Compile Include="Controllers\Api\TipoProductoController.cs" />

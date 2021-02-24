@@ -1,42 +1,69 @@
-﻿var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [];
+﻿var CategoriaProductoLista = [],
+    UnidadMedidaLista = [],
+    TipoAfectacionLista = [],
+    TipoCalculo = [],
+    TipoProductoLista = [];
 TipoCalculo = [{
     Id: "VALORUNITARIO",
     Descripcion: "Valor Unitario (monto sin igv)"
 }, { Id: "PRECIOUNITARIO", Descripcion: "Precio Unitario (monto con igv)" }, { Id: "IMPORTETOTAL", Descripcion: "Importe Total" }]
 
 const pageMantenimientoProducto = {
-    Init: function () {
+    Init: function() {
         this.Validar();
         this.InitEvents();
     },
-    InitEvents: function () {
+    InitEvents: function() {
         pageMantenimientoProducto.ObtenerDatos();
         pageMantenimientoProducto.CargarCombo();
     },
-    Validar: function () {
+    Validar: function() {
         $("#frm-producto-mantenimiento")
             .bootstrapValidator({
                 fields: {
                     "txt-nombre": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar Categoria.",
+                                message: "Debe ingresar nombre.",
                             },
                             regexp: {
                                 regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
                                 message: 'Solo puede ingresar caracteres alfabéticos'
                             }
                         }
+                    },
+                    "txt-codigo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar código de producto."
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                                message: 'Solo puede ingresar caracteres alfanumericos.'
+                            }
+                        }
+                    },
+                    "txt-codigo-sunat": {
+                        validators: {
+                            stringLength: {
+                                min: 8,
+                                max: 8,
+                                message: "Código Sunat consta de 8 dígitos."
+                            },
+                            notEmpty: {
+                                message: "Debe de ingresar código sunat."
+                            }
+                        }
                     }
                 }
             })
-            .on('success.form.bv', function (e) {
+            .on('success.form.bv', function(e) {
                 e.preventDefault();
                 pageMantenimientoProducto.EnviarFormulario();
             });
     },
 
-    ObtenerDatos: function () {
+    ObtenerDatos: function() {
         let numero = $("#txt-opcion").val();
         if (numero != 0) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
@@ -50,35 +77,40 @@ const pageMantenimientoProducto = {
         }
     },
 
-    CargarCombo: async function () {
+    CargarCombo: async function() {
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let promises = [
             fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`),
-            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${empresaId}`)
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${empresaId}`),
+            fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))
-            .then(([CategoriaProductoLista, TipoAfectacionLista, UnidadMedidaLista]) => {
+            .then(([CategoriaProductoLista, TipoAfectacionLista, UnidadMedidaLista, tipoProductoLista]) => {
                 CategoriaProductoLista = CategoriaProductoLista;
                 TipoAfectacionLista = TipoAfectacionLista;
                 UnidadMedidaLista = UnidadMedidaLista;
+                TipoProductoLista = tipoProductoLista;
 
                 pageMantenimientoProducto.ResponseCategoriaProductoListar(CategoriaProductoLista);
                 pageMantenimientoProducto.ResponseTipoAfectacionIgvListar(TipoAfectacionLista);
                 pageMantenimientoProducto.ResponseUnidadMedidaListar(UnidadMedidaLista);
                 pageMantenimientoProducto.ResponseTipoCalculoListar(TipoCalculo);
+                pageMantenimientoProducto.ResponseTipoProductoListar(TipoProductoLista);
                 //$("#cmb-categoria").val(1).trigger('change');
             })
     },
 
-    EnviarFormulario: function () {
+    EnviarFormulario: function() {
         let productoId = $("#txt-opcion").val();
         let nombre = $("#txt-nombre").val();
         let categoriaId = $("#cmb-categoria").val();
         let tipoAfectacionIgvId = $("#cmb-tipo-afectacion").val();
         let unidadMedidaId = $("#cmb-unidad-medida").val();
-        let tipoProducto = $("#cmb-tipo-producto").val();
+        let tipoProductoId = $("#cmb-tipo-producto").val();
+        let codigoSunat = $("#txt-codigo-sunat").val();
+        let codigo = $("#txt-codigo").val();
         let tipoCalculo = $("#cmb-tipo-calculo").val();
         let monto = $("#txt-monto").val();
         let stockMinimo = $("#txt-stock-minimo").val();
@@ -86,17 +118,20 @@ const pageMantenimientoProducto = {
         let user = common.ObtenerUsuario().Nombre;
 
         let ObjectoJson = {
-            EmpresaId : empresaId,
-            ProductoId :productoId,
+            EmpresaId: empresaId,
+            ProductoId: productoId,
             CategoriaId: categoriaId,
             Nombre: nombre,
-            TipoAfectacionIgvId: tipoAfectacionIgvId ,
+            TipoAfectacionIgvId: tipoAfectacionIgvId,
             UnidadMedidaId: unidadMedidaId,
-            TipoProducto: tipoProducto ,
+            TipoProducto: tipoProductoId,
             TipoCalculo: tipoCalculo,
-            Monto: monto ,
-            StockMinimo: stockMinimo ,
-            Usuario : user
+            Monto: monto,
+            StockMinimo: stockMinimo,
+            Usuario: user,
+            TipoProductoId: tipoProductoId,
+            CodigoSunat: codigoSunat,
+            Codigo: codigo
         }
 
         let url = `${urlRoot}api/producto/guardar-producto`;
@@ -108,12 +143,13 @@ const pageMantenimientoProducto = {
             .then(r => r.json())
             .then(pageMantenimientoProducto.ResponseEnviarFormulario);
     },
-    ResponseObtenerDatos: function (data) {
+    ResponseObtenerDatos: function(data) {
         $("#txt-nombre").val(data.Nombre);
         $("#cmb-categoria").val(data.CategoriaId).trigger('change');
     },
-    ResponseEnviarFormulario: function (data) {
-        let tipo = "", mensaje = "";
+    ResponseEnviarFormulario: function(data) {
+        let tipo = "",
+            mensaje = "";
         if (data == true) {
             tipo = "success";
             mensaje = "¡Se ha guardado con éxito!";
@@ -132,7 +168,7 @@ const pageMantenimientoProducto = {
             },
             focus: true,
             timer: 1800,
-            onHide: function () {
+            onHide: function() {
                 if (data == true) {
                     location.href = `${urlRoot}Productos`
                 }
@@ -140,20 +176,24 @@ const pageMantenimientoProducto = {
         });
     },
 
-    ResponseCategoriaProductoListar: function (data) {
+    ResponseCategoriaProductoListar: function(data) {
         let datacategoriaproducto = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.CategoriaProductoId, text: item.Nombre }); });
         $("#cmb-categoria").select2({ data: datacategoriaproducto, width: '100%', placeholder: '[SELECCIONE...]' });
     },
-    ResponseTipoAfectacionIgvListar: function (data) {
+    ResponseTipoAfectacionIgvListar: function(data) {
         let datatipoafectacionigv = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
         $("#cmb-tipo-afectacion").select2({ data: datatipoafectacionigv, width: '100%', placeholder: '[SELECCIONE...]' });
     },
-    ResponseUnidadMedidaListar: function (data) {
+    ResponseUnidadMedidaListar: function(data) {
         let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
         $("#cmb-unidad-medida").select2({ data: dataunidadmedida, width: '100%', placeholder: '[SELECCIONE...]' });
     },
-    ResponseTipoCalculoListar: function (data) {
+    ResponseTipoCalculoListar: function(data) {
         let datatipocalculo = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
         $("#cmb-tipo-calculo").select2({ data: datatipocalculo, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseTipoProductoListar: function(data) {
+        let datatipoproducto = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoProductoId, text: item.Nombre }); });
+        $("#cmb-tipo-producto").select2({ data: datatipoproducto, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 }
