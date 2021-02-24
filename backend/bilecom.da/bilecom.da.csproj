@@ -63,6 +63,7 @@
     <Compile Include="ProvinciaDa.cs" />
     <Compile Include="SerieDa.cs" />
     <Compile Include="TipoAfectacionIgvDa.cs" />
+    <Compile Include="TipoCambioDa.cs" />
     <Compile Include="TipoComprobanteDa.cs" />
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
     <Compile Include="TipoOperacionVentaDa.cs" />

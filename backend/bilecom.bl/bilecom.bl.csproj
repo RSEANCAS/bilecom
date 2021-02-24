@@ -67,6 +67,7 @@
     <Compile Include="ProvinciaBl.cs" />
     <Compile Include="SerieBl.cs" />
     <Compile Include="TipoAfectacionIgvBl.cs" />
+    <Compile Include="TipoCambioBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
     <Compile Include="TipoOperacionVentaBl.cs" />

@@ -81,6 +81,7 @@
     <Compile Include="SedeUsuarioBe.cs" />
     <Compile Include="SerieBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />
+    <Compile Include="TipoCambioBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
     <Compile Include="TipoOperacionVentaBe.cs" />
