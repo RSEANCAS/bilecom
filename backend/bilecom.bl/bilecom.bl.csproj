@@ -69,6 +69,7 @@
     <Compile Include="TableroConteo_x_DocumentoBl.cs" />
     <Compile Include="TableroUltimosDocumentosBl.cs" />
     <Compile Include="TipoAfectacionIgvBl.cs" />
+    <Compile Include="TipoCambioBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
     <Compile Include="TipoOperacionAlmacenBl.cs" />

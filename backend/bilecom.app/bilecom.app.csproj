@@ -2840,6 +2840,7 @@
     <Compile Include="Controllers\Api\TableroConteo_x_DocumentoController.cs" />
     <Compile Include="Controllers\Api\TableroUltimosDocumentosController.cs" />
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
+    <Compile Include="Controllers\Api\TipoCambioController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionAlmacenController.cs" />

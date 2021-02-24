@@ -1,4 +1,3 @@
-D:\JARE\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csproj.CoreCompileInputs.cache
 C:\Jare\bilecom\backend\bilecom.sunat\obj\Debug\bilecom.sunat.csprojAssemblyReference.cache
 C:\Jare\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll.config
 C:\Jare\bilecom\backend\bilecom.sunat\bin\Debug\bilecom.sunat.dll

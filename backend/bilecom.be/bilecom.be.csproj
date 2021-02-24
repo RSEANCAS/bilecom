@@ -83,6 +83,7 @@
     <Compile Include="TableroConteo_x_DocumentoBe.cs" />
     <Compile Include="TableroUltimosDocumentosBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />
+    <Compile Include="TipoCambioBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
     <Compile Include="TipoOperacionAlmacenBe.cs" />
