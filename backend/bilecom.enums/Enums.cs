@@ -72,5 +72,33 @@ namespace bilecom.enums
             FacturaGuiaRemitente = 9,
             FacturaGuiaTransportista = 10,
         }
+
+        public enum TipoTributo
+        {
+            Igv = 1,
+            Isc = 2,
+            Exportacion = 3,
+            Gratuito = 4,
+            Exonerado = 5,
+            Inafecto = 6,
+            OtrosConceptosPago = 7,
+            ImpuestoVentaArrozPilado = 8
+        }
+
+        public enum EstadoCdr
+        {
+            [Description("Aceptado")]
+            [Category("success")]
+            Aceptado = 1,
+            [Description("En Proceso")]
+            [Category("warning")]
+            EnProceso = 2,
+            [Description("Rechazado")]
+            [Category("danger")]
+            Rechazado = 3,
+            [Description("No Emitido")]
+            [Category("default")]
+            NoEmitido = 4
+        }
     }
 }

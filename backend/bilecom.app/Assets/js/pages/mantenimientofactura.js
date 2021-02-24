@@ -1,4 +1,4 @@
-﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], detalleLista = [], detalleListaEliminados = [];
+﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], detalleLista = [], detalleListaEliminados = [];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -532,7 +532,7 @@ const pageMantenimientoFactura = {
         let descripcion = $("#cmb-detalle-descripcion option:selected").text();
         let tipoAfectacionIgvId = $("#cmb-detalle-tipo-afectacion-igv").val();
         let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
-        tipoAfectacionIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Id: tipoAfectacionIgv.Id, FlagGratuito: tipoAfectacionIgv.FlagGratuito, TipoTributo: tipoAfectacionIgv.TipoTributo };
+        tipoAfectacionIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Id: tipoAfectacionIgv.Id, FlagGravado: tipoAfectacionIgv.FlagGravado, FlagExonerado: tipoAfectacionIgv.FlagExonerado, FlagInafecto: tipoAfectacionIgv.FlagInafecto, FlagExportacion: tipoAfectacionIgv.FlagExportacion, FlagGratuito: tipoAfectacionIgv.FlagGratuito, FlagVentaArrozPilado: tipoAfectacionIgv.FlagVentaArrozPilado, TipoTributo: tipoAfectacionIgv.TipoTributo };
         let tipoTributoIgvId = tipoAfectacionIgv.TipoTributoId;
         let tipoTributoIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Codigo: tipoAfectacionIgv.TipoTributo.Codigo, Nombre: tipoAfectacionIgv.TipoTributo.Nombre, CodigoNombre: tipoAfectacionIgv.TipoTributo.CodigoNombre };
         let descuento = Number($("#txt-detalle-descuento").val().replace(/,/g, ""));
@@ -540,8 +540,8 @@ const pageMantenimientoFactura = {
         let porcentajeIgv = Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
         let igv = Number($("#txt-detalle-igv").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
-        let valorUnitario = Math.round(precioUnitario * 0.18, 2);
-        let valorVenta = Math.round(valorUnitario * cantidad, 2);
+        let valorUnitario = Math.round((precioUnitario / 1.18) * 100) / 100;
+        let valorVenta = Math.round((valorUnitario * cantidad) * 100) / 100;
         let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
         let data = {
@@ -567,7 +567,7 @@ const pageMantenimientoFactura = {
             PorcentajeICPBER: 0,
             ValorUnitario: valorUnitario,
             PrecioUnitario: precioUnitario,
-            ValorVenta: valorUnitario,
+            ValorVenta: valorVenta,
             PrecioVenta: totalImporte,
             ImporteTotal: totalImporte
         }
@@ -598,9 +598,11 @@ const pageMantenimientoFactura = {
         
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
         let precioUnitario = isNaN(Number(precioUnitarioString)) ? 0 : Number(precioUnitarioString);
+        let valorUnitario = precioUnitario / 1.18;
+        let valorVenta = valorUnitario * cantidad;
         let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
-        let importeTotal = cantidad * precioUnitario - descuento;
-        let igv = importeTotal * 0.18;
+        let importeTotal = cantidad * (precioUnitario - descuento);
+        let igv = importeTotal - valorVenta;
 
 
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
@@ -619,10 +621,11 @@ const pageMantenimientoFactura = {
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`)]
+            fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
+            fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista]) => {
+            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista]) => {
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
@@ -630,6 +633,7 @@ const pageMantenimientoFactura = {
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 unidadMedidaLista = UnidadMedidaLista || [];
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
+                tipoTributoLista = TipoTributoLista || [];
 
                 pageMantenimientoFactura.ResponseSerieListar(serieLista);
                 pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
@@ -659,10 +663,15 @@ const pageMantenimientoFactura = {
 
     EnviarFormulario: function () {
         let serieId = $("#cmb-serie").val();
+        let serie = $("#cmb-serie").select2("data")[0];
+        serie = { Serial: serie.Serial };
         let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
         let moneda = $("#cmb-moneda").select2("data")[0];
         moneda = { MonedaId: moneda.MonedaId, Nombre: moneda.Nombre, Simbolo: moneda.Simbolo, Codigo: moneda.Codigo };
         let monedaId = $("#cmb-moneda").val();
+        let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
+        let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
+        tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
         let clienteId = $("#hdn-cliente-id").val();
         let tipoDocumentoIdentidadCliente = $("#cmb-tipo-documento-identidad-cliente").select2("data")[0];
         let cliente = {
@@ -671,11 +680,11 @@ const pageMantenimientoFactura = {
             RazonSocial: $("#txt-nombres-completos-cliente").val()
         };
         let totalGravado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalInafecto = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExportacion = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalInafecto = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExportacion = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalGratuito = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalIGV = detalleLista.map(x => x.IGV).reduce((a, b) => a + b, 0);
         let totalISC = detalleLista.map(x => x.ISC).reduce((a, b) => a + b, 0);
         let totalOtrosCargos = 0;
@@ -684,6 +693,14 @@ const pageMantenimientoFactura = {
         let totalDescuentoDetalle = detalleLista.map(x => x.Descuento).reduce((a, b) => a + b, 0);
         let importeTotal = detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0);
 
+        let tipoTributoExonerado = totalExonerado > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdExonerado) : null;
+        let tipoTributoInafecto = totalInafecto > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdInafecto) : null;
+        let tipoTributoExportacion = totalExportacion > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdExportacion) : null;
+        let tipoTributoGratuito = totalGratuito > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdGratuito) : null;
+        let tipoTributoIgv = totalIGV > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdIgv) : null;
+        let tipoTributoIsc = totalISC > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdIsc) : null;
+        let tipoTributoOth = totalOtrosTributos > 0 ? tipoTributoLista.find(x => x.TipoTributoId == tipoTributoIdOtrosConceptosPago) : null;
+
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
 
@@ -691,9 +708,12 @@ const pageMantenimientoFactura = {
             EmpresaId: empresaId,
             FacturaId: facturaId,
             SerieId: serieId,
+            Serie: serie,
             FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
             Moneda: moneda,
+            TipoOperacionVentaId: tipoOperacionVentaId,
+            TipoOperacionVenta: tipoOperacionVenta,
             FlagExportacion: false,
             FlagGratuito: false,
             FlagEmisorItinerante: false,
@@ -716,6 +736,20 @@ const pageMantenimientoFactura = {
             TotalBaseImponible: totalBaseImponible,
             TotaDescuentos: totalDescuentoDetalle,
             ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
+            TipoTributoIdExonerado: totalExonerado > 0 ? tipoTributoIdExonerado : null,
+            TipoTributoExonerado: tipoTributoExonerado,
+            TipoTributoIdInafecto: totalInafecto > 0 ? tipoTributoIdInafecto : null,
+            TipoTributoInafecto: tipoTributoInafecto,
+            TipoTributoIdExportacion: totalExportacion > 0 ? tipoTributoIdExportacion : null,
+            TipoTributoExportacion: tipoTributoExportacion,
+            TipoTributoIdGratuito: totalGratuito > 0 ? tipoTributoIdGratuito : null,
+            TipoTributoGratuito: tipoTributoGratuito,
+            TipoTributoIdIgv: totalIGV > 0 ? tipoTributoIdIgv : null,
+            TipoTributoIgv: tipoTributoIgv,
+            TipoTributoIdIsc: totalISC > 0 ? tipoTributoIdIsc : null,
+            TipoTributoIsc: tipoTributoIsc,
+            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago: null,
+            TipoTributoOtrosTributos: tipoTributoOth,
             Usuario: user.Nombre,
             ListaFacturaDetalle: detalleLista,
             ListaFacturaDetalleEliminados: detalleListaEliminados
@@ -807,7 +841,7 @@ const pageMantenimientoFactura = {
     },
 
     ResponseTipoAfectacionIgvListar: function (data, dropdownParent = null) {
-        let dataTipoAfectacionIgv = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        let dataTipoAfectacionIgv = data.map(x => Object.assign(x, { id: x.TipoAfectacionIgvId, text: x.Descripcion }));
         $("#cmb-detalle-tipo-afectacion-igv").empty();
         $("#cmb-detalle-tipo-afectacion-igv").select2({ data: dataTipoAfectacionIgv, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-tipo-afectacion-igv").val("").trigger("change");

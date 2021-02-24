@@ -55,7 +55,7 @@ const pageMantenimientoProducto = {
         let promises = [
             fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`),
-            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`)
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${empresaId}`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))

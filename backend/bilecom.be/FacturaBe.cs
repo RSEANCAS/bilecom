@@ -1,8 +1,11 @@
-﻿using System;
+﻿using bilecom.enums;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static bilecom.enums.Enums;
 
 namespace bilecom.be
 {
@@ -18,6 +21,8 @@ namespace bilecom.be
         public DateTime? FechaVencimiento { get; set; }
         public int MonedaId { get; set; }
         public MonedaBe Moneda { get; set; }
+        public int TipoOperacionVentaId { get; set; }
+        public TipoOperacionVentaBe TipoOperacionVenta { get; set; }
         public int ClienteId { get; set; }
         public ClienteBe Cliente { get; set; }
         public bool FlagExportacion { get; set; }
@@ -29,27 +34,27 @@ namespace bilecom.be
         public bool FlagOtrosTributos { get; set; }
         public decimal TotalGravado { get; set; }
         public decimal TotalExonerado { get; set; }
-        public int TipoTributoIdExonerado { get; set; }
+        public int? TipoTributoIdExonerado { get; set; }
         public TipoTributoBe TipoTributoExonerado { get; set; }
         public decimal TotalInafecto { get; set; }
-        public int TipoTributoIdInafecto { get; set; }
+        public int? TipoTributoIdInafecto { get; set; }
         public TipoTributoBe TipoTributoInafecto { get; set; }
         public decimal TotalExportacion { get; set; }
-        public int TipoTributoIdExportacion { get; set; }
+        public int? TipoTributoIdExportacion { get; set; }
         public TipoTributoBe TipoTributoExportacion { get; set; }
         public decimal TotalGratuito { get; set; }
-        public int TipoTributoIdGratuito { get; set; }
+        public int? TipoTributoIdGratuito { get; set; }
         public TipoTributoBe TipoTributoGratuito { get; set; }
         public decimal TotalVentaArrozPilado { get; set; }
         public decimal TotalIgv { get; set; }
-        public int TipoTributoIdIgv { get; set; }
+        public int? TipoTributoIdIgv { get; set; }
         public TipoTributoBe TipoTributoIgv { get; set; }
         public decimal TotalIsc { get; set; }
-        public int TipoTributoIdIsc { get; set; }
+        public int? TipoTributoIdIsc { get; set; }
         public TipoTributoBe TipoTributoIsc { get; set; }
         public decimal TotalOtrosCargos { get; set; }
         public decimal TotalOtrosTributos { get; set; }
-        public int TipoTributoIdOtrosTributos { get; set; }
+        public int? TipoTributoIdOtrosTributos { get; set; }
         public TipoTributoBe TipoTributoOtrosTributos { get; set; }
         public decimal TotalBaseImponible { get; set; }
         public decimal TotalDescuentos { get; set; }
@@ -59,6 +64,37 @@ namespace bilecom.be
         public decimal TotalDescuentosGlobal { get; set; }
         public decimal ImporteTotal { get; set; }
         public bool FlagAnulado { get; set; }
+        public string CodigoRespuestaSunat { get; set; }
+        public string DescripcionRespuestaSunat { get; set; }
+        public int? EstadoIdRespuestaSunat { get; set; }
+        public EstadoCdr EstadoRespuestaSunat
+        {
+            get
+            {
+                EstadoCdr value = EstadoCdr.NoEmitido;
+                if (EstadoIdRespuestaSunat != null) value = (EstadoCdr)EstadoIdRespuestaSunat;
+
+                return value;
+            }
+        }
+        public string EstadoStrRespuestaSunat
+        {
+            get
+            {
+                return EstadoRespuestaSunat.GetAttributeOfType<DescriptionAttribute>().Description;
+            }
+        }
+        public string EstadoColorRespuestaSunat
+        {
+            get
+            {
+                return EstadoRespuestaSunat.GetAttributeOfType<CategoryAttribute>().Category;
+            }
+        }
+        public string RutaXml { get; set; }
+        public string RutaPdf { get; set; }
+        public string RutaCdr { get; set; }
+
 
         public int[] ListaFacturaGuiaRemisionEliminados { get; set; }
         public List<FacturaGuiaRemisionBe> ListaFacturaGuiaRemision { get; set; }

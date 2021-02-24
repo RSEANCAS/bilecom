@@ -321,6 +321,7 @@
     <Content Include="Assets\img\gl-alert.jpg" />
     <Content Include="Assets\img\invoice-logo.png" />
     <Content Include="Assets\img\logo.png" />
+    <Content Include="Assets\img\logo_bilecom.png" />
     <Content Include="Assets\img\pg-alert.jpg" />
     <Content Include="Assets\img\pl-alert.jpg" />
     <Content Include="Assets\img\profile-photos\1.png" />
@@ -2843,6 +2844,7 @@
     <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
     <Compile Include="Controllers\Api\TipoProductoController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
+    <Compile Include="Controllers\Api\TipoTributoController.cs" />
     <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />

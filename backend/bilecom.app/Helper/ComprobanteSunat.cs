@@ -78,9 +78,13 @@ namespace bilecom.app.Helper
             // 05. TIPO COMPROBANTE
             invoiceType.InvoiceTypeCode = new sunat.comprobante.invoice.InvoiceTypeCodeType();
             invoiceType.InvoiceTypeCode.Value = TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
+            invoiceType.InvoiceTypeCode.listID = item.TipoOperacionVenta.CodigoSunat;
             invoiceType.InvoiceTypeCode.listAgencyName = "PE:SUNAT";
             invoiceType.InvoiceTypeCode.listName = "Tipo de Documento";
             invoiceType.InvoiceTypeCode.listURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01";
+
+            invoiceType.ID = new sunat.comprobante.invoice.IDType();
+            invoiceType.ID.Value = $"{item.Serie.Serial}-{item.NroComprobante:00000000}";
 
             // 06. TIPO MONEDA
             invoiceType.DocumentCurrencyCode = new sunat.comprobante.invoice.DocumentCurrencyCodeType();
@@ -95,12 +99,39 @@ namespace bilecom.app.Helper
                 invoiceType.DueDate = new sunat.comprobante.invoice.DueDateType();
                 invoiceType.DueDate.Value = item.FechaVencimiento.Value;
             }
+
+            invoiceType.ProfileID = new sunat.comprobante.invoice.ProfileIDType();
+            invoiceType.ProfileID.Value = item.TipoOperacionVenta.CodigoSunat;
+            //invoiceType.ProfileID.schemeName = "SUNAT:Identificador de Tipo de Operación";
+            //invoiceType.ProfileID.schemeAgencyName = "PE:SUNAT";
+            //invoiceType.ProfileID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo17";
             #endregion
 
             #region Firma Digital
             // 08. FIRMA DIGITAL
             invoiceType.UBLExtensions = new sunat.comprobante.invoice.UBLExtensionType[1];
             invoiceType.UBLExtensions[0] = new sunat.comprobante.invoice.UBLExtensionType();
+            invoiceType.UBLExtensions[0].ExtensionContent = new System.Xml.XmlDocument().CreateElement("ext:firma", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+
+            invoiceType.Signature = new sunat.comprobante.invoice.SignatureType[1];
+            invoiceType.Signature[0] = new sunat.comprobante.invoice.SignatureType();
+            invoiceType.Signature[0].ID = new sunat.comprobante.invoice.IDType();
+            invoiceType.Signature[0].ID.Value = "IDSignJAREV";
+
+            invoiceType.Signature[0].SignatoryParty = new sunat.comprobante.invoice.PartyType();
+            invoiceType.Signature[0].SignatoryParty.PartyIdentification = new sunat.comprobante.invoice.PartyIdentificationType[1];
+            invoiceType.Signature[0].SignatoryParty.PartyIdentification[0] = new sunat.comprobante.invoice.PartyIdentificationType();
+            invoiceType.Signature[0].SignatoryParty.PartyIdentification[0].ID = new sunat.comprobante.invoice.IDType();
+            invoiceType.Signature[0].SignatoryParty.PartyIdentification[0].ID.Value = item.Empresa.Ruc;
+            invoiceType.Signature[0].SignatoryParty.PartyName = new sunat.comprobante.invoice.PartyNameType[1];
+            invoiceType.Signature[0].SignatoryParty.PartyName[0] = new sunat.comprobante.invoice.PartyNameType();
+            invoiceType.Signature[0].SignatoryParty.PartyName[0].Name = new sunat.comprobante.invoice.NameType1();
+            invoiceType.Signature[0].SignatoryParty.PartyName[0].Name.Value = item.Empresa.RazonSocial;
+
+            invoiceType.Signature[0].DigitalSignatureAttachment = new sunat.comprobante.invoice.AttachmentType();
+            invoiceType.Signature[0].DigitalSignatureAttachment.ExternalReference = new sunat.comprobante.invoice.ExternalReferenceType();
+            invoiceType.Signature[0].DigitalSignatureAttachment.ExternalReference.URI = new sunat.comprobante.invoice.URIType();
+            invoiceType.Signature[0].DigitalSignatureAttachment.ExternalReference.URI.Value = "#SignatureJAREV";
             #endregion
 
             #region Datos del Emisor
@@ -312,6 +343,7 @@ namespace bilecom.app.Helper
                     invoiceType.InvoiceLine[i].TaxTotal[0] = new sunat.comprobante.invoice.TaxTotalType();
                     invoiceType.InvoiceLine[i].TaxTotal[0].TaxAmount = new sunat.comprobante.invoice.TaxAmountType();
                     invoiceType.InvoiceLine[i].TaxTotal[0].TaxAmount.Value = totalImpuestosDetalle;
+                    invoiceType.InvoiceLine[i].TaxTotal[0].TaxAmount.currencyID = item.Moneda.Codigo;
 
                     // 31. IMPUESTOS
                     int iImpuestoDetalle = 0;
@@ -476,6 +508,7 @@ namespace bilecom.app.Helper
             invoiceType.TaxTotal[0] = new sunat.comprobante.invoice.TaxTotalType();
             invoiceType.TaxTotal[0].TaxAmount = new sunat.comprobante.invoice.TaxAmountType();
             invoiceType.TaxTotal[0].TaxAmount.Value = totalImpuestos;
+            invoiceType.TaxTotal[0].TaxAmount.currencyID = item.Moneda.Codigo;
 
             // 36. TOTAL EXPORTACION
             int iImpuesto = 0;

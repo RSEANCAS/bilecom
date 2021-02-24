@@ -20,7 +20,6 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_tipoTributo_obtener", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    //cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@tipoTributoId", tipoTributoId.GetNullable());
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
@@ -46,6 +45,44 @@ namespace bilecom.da
                 respuesta = null;
             }
             return respuesta;
+        }
+
+        public List<TipoTributoBe> Listar(SqlConnection cn)
+        {
+            List<TipoTributoBe> lista = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tipotributo_listar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            lista = new List<TipoTributoBe>();
+
+                            while (dr.Read())
+                            {
+                                TipoTributoBe item = new TipoTributoBe();
+
+                                item.TipoTributoId = dr.GetData<int>("TipoTributoId");
+                                item.Descripcion = dr.GetData<string>("Descripcion");
+                                item.Nombre = dr.GetData<string>("Nombre");
+                                item.Codigo = dr.GetData<string>("Codigo");
+                                item.CodigoNombre = dr.GetData<string>("CodigoNombre");
+
+                                lista.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lista = null;
+            }
+            return lista;
         }
     }
 }
