@@ -72,5 +72,16 @@ namespace bilecom.enums
             FacturaGuiaRemitente = 9,
             FacturaGuiaTransportista = 10,
         }
+        public enum EstadoCdr
+        {
+            [Description("Aceptado")]
+            Aceptado =1,
+            [Description("En Proceso")]
+            EnProceso =2,
+            [Description("Rechazado")]
+            Rechazado =3,
+            [Description("No Emitido")]
+            NoEmitido =4
+        }
     }
 }

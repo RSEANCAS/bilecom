@@ -49,7 +49,6 @@
     <Compile Include="Extensiones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seguridad.cs" />
-    <Compile Include="Utilitarios.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
