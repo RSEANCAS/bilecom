@@ -42,8 +42,10 @@ namespace bilecom.sunat
 
             byte[] certificadoByte = File.ReadAllBytes(rutaCertificado);
             X509Certificate2 certificado = new X509Certificate2();
+            //certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.DefaultKeySet);
             certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.Exportable);
-            firmado.SigningKey = (RSA)certificado.PrivateKey;
+            //firmado.SigningKey = (RSA)certificado.PrivateKey;
+            firmado.SigningKey = certificado.PrivateKey;
 
             //digest info agregada en la seccion firma
             var env = new XmlDsigEnvelopedSignatureTransform();

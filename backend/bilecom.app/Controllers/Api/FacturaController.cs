@@ -55,6 +55,9 @@ namespace bilecom.app.Controllers.Api
 
             if (respuesta)
             {
+                try
+                {
+
                 if (facturaId.HasValue) registro.FacturaId = facturaId.Value;
                 if (fechaHoraEmision.HasValue) registro.FechaHoraEmision = fechaHoraEmision.Value;
                 if (nroComprobante.HasValue) registro.NroComprobante = nroComprobante.Value;
@@ -69,7 +72,7 @@ namespace bilecom.app.Controllers.Api
                 string rucSOL = AppSettings.Get<string>("Sunat.RucSOL");
                 string usuarioSOL = AppSettings.Get<string>("Sunat.UsuarioSOL");
                 string claveSOL = AppSettings.Get<string>("Sunat.ClaveSOL");
-                string rutaCertificado = AppSettings.Get<string>("Sunat.RutaCertificado");
+                string rutaCertificado = AppSettings.Get<string>("Sunat.RutaCertificado").Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory);
                 string claveCertificado = AppSettings.Get<string>("Sunat.ClaveCertificado");
 
                 InvoiceType invoiceType = ComprobanteSunat.ObtenerComprobante(registro, ComprobanteSunat.VersionUBL._2_1);
@@ -94,7 +97,7 @@ namespace bilecom.app.Controllers.Api
 
                 string rutaCarpetaSunatComprobantesBase = AppSettings.Get<string>("Empresa.Almacenamiento.Sunat.Comprobantes");
                 string rutaCarpetaSunatComprobantes = rutaCarpetaSunatComprobantesBase
-                    .Replace("~", AppDomain.CurrentDomain.BaseDirectory)
+                    .Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory)
                     .Replace("{Ruc}", registro.Empresa.Ruc)
                     .Replace("{TipoComprobante}", TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value.ToString())
                     .Replace("{Comprobante}", $"{registro.Serie.Serial}-{registro.NroComprobante:00000000}");
@@ -120,6 +123,18 @@ namespace bilecom.app.Controllers.Api
                     registro.RutaCdr = rutaArchivoCdr;
 
                     bool seGuardoRespuestaSunat = facturaBl.GuardarRespuestaSunatFactura(registro);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string rutaLog = AppSettings.Get<string>("Log.Ruta")
+                        .Replace("~", AppDomain.CurrentDomain.BaseDirectory)
+                        .Replace("{Fecha}", DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss"));
+
+                    string[] errors = new string[] { "Message: " + ex.Message, "StackTrace: " + ex.StackTrace };
+
+                    File.WriteAllText(rutaLog, string.Join(Environment.NewLine, errors));
+
                 }
             }
             return respuesta;

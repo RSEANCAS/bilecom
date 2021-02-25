@@ -181,7 +181,7 @@ const pageMantenimientoProducto = {
         $("#cmb-categoria").select2({ data: datacategoriaproducto, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseTipoAfectacionIgvListar: function(data) {
-        let datatipoafectacionigv = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
+        let datatipoafectacionigv = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoAfectacionIgvId, text: item.Descripcion }); });
         $("#cmb-tipo-afectacion").select2({ data: datatipoafectacionigv, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseUnidadMedidaListar: function(data) {
