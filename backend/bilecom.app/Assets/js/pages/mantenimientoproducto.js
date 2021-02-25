@@ -1,4 +1,5 @@
-﻿var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [], TipoProductoLista = [];
+﻿/// <reference path="mantenimientopersonal.js" />
+var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [], TipoProductoLista = [];
 TipoCalculo = [{
     Id: "VALORUNITARIO",
     Descripcion: "Valor Unitario (monto sin igv)"
@@ -10,8 +11,8 @@ const pageMantenimientoProducto = {
         this.InitEvents();
     },
     InitEvents: function () {
-        pageMantenimientoProducto.ObtenerDatos();
         pageMantenimientoProducto.CargarCombo();
+        pageMantenimientoProducto.ObtenerDatos();
     },
     Validar: function () {
         $("#frm-producto-mantenimiento")
@@ -78,7 +79,7 @@ const pageMantenimientoProducto = {
         let promises = [
             fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv`),
-            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida`),
+            fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${empresaId}`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto`)
         ]
         Promise.all(promises)
@@ -140,8 +141,18 @@ const pageMantenimientoProducto = {
             .then(pageMantenimientoProducto.ResponseEnviarFormulario);
     },
     ResponseObtenerDatos: function (data) {
-        $("#txt-nombre").val(data.Nombre);
+        
         $("#cmb-categoria").val(data.CategoriaId).trigger('change');
+        $("#txt-codigo").val(data.Codigo);
+        $("#txt-nombre").val(data.Nombre);
+        $("#txt-stock-minimo").val(data.StockMinimo);
+        $("#cmb-tipo-producto").val(data.TipoProductoId).trigger('change');
+        $("#cmb-unidad-medida").val(data.UnidadMedidaId).trigger('change');
+        $("#txt-codigo-sunat").val(data.CodigoSunat);
+        $("#cmb-tipo-afectacion").val(data.TipoAfectacionIgvId).trigger('change');
+        $("#cmb-tipo-calculo").val(data.TipoCalculo).trigger('change');
+        $("#txt-monto").val(data.Monto);
+
     },
     ResponseEnviarFormulario: function (data) {
         let tipo = "", mensaje = "";
@@ -180,7 +191,7 @@ const pageMantenimientoProducto = {
         $("#cmb-tipo-afectacion").select2({ data: datatipoafectacionigv, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseUnidadMedidaListar: function (data) {
-        let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
+        let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.UnidadMedidaId, text: item.Descripcion }); });
         $("#cmb-unidad-medida").select2({ data: dataunidadmedida, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseTipoCalculoListar: function (data) {
