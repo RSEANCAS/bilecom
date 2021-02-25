@@ -76,6 +76,7 @@
     <Compile Include="TipoOperacionVentaBl.cs" />
     <Compile Include="TipoMovimientoBl.cs" />
     <Compile Include="TipoProductoBl.cs" />
+    <Compile Include="TipoTributoBl.cs" />
     <Compile Include="UnidadMedidaBl.cs" />
     <Compile Include="UsuarioBl.cs" />
     <Compile Include="ProveedorBl.cs" />
@@ -91,6 +92,13 @@
       <Project>{edcafcb6-48a5-4e7c-8892-973fb2153823}</Project>
       <Name>bilecom.da</Name>
     </ProjectReference>
+    <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
+      <Project>{8929a9ee-5864-4cfa-b7ae-3d6850945ab1}</Project>
+      <Name>bilecom.ut</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

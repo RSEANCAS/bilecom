@@ -25,7 +25,7 @@ namespace bilecom.bl
                 lista = facturaDa.Buscar(empresaId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
-            catch (Exception) { lista = null; }
+            catch (Exception ex) { lista = null; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
@@ -82,6 +82,38 @@ namespace bilecom.bl
                         if (seGuardo) scope.Complete();
                         cn.Close();
                     }
+                }
+                catch (Exception ex) { seGuardo = false; }
+                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            }
+            return seGuardo;
+        }
+
+        public bool AnularFactura(FacturaBe registro)
+        {
+            bool seGuardo = false;
+            {
+                try
+                {
+                    cn.Open();
+                    seGuardo = facturaDa.Anular(registro, cn);
+                    cn.Close();
+                }
+                catch (Exception ex) { seGuardo = false; }
+                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            }
+            return seGuardo;
+        }
+
+        public bool GuardarRespuestaSunatFactura(FacturaBe registro)
+        {
+            bool seGuardo = false;
+            {
+                try
+                {
+                    cn.Open();
+                    seGuardo = facturaDa.GuardarRespuestaSunat(registro, cn);
+                    cn.Close();
                 }
                 catch (Exception ex) { seGuardo = false; }
                 finally { if (cn.State == ConnectionState.Open) cn.Close(); }

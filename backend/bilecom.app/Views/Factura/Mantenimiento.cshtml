@@ -207,6 +207,16 @@
     <script>
         const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
         const facturaId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
+
+        const tipoTributoIdIgv = @((int)Enums.TipoTributo.Igv);
+        const tipoTributoIdIsc = @((int)Enums.TipoTributo.Isc);
+        const tipoTributoIdExportacion = @((int)Enums.TipoTributo.Exportacion);
+        const tipoTributoIdGratuito = @((int)Enums.TipoTributo.Gratuito);
+        const tipoTributoIdExonerado = @((int)Enums.TipoTributo.Exonerado);
+        const tipoTributoIdInafecto = @((int)Enums.TipoTributo.Inafecto);
+        const tipoTributoIdOtrosConceptosPago = @((int)Enums.TipoTributo.OtrosConceptosPago);
+        const tipoTributoIdImpuestoVentaArrozPilado = @((int)Enums.TipoTributo.ImpuestoVentaArrozPilado);
+
         $(document).ready(function () {
             pageMantenimientoFactura.Init();
         });

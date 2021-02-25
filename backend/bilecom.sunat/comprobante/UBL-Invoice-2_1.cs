@@ -44121,7 +44121,28 @@ namespace bilecom.sunat.comprobante.invoice {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2")]
     [System.Xml.Serialization.XmlRootAttribute("Invoice", Namespace="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", IsNullable=false)]
     public partial class InvoiceType {
-        
+
+        [XmlAttribute(AttributeName = "Xmlns", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Xmlns { get; set; } = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2";
+        [XmlAttribute(AttributeName = "cac", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Cac { get; set; } = "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2";
+        [XmlAttribute(AttributeName = "cbc", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Cbc { get; set; } = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";
+        [XmlAttribute(AttributeName = "ccts", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Ccts { get; set; } = "urn:un:unece:uncefact:documentation:2";
+        [XmlAttribute(AttributeName = "ds", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Ds { get; set; } = "http://www.w3.org/2000/09/xmldsig#";
+        [XmlAttribute(AttributeName = "ext", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Ext { get; set; } = "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2";
+        [XmlAttribute(AttributeName = "qdt", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Qdt { get; set; } = "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2";
+        [XmlAttribute(AttributeName = "udt", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Udt { get; set; } = "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2";
+        [XmlAttribute(AttributeName = "xsi", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Xsi { get; set; }
+        [XmlAttribute(AttributeName = "sac", Namespace = "http://www.w3.org/2000/xmlns/")]
+        public string Sac { get; set; } = "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1";
+
         private UBLExtensionType[] uBLExtensionsField;
         
         private UBLVersionIDType uBLVersionIDField;

@@ -128,6 +128,7 @@ const pageFactura = {
             { data: "Cliente.NroDocumentoIdentidad" },
             { data: "Cliente.RazonSocial" },
             { data: "ImporteTotal", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
+            { data: "EstadoStrRespuestaSunat", render: (data, type, row) => `<span class="label label-${row.EstadoColorRespuestaSunat}">${data}</span>` },
             {
                 data: "FacturaId", render: function (data, type, row) {
                     return `${row.FlagAnulado == true ? "" :
