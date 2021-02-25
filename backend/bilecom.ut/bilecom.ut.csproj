@@ -54,5 +54,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bilecom.sunat\bilecom.sunat.csproj">
+      <Project>{EF83C0F1-8397-48AC-B610-EB90F282369C}</Project>
+      <Name>bilecom.sunat</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

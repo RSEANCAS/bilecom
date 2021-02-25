@@ -51,6 +51,12 @@ namespace bilecom.da
                             item.Cliente.RazonSocial = dr.GetData<string>("RazonSocialCliente");
                             item.ImporteTotal = dr.GetData<decimal>("ImporteTotal");
                             item.FlagAnulado = dr.GetData<bool>("FlagAnulado");
+                            item.CodigoRespuestaSunat = dr.GetData<string>("CodigoRespuestaSunat");
+                            item.DescripcionRespuestaSunat = dr.GetData<string>("DescripcionRespuestaSunat");
+                            item.EstadoIdRespuestaSunat = dr.GetData<int?>("EstadoIdRespuestaSunat");
+                            item.RutaXml = dr.GetData<string>("RutaXml");
+                            item.RutaPdf = dr.GetData<string>("RutaPdf");
+                            item.RutaCdr = dr.GetData<string>("RutaCdr");
                             lista.Add(item);
 
                             totalRegistros = dr.GetData<int>("Total");
@@ -79,6 +85,7 @@ namespace bilecom.da
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@fechaHoraEmision", SqlDbType = SqlDbType.DateTime, Value = DBNull.Value, Direction = ParameterDirection.InputOutput });
                     cmd.Parameters.AddWithValue("@fechaVencimiento", registro.FechaVencimiento.GetNullable());
                     cmd.Parameters.AddWithValue("@monedaId", registro.MonedaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoOperacionVentaId", registro.TipoOperacionVentaId.GetNullable());
                     cmd.Parameters.AddWithValue("@clienteID", registro.ClienteId.GetNullable());
                     cmd.Parameters.AddWithValue("@flagExportacion", registro.FlagExportacion.GetNullable());
                     cmd.Parameters.AddWithValue("@flagGratuito", registro.FlagGratuito.GetNullable());
@@ -110,6 +117,57 @@ namespace bilecom.da
                         nroComprobante = (int?)cmd.Parameters["@nroComprobante"].Value;
                         fechaHoraEmision = (DateTime?)cmd.Parameters["@fechaHoraEmision"].Value;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                seGuardo = false;
+            }
+            return seGuardo;
+        }
+
+        public bool Anular(FacturaBe registro, SqlConnection cn)
+        {
+            bool seGuardo = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_factura_anular", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@facturaId", registro.FacturaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                seGuardo = false;
+            }
+            return seGuardo;
+        }
+
+        public bool GuardarRespuestaSunat(FacturaBe registro, SqlConnection cn)
+        {
+            bool seGuardo = false;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_factura_guardar_respuestasunat", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@facturaId", registro.FacturaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@codigoRespuestaSunat", registro.CodigoRespuestaSunat.GetNullable());
+                    cmd.Parameters.AddWithValue("@descripcionRespuestaSunat", registro.DescripcionRespuestaSunat.GetNullable());
+                    cmd.Parameters.AddWithValue("@estadoIdRespuestaSunat", registro.EstadoIdRespuestaSunat.GetNullable());
+                    cmd.Parameters.AddWithValue("@rutaXml", registro.RutaXml.GetNullable());
+                    cmd.Parameters.AddWithValue("@rutaCdr", registro.RutaCdr.GetNullable());
+                    cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = filasAfectadas > 0;
                 }
             }
             catch (Exception ex)

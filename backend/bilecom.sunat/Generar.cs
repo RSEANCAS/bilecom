@@ -4,6 +4,7 @@ using bilecom.sunat.comprobante.invoice;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -12,12 +13,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using static bilecom.enums.Enums;
 
 namespace bilecom.sunat
 {
     public class Generar
     {
-        string RetornarXmlFirmado(string xmlString, string rutaCertificado, string claveCertificado, out string hash)
+        public static string RetornarXmlFirmado(string xmlString, string rutaCertificado, string claveCertificado, out string hash)
         {
             hash = null;
 
@@ -40,8 +42,10 @@ namespace bilecom.sunat
 
             byte[] certificadoByte = File.ReadAllBytes(rutaCertificado);
             X509Certificate2 certificado = new X509Certificate2();
+            //certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.DefaultKeySet);
             certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.Exportable);
-            firmado.SigningKey = (RSA)certificado.PrivateKey;
+            //firmado.SigningKey = (RSA)certificado.PrivateKey;
+            firmado.SigningKey = certificado.PrivateKey;
 
             //digest info agregada en la seccion firma
             var env = new XmlDsigEnvelopedSignatureTransform();
@@ -60,7 +64,7 @@ namespace bilecom.sunat
             keyInfo.AddClause(new KeyInfoX509Data(certificado));
 
             xmlSignature.KeyInfo = keyInfo;
-            xmlSignature.Id = "SignatureErickOrlando";
+            xmlSignature.Id = "SignatureJAREV";
             firmado.ComputeSignature();
 
 
@@ -82,10 +86,99 @@ namespace bilecom.sunat
                     documentXml.WriteTo(writer);
                 }
 
+                //resultado = Encoding.GetEncoding("ISO-8859-1").GetString(memDoc.ToArray());
                 resultado = Convert.ToBase64String(memDoc.ToArray());
 
             }
             return resultado;
+        }
+
+        //public static byte[] RetornarXmlComprimido(string xmlFirmadoString, string nombreArchivoXml)
+        //{
+        //    byte[] archivoZip = null;
+
+
+        //    using (var memoryStream = new MemoryStream())
+        //    {
+        //        using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+        //        {
+        //            var demoFile = zipArchive.CreateEntry(nombreArchivoXml);
+
+        //            using (var entryStream = demoFile.Open())
+        //            {
+        //                using (var streamWriter = new StreamWriter(entryStream))
+        //                {
+        //                    streamWriter.Write(xmlFirmadoString);
+        //                }
+        //            }
+        //        }
+
+        //        archivoZip = memoryStream.ToArray();
+        //    }
+
+        //    return archivoZip;
+        //}
+
+        public static byte[] RetornarXmlComprimido(byte[] xmlFirmadoBytes, string nombreArchivoXml)
+        {
+            byte[] archivoZip = null;
+
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    var demoFile = zipArchive.CreateEntry(nombreArchivoXml);
+
+                    using (var entryStream = demoFile.Open())
+                    {
+                        entryStream.Write(xmlFirmadoBytes, 0, xmlFirmadoBytes.Length);
+                    }
+                }
+
+                archivoZip = memoryStream.ToArray();
+            }
+
+            return archivoZip;
+        }
+
+        public static void EvaluarXmlCdrDescomprimido(byte[] cdrZipBytes, string nombreArchivoCdr, out string codigoCdr, out string descripcionCdr, out EstadoCdr? estadoCdr)
+        {
+            codigoCdr = null;
+            descripcionCdr = null;
+            estadoCdr = null;
+            string contenidoXmlCdr = null;
+
+            using (var memoryStream = new MemoryStream(cdrZipBytes))
+            {
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Read))
+                {
+                    var demoFile = zipArchive.GetEntry(nombreArchivoCdr);
+
+                    var fileStream = demoFile.Open();
+
+                    byte[] fileBytes = null;
+
+                    using (var ms = new MemoryStream())
+                    {
+                        fileStream.CopyTo(ms);
+
+                        fileBytes = ms.ToArray();
+                    }
+
+                    contenidoXmlCdr = Encoding.UTF8.GetString(fileBytes);
+
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.LoadXml(contenidoXmlCdr);
+                    try
+                    {
+                        codigoCdr = xmlDocument.DocumentElement.GetElementsByTagName("cac:DocumentResponse").Item(0).ChildNodes[0].ChildNodes[1].InnerXml;
+                        descripcionCdr = xmlDocument.DocumentElement.GetElementsByTagName("cac:DocumentResponse").Item(0).ChildNodes[0].ChildNodes[2].InnerXml;
+                        estadoCdr = codigoCdr == "0" ? EstadoCdr.Aceptado : EstadoCdr.Rechazado;
+                    }
+                    catch (Exception ex) { }
+                }
+            }
         }
 
         public static string GenerarXML(InvoiceType item)

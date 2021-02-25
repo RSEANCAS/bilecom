@@ -321,6 +321,7 @@
     <Content Include="Assets\img\gl-alert.jpg" />
     <Content Include="Assets\img\invoice-logo.png" />
     <Content Include="Assets\img\logo.png" />
+    <Content Include="Assets\img\logo_bilecom.png" />
     <Content Include="Assets\img\pg-alert.jpg" />
     <Content Include="Assets\img\pl-alert.jpg" />
     <Content Include="Assets\img\profile-photos\1.png" />
@@ -392,6 +393,7 @@
     <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\factura.js" />
+    <Content Include="Assets\js\pages\inicio.js" />
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -2836,6 +2838,8 @@
     <Compile Include="Controllers\Api\ProvinciaController.cs" />
     <Compile Include="Controllers\Api\SedeController.cs" />
     <Compile Include="Controllers\Api\SerieController.cs" />
+    <Compile Include="Controllers\Api\TableroConteo_x_DocumentoController.cs" />
+    <Compile Include="Controllers\Api\TableroUltimosDocumentosController.cs" />
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
     <Compile Include="Controllers\Api\TipoCambioController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
@@ -2845,6 +2849,7 @@
     <Compile Include="Controllers\Api\TipoMovimientoController.cs" />
     <Compile Include="Controllers\Api\TipoProductoController.cs" />
     <Compile Include="Controllers\Api\TipoSedeController.cs" />
+    <Compile Include="Controllers\Api\TipoTributoController.cs" />
     <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />
@@ -3147,6 +3152,8 @@
     <Content Include="Assets\plugins\weather-icons\sass\weather-icons.scss" />
     <Content Include="Assets\plugins\x-editable\LICENSE-MIT" />
     <Content Include="Assets\plugins\x-editable\README.md" />
+    <Content Include="App_Data\certificado.p12" />
+    <Content Include="App_Data\CertificadoPFX.pfx" />
     <None Include="packages.config" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -3185,7 +3192,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
   </ItemGroup>

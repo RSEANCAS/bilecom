@@ -31,6 +31,7 @@ namespace bilecom.da
                                 item.CodigoTipoDocumentoIdentidad = dr.GetData<int>("CodigoTipoDocumentoIdentidad");
                                 item.TipoDocumentoIdentidadId = dr.GetData<int>("TipoDocumentoIdentidadId");
                                 item.Descripcion = dr.GetData<string>("Descripcion");
+                                item.Codigo = dr.GetData<string>("Codigo");
                                 lista.Add(item);
                             }
                         }

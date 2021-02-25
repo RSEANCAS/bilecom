@@ -73,9 +73,38 @@ namespace bilecom.enums
             FacturaGuiaTransportista = 10,
         }
 
+<<<<<<< HEAD
         public enum Moneda
         {
             Dolares = 2
+=======
+        public enum TipoTributo
+        {
+            Igv = 1,
+            Isc = 2,
+            Exportacion = 3,
+            Gratuito = 4,
+            Exonerado = 5,
+            Inafecto = 6,
+            OtrosConceptosPago = 7,
+            ImpuestoVentaArrozPilado = 8
+        }
+
+        public enum EstadoCdr
+        {
+            [Description("Aceptado")]
+            [Category("success")]
+            Aceptado = 1,
+            [Description("En Proceso")]
+            [Category("warning")]
+            EnProceso = 2,
+            [Description("Rechazado")]
+            [Category("danger")]
+            Rechazado = 3,
+            [Description("No Emitido")]
+            [Category("default")]
+            NoEmitido = 4
+>>>>>>> baafaacc9a7e5e2654dca384fec9211bd1488804
         }
     }
 }
