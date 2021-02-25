@@ -72,5 +72,10 @@ namespace bilecom.enums
             FacturaGuiaRemitente = 9,
             FacturaGuiaTransportista = 10,
         }
+
+        public enum Moneda
+        {
+            Dolares = 2
+        }
     }
 }
