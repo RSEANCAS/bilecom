@@ -2826,6 +2826,7 @@
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
+    <Compile Include="Controllers\Api\FormatoController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
     <Compile Include="Controllers\Api\MovimientoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
