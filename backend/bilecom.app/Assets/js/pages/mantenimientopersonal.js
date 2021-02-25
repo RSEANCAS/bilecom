@@ -2,10 +2,9 @@
 const pageMantenimientoPersonal = {
     Init: function () {
         this.Validar();
-        this.InitEvents();
+        this.CargarCombo(this.InitEvents())
     },
     InitEvents: function () {
-        pageMantenimientoPersonal.CargarCombo();
         pageMantenimientoPersonal.ObtenerDatos();
         
         $("#cmb-pais").change(pageMantenimientoPersonal.CmbPaisChange)
@@ -30,7 +29,7 @@ const pageMantenimientoPersonal = {
         pageMantenimientoPersonal.ResponseDistritoListar(DistritoFiltro);
     },
 
-    CargarCombo: async function () {
+    CargarCombo: async function (fn=null) {
         let promises = [
             fetch(`${urlRoot}api/pais/listar-pais`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
@@ -53,10 +52,7 @@ const pageMantenimientoPersonal = {
                 pageMantenimientoPersonal.ResponseDistritoListar(DistritoLista);
                 pageMantenimientoPersonal.ResponseTipoDocumentoIdentidadListar(TipoDocumentoIdentidadLista);
 
-                $("#cmb-pais").val(145).trigger('change');
-                $("#cmb-departamento").val(15).trigger('change');
-                $("#cmb-provincia").val(128).trigger('change');
-
+                if (typeof fn == 'function') fn();
                 
         })
     },
@@ -72,6 +68,10 @@ const pageMantenimientoPersonal = {
             fetch(url, init)
                 .then(r => r.json())
                 .then(pageMantenimientoPersonal.ResponseObtenerDatos);
+        } else {
+            $("#cmb-pais").val(145).trigger('change');
+            $("#cmb-departamento").val(15).trigger('change');
+            $("#cmb-provincia").val(128).trigger('change');
         }
     },
 

@@ -8,8 +8,10 @@ namespace bilecom.be
 {
     public class TipoCambioBe
     {
-        public string Dia { get; set; }
+        public DateTime Fecha { get; set; }
+        public int MonedaId { get; set; }
         public decimal Compra { get; set; }
         public decimal Venta { get; set; }
+        public string Usuario { get { return "usuarioBileCom"; } }
     }
 }
