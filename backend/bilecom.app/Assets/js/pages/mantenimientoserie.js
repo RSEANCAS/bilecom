@@ -1,8 +1,7 @@
 ﻿const pageMantenimientoSerie = {
     Init: function () {
-        this.CargarCombo();
+        this.CargarCombo(this.InitEvents());
         this.Validar();
-        this.InitEvents();
     },
     InitEvents: function () {
         pageMantenimientoSerie.ObtenerDatos();
@@ -60,13 +59,15 @@
                 .then(pageMantenimientoSerie.ResponseObtenerDatos);
         }
     },
-    CargarCombo: async function () {
+    CargarCombo: async function (fn=null) {
         let promises = [
             fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))
             .then(([TipoComprobanteLista]) => {
                 pageMantenimientoSerie.ResponseTipoComprobanteListar(TipoComprobanteLista || []);
+
+                if (typeof fn == 'function') fn();
             })
     },
     EnviarFormulario: function () {

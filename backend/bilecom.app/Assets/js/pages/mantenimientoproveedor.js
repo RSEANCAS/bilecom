@@ -1,10 +1,9 @@
 ﻿const pageMantenimientoProveedor = {
     Init: function () {
         this.Validar();
-        this.InitEvents();
+        this.CargarCombo(this.InitEvents());
     },
     InitEvents: function () {
-        pageMantenimientoProveedor.CargarCombo();
         pageMantenimientoProveedor.ObtenerDatos();
 
         $("#cmb-pais").change(pageMantenimientoProveedor.CmbPaisChange)
@@ -148,7 +147,7 @@
             });
     },
 
-    CargarCombo: async function () {
+    CargarCombo: async function (fn=null) {
         let promises = [
             fetch(`${urlRoot}api/pais/listar-pais`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
@@ -169,12 +168,7 @@
                 pageMantenimientoProveedor.ResponseProvinciaListar(ProvinciaLista);
                 pageMantenimientoProveedor.ResponseDistritoListar(DistritoLista);
                 pageMantenimientoProveedor.ResponseTipoDocumentoIdentidadListar(TipoDocumentoIdentidadLista);
-
-                $("#cmb-pais").val(145).trigger('change');
-                $("#cmb-departamento").val(15).trigger('change');
-                $("#cmb-provincia").val(128).trigger('change');
-
-
+                if (typeof fn == 'function') fn();
             })
     },
 
@@ -189,6 +183,10 @@
             fetch(url, init)
                 .then(r => r.json())
                 .then(pageMantenimientoProveedor.ResponseObtenerDatos);
+        } else {
+            $("#cmb-pais").val(145).trigger('change');
+            $("#cmb-departamento").val(15).trigger('change');
+            $("#cmb-provincia").val(128).trigger('change');
         }
     },
 
