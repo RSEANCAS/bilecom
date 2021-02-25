@@ -43,7 +43,7 @@
                 }
             },
             columns: [
-                { data: "ProductoId" },
+                { data: "Fila" },
                 { data: "Nombre" },
                 { data: "categoriaProducto.Nombre" },
                 { data: "StockMinimo" }, 

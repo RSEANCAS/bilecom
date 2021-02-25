@@ -35,7 +35,8 @@ namespace bilecom.da
                         while (dr.Read())
                         {
                             ProductoBe item = new ProductoBe();
-                            item.ProductoId = dr.GetData<int>("Fila");
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.ProductoId = dr.GetData<int>("ProductoId");
                             item.Nombre = dr.GetData<string>("NombreProducto");
                             item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
                             item.UnidadMedidaId = dr.GetData<string>("UnidadMedidaId");
@@ -200,6 +201,9 @@ namespace bilecom.da
                                 respuesta.TipoCalculo = dr.GetData<string>("TipoCalculo");
                                 respuesta.Monto = dr.GetData<decimal>("Monto");
                                 respuesta.StockMinimo = dr.GetData<decimal>("StockMinimo");
+                                respuesta.Codigo = dr.GetData<string>("Codigo");
+                                respuesta.CodigoSunat = dr.GetData<string>("CodigoSunat");
+                                respuesta.TipoProductoId = dr.GetData<int>("TipoProductoId");
                             }
                         }
                     }

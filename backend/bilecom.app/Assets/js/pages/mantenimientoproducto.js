@@ -1,8 +1,5 @@
-﻿var CategoriaProductoLista = [],
-    UnidadMedidaLista = [],
-    TipoAfectacionLista = [],
-    TipoCalculo = [],
-    TipoProductoLista = [];
+﻿/// <reference path="mantenimientopersonal.js" />
+var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [], TipoProductoLista = [];
 TipoCalculo = [{
     Id: "VALORUNITARIO",
     Descripcion: "Valor Unitario (monto sin igv)"
@@ -13,9 +10,9 @@ const pageMantenimientoProducto = {
         this.Validar();
         this.InitEvents();
     },
-    InitEvents: function() {
-        pageMantenimientoProducto.ObtenerDatos();
+    InitEvents: function () {
         pageMantenimientoProducto.CargarCombo();
+        pageMantenimientoProducto.ObtenerDatos();
     },
     Validar: function() {
         $("#frm-producto-mantenimiento")
@@ -146,6 +143,16 @@ const pageMantenimientoProducto = {
     ResponseObtenerDatos: function(data) {
         $("#txt-nombre").val(data.Nombre);
         $("#cmb-categoria").val(data.CategoriaId).trigger('change');
+        $("#txt-codigo").val(data.Codigo);
+        $("#txt-nombre").val(data.Nombre);
+        $("#txt-stock-minimo").val(data.StockMinimo);
+        $("#cmb-tipo-producto").val(data.TipoProductoId).trigger('change');
+        $("#cmb-unidad-medida").val(data.UnidadMedidaId).trigger('change');
+        $("#txt-codigo-sunat").val(data.CodigoSunat);
+        $("#cmb-tipo-afectacion").val(data.TipoAfectacionIgvId).trigger('change');
+        $("#cmb-tipo-calculo").val(data.TipoCalculo).trigger('change');
+        $("#txt-monto").val(data.Monto);
+
     },
     ResponseEnviarFormulario: function(data) {
         let tipo = "",
@@ -184,8 +191,8 @@ const pageMantenimientoProducto = {
         let datatipoafectacionigv = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoAfectacionIgvId, text: item.Descripcion }); });
         $("#cmb-tipo-afectacion").select2({ data: datatipoafectacionigv, width: '100%', placeholder: '[SELECCIONE...]' });
     },
-    ResponseUnidadMedidaListar: function(data) {
-        let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.Id, text: item.Descripcion }); });
+    ResponseUnidadMedidaListar: function (data) {
+        let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.UnidadMedidaId, text: item.Descripcion }); });
         $("#cmb-unidad-medida").select2({ data: dataunidadmedida, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseTipoCalculoListar: function(data) {
