@@ -16,9 +16,9 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("obtener-tipocambio")]
-        public TipoCambioBe ObtenerTipoCambioSunat(string fecha)
+        public TipoCambioBe ObtenerDolarTipoCambio()
         {
-            return tipoCambioBl.Obtener(fecha);
+            return tipoCambioBl.ObtenerDolarTipoCambio();
         }
 
     }

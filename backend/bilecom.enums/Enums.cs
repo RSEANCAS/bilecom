@@ -73,6 +73,11 @@ namespace bilecom.enums
             FacturaGuiaTransportista = 10,
         }
 
+<<<<<<< HEAD
+        public enum Moneda
+        {
+            Dolares = 2
+=======
         public enum TipoTributo
         {
             Igv = 1,
@@ -99,6 +104,7 @@ namespace bilecom.enums
             [Description("No Emitido")]
             [Category("default")]
             NoEmitido = 4
+>>>>>>> baafaacc9a7e5e2654dca384fec9211bd1488804
         }
     }
 }

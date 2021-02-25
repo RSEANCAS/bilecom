@@ -84,6 +84,10 @@
       <Project>{e9f1604b-36af-4c5d-a7a1-0f5125cd30ab}</Project>
       <Name>bilecom.be</Name>
     </ProjectReference>
+    <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
+      <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
+      <Name>bilecom.enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
       <Project>{8929a9ee-5864-4cfa-b7ae-3d6850945ab1}</Project>
       <Name>bilecom.ut</Name>

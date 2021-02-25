@@ -1,14 +1,10 @@
 D:\JARE\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.dll
 D:\JARE\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.pdb
+D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csprojAssemblyReference.cache
 D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.dll
 D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.pdb
 C:\Jare\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.dll
 C:\Jare\bilecom\backend\bilecom.enums\bin\Debug\bilecom.enums.pdb
 C:\Jare\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.dll
 C:\Jare\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.pdb
-D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csproj.CoreCompileInputs.cache
-<<<<<<< HEAD
-D:\JARE\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csprojAssemblyReference.cache
-=======
 C:\Jare\bilecom\backend\bilecom.enums\obj\Debug\bilecom.enums.csprojAssemblyReference.cache
->>>>>>> fb8e8eb5b3d962ca8957ede0ccd10c2635d21c42
