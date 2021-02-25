@@ -16,3 +16,5 @@ backend/bilecom.ut/bin
 backend/bilecom.ut/obj
 backend/bilecom.sunat/bin
 backend/bilecom.sunat/obj
+backend/bilecom.procesos/bin
+backend/bilecom.procesos/obj
