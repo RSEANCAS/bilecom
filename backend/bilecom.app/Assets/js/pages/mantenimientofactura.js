@@ -1,4 +1,4 @@
-﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], detalleLista = [], detalleListaEliminados = [];
+﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formaPagoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -525,7 +525,7 @@ const pageMantenimientoFactura = {
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let unidadMedidaId = $("#cmb-detalle-unidad-medida").val();
         let unidadMedida = $("#cmb-detalle-unidad-medida").select2("data")[0];
-        unidadMedida = { UnidadMedidaId: unidadMedida.UnidadMedidaId, Id: unidadMedida.Id };
+        unidadMedida = { UnidadMedidaId: unidadMedida.UnidadMedidaId, Id: unidadMedida.Id, Descripcion: unidadMedida.Descripcion };
         let productoId = parseInt($("#cmb-detalle-descripcion").val());
         let codigo = $("#cmb-detalle-codigo option:selected").text();
         let codigoSunat = $("#cmb-detalle-codigo-sunat").val();
@@ -537,10 +537,10 @@ const pageMantenimientoFactura = {
         let tipoTributoIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Codigo: tipoAfectacionIgv.TipoTributo.Codigo, Nombre: tipoAfectacionIgv.TipoTributo.Nombre, CodigoNombre: tipoAfectacionIgv.TipoTributo.CodigoNombre };
         let descuento = Number($("#txt-detalle-descuento").val().replace(/,/g, ""));
         let isc = Number($("#txt-detalle-isc").val().replace(/,/g, ""));
-        let porcentajeIgv = Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
-        let igv = Number($("#txt-detalle-igv").val().replace(/,/g, ""));
+        let porcentajeIgv = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto ? 0 : Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
+        let igv = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto ? 0 : Number($("#txt-detalle-igv").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
-        let valorUnitario = Math.round((precioUnitario / 1.18) * 100) / 100;
+        let valorUnitario = Math.round((precioUnitario / (1 + (porcentajeIgv / 100))) * 100) / 100;
         let valorVenta = Math.round((valorUnitario * cantidad) * 100) / 100;
         let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
@@ -595,10 +595,14 @@ const pageMantenimientoFactura = {
         let cantidadString = $("#txt-detalle-cantidad").val().replace(/,/g, '');
         let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '');
         let descuentoString = $("#txt-detalle-descuento").val().replace(/,/g, '');
-        
+
+        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
+        let porcentajeIgvString = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto ? "0" : $("#txt-detalle-porcentaje-igv").val().replace(/,/g, "");
+        let porcentajeIgv = Number(porcentajeIgvString);
+
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
         let precioUnitario = isNaN(Number(precioUnitarioString)) ? 0 : Number(precioUnitarioString);
-        let valorUnitario = precioUnitario / 1.18;
+        let valorUnitario = precioUnitario / (1 + (porcentajeIgv / 100));
         let valorVenta = valorUnitario * cantidad;
         let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
         let importeTotal = cantidad * (precioUnitario - descuento);
@@ -608,6 +612,7 @@ const pageMantenimientoFactura = {
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#txt-detalle-precio-unitario").val(precioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#txt-detalle-descuento").val(descuento.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#txt-detalle-porcentaje-igv").val(porcentajeIgv.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#txt-detalle-igv").val(igv.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#txt-detalle-importe-total").val(importeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
@@ -622,10 +627,12 @@ const pageMantenimientoFactura = {
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
-            fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`)]
+            fetch(`${urlRoot}api/tipotributo/listar-tipoTributo`),
+            fetch(`${urlRoot}api/formapago/listar-formapago`),
+            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista]) => {
+            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormaPagoLista, FormatoLista]) => {
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
@@ -634,11 +641,15 @@ const pageMantenimientoFactura = {
                 unidadMedidaLista = UnidadMedidaLista || [];
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
                 tipoTributoLista = TipoTributoLista || [];
+                formaPagoLista = FormaPagoLista || [];
+                formatoLista = FormatoLista || [];
 
                 pageMantenimientoFactura.ResponseSerieListar(serieLista);
                 pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
                 pageMantenimientoFactura.ResponseTipoOperacionVentaListar(tipoOperacionVentaLista);
                 pageMantenimientoFactura.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
+                pageMantenimientoFactura.ResponseFormaPagoListar(formaPagoLista);
+                pageMantenimientoFactura.ResponseFormatoListar(formatoLista);
                 if (typeof fnNext == "function") fnNext();
             })
     },
@@ -672,12 +683,18 @@ const pageMantenimientoFactura = {
         let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
         let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
         tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
+        let formaPagoId = $("#cmb-forma-pago").val();
+        let formaPago = $("#cmb-forma-pago").select2("data")[0];
+        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
+        let formatoId = $("#cmb-formato").val();
+        let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();
         let tipoDocumentoIdentidadCliente = $("#cmb-tipo-documento-identidad-cliente").select2("data")[0];
         let cliente = {
             TipoDocumentoIdentidad: { TipoDocumentoIdentidadId: tipoDocumentoIdentidadCliente.TipoDocumentoIdentidadId, Descripcion: tipoDocumentoIdentidadCliente.Descripcion, Codigo: tipoDocumentoIdentidadCliente.Codigo },
             NroDocumentoIdentidad: $("#txt-numero-documento-identidad-cliente").val(),
-            RazonSocial: $("#txt-nombres-completos-cliente").val()
+            RazonSocial: $("#txt-nombres-completos-cliente").val(),
+            Direccion: $("#txt-direccion-cliente").val()
         };
         let totalGravado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
@@ -714,6 +731,10 @@ const pageMantenimientoFactura = {
             Moneda: moneda,
             TipoOperacionVentaId: tipoOperacionVentaId,
             TipoOperacionVenta: tipoOperacionVenta,
+            FormaPagoId: formaPagoId,
+            FormaPago: formaPago,
+            FormatoId: formatoId,
+            Observacion: observacion,
             FlagExportacion: false,
             FlagGratuito: false,
             FlagEmisorItinerante: false,
@@ -736,6 +757,7 @@ const pageMantenimientoFactura = {
             TotalBaseImponible: totalBaseImponible,
             TotaDescuentos: totalDescuentoDetalle,
             ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
+            Observacion: observacion,
             TipoTributoIdExonerado: totalExonerado > 0 ? tipoTributoIdExonerado : null,
             TipoTributoExonerado: tipoTributoExonerado,
             TipoTributoIdInafecto: totalInafecto > 0 ? tipoTributoIdInafecto : null,
@@ -845,6 +867,16 @@ const pageMantenimientoFactura = {
         $("#cmb-detalle-tipo-afectacion-igv").empty();
         $("#cmb-detalle-tipo-afectacion-igv").select2({ data: dataTipoAfectacionIgv, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-tipo-afectacion-igv").val("").trigger("change");
+    },
+
+    ResponseFormaPagoListar: function (data) {
+        let dataFormaPago = data.map(x => Object.assign(x, { id: x.FormaPagoId, text: x.Descripcion }));
+        $("#cmb-forma-pago").select2({ data: dataFormaPago, width: '100%', placeholder: '[Seleccione...]' });
+    },
+
+    ResponseFormatoListar: function (data) {
+        let dataFormato = data.map(x => Object.assign(x, { id: x.FormatoId, text: x.Nombre }));
+        $("#cmb-formato").select2({ data: dataFormato, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ObtenerFiltroClienteNroDocumentoIdentidad: function () {

@@ -4,7 +4,7 @@
     },
     InitEvents: function () {
         $('#btn-cambiar-perfil').click(pageLayout.BtnCambiarPerfilClick);
-        $('#btn-cerrar-sesion').click(pageLayout.BtnCerrarSesionClick);
+        $('.btn-cerrar-sesion').click(pageLayout.BtnCerrarSesionClick);
     },
     CargarComboUsuarioPerfil: function () {
 

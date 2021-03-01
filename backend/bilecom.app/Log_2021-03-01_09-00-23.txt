@@ -1,0 +1,2 @@
+Message: Referencia a objeto no establecida como instancia de un objeto.
+StackTrace:    en bilecom.app.Controllers.Api.FacturaController.GuardarFactura(FacturaBe registro) en D:\JARE\bilecom\backend\bilecom.app\Controllers\Api\FacturaController.cs:línea 71
