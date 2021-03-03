@@ -1,8 +1,12 @@
 ﻿using bilecom.sunat.comprobante.creditnote;
 using bilecom.sunat.comprobante.debitnote;
 using bilecom.sunat.comprobante.invoice;
+using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -42,10 +46,11 @@ namespace bilecom.sunat
 
             byte[] certificadoByte = File.ReadAllBytes(rutaCertificado);
             X509Certificate2 certificado = new X509Certificate2();
-            //certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.DefaultKeySet);
-            certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.Exportable);
+            certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+            //certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.Exportable);
+            firmado.SigningKey = certificado.GetRSAPrivateKey();
             //firmado.SigningKey = (RSA)certificado.PrivateKey;
-            firmado.SigningKey = certificado.PrivateKey;
+            //firmado.SigningKey = certificado.PrivateKey;
 
             //digest info agregada en la seccion firma
             var env = new XmlDsigEnvelopedSignatureTransform();
@@ -223,6 +228,26 @@ namespace bilecom.sunat
             byte[] xmlByte = null;
 
             return xmlByte;
+        }
+
+        public static byte[] GenerarQR(string rucEmpresa, string codigoSunatTipoComprobante, string serie, int nroComprobante, DateTime fechaEmision, string codigoSunatTipoDocumentoIdentidad, string nroDocumentoIdentidadCliente, decimal totalIGV, decimal totalImporte, string hash)
+        {
+            byte[] imagen = null;
+
+            QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
+            QrCode qrCode = new QrCode();
+
+            qrEncoder.TryEncode($"{rucEmpresa}|{codigoSunatTipoComprobante}|{serie}-{nroComprobante:00000000)}|{totalIGV}|{totalImporte}|{fechaEmision:dd/MM/yyyy)}|{codigoSunatTipoDocumentoIdentidad}|{nroDocumentoIdentidadCliente}|{hash}", out qrCode);
+
+            GraphicsRenderer renderer = new GraphicsRenderer(new FixedCodeSize(400, QuietZoneModules.Zero), Brushes.Black, Brushes.White);
+
+            MemoryStream ms = new MemoryStream();
+
+            renderer.WriteToStream(qrCode.Matrix, ImageFormat.Png, ms);
+
+            imagen = ms.ToArray();
+
+            return imagen;
         }
     }
 }

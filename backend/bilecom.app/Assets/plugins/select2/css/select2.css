@@ -662,7 +662,8 @@
     outline: none !important;
 }
 .select2-container .select2-selection--single{
-    height: 32px
+    height: 33px;
+/*    height: 32px*/
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow{
     height: 30px

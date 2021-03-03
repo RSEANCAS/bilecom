@@ -131,8 +131,24 @@ const pageFactura = {
             { data: "EstadoStrRespuestaSunat", render: (data, type, row) => `<span class="label label-${row.EstadoColorRespuestaSunat}">${data}</span>` },
             {
                 data: "FacturaId", render: function (data, type, row) {
+                    var user = common.ObtenerUsuario();
+                    let nombreArchivo = `${user.Empresa.Ruc}-01-${row.Serie.Serial}-${Number(row.NroComprobante).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '')}`;
+                    let rutaArchivo = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/Comprobantes/01/${row.Serie.Serial}-${Number(row.NroComprobante).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '')}/${nombreArchivo}`;
+                    let rutaArchivoCdr = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/Comprobantes/01/${row.Serie.Serial}-${Number(row.NroComprobante).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '')}/R-${nombreArchivo}`;
+
                     return `${row.FlagAnulado == true ? "" :
-                        `<a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageFactura.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>`}`;
+                        `<a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageFactura.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>
+                        <div class="input-group-btn dropdown">
+	                        <button data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" type="button">
+		                        <i class="fa fa-download"></i> <i class="fa fa-sort-down"></i>
+	                        </button>
+	                        <ul class="dropdown-menu">
+		                        <li><a download="${nombreArchivo}.pdf" href="${rutaArchivo}.pdf">PDF</a></li>
+		                        <li><a download="${nombreArchivo}.xml" href="${rutaArchivo}.xml">XML</a></li>
+		                        <li><a download="R-${nombreArchivo}.zip" href="${rutaArchivoCdr}.zip">CDR</a></li>
+	                        </ul>
+                        </div>`
+                        }`;
                 }
             }
         ];

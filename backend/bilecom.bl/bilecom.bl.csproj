@@ -51,7 +51,10 @@
     <Compile Include="DistritoBl.cs" />
     <Compile Include="CotizacionBl.cs" />
     <Compile Include="EmpresaBl.cs" />
+    <Compile Include="EmpresaImagenBl.cs" />
     <Compile Include="FacturaBl.cs" />
+    <Compile Include="FormaPagoBl.cs" />
+    <Compile Include="FormatoBl.cs" />
     <Compile Include="GuiaRemisionRemitenteBl.cs" />
     <Compile Include="GuiaRemisionTransportistaBl.cs" />
     <Compile Include="MonedaBl.cs" />
@@ -91,6 +94,10 @@
     <ProjectReference Include="..\bilecom.da\bilecom.da.csproj">
       <Project>{edcafcb6-48a5-4e7c-8892-973fb2153823}</Project>
       <Name>bilecom.da</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
+      <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
+      <Name>bilecom.enums</Name>
     </ProjectReference>
     <ProjectReference Include="..\bilecom.ut\bilecom.ut.csproj">
       <Project>{8929a9ee-5864-4cfa-b7ae-3d6850945ab1}</Project>

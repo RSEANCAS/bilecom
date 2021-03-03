@@ -1,6 +1,6 @@
 ﻿@using bilecom.enums
 @section links_footer{
-    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
@@ -71,6 +71,24 @@
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-moneda" id="cmb-moneda" data-bv-field="cmb-moneda" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Forma de Pago</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-forma-pago" id="cmb-forma-pago" data-bv-field="cmb-forma-pago" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Formato de Impresión</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-formato" id="cmb-formato" data-bv-field="cmb-formato" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Observación</span>
+                                        <textarea class="form-control" placeholder="Observación" name="txt-observacion" id="txt-observacion" data-bv-field="txt-observacion" rows="3"></textarea>
                                     </div>
                                 </div>
                             </div>

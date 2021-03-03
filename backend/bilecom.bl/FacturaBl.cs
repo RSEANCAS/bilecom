@@ -30,11 +30,12 @@ namespace bilecom.bl
             return lista;
         }
 
-        public bool GuardarFactura(FacturaBe registro, out int? facturaId, out int? nroComprobante, out DateTime? fechaHoraEmision)
+        public bool GuardarFactura(FacturaBe registro, out int? facturaId, out int? nroComprobante, out DateTime? fechaHoraEmision, out string totalImporteEnLetras)
         {
             facturaId = null;
             nroComprobante = null;
             fechaHoraEmision = null;
+            totalImporteEnLetras = null;
             bool seGuardo = false;
             {
                 try
@@ -42,7 +43,7 @@ namespace bilecom.bl
                     using (TransactionScope scope = new TransactionScope())
                     {
                         cn.Open();
-                        seGuardo = facturaDa.Guardar(registro, cn, out facturaId, out nroComprobante, out fechaHoraEmision);
+                        seGuardo = facturaDa.Guardar(registro, cn, out facturaId, out nroComprobante, out fechaHoraEmision, out totalImporteEnLetras);
                         // Si seGuardo es True entonces 
                         if (seGuardo)
                         {

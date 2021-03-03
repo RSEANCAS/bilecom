@@ -53,6 +53,9 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.8.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
+    <Reference Include="Select.HtmlToPdf, Version=20.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
+      <HintPath>..\packages\Select.HtmlToPdf.20.2.0\lib\net40\Select.HtmlToPdf.dll</HintPath>
+    </Reference>
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.8.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
@@ -2826,6 +2829,8 @@
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
+    <Compile Include="Controllers\Api\FormaPagoController.cs" />
+    <Compile Include="Controllers\Api\FormatoController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
     <Compile Include="Controllers\Api\MovimientoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
@@ -3154,6 +3159,7 @@
     <Content Include="Assets\plugins\x-editable\README.md" />
     <Content Include="App_Data\certificado.p12" />
     <Content Include="App_Data\CertificadoPFX.pfx" />
+    <Content Include="App_Data\Web.config" />
     <None Include="packages.config" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />

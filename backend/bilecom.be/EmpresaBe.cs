@@ -16,5 +16,9 @@ namespace bilecom.be
         public DistritoBe Distrito { get; set; }
         public string Direccion { get; set; }
         public string CreadoPor { get; set; }
+
+        public EmpresaImagenBe EmpresaImagen { get; set; }
+        public EmpresaConfiguracionBe EmpresaConfiguracion { get; set; }
+
     }
 }

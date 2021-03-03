@@ -41,15 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmbienteSunatDa.cs" />
     <Compile Include="CotizacionDa.cs" />
     <Compile Include="CategoriaProductoDa.cs" />
     <Compile Include="ClienteDa.cs" />
     <Compile Include="DepartamentoDa.cs" />
     <Compile Include="DistritoDa.cs" />
     <Compile Include="CotizacionDetalleDa.cs" />
+    <Compile Include="EmpresaAmbienteSunatDa.cs" />
+    <Compile Include="EmpresaConfiguracionDa.cs" />
     <Compile Include="EmpresaDa.cs" />
+    <Compile Include="EmpresaImagenDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="FacturaDetalleDa.cs" />
+    <Compile Include="FormaPagoDa.cs" />
     <Compile Include="MonedaDa.cs" />
     <Compile Include="MovimientoDa.cs" />
     <Compile Include="MovimientoDetalleDa.cs" />
@@ -67,6 +72,7 @@
     <Compile Include="TipoAfectacionIgvDa.cs" />
     <Compile Include="TipoCambioDa.cs" />
     <Compile Include="TipoComprobanteDa.cs" />
+    <Compile Include="FormatoDa.cs" />
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
     <Compile Include="TipoOperacionAlmacenDa.cs" />
     <Compile Include="TipoOperacionVentaDa.cs" />
