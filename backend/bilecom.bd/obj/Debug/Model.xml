@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="bilecom.bd.dll" />
-			<Metadata Name="FileName" Value="D:\JARE\BILECOM\BACKEND\BILECOM.BD\OBJ\DEBUG\BILECOM.BD.DLL" />
+			<Metadata Name="FileName" Value="C:\JARE\BILECOM\BACKEND\BILECOM.BD\OBJ\DEBUG\BILECOM.BD.DLL" />
 			<Metadata Name="AssemblyName" Value="bilecom.bd" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="D:\JARE\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>

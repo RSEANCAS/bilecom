@@ -42,9 +42,9 @@ namespace bilecom.app.Controllers.Api
 
         [HttpPost]
         [Route("guardar-cliente")]
-        public bool GuardarCliente(ClienteBe registro)
+        public int GuardarCliente(ClienteBe registro)
         {
-            bool respuesta = clienteBl.GuardarCliente(registro);
+            int respuesta = clienteBl.GuardarCliente(registro);
             return respuesta;
         }
 

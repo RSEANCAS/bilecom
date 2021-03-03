@@ -17,3 +17,7 @@ C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.sqlprojAssemblyReference
 C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.dll
 C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.pdb
 >>>>>>> fb8e8eb5b3d962ca8957ede0ccd10c2635d21c42
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\Model.xml
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\refactor.xml
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\postdeploy.sql
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\predeploy.sql
