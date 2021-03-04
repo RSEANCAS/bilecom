@@ -1,4 +1,23 @@
+<<<<<<< HEAD
+﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], detalleLista = [], detalleListaEliminados = [];
+var departamentoLista = [], provinciaLista = [], distritoLista = [];
+
+var datosclienteNuevo = {
+    ClienteId: 0,
+    EmpresaId: 0,
+    TipoDocumentoIdentidadId: 0,
+    NroDocumentoIdentidad: "",
+    RazonSocial: "",
+    NombreComercial: "",
+    DistritoId: 0,
+    Direccion: "",
+    Correo: "",
+    FlagActivo: 1,
+    Usuario: ""
+}
+=======
 ﻿var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formaPagoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
+>>>>>>> e2d507f7e946228208b8e20f459e7a0c12cf7275
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -33,6 +52,8 @@ const pageMantenimientoFactura = {
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
 
         pageMantenimientoFactura.ObtenerDatos();
+
+        $("#btn-nuevo-cliente").click(pageMantenimientoFactura.BtnNuevoClienteClick);
     },
 
     BtnBuscarClienteClick: function () {
@@ -115,12 +136,141 @@ const pageMantenimientoFactura = {
             animateOut: 'zoomOutUp'
         });
     },
+    BtnNuevoClienteClick: function () {
+        bootbox.dialog({
+            title: "Nuevo Cliente",
+            message:
+                `<form id="frm-factura-cliente-nuevo" autocomplete="off">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Doc. Identidad</label>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-tipo-documento-identidad-nuevo" id="cmb-cliente-tipo-documento-identidad-nuevo" data-bv-field="cmb-cliente-tipo-documento-identidad-nuevo" tabindex="-1" aria-hidden="false" ></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label">N° Doc. Identidad</label>
+                                <input class="form-control" name="txt-cliente-nro-documento-identidad-nuevo" id="txt-cliente-nro-documento-identidad-nuevo">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Nombres y/o Razón Social</label>
+                                <input class="form-control" name="txt-cliente-nombres-razonsocial-nuevo" id="txt-cliente-nombres-razonsocial-nuevo">
+                            </div>
+                        </div>          
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Departamento</label>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbDepartamentoChange()"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Provincia</label>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbProvinciaChange()"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Distrito</label>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-distrito-nuevo" id="cmb-cliente-distrito-nuevo" data-bv-field="cmb-cliente-distrito-nuevo" tabindex="-1" aria-hidden="false" ></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Dirección</label>
+                                <input class="form-control" name="txt-cliente-direccion-nuevo" id="txt-cliente-direccion-nuevo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Correo</label>
+                                <input class="form-control" name="txt-cliente-correo-nuevo" id="txt-cliente-correo-nuevo">
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoFactura.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoFactura.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
+                            </div>
+                        </div>
+                    </div>-->
+                </form>`,
+            closeButton: true,
+            buttons: {
+                guardar: {
+                    label: 'Guardar y Seleccionar',
+                    className: 'btn-success',
+                    callback: function () {
+                        $("#frm-factura-cliente-nuevo").trigger("submit");
+                        return false;
+                    },
 
-    BtnSeleccionarClienteClick: function (data) {
+                },
+                cancelar: {
+                    label: 'Cancelar',
+                    classname: 'btn-danger',
+                    callback: function () {
+                        pageMantenimientoFactura.BtnCierraNuevoCliente();
+                    }
+                }
+            },
+            onShow: function (e) {
+                $(e.currentTarget).attr("id", "modal-nuevo-cliente");
+
+                $("#modal-nuevo-cliente").on("hide.bs.modal", function () {
+                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                })
+
+                pageMantenimientoFactura.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoFactura.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
+
+                let user = common.ObtenerUsuario();
+                let empresaId = user.Empresa.EmpresaId;
+
+                pageMantenimientoFactura.CmbDepartamentoChange();
+                pageMantenimientoFactura.ValidarClienteNuevo();
+                //$("#btn-buscar-cliente-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-cliente", ajax, columns));
+                //$("#btn-buscar-cliente-dialog").trigger("click");
+            },
+            animateIn: 'zoomInDown',
+            animateOut: 'zoomOutUp'
+        });
+    },
+    BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
         pageMantenimientoFactura.LlenarDatosCliente(data);
-        $("#modal-busqueda-cliente").modal('hide');
+        $(modal).modal('hide');
     },
 
+
+    CmbDepartamentoChange: function () {
+        let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
+        let ProvinciaFiltro = provinciaLista.filter(x => x.DepartamentoId == departamentoId);
+        pageMantenimientoFactura.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+
+        pageMantenimientoFactura.CmbProvinciaChange();
+    },
+
+    CmbProvinciaChange: function () {
+        let provinciaId = $("#cmb-cliente-provincia-nuevo").val();
+        let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
+        pageMantenimientoFactura.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+
+    },
     LlenarDatosCliente(data) {
         pageMantenimientoFactura.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
@@ -480,7 +630,147 @@ const pageMantenimientoFactura = {
                 pageMantenimientoFactura.EnviarFormulario();
             });
     },
-
+    ValidarClienteNuevo: function () {
+        $("#frm-factura-cliente-nuevo")
+            .bootstrapValidator({
+                fields: {
+                    "cmb-cliente-tipo-documento-identidad-nuevo": {
+                        validators: {
+                            notEmpty: {message:"Debe seleccionar tipo de documento de identidad."}
+                        }
+                    },
+                    "txt-cliente-nro-documento-identidad-nuevo": {
+                        validators: {
+                            notEmpty: { message: "Debe ingresar número de documento de identidad." },
+                            callback: {
+                                message: 'El número de documento de identidad no es válido',
+                                callback: function (value, validator, $field) {
+                                    let tipoDocumentoIdentidad = $("#cmb-cliente-tipo-documento-identidad-nuevo").select2('data')[0];
+                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 11) {
+                                            return {
+                                                valid: false,
+                                                message: "RUC inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "RUC inválido"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiCE) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 11) {
+                                            return {
+                                                valid: false,
+                                                message: "Carnet de Extranjería inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "Carnet de Extranjería inválido"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiPasaporte) {
+                                        if (value === "") {
+                                            return true;
+                                        }
+                                        if (value.length != 7) {
+                                            return {
+                                                valid: false,
+                                                message: "Pasaporte inválido"
+                                            }
+                                        }
+                                        else {
+                                            if (!(/^[0-9]*$/).test(value)) {
+                                                return {
+                                                    valid: false,
+                                                    message: "Pasaporte inválido"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                    },
+                    "txt-cliente-nombres-razonsocial-nuevo": {
+                        validators: {
+                            notEmpty: { message: "Debe de ingresar Nombres o Razón Social." },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-ñÑá-úÁ-Ú ]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
+                            }
+                        }
+                    },
+                    "cmb-cliente-departamento-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar departamento",
+                            }
+                        }
+                    },
+                    "cmb-cliente-provincia-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar provincia",
+                            }
+                        }
+                    },
+                    "cmb-cliente-distrito-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar distrito",
+                            }
+                        }
+                    },
+                    "txt-cliente-direccion-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar direccion",
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                                message: 'Solo puede ingresar caracteres alfabéticos'
+                            },
+                            stringLength: {
+                                min: 5,
+                                message: 'Dirección no válida'
+                            }
+                        }
+                    },
+                    "txt-cliente-correo-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar correo válido",
+                            },
+                            emailAddress: {
+                                message: 'La dirección de correo no es válido'
+                            }
+                        }
+                    },
+                }
+            })
+            .on('success.form.bv', function (e) {
+                e.preventDefault();
+                
+                pageMantenimientoFactura.BtnGuardarySeleccionar();
+            });
+    },
     ValidarDetalle: function () {
         $("#frm-factura-detalle")
             .bootstrapValidator({
@@ -628,12 +918,23 @@ const pageMantenimientoFactura = {
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
+<<<<<<< HEAD
+            fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`),
+            fetch(`${urlRoot}api/departamento/listar-departamento`),
+            fetch(`${urlRoot}api/provincia/listar-provincia`),
+            fetch(`${urlRoot}api/distrito/listar-distrito`)
+        ]
+        Promise.all(promises)
+            .then(r => Promise.all(r.map(common.ResponseToJson)))
+            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista,DepartamentoLista,ProvinciaLista,DistritoLista]) => {
+=======
             fetch(`${urlRoot}api/tipotributo/listar-tipoTributo`),
             fetch(`${urlRoot}api/formapago/listar-formapago`),
             fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
             .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormaPagoLista, FormatoLista]) => {
+>>>>>>> e2d507f7e946228208b8e20f459e7a0c12cf7275
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
@@ -642,8 +943,14 @@ const pageMantenimientoFactura = {
                 unidadMedidaLista = UnidadMedidaLista || [];
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
                 tipoTributoLista = TipoTributoLista || [];
+<<<<<<< HEAD
+                departamentoLista = DepartamentoLista || [];
+                provinciaLista = ProvinciaLista || [];
+                distritoLista = DistritoLista || [];
+=======
                 formaPagoLista = FormaPagoLista || [];
                 formatoLista = FormatoLista || [];
+>>>>>>> e2d507f7e946228208b8e20f459e7a0c12cf7275
 
                 pageMantenimientoFactura.ResponseSerieListar(serieLista);
                 pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
@@ -848,7 +1155,7 @@ const pageMantenimientoFactura = {
         $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]' });
         $("#cmb-tipo-documento-identidad-cliente").val("").trigger("change");
     },
-
+    
     ResponseTipoProductoListar: function (data) {
         let dataTipoProducto = data.map((x, i) => `<label class="radio-inline"><input type="radio" ${(i == 0 ? "checked" : "")} id="rbt-detalle-tipo-producto-${x.TipoProductoId}" name="rbt-detalle-tipo-producto" value="${x.TipoProductoId}" /> ${x.Nombre}</label>`).join('');
         $("#div-detalle-tipo-producto").html(dataTipoProducto);
@@ -896,5 +1203,114 @@ const pageMantenimientoFactura = {
     ObtenerFiltroPersonalNombresCompletos: function () {
         return $("#txt-filtro-personal-nombres-completos").val();
 
+    },
+    ResponseDepartamentoListar: function (data, dropdownParent = null) {
+        $("#cmb-cliente-departamento-nuevo").empty();
+        let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
+        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]',dropdownParent});
+    },
+
+    ResponseProvinciaListar: function (data, dropdownParent = null) {
+        $("#cmb-cliente-provincia-nuevo").empty();
+        let dataprovincia = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.ProvinciaId, text: item.Nombre }); });
+        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+    },
+
+    ResponseDistritoListar: function (data, dropdownParent = null) {
+        $("#cmb-cliente-distrito-nuevo").empty();
+        let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
+        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+    },
+    ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
+        data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
+        let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
+        $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
+    },
+    BtnCierraNuevoCliente: function () {
+        $("#modal-nuevo-cliente").modal('hide');
+    },
+    BtnGuardarySeleccionar: function () {
+        let clienteId = 0;
+        let nombres = $("#txt-cliente-nombres-razonsocial-nuevo").val();
+        let nrodocumento = $("#txt-cliente-nro-documento-identidad-nuevo").val();
+        let nombrecomercial = "";
+        let direcion = $("#txt-cliente-direccion-nuevo").val();
+        let correo = $("#txt-cliente-correo-nuevo").val();
+        let tipodocumentoidentidadId = $("#cmb-cliente-tipo-documento-identidad-nuevo").val();
+        let distritoId = $("#cmb-cliente-distrito-nuevo").val();
+
+        let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
+        let user = common.ObtenerUsuario().Nombre;
+
+        pageMantenimientoFactura.datosclienteNuevo = {
+            ClienteId: clienteId,
+            EmpresaId: empresaId,
+            TipoDocumentoIdentidadId: tipodocumentoidentidadId,
+            NroDocumentoIdentidad: nrodocumento,
+            RazonSocial: nombres,
+            NombreComercial: nombrecomercial,
+            DistritoId: distritoId,
+            Direccion: direcion,
+            Correo: correo,
+            FlagActivo: 1,
+            Usuario: user
+        }
+        let url = `${urlRoot}api/cliente/guardar-cliente`;
+        let params = JSON.stringify(pageMantenimientoFactura.datosclienteNuevo);
+        let headers = { 'Content-Type': 'application/json' };
+        let init = { method: 'POST', body: params, headers };
+
+        fetch(url, init)
+            .then(r => r.json())
+            .then(pageMantenimientoFactura.ResponseClienteNuevoGuardar);
+        
+    },
+    ResponseClienteNuevoGuardar: function (data) {
+        
+        let tipo = "", mensaje = "";
+        if (data > 0) {
+            //$("#hdn-cliente-id").val(data);
+            tipo = "success";
+            mensaje = "¡Se ha guardado y seleccionado con éxito!";
+            pageMantenimientoFactura.datosclienteNuevo.ClienteId = data;
+            pageMantenimientoFactura.BtnSeleccionarClienteClick(pageMantenimientoFactura.datosclienteNuevo,"#modal-nuevo-cliente");
+            pageMantenimientoFactura.BtnCierraNuevoCliente();
+        } else {
+            tipo = "danger";
+            mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
+        }
+
+        $.niftyNoty({
+            type: tipo,
+            container: "floating",
+            html: mensaje,
+            floating: {
+                position: "top-center",
+                animationIn: "shake",
+                animationOut: "fadeOut"
+            },
+            focus: true,
+            timer: 1800,
+            onHide: function () {
+                //if (data == true) {
+                //    location.href = `${urlRoot}Facturas`
+                //}
+            }
+        });
+    },
+    LimpiarDatosClienteNuevo: function () {
+        pageMantenimientoFactura.datosclienteNuevo = {
+            ClienteId: 0,
+            EmpresaId: 0,
+            TipoDocumentoIdentidadId: 0,
+            NroDocumentoIdentidad: "",
+            RazonSocial: "",
+            NombreComercial: "",
+            DistritoId: 0,
+            Direccion: "",
+            Correo: "",
+            FlagActivo: 1,
+            Usuario: ""
+        }
     }
 }

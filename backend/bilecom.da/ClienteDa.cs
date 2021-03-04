@@ -94,15 +94,18 @@ namespace bilecom.da
             return respuesta;
         }
 
-        public bool Guardar(ClienteBe registro, SqlConnection cn)
+        public int Guardar(ClienteBe registro, SqlConnection cn)
         {
-            bool seGuardo = false;
+            
+            int seGuardo = 0;
             try
             {
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_cliente_guardar", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@clienteId", registro.ClienteId.GetNullable());
+                    //cmd.Parameters.AddWithValue("@clienteId", registro.ClienteId.GetNullable());
+                    cmd.Parameters.Add(new SqlParameter { ParameterName = "@clienteId", SqlDbType = SqlDbType.Int, Value = registro.ClienteId.GetNullable(), Direction = ParameterDirection.InputOutput });
+
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@tipoDocumentoIdentidadId", registro.TipoDocumentoIdentidadId.GetNullable());
                     cmd.Parameters.AddWithValue("@nroDocumentoIdentidad", registro.NroDocumentoIdentidad.GetNullable());
@@ -115,12 +118,16 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
-                    seGuardo = filasAfectadas > 0;
+                    bool seGuardoB = filasAfectadas > 0;
+                    if (seGuardoB)
+                    {
+                        seGuardo = (int)cmd.Parameters["@clienteId"].Value;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                seGuardo = false;
+                seGuardo = 0;
             }
             return seGuardo;
         }

@@ -42,16 +42,16 @@ namespace bilecom.bl
             return respuesta;
         }
 
-        public bool GuardarCliente(ClienteBe registro)
+        public int GuardarCliente(ClienteBe registro)
         {
-            bool seGuardo = false;
+            int seGuardo = 0;
             try
             {
                 cn.Open();
                 seGuardo = clienteDa.Guardar(registro, cn);
                 cn.Close();
             }
-            catch (Exception ex) { seGuardo = false; }
+            catch (Exception ex) { seGuardo = 0; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }

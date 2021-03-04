@@ -317,7 +317,7 @@ const pageMantenimientoCliente = {
 
     ResponseEnviarFormulario: function (data) {
         let tipo = "", mensaje = "";
-        if (data == true) {
+        if (data > 0) {
             tipo = "success";
             mensaje = "¡Se ha guardado con éxito!";
         } else {

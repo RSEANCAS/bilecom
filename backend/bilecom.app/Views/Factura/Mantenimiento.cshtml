@@ -98,6 +98,10 @@
                     <div class="panel panel-bordered panel-dark">
                         <div class="panel-heading">
                             <div class="panel-control">
+                                <button id="btn-nuevo-cliente" class="btn btn-default" type="button">
+                                    <i class="ion-plus"></i>
+                                    <span>Nuevo</span>
+                                </button>
                                 <button id="btn-buscar-cliente" class="btn btn-default" type="button">
                                     <i class="ion-search"></i>
                                     <span>Buscar</span>
@@ -234,6 +238,11 @@
         const tipoTributoIdInafecto = @((int)Enums.TipoTributo.Inafecto);
         const tipoTributoIdOtrosConceptosPago = @((int)Enums.TipoTributo.OtrosConceptosPago);
         const tipoTributoIdImpuestoVentaArrozPilado = @((int)Enums.TipoTributo.ImpuestoVentaArrozPilado);
+
+        const tdiDNI = "@((int)Enums.TipoDocumentoIdentidad.DNI)"
+        const tdiRUC = "@((int)Enums.TipoDocumentoIdentidad.RUC)"
+        const tdiCE = "@((int)Enums.TipoDocumentoIdentidad.CarnetExtranjeria)"
+        const tdiPasaporte = "@((int)Enums.TipoDocumentoIdentidad.Pasaporte)"
 
         $(document).ready(function () {
             pageMantenimientoFactura.Init();
