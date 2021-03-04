@@ -8,8 +8,9 @@ namespace bilecom.be
 {
     public class SerieBe
     {
-        public int SerieId { get; set; }
         public int EmpresaId { get; set; }
+        public int SerieId { get; set; }
+        public int AmbienteSunatId { get; set; }
         public int TipoComprobanteId { get; set; }
         public TipoComprobanteBe TipoComprobante { get; set; }
         public string Serial { get; set; }

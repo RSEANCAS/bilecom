@@ -52,6 +52,9 @@ namespace bilecom.app.Controllers.Api
         [Route("guardar-factura")]
         public bool GuardarFactura(FacturaBe registro)
         {
+            var cookieSS = Request.Headers.GetCookies("ss").FirstOrDefault();
+            var user = JsonConvert.DeserializeObject<dynamic>(cookieSS["ss"].Value);
+
             int? facturaId = null, nroComprobante = null;
             DateTime? fechaHoraEmision = null;
             string totalImporteEnLetras = null;
@@ -66,9 +69,6 @@ namespace bilecom.app.Controllers.Api
                     if (fechaHoraEmision.HasValue) registro.FechaHoraEmision = fechaHoraEmision.Value;
                     if (nroComprobante.HasValue) registro.NroComprobante = nroComprobante.Value;
                     if (totalImporteEnLetras != null) registro.ImporteTotalEnLetras = totalImporteEnLetras;
-                    var cookieSS = Request.Headers.GetCookies("ss").FirstOrDefault();
-
-                    var user = JsonConvert.DeserializeObject<dynamic>(cookieSS["ss"].Value);
 
                     int empresaId = user.Usuario.Empresa.EmpresaId;
 
@@ -173,19 +173,15 @@ namespace bilecom.app.Controllers.Api
                     File.WriteAllBytes(rutaArchivoXml, contenidoXmlFirmadoBytes);
                     File.WriteAllBytes(rutaArchivoPdf, contenidoPdfBytes);
 
-                    if (seEmitio)
-                    {
-                        File.WriteAllBytes(rutaArchivoCdr, cdrBytes);
-                        //File.WriteAllBytes(rutaArchivoPdf, contenidoXmlFirmadoBytes);
+                    if (cdrBytes != null) File.WriteAllBytes(rutaArchivoCdr, cdrBytes);
 
-                        registro.CodigoRespuestaSunat = codigoCdr;
-                        registro.DescripcionRespuestaSunat = descripcionCdr;
-                        registro.EstadoIdRespuestaSunat = estadoCdr.HasValue ? (int?)estadoCdr.Value : null;
-                        registro.RutaXml = rutaArchivoXml;
-                        registro.RutaCdr = rutaArchivoCdr;
+                    registro.CodigoRespuestaSunat = codigoCdr;
+                    registro.DescripcionRespuestaSunat = descripcionCdr;
+                    registro.EstadoIdRespuestaSunat = estadoCdr.HasValue ? (int?)estadoCdr.Value : null;
+                    registro.RutaXml = rutaArchivoXml;
+                    registro.RutaCdr = rutaArchivoCdr;
 
-                        bool seGuardoRespuestaSunat = facturaBl.GuardarRespuestaSunatFactura(registro);
-                    }
+                    bool seGuardoRespuestaSunat = facturaBl.GuardarRespuestaSunatFactura(registro);
                 }
                 catch (Exception ex)
                 {

@@ -537,12 +537,12 @@ const pageMantenimientoFactura = {
         let tipoTributoIgv = { TipoTributoId: tipoAfectacionIgv.TipoTributoId, Codigo: tipoAfectacionIgv.TipoTributo.Codigo, Nombre: tipoAfectacionIgv.TipoTributo.Nombre, CodigoNombre: tipoAfectacionIgv.TipoTributo.CodigoNombre };
         let descuento = Number($("#txt-detalle-descuento").val().replace(/,/g, ""));
         let isc = Number($("#txt-detalle-isc").val().replace(/,/g, ""));
-        let porcentajeIgv = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto ? 0 : Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
-        let igv = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto ? 0 : Number($("#txt-detalle-igv").val().replace(/,/g, ""));
+        let porcentajeIgv = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? 0 : Number($("#txt-detalle-porcentaje-igv").val().replace(/,/g, ""));
+        let igv = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? 0 : Number($("#txt-detalle-igv").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
         let valorUnitario = Math.round((precioUnitario / (1 + (porcentajeIgv / 100))) * 100) / 100;
         let valorVenta = Math.round((valorUnitario * cantidad) * 100) / 100;
-        let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
+        let totalImporte = tipoAfectacionIgv.FlagGratuito ? 0 : Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
         let data = {
             FacturaDetalleId: facturaDetalleId,
@@ -597,7 +597,7 @@ const pageMantenimientoFactura = {
         let descuentoString = $("#txt-detalle-descuento").val().replace(/,/g, '');
 
         let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
-        let porcentajeIgvString = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto ? "0" : $("#txt-detalle-porcentaje-igv").val().replace(/,/g, "");
+        let porcentajeIgvString = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : $("#txt-detalle-porcentaje-igv").val().replace(/,/g, "");
         let porcentajeIgv = Number(porcentajeIgvString);
 
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
@@ -606,7 +606,8 @@ const pageMantenimientoFactura = {
         let valorVenta = valorUnitario * cantidad;
         let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
         let importeTotal = cantidad * (precioUnitario - descuento);
-        let igv = importeTotal - valorVenta;
+        let igv = tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : importeTotal - valorVenta;
+        importeTotal = tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
 
 
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));

@@ -30,6 +30,7 @@ namespace bilecom.da
                                 AmbienteSunatBe item = new AmbienteSunatBe();
                                 item.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
                                 item.Nombre = dr.GetData<string>("Nombre");
+                                item.ColorHexadecimal = dr.GetData<string>("ColorHexadecimal");
                                 item.ServicioWebUrlVenta = dr.GetData<string>("ServicioWebUrlVenta");
                                 item.ServicioWebUrlGuia = dr.GetData<string>("ServicioWebUrlGuia");
                                 item.ServicioWebUrlOtros = dr.GetData<string>("ServicioWebUrlOtros");
@@ -66,6 +67,7 @@ namespace bilecom.da
                             {
                                 item.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
                                 item.Nombre = dr.GetData<string>("Nombre");
+                                item.ColorHexadecimal = dr.GetData<string>("ColorHexadecimal");
                                 item.ServicioWebUrlVenta = dr.GetData<string>("ServicioWebUrlVenta");
                                 item.ServicioWebUrlGuia = dr.GetData<string>("ServicioWebUrlGuia");
                                 item.ServicioWebUrlOtros = dr.GetData<string>("ServicioWebUrlOtros");

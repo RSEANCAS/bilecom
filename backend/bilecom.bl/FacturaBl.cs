@@ -78,6 +78,18 @@ namespace bilecom.bl
                                     if (!seGuardo) break;
                                 }
                             }
+
+                            //if(registro.ListaFacturaGuiaRemision != null)
+                            //{
+                            //    foreach(var item in registro.ListaFacturaGuiaRemision)
+                            //    {
+                            //        int? facturaGuiaRemision = null;
+                            //        item.FacturaId = (int)facturaId;
+                            //        item.EmpresaId = registro.EmpresaId;
+                            //        item.Usuario = registro.Usuario;
+                            //        seg
+                            //    }
+                            //}
                         }
 
                         if (seGuardo) scope.Complete();

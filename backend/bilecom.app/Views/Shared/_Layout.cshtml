@@ -83,7 +83,7 @@
                 <!--Brand logo & name-->
                 <!--================================-->
                 <div class="navbar-header">
-                    <a href="index.html" class="navbar-brand">
+                    <a href="@Url.Content("~")" class="navbar-brand">
                         <img src="@Url.Content("~/Assets/img/logo.png")" alt="Nifty Logo" class="brand-icon">
                         <div class="brand-title">
                             <span class="brand-text">ileCom</span>
@@ -205,6 +205,12 @@
                                 <!--================================-->
                                 <div id="mainnav-profile" class="mainnav-profile">
                                     <div class="profile-wrap text-center">
+                                        <div class="pad-btm">
+                                            <span class="badge" style="font-size: 20px; background-color: @empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.ColorHexadecimal">
+                                                @empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre.ToUpper()
+                                            </span>
+                                            @*<span class="badge badge-primary">@empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre</span>*@
+                                        </div>
                                         <div class="pad-btm">
                                             <img class="img img-md" src="@($"data:{empresa.EmpresaImagen.LogoTipoContenido};base64,{Convert.ToBase64String(empresa.EmpresaImagen.Logo)}")" alt="Profile Picture">
                                         </div>

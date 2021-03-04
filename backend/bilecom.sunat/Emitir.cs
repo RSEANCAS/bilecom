@@ -48,7 +48,10 @@ namespace bilecom.sunat
                     Generar.EvaluarXmlCdrDescomprimido(cdrBytes, nombreArchivoCdr, out codigoCdr, out descripcionCdr, out estadoCdr);
                 }
             }
-            catch (FaultException ex) { }
+            catch (FaultException ex) {
+                descripcionCdr = ex.Message;
+                codigoCdr = ex.Code.Name.ToString();
+            }
             catch (Exception ex) { }
             seEmitio = cdrBytes != null;
 

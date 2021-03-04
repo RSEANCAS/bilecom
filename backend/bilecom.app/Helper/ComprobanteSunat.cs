@@ -322,7 +322,7 @@ namespace bilecom.app.Helper
                     // 27. VALOR UNITARIO
                     invoiceType.InvoiceLine[i].Price = new sunat.comprobante.invoice.PriceType();
                     invoiceType.InvoiceLine[i].Price.PriceAmount = new sunat.comprobante.invoice.PriceAmountType();
-                    invoiceType.InvoiceLine[i].Price.PriceAmount.Value = Math.Round(itemFacturaDetalle.ValorUnitario, cantidadDecimales);
+                    invoiceType.InvoiceLine[i].Price.PriceAmount.Value = Math.Round(itemFacturaDetalle.TipoAfectacionIgv.FlagGratuito ? 0M : itemFacturaDetalle.ValorUnitario, cantidadDecimales);
                     invoiceType.InvoiceLine[i].Price.PriceAmount.currencyID = item.Moneda.Codigo;
 
                     // 28. PRECIO UNITARIO - 29 VALOR REFERENCIAL

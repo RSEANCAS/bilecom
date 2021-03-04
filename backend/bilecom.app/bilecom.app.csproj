@@ -2817,6 +2817,7 @@
     <Content Include="Assets\premium\icon-sets\thumbs\solid-icons\zodiac.png" />
     <Content Include="Assets\premium\line-icons-header.png" />
     <Content Include="Assets\premium\solid-icons-header.png" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>

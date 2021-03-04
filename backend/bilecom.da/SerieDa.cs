@@ -33,6 +33,7 @@ namespace bilecom.da
                                 SerieBe item = new SerieBe();
                                 item.EmpresaId = dr.GetData<int>("EmpresaId");
                                 item.SerieId = dr.GetData<int>("SerieId");
+                                item.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
                                 item.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
                                 item.Serial = dr.GetData<string>("Serial");
                                 item.ValorInicial = dr.GetData<int>("ValorInicial");
@@ -75,6 +76,7 @@ namespace bilecom.da
                             SerieBe item = new SerieBe();
                             item.SerieId = dr.GetData<int>("Fila");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
                             item.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
                             item.TipoComprobante = new TipoComprobanteBe();
                             item.TipoComprobante.Nombre = dr.GetData<string>("NombreTipoComprobante");
@@ -111,6 +113,7 @@ namespace bilecom.da
                             {
                                 respuesta = new SerieBe();
                                 respuesta.SerieId = dr.GetData<int>("SerieId");
+                                respuesta.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
                                 respuesta.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
                                 respuesta.Serial = dr.GetData<string>("Serial");
                                 respuesta.ValorInicial = dr.GetData<int>("ValorInicial");
@@ -139,6 +142,7 @@ namespace bilecom.da
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@EmpresaId", serieBe.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@SerieId", serieBe.SerieId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ambienteSunatId", serieBe.AmbienteSunatId.GetNullable());
                     cmd.Parameters.AddWithValue("@TipoComprobanteId", serieBe.TipoComprobanteId.GetNullable());
                     cmd.Parameters.AddWithValue("@Serial", serieBe.Serial.GetNullable());
                     cmd.Parameters.AddWithValue("@ValorInicial", serieBe.ValorInicial.GetNullable());

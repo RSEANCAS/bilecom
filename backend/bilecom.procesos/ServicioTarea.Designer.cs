@@ -1,6 +1,6 @@
 ﻿namespace bilecom.procesos
 {
-    partial class Service1
+    partial class ServicioTarea
     {
         /// <summary> 
         /// Variable del diseñador necesaria.

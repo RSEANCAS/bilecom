@@ -1,9 +1,10 @@
 ﻿const pageSerie = {
     Init: function () {
         common.ConfiguracionDataTable();
-        this.CargarCombo();
-        this.InitEvents();
-        $("#btn-buscar").trigger("click");
+        this.CargarCombo(() => {
+            this.InitEvents();
+            $("#btn-buscar").trigger("click");
+        });
     },
     InitEvents: function () {
         $("#btn-buscar").click(pageSerie.BtnBuscarClick);
@@ -12,7 +13,7 @@
         e.preventDefault();
         pageSerie.CreateDataTable("#tbl-lista")
     },
-    CargarCombo: async function () {
+    CargarCombo: async function (fn = null) {
         let promises = [
             fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`)]
         Promise.all(promises)
@@ -20,6 +21,7 @@
             .then(([TipoComprobanteLista]) => {
 
                 pageSerie.ResponseTipoComprobanteListar(TipoComprobanteLista || []);
+                if (typeof fn == "function") fn();
 
             })
     },
