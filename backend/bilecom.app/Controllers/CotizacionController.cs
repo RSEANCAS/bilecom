@@ -10,7 +10,7 @@ namespace bilecom.app.Controllers
 {
     [RoutePrefix("Cotizaciones")]
     [IsLogoutFilter]
-    public class CotizacionController : _BaseController
+    public class CotizacionController : Controller
     {
         [Route("")]
         // GET: Cotizacion

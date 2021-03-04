@@ -15,5 +15,10 @@ namespace bilecom.be
         public string ClaveCertificado { get; set; }
         public string CuentaCorriente { get; set; }
         public string ComentarioLegal { get; set; }
+        public string ComentarioLegalDetraccion { get; set; }
+        public int CantidadDecimalGeneral { get; set; }
+        public int CantidadDecimalDetallado { get; set; }
+        public int FormatoId { get; set; }
+        public FormatoBe Formato { get; set; }
     }
 }

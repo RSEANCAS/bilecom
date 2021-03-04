@@ -2876,8 +2876,6 @@
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\SerieController.cs" />
     <Compile Include="Controllers\TipoSedeController.cs" />
-    <Compile Include="Controllers\_BaseController.cs" />
-    <Compile Include="Controllers\_FilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

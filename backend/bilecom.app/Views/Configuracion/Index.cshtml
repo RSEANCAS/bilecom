@@ -1,4 +1,8 @@
-﻿@using bilecom.enums
+﻿@{
+    ViewBag.Titulo = "Configuración";
+}
+
+@using bilecom.enums
 @section links_footer{
     <link href="@Url.Content("~/Assets/plugins/select2/css/select2.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
@@ -24,28 +28,47 @@
             <!--Nav Tabs-->
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a data-toggle="tab" href="#demo-lft-tab-1">Home <span class="badge badge-purple">27</span></a>
+                    @*<a data-toggle="tab" href="#demo-lft-tab-1">Home <span class="badge badge-purple">27</span></a>*@
+                    <a data-toggle="tab" href="#demo-lft-tab-1">Empresa</a>
                 </li>
                 <li>
-                    <a data-toggle="tab" href="#demo-lft-tab-2">Profile</a>
+                    <a data-toggle="tab" href="#demo-lft-tab-2">Predeterminado</a>
                 </li>
                 <li>
-                    <a data-toggle="tab" href="#demo-lft-tab-3">Setting</a>
+                    <a data-toggle="tab" href="#demo-lft-tab-3">Sunat</a>
                 </li>
             </ul>
 
             <!--Tabs Content-->
             <div class="tab-content">
-                <div id="demo-lft-tab-1" class="tab-pane fade active in">
-                    <p class="text-main text-semibold">First Tab Content</p>
+                <div id="tab-empresa" class="tab-pane fade active in">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">RUC</span>
+                                <input class="form-control" placeholder="RUC" name="txt-razon-social" id="txt-razon-social" data-bv-field="txt-razon-social" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Razón Social</span>
+                                <input class="form-control" placeholder="Razón Social" name="txt-razon-social" id="txt-razon-social" data-bv-field="txt-razon-social" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Nombre Comercial</span>
+                                <input class="form-control" placeholder="Nombre Comercial" name="txt-nombre-comercial" id="txt-nombre-comercial" data-bv-field="txt-nombre-comercial">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-predeterminado" class="tab-pane fade">
+                    <p class="text-main text-semibold">Predeterminado</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
                 </div>
-                <div id="demo-lft-tab-2" class="tab-pane fade">
-                    <p class="text-main text-semibold">Second Tab Content</p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                </div>
-                <div id="demo-lft-tab-3" class="tab-pane fade">
-                    <p class="text-main text-semibold">Third Tab Content</p>
+                <div id="tab-sunat" class="tab-pane fade">
+                    <p class="text-main text-semibold">Sunat</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
                 </div>
             </div>
@@ -60,12 +83,12 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/switchery/switchery.min.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/mantenimientofactura.js")"></script>
-    <script>
-        const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
-        const facturaId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
-        $(document).ready(function () {
-            pageMantenimientoFactura.Init();
-        });
-    </script>
+    @*<script src="@Url.Content("~/Assets/js/pages/mantenimientofactura.js")"></script>*@
+    @*<script>
+            const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
+            const facturaId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
+            $(document).ready(function () {
+                pageMantenimientoFactura.Init();
+            });
+        </script>*@
 }

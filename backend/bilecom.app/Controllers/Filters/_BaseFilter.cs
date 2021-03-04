@@ -34,7 +34,19 @@ namespace bilecom.app.Controllers.Filters
         {
             get
             {
-                bool existe = Data != null;
+                dynamic data = null;
+
+                try
+                {
+                    HttpCookie cookie = HttpContext.Current.Request.Cookies.Get("ss");
+                    if (cookie != null) data = JsonConvert.DeserializeObject<dynamic>(cookie.Value);
+                }
+                catch (Exception ex)
+                {
+                    data = null;
+                }
+
+                bool existe = data != null;
 
                 return existe;
             }
