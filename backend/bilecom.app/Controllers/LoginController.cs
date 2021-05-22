@@ -27,5 +27,6 @@ namespace bilecom.app.Controllers
 
             return RedirectToAction("Index", "Login");
         }
+
     }
 }

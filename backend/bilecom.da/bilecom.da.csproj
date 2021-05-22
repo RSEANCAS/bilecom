@@ -50,6 +50,7 @@
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="FacturaDetalleDa.cs" />
+    <Compile Include="FormatoCorreoDa.cs" />
     <Compile Include="MonedaDa.cs" />
     <Compile Include="MovimientoDa.cs" />
     <Compile Include="MovimientoDetalleDa.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="TipoMovimientoDa.cs" />
     <Compile Include="TipoProductoDa.cs" />
     <Compile Include="TipoTributoDa.cs" />
+    <Compile Include="TokenDa.cs" />
     <Compile Include="UnidadMedidaDa.cs" />
     <Compile Include="UsuarioDa.cs" />
     <Compile Include="ProveedorDa.cs" />

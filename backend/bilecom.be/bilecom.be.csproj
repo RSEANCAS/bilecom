@@ -59,6 +59,7 @@
     <Compile Include="FacturaDetalleBe.cs" />
     <Compile Include="FacturaDocumentoBe.cs" />
     <Compile Include="FacturaGuiaRemisionBe.cs" />
+    <Compile Include="FormatoCorreoBe.cs" />
     <Compile Include="GuiaRemisionBe.cs" />
     <Compile Include="MonedaBe.cs" />
     <Compile Include="MovimientoBe.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="TipoProductoBe.cs" />
     <Compile Include="TipoSedeBe.cs" />
     <Compile Include="TipoTributoBe.cs" />
+    <Compile Include="TokenBe.cs" />
     <Compile Include="UnidadMedidaBe.cs" />
     <Compile Include="UsuarioBe.cs" />
     <Compile Include="UsuarioPerfilBe.cs" />
