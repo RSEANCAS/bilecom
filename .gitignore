@@ -20,3 +20,5 @@ backend/bilecom.sunat/bin
 backend/bilecom.sunat/obj
 backend/bilecom.procesos/bin
 backend/bilecom.procesos/obj
+backend/bilecom.sunat.testenvio/bin
+backend/bilecom.sunat.testenvio/obj

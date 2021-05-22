@@ -56,12 +56,9 @@
     <Compile Include="EmpresaConfiguracionBl.cs" />
     <Compile Include="EmpresaImagenBl.cs" />
     <Compile Include="FacturaBl.cs" />
-<<<<<<< HEAD
     <Compile Include="FormatoCorreoBl.cs" />
-=======
     <Compile Include="FormaPagoBl.cs" />
     <Compile Include="FormatoBl.cs" />
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Compile Include="GuiaRemisionRemitenteBl.cs" />
     <Compile Include="GuiaRemisionTransportistaBl.cs" />
     <Compile Include="MonedaBl.cs" />

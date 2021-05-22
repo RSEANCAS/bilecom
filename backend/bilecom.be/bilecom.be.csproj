@@ -63,11 +63,8 @@
     <Compile Include="FacturaDetalleBe.cs" />
     <Compile Include="FacturaDocumentoBe.cs" />
     <Compile Include="FacturaGuiaRemisionBe.cs" />
-<<<<<<< HEAD
     <Compile Include="FormatoCorreoBe.cs" />
-=======
     <Compile Include="FormaPagoBe.cs" />
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Compile Include="GuiaRemisionBe.cs" />
     <Compile Include="MonedaBe.cs" />
     <Compile Include="MovimientoBe.cs" />
