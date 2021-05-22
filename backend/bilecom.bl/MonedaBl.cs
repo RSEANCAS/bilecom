@@ -13,6 +13,20 @@ namespace bilecom.bl
     {
         MonedaDa monedaDa = new MonedaDa();
 
+        public List<MonedaBe> ListarMoneda()
+        {
+            List<MonedaBe> lista = new List<MonedaBe>();
+            try
+            {
+                cn.Open();
+                lista = monedaDa.Listar(cn);
+                cn.Close();
+            }
+            catch (Exception) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
+        }
+
         public List<MonedaBe> ListarMonedaPorEmpresa(int empresaId)
         {
             List<MonedaBe> lista = new List<MonedaBe>();

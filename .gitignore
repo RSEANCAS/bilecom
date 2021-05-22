@@ -1,5 +1,7 @@
+*.dll
 backend/.vs
 backend/bilecom.app/App_Data
+backend/bilecom.app/App_Files
 backend/bilecom.app/bin
 backend/bilecom.app/obj
 backend/bilecom.app.admin/bin
@@ -16,3 +18,5 @@ backend/bilecom.ut/bin
 backend/bilecom.ut/obj
 backend/bilecom.sunat/bin
 backend/bilecom.sunat/obj
+backend/bilecom.procesos/bin
+backend/bilecom.procesos/obj

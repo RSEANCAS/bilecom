@@ -31,8 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gma.QrCodeNet.Encoding, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QrCode.Net.0.4.0.0\lib\net45\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Services3.3.0.0.0\lib\net20\Microsoft.Web.Services3.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization" />
@@ -49,21 +56,6 @@
     <Compile Include="comprobante\UBL-CreditNote-2_1.cs" />
     <Compile Include="comprobante\UBL-DebitNote-2_1.cs" />
     <Compile Include="comprobante\UBL-Invoice-2_1.cs" />
-    <Compile Include="Connected Services\bilecom.sunat.ws.guia\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Connected Services\bilecom.sunat.ws.otros\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Connected Services\bilecom.sunat.ws.venta\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Connected Services\ws.venta\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -71,71 +63,12 @@
     </Compile>
     <Compile Include="Emitir.cs" />
     <Compile Include="Generar.cs" />
+    <Compile Include="PasswordDigestBehavior.cs" />
+    <Compile Include="PasswordDigestMessageInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Connected Services\bilecom.sunat.ws.guia\bilecom.sunat.bilecom.sunat.ws.guia.getStatusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\bilecom.sunat.bilecom.sunat.ws.guia.sendBillResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\bilecom.sunat.bilecom.sunat.ws.guia.sendPackResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\bilecom.sunat.bilecom.sunat.ws.guia.sendSummaryResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\bilecom.sunat.bilecom.sunat.ws.guia.statusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\billService.wsdl" />
-    <None Include="Connected Services\bilecom.sunat.ws.guia\billService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\billService1.wsdl" />
-    <None Include="Connected Services\bilecom.sunat.ws.otros\bilecom.sunat.bilecom.sunat.ws.otros.getStatusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\bilecom.sunat.bilecom.sunat.ws.otros.sendBillResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\bilecom.sunat.bilecom.sunat.ws.otros.sendPackResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\bilecom.sunat.bilecom.sunat.ws.otros.sendSummaryResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\bilecom.sunat.bilecom.sunat.ws.otros.statusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\billService.wsdl" />
-    <None Include="Connected Services\bilecom.sunat.ws.otros\billService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\billService1.wsdl" />
-    <None Include="Connected Services\bilecom.sunat.ws.venta\bilecom.sunat.bilecom.sunat.ws.venta.getStatusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\bilecom.sunat.bilecom.sunat.ws.venta.sendBillResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\bilecom.sunat.bilecom.sunat.ws.venta.sendPackResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\bilecom.sunat.bilecom.sunat.ws.venta.sendSummaryResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\bilecom.sunat.bilecom.sunat.ws.venta.statusResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\billService.wsdl" />
-    <None Include="Connected Services\bilecom.sunat.ws.venta\billService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\billService1.wsdl" />
-    <None Include="Connected Services\bilecom.sunat.ws.venta\billService2.wsdl" />
     <None Include="Connected Services\ws.venta\bilecom.sunat.ws.venta.getStatusResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -157,51 +90,19 @@
     </None>
     <None Include="Connected Services\ws.venta\billService1.wsdl" />
     <None Include="Connected Services\ws.venta\billService2.wsdl" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\bilecom.sunat.ws.guia\" />
-    <WCFMetadataStorage Include="Connected Services\bilecom.sunat.ws.otros\" />
-    <WCFMetadataStorage Include="Connected Services\bilecom.sunat.ws.venta\" />
+    <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
+      <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
+      <Name>bilecom.enums</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ws.venta\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.guia\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.venta\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\bilecom.sunat.ws.otros\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\ws.venta\configuration91.svcinfo" />
@@ -214,12 +115,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\bilecom.enums\bilecom.enums.csproj">
-      <Project>{37EB0228-2C9C-4E6F-B5F6-9A4748018C73}</Project>
-      <Name>bilecom.enums</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -43,5 +43,37 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public TipoComprobanteBe Obtener(int tipoComprobanteId, SqlConnection cn)
+        {
+            TipoComprobanteBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tipocomprobante_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@tipoComprobanteId", tipoComprobanteId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new TipoComprobanteBe();
+                                respuesta.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
+                                respuesta.Codigo = dr.GetData<string>("Codigo");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

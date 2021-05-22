@@ -4,6 +4,7 @@
 @using bilecom.be;
 @{
     int perfilId = ViewBag.Data.PerfilActual.PerfilId;
+    EmpresaBe empresa = (EmpresaBe)ViewBag.Empresa;
     List<PerfilBe> listaPerfil = ViewBag.ListaPerfil == null ? null : (List<PerfilBe>)ViewBag.ListaPerfil;
     List<OpcionBe> listaOpcion = (List<OpcionBe>)listaPerfil.FirstOrDefault(x => x.PerfilId == perfilId).ListaOpcion;
 }
@@ -39,7 +40,7 @@
     <!--Demo [ DEMONSTRATION ]-->
     <link href="@Url.Content("~/Assets/css/demo/nifty-demo.min.css")" rel="stylesheet">
 
-    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.css")" rel="stylesheet">
 
     <!--=================================================
 
@@ -82,10 +83,10 @@
                 <!--Brand logo & name-->
                 <!--================================-->
                 <div class="navbar-header">
-                    <a href="index.html" class="navbar-brand">
+                    <a href="@Url.Content("~")" class="navbar-brand">
                         <img src="@Url.Content("~/Assets/img/logo.png")" alt="Nifty Logo" class="brand-icon">
                         <div class="brand-title">
-                            <span class="brand-text">BileCom</span>
+                            <span class="brand-text">ileCom</span>
                         </div>
                     </a>
                 </div>
@@ -105,13 +106,18 @@
                         </li>
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End Navigation toogle button-->
-                        <!--Search-->
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <li>
+                    </ul>
+                    <ul class="nav navbar-top-links" style="display: flex; align-items: center;">
+                        <li class="tgl-menu-btn">
+                            <div class="form-group form-inline mar-no">
+                                <label class="text-light text-bold">SEDE: </label>
+                                <select class="form-control">
+                                    <option>
+                                        SELECCIONE
+                                    </option>
+                                </select>
+                            </div>
                         </li>
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <!--End Search-->
-
                     </ul>
                     <ul class="nav navbar-top-links">
 
@@ -152,7 +158,7 @@
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                 <ul class="head-list">
                                     <li>
-                                        <a href="#" id="btn-cerrar-sesion"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a>
+                                        <a href="#" id="btn-cerrar-sesion" class="btn-cerrar-sesion"><i class="demo-pli-unlock icon-lg icon-fw"></i> Salir</a>
                                     </li>
                                 </ul>
                             </div>
@@ -205,7 +211,13 @@
                                 <div id="mainnav-profile" class="mainnav-profile">
                                     <div class="profile-wrap text-center">
                                         <div class="pad-btm">
-                                            <img class="img-circle img-md" src="@Url.Content("~/Assets/img/profile-photos/1.png")" alt="Profile Picture">
+                                            <span class="badge" style="font-size: 20px; background-color: @empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.ColorHexadecimal">
+                                                @empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre.ToUpper()
+                                            </span>
+                                            @*<span class="badge badge-primary">@empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre</span>*@
+                                        </div>
+                                        <div class="pad-btm">
+                                            <img class="img img-md" src="@($"data:{empresa.EmpresaImagen.LogoTipoContenido};base64,{Convert.ToBase64String(empresa.EmpresaImagen.Logo)}")" alt="Profile Picture">
                                         </div>
                                         <a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
                                             <span class="pull-right dropdown-toggle">
@@ -228,7 +240,7 @@
                                         }
                                     </div>
                                     <div id="profile-nav" class="collapse list-group bg-trans">
-                                        <a href="#" class="list-group-item">
+                                        @*<a href="#" class="list-group-item">
                                             <i class="demo-pli-male icon-lg icon-fw"></i> View Profile
                                         </a>
                                         <a href="#" class="list-group-item">
@@ -236,9 +248,12 @@
                                         </a>
                                         <a href="#" class="list-group-item">
                                             <i class="demo-pli-information icon-lg icon-fw"></i> Help
+                                        </a>*@
+                                        <a href="@Url.Content("~/Configuracion")" class="list-group-item">
+                                            <i class="demo-pli-gear icon-lg icon-fw"></i> Configuración
                                         </a>
-                                        <a href="#" class="list-group-item">
-                                            <i class="demo-pli-unlock icon-lg icon-fw"></i> Logout
+                                        <a href="#" class="list-group-item btn-cerrar-sesion">
+                                            <i class="demo-pli-unlock icon-lg icon-fw"></i> Salir
                                         </a>
                                     </div>
                                 </div>
@@ -344,6 +359,8 @@
         const urlRoot = "@Url.Content("~")";
         const listaPerfil = @(Html.Raw(Json.Encode(listaPerfil)));
         const perfilId = @perfilId;
+        const ambienteSunatId = @empresa.EmpresaConfiguracion.AmbienteSunatId;
+        const ambienteSunatNombre = '@Html.Raw(empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre)';
         pageLayout.Init();
     </script>
     @*    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>*@

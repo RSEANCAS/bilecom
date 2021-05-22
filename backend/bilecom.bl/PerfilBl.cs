@@ -35,7 +35,7 @@ namespace bilecom.bl
                     }
                 }
             }
-            catch (Exception ex) { cn.Close(); throw ex; }
+            catch (Exception ex) { throw ex; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return lista;

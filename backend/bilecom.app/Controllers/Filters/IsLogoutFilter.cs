@@ -10,6 +10,7 @@ namespace bilecom.app.Controllers.Filters
     public class IsLogoutFilter : _BaseFilter
     {
         PerfilBl perfilBl = new PerfilBl();
+        EmpresaBl empresaBl = new EmpresaBl();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -22,6 +23,9 @@ namespace bilecom.app.Controllers.Filters
                 int empresaId = Data.Usuario.Empresa.EmpresaId;
                 int usuarioId = Data.Usuario.Id;
 
+                var empresa = empresaBl.ObtenerEmpresa(empresaId, withUbigeo: true, withConfiguracion: true, columnasEmpresaImagen: new List<enums.Enums.ColumnasEmpresaImagen> { enums.Enums.ColumnasEmpresaImagen.Logo, enums.Enums.ColumnasEmpresaImagen.LogoTipoContenido });
+
+                filterContext.Controller.ViewBag.Empresa = empresa;
                 filterContext.Controller.ViewBag.Data = Data;
                 filterContext.Controller.ViewBag.ListaPerfil = perfilBl.ListarPerfilPorUsuario(empresaId, usuarioId, loadListaOpcion: true);
             }

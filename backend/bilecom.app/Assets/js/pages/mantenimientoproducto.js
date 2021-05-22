@@ -1,18 +1,18 @@
-﻿/// <reference path="mantenimientopersonal.js" />
-var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [], TipoProductoLista = [];
+﻿var CategoriaProductoLista = [], UnidadMedidaLista = [], TipoAfectacionLista = [], TipoCalculo = [], TipoProductoLista = [];
 TipoCalculo = [{
     Id: "VALORUNITARIO",
     Descripcion: "Valor Unitario (monto sin igv)"
-}, { Id: "PRECIOUNITARIO", Descripcion: "Precio Unitario (monto con igv)" }, { Id: "IMPORTETOTAL", Descripcion: "Importe Total" }]
+}, { Id: "PRECIOUNITARIO", Descripcion: "Precio Unitario (monto con igv)" }, { Id: "IMPORTETOTAL", Descripcion: "Importe Total" }];
 
 const pageMantenimientoProducto = {
     Init: function() {
         this.Validar();
         this.InitEvents();
+        
     },
     InitEvents: function () {
-        pageMantenimientoProducto.CargarCombo();
-        pageMantenimientoProducto.ObtenerDatos();
+        pageMantenimientoProducto.CargarCombo(pageMantenimientoProducto.ObtenerDatos);
+        
     },
     Validar: function() {
         $("#frm-producto-mantenimiento")
@@ -60,7 +60,7 @@ const pageMantenimientoProducto = {
             });
     },
 
-    ObtenerDatos: function() {
+    ObtenerDatos: async function() {
         let numero = $("#txt-opcion").val();
         if (numero != 0) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
@@ -74,7 +74,7 @@ const pageMantenimientoProducto = {
         }
     },
 
-    CargarCombo: async function() {
+    CargarCombo: async function(fn = null) {
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let promises = [
             fetch(`${urlRoot}api/categoriaproducto/listar-categoriaproducto?empresaId=${empresaId}`),
@@ -95,6 +95,7 @@ const pageMantenimientoProducto = {
                 pageMantenimientoProducto.ResponseUnidadMedidaListar(UnidadMedidaLista);
                 pageMantenimientoProducto.ResponseTipoCalculoListar(TipoCalculo);
                 pageMantenimientoProducto.ResponseTipoProductoListar(TipoProductoLista);
+                if (typeof fn == 'function') fn();
                 //$("#cmb-categoria").val(1).trigger('change');
             })
     },
@@ -140,20 +141,7 @@ const pageMantenimientoProducto = {
             .then(r => r.json())
             .then(pageMantenimientoProducto.ResponseEnviarFormulario);
     },
-    ResponseObtenerDatos: function(data) {
-        $("#txt-nombre").val(data.Nombre);
-        $("#cmb-categoria").val(data.CategoriaId).trigger('change');
-        $("#txt-codigo").val(data.Codigo);
-        $("#txt-nombre").val(data.Nombre);
-        $("#txt-stock-minimo").val(data.StockMinimo);
-        $("#cmb-tipo-producto").val(data.TipoProductoId).trigger('change');
-        $("#cmb-unidad-medida").val(data.UnidadMedidaId).trigger('change');
-        $("#txt-codigo-sunat").val(data.CodigoSunat);
-        $("#cmb-tipo-afectacion").val(data.TipoAfectacionIgvId).trigger('change');
-        $("#cmb-tipo-calculo").val(data.TipoCalculo).trigger('change');
-        $("#txt-monto").val(data.Monto);
 
-    },
     ResponseEnviarFormulario: function(data) {
         let tipo = "",
             mensaje = "";
@@ -192,6 +180,7 @@ const pageMantenimientoProducto = {
         $("#cmb-tipo-afectacion").select2({ data: datatipoafectacionigv, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseUnidadMedidaListar: function (data) {
+        $("#cmb-unidad-medida").empty();
         let dataunidadmedida = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.UnidadMedidaId, text: item.Descripcion }); });
         $("#cmb-unidad-medida").select2({ data: dataunidadmedida, width: '100%', placeholder: '[SELECCIONE...]' });
     },
@@ -202,5 +191,19 @@ const pageMantenimientoProducto = {
     ResponseTipoProductoListar: function(data) {
         let datatipoproducto = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoProductoId, text: item.Nombre }); });
         $("#cmb-tipo-producto").select2({ data: datatipoproducto, width: '100%', placeholder: '[SELECCIONE...]' });
+    },
+    ResponseObtenerDatos: function (data) {
+        $("#txt-nombre").val(data.Nombre);
+        $("#cmb-categoria").val(data.CategoriaId).trigger('change');
+        $("#txt-codigo").val(data.Codigo);
+        $("#txt-nombre").val(data.Nombre);
+        $("#txt-stock-minimo").val(data.StockMinimo);
+        $("#cmb-tipo-producto").val(data.TipoProductoId).trigger('change');
+        $("#cmb-unidad-medida").val(data.UnidadMedidaId).trigger('change');
+        $("#txt-codigo-sunat").val(data.CodigoSunat);
+        $("#cmb-tipo-afectacion").val(data.TipoAfectacionIgvId).trigger('change');
+        $("#cmb-tipo-calculo").val(data.TipoCalculo).trigger('change');
+        $("#txt-monto").val(data.Monto);
+
     },
 }

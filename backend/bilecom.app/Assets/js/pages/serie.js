@@ -1,18 +1,22 @@
 ﻿const pageSerie = {
     Init: function () {
         common.ConfiguracionDataTable();
-        this.CargarCombo();
-        this.InitEvents();
-        $("#btn-buscar").trigger("click");
+        this.CargarCombo(() => {
+            this.InitEvents();
+            $("#btn-buscar").trigger("click");
+        });
     },
+
     InitEvents: function () {
         $("#btn-buscar").click(pageSerie.BtnBuscarClick);
     },
+
     BtnBuscarClick: function (e) {
         e.preventDefault();
         pageSerie.CreateDataTable("#tbl-lista")
     },
-    CargarCombo: async function () {
+
+    CargarCombo: async function (fn = null) {
         let promises = [
             fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`)]
         Promise.all(promises)
@@ -20,22 +24,27 @@
             .then(([TipoComprobanteLista]) => {
 
                 pageSerie.ResponseTipoComprobanteListar(TipoComprobanteLista || []);
+                if (typeof fn == "function") fn();
 
             })
     },
+
     ObtenerTipoComprobante: function () {
         let tipoComprobante = $("#cmb-tipo-comprobante").val();
         return tipoComprobante;
     },
+
     ObtenerSerial: function () {
         let serial = $("#txt-serial").val();
         return serial;
     },
+
     ResponseTipoComprobanteListar: function (data) {
         $("#cmb-tipo-comprobante").empty();
         let datatipocomprobante = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoComprobanteId, text: item.Nombre }); });
         $("#cmb-tipo-comprobante").select2({ data: datatipocomprobante, width: '100%', placeholder: '[TODOS...]' });
     },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
@@ -52,12 +61,13 @@
                 url: `${urlRoot}api/serie/buscar-serie`,
                 data: {
                     empresaId: empresaId,
+                    ambienteSunatId: ambienteSunatId,
                     tipoComprobanteId: pageSerie.ObtenerTipoComprobante,
                     serial: pageSerie.ObtenerSerial
                 }
             },
             columns: [
-                { data: "SerieId" },
+                { data: "Fila" },
                 { data: "TipoComprobante.Nombre" },
                 { data: "Serial" },
                 { data: "ValorInicial" },

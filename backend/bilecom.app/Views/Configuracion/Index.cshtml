@@ -1,12 +1,17 @@
-﻿@using bilecom.enums
+﻿@{
+    ViewBag.Titulo = "Configuración";
+}
+
+@using bilecom.enums
 @section links_footer{
-    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/select2/css/select2.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/switchery/switchery.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/ionicons/css/ionicons.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/dropzone/dropzone.min.css")" rel="stylesheet">
 }
 
 <div id="content-container">
@@ -19,37 +24,248 @@
         </div>
     </div>
     <div id="page-content">
-        <div class="tab-base">
+        <form id="frm-configuracion">
+            <div class="tab-base">
 
-            <!--Nav Tabs-->
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a data-toggle="tab" href="#demo-lft-tab-1">Home <span class="badge badge-purple">27</span></a>
-                </li>
-                <li>
-                    <a data-toggle="tab" href="#demo-lft-tab-2">Profile</a>
-                </li>
-                <li>
-                    <a data-toggle="tab" href="#demo-lft-tab-3">Setting</a>
-                </li>
-            </ul>
+                <!--Nav Tabs-->
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        @*<a data-toggle="tab" href="#demo-lft-tab-1">Home <span class="badge badge-purple">27</span></a>*@
+                        <a data-toggle="tab" href="#tab-empresa">Empresa</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#tab-predeterminado">Predeterminado</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#tab-sunat">Sunat</a>
+                    </li>
+                </ul>
 
-            <!--Tabs Content-->
-            <div class="tab-content">
-                <div id="demo-lft-tab-1" class="tab-pane fade active in">
-                    <p class="text-main text-semibold">First Tab Content</p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                </div>
-                <div id="demo-lft-tab-2" class="tab-pane fade">
-                    <p class="text-main text-semibold">Second Tab Content</p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-                </div>
-                <div id="demo-lft-tab-3" class="tab-pane fade">
-                    <p class="text-main text-semibold">Third Tab Content</p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                <!--Tabs Content-->
+                <div class="tab-content">
+                    <div id="tab-empresa" class="tab-pane fade active in">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">RUC</span>
+                                    <input class="form-control" placeholder="RUC" name="txt-ruc" id="txt-ruc" data-bv-field="txt-ruc" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Razón Social</span>
+                                    <input class="form-control" placeholder="Razón Social" name="txt-razon-social" id="txt-razon-social" data-bv-field="txt-razon-social" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Nombre Comercial</span>
+                                    <input class="form-control" placeholder="Nombre Comercial" name="txt-nombre-comercial" id="txt-nombre-comercial" data-bv-field="txt-nombre-comercial">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">País</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-pais" id="cmb-pais" data-bv-field="cmb-pais" tabindex="-1" aria-hidden="false" disabled></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Departamento</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-departamento" id="cmb-departamento" data-bv-field="cmb-departamento" tabindex="-1" aria-hidden="false" disabled></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Provincia</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-provincia" id="cmb-provincia" data-bv-field="cmb-provincia" tabindex="-1" aria-hidden="false" disabled></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Distrito</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-distrito" id="cmb-distrito" data-bv-field="cmb-distrito" tabindex="-1" aria-hidden="false" disabled></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                    <input class="form-control" placeholder="Dirección" name="txt-direccion" id="txt-direccion" data-bv-field="txt-direccion" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Logo</span>
+                                    <div class="dropzone-container" id="fle-imagen-logo-container">
+                                        <div class="dz-default dz-message">
+                                            <div class="dz-icon">
+                                                <i class="demo-pli-upload-to-cloud icon-5x"></i>
+                                            </div>
+                                            <div>
+                                                <span class="dz-text">Drop files to upload</span>
+                                                <p class="text-sm text-muted">or click to pick manually</p>
+                                            </div>
+                                        </div>
+                                        <div class="fallback">
+                                            @*<form action="#" method="post" enctype="multipart/form-data">*@
+                                                @*<input type="file" id="fle-imagen-logo" name="fle-imagen-logo" data-bv-field="fle-imagen-logo" multiple />*@
+                                                @*<input name="file" type="file" multiple>*@
+                                            @*</form>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-predeterminado" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Monedas</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-lista-moneda" id="cmb-lista-moneda" data-bv-field="cmb-lista-moneda" tabindex="-1" aria-hidden="false" multiple="multiple" size="1"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Moneda por defecto</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-moneda-default" id="cmb-moneda-default" data-bv-field="cmb-moneda-default" tabindex="-1" aria-hidden="false"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Tipos de Afectación al IGV</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-lista-tipo-afectacion-igv" id="cmb-lista-tipo-afectacion-igv" data-bv-field="cmb-lista-tipo-afectacion-igv" tabindex="-1" aria-hidden="false" multiple="multiple" size="1"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Afectación al IGV por defecto</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-afectacion-igv-default" id="cmb-tipo-afectacion-igv-default" data-bv-field="cmb-tipo-afectacion-igv-default" tabindex="-1" aria-hidden="false"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Tipo Operación de Venta</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-lista-tipo-operacion-venta" id="cmb-lista-tipo-operacion-venta" data-bv-field="cmb-lista-tipo-operacion-venta" tabindex="-1" aria-hidden="false" multiple="multiple" size="1"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Tipo Operación de Venta por defecto</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-operacion-venta-default" id="cmb-tipo-operacion-venta-default" data-bv-field="cmb-tipo-operacion-venta-default" tabindex="-1" aria-hidden="false"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Producto</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-lista-tipo-producto" id="cmb-lista-tipo-producto" data-bv-field="cmb-lista-tipo-producto" tabindex="-1" aria-hidden="false" multiple="multiple" size="1"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Producto por defecto</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-producto-default" id="cmb-tipo-producto-default" data-bv-field="cmb-tipo-producto-default" tabindex="-1" aria-hidden="false"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Unidad de Medida</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-lista-unidad-medida" id="cmb-lista-unidad-medida" data-bv-field="cmb-lista-unidad-medida" tabindex="-1" aria-hidden="false" multiple="multiple" size="1"></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Unidad de Medida por defecto</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-unidad-medida-default" id="cmb-unidad-medida-default" data-bv-field="cmb-unidad-medida-default" tabindex="-1" aria-hidden="false"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-sunat" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Cuenta Corriente</span>
+                                    <input class="form-control" placeholder="Cuenta Corriente" name="txt-cuenta-corriente" id="txt-cuenta-corriente" data-bv-field="txt-cuenta-corriente">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Comentario Legal</span>
+                                    <input class="form-control" placeholder="Comentario Legal" name="txt-comentario-legal" id="txt-comentario-legal" data-bv-field="txt-comentario-legal">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Comentario Legal Detracción</span>
+                                    <input class="form-control" placeholder="Comentario Legal Detracción" name="txt-comentario-legal-detraccion" id="txt-comentario-legal-detraccion" data-bv-field="txt-comentario-legal-detraccion">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Formato Impresión</span>
+                                    <select class="form-control val-exc select2-show-accessible" name="cmb-formato" id="cmb-formato" data-bv-field="cmb-formato" tabindex="-1" aria-hidden="false" multiple="multiple" size="1"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Cantidad Decimal General</span>
+                                    <input class="form-control" placeholder="Cantidad Decimal General" name="txt-cantidad-decimal-general" id="txt-cantidad-decimal-general" data-bv-field="txt-cantidad-decimal-general">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Cantidad Decimal Detallado</span>
+                                    <input class="form-control" placeholder="Cantidad Decimal Detallado" name="txt-cantidad-decimal-detallado" id="txt-cantidad-decimal-detallado" data-bv-field="txt-cantidad-decimal-detallado">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <span class="bg-dark box-block pad-lft pad-rgt">Logo Formato Impresión</span>
+                                    <div class="dropzone-container" id="fle-imagen-logo-formato-container">
+                                        <div class="dz-default dz-message">
+                                            <div class="dz-icon">
+                                                <i class="demo-pli-upload-to-cloud icon-5x"></i>
+                                            </div>
+                                            <div>
+                                                <span class="dz-text">Drop files to upload</span>
+                                                <p class="text-sm text-muted">or click to pick manually</p>
+                                            </div>
+                                        </div>
+                                        <div class="fallback">
+                                            @*<form action="#" method="post" enctype="multipart/form-data">*@
+                                            @*<input type="file" id="fle-imagen-logo-formato" name="fle-imagen-logo-formato" data-bv-field="fle-imagen-logo-formato" />*@
+                                            @*<input name="file" type="file" multiple>*@
+                                            @*</form>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-sm-3 col-sm-offset-6">
+                    <button class="btn btn-success col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
+                </div>
+                <div class="col-sm-3">
+                    <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~")">Cancelar</a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -60,12 +276,11 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/switchery/switchery.min.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/mantenimientofactura.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/dropzone/dropzone.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/configuracion.js")"></script>
     <script>
-        const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
-        const facturaId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
         $(document).ready(function () {
-            pageMantenimientoFactura.Init();
+            pageConfiguracion.Init();
         });
     </script>
 }

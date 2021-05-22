@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="BRjr2/laO9lIAE+hM1D5wW4I1VwjM8OJkT/IrOnYs2c=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="ENxkOfYrbuSIvI8Yr7KI/mwcAFMyUmGwF89oj/ZxNPs=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="basicHttpBinding" name="BillServicePortBinding13">
+    <bindingConfiguration bindingType="basicHttpBinding" name="BillServicePortBinding">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding13</serializedValue>
+          <serializedValue>BillServicePortBinding</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -110,10 +110,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="basicHttpBinding" name="BillServicePortBinding15">
+    <bindingConfiguration bindingType="basicHttpBinding" name="BillServicePortBinding2">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding15</serializedValue>
+          <serializedValue>BillServicePortBinding2</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -219,10 +219,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="basicHttpBinding" name="BillServicePortBinding16">
+    <bindingConfiguration bindingType="basicHttpBinding" name="BillServicePortBinding3">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding16</serializedValue>
+          <serializedValue>BillServicePortBinding3</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -328,10 +328,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="customBinding" name="BillServicePortBinding14">
+    <bindingConfiguration bindingType="customBinding" name="BillServicePortBinding1">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding14</serializedValue>
+          <serializedValue>BillServicePortBinding1</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -484,7 +484,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BillServicePort4" contract="ws.venta.billService" bindingType="basicHttpBinding" address="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService" bindingConfiguration="BillServicePortBinding13">
+    <endpoint name="BillServicePort" contract="ws.venta.billService" bindingType="basicHttpBinding" address="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService" bindingConfiguration="BillServicePortBinding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>https://e-factura.sunat.gob.pe:443/ol-ti-itcpfegem/billService</serializedValue>
@@ -496,7 +496,7 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding13</serializedValue>
+          <serializedValue>BillServicePortBinding</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>ws.venta.billService</serializedValue>
@@ -559,7 +559,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePort4</serializedValue>
+          <serializedValue>BillServicePort</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -569,7 +569,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="BillServicePort.01" contract="ws.venta.billService" bindingType="customBinding" address="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService" bindingConfiguration="BillServicePortBinding14">
+    <endpoint name="BillServicePort.0" contract="ws.venta.billService" bindingType="customBinding" address="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService" bindingConfiguration="BillServicePortBinding1">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>https://e-factura.sunat.gob.pe:443/ol-ti-itcpfegem/billService</serializedValue>
@@ -581,7 +581,7 @@
           <serializedValue>customBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding14</serializedValue>
+          <serializedValue>BillServicePortBinding1</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>ws.venta.billService</serializedValue>
@@ -644,7 +644,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePort.01</serializedValue>
+          <serializedValue>BillServicePort.0</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -654,7 +654,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="BillServicePort.31" contract="ws.venta.billService" bindingType="basicHttpBinding" address="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService" bindingConfiguration="BillServicePortBinding15">
+    <endpoint name="BillServicePort.3" contract="ws.venta.billService" bindingType="basicHttpBinding" address="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService" bindingConfiguration="BillServicePortBinding2">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>https://e-factura.sunat.gob.pe:443/ol-ti-itcpfegem/billService</serializedValue>
@@ -666,7 +666,7 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePortBinding15</serializedValue>
+          <serializedValue>BillServicePortBinding2</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>ws.venta.billService</serializedValue>
@@ -729,7 +729,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BillServicePort.31</serializedValue>
+          <serializedValue>BillServicePort.3</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

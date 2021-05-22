@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmbienteSunatBe.cs" />
     <Compile Include="Base.cs" />
     <Compile Include="BoletaBe.cs" />
     <Compile Include="BoletaDetalleBe.cs" />
@@ -53,13 +54,20 @@
     <Compile Include="Custom\DataPaginate.cs" />
     <Compile Include="DepartamentoBe.cs" />
     <Compile Include="DistritoBe.cs" />
+    <Compile Include="EmpresaAmbienteSunatBe.cs" />
     <Compile Include="EmpresaBe.cs" />
+    <Compile Include="EmpresaConfiguracionBe.cs" />
+    <Compile Include="EmpresaImagenBe.cs" />
     <Compile Include="EmpresaTipoAfectacionIgvBe.cs" />
     <Compile Include="FacturaBe.cs" />
     <Compile Include="FacturaDetalleBe.cs" />
     <Compile Include="FacturaDocumentoBe.cs" />
     <Compile Include="FacturaGuiaRemisionBe.cs" />
+<<<<<<< HEAD
     <Compile Include="FormatoCorreoBe.cs" />
+=======
+    <Compile Include="FormaPagoBe.cs" />
+>>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Compile Include="GuiaRemisionBe.cs" />
     <Compile Include="MonedaBe.cs" />
     <Compile Include="MovimientoBe.cs" />
@@ -81,11 +89,14 @@
     <Compile Include="SedeBe.cs" />
     <Compile Include="SedeUsuarioBe.cs" />
     <Compile Include="SerieBe.cs" />
+    <Compile Include="StockAlmacenBe.cs" />
     <Compile Include="TableroConteo_x_DocumentoBe.cs" />
     <Compile Include="TableroUltimosDocumentosBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />
     <Compile Include="TipoCambioBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
+    <Compile Include="FormatoBe.cs" />
+    <Compile Include="TipoComprobanteTipoOperacionVentaBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
     <Compile Include="TipoOperacionAlmacenBe.cs" />
     <Compile Include="TipoOperacionVentaBe.cs" />

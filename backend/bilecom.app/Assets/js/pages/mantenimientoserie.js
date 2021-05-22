@@ -1,12 +1,15 @@
 ﻿const pageMantenimientoSerie = {
     Init: function () {
-        this.CargarCombo();
-        this.Validar();
-        this.InitEvents();
+        this.CargarCombo(() => {
+            this.InitEvents();
+            this.Validar();
+        });
     },
+
     InitEvents: function () {
         pageMantenimientoSerie.ObtenerDatos();
     },
+
     Validar: function () {
         $("#frm-serie")
             .bootstrapValidator({
@@ -24,7 +27,7 @@
                                 message: "Debe ingresar Serial.",
                             },
                             regexp: {
-                                regexp: /^[0-9]/,
+                                regexp: /^[a-zA-Z0-9]{1}?[0-9]{3}?$/g,
                                 message: 'Solo puede ingresar caracteres numericos'
                             }
                         }
@@ -47,6 +50,7 @@
                 pageMantenimientoSerie.EnviarFormulario();
             });
     },
+
     ObtenerDatos: function () {
         let numero = $("#txt-opcion").val();
         if (numero != 0) {
@@ -60,15 +64,19 @@
                 .then(pageMantenimientoSerie.ResponseObtenerDatos);
         }
     },
-    CargarCombo: async function () {
+
+    CargarCombo: async function (fn=null) {
         let promises = [
             fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`)]
         Promise.all(promises)
             .then(r => Promise.all(r.map(x => x.json())))
             .then(([TipoComprobanteLista]) => {
                 pageMantenimientoSerie.ResponseTipoComprobanteListar(TipoComprobanteLista || []);
+
+                if (typeof fn == 'function') fn();
             })
     },
+
     EnviarFormulario: function () {
         let serieId = $("#txt-opcion").val();
         let tipocomprobanteId = $("#cmb-tipo-comprobante").val();
@@ -84,6 +92,7 @@
         let ObjectoJson = {
             SerieId: serieId,
             EmpresaId: empresaId,
+            AmbienteSunatId: ambienteSunatId,
             TipoComprobanteId: tipocomprobanteId,
             Serial: serial,
             ValorInicial: valorinicial,
@@ -102,8 +111,9 @@
             .then(r => r.json())
             .then(pageMantenimientoSerie.ResponseEnviarFormulario);
     },
+
     ResponseObtenerDatos: function (data) {
-        $("#cmb-tipo-comprobante").val(data.tipocomprobanteId);
+        $("#cmb-tipo-comprobante").val(data.TipoComprobanteId).trigger("change");
         $("#txt-serial").val(data.Serial);
         $("#txt-valor-inicial").val(data.ValorInicial);
         $("#chk-flag-sin-final").prop("checked",data.FlagSinFinal);

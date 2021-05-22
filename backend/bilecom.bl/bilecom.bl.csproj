@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmbienteSunatBl.cs" />
     <Compile Include="BoletaBl.cs" />
     <Compile Include="CategoriaProductoBl.cs" />
     <Compile Include="ClienteBl.cs" />
@@ -50,9 +51,17 @@
     <Compile Include="DepartamentoBl.cs" />
     <Compile Include="DistritoBl.cs" />
     <Compile Include="CotizacionBl.cs" />
+    <Compile Include="EmpresaAmbienteSunatBl.cs" />
     <Compile Include="EmpresaBl.cs" />
+    <Compile Include="EmpresaConfiguracionBl.cs" />
+    <Compile Include="EmpresaImagenBl.cs" />
     <Compile Include="FacturaBl.cs" />
+<<<<<<< HEAD
     <Compile Include="FormatoCorreoBl.cs" />
+=======
+    <Compile Include="FormaPagoBl.cs" />
+    <Compile Include="FormatoBl.cs" />
+>>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Compile Include="GuiaRemisionRemitenteBl.cs" />
     <Compile Include="GuiaRemisionTransportistaBl.cs" />
     <Compile Include="MonedaBl.cs" />
@@ -68,11 +77,13 @@
     <Compile Include="ProvinciaBl.cs" />
     <Compile Include="RecuperarContrasenaBl.cs" />
     <Compile Include="SerieBl.cs" />
+    <Compile Include="StockAlmacenBl.cs" />
     <Compile Include="TableroConteo_x_DocumentoBl.cs" />
     <Compile Include="TableroUltimosDocumentosBl.cs" />
     <Compile Include="TipoAfectacionIgvBl.cs" />
     <Compile Include="TipoCambioBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
+    <Compile Include="TipoComprobanteTipoOperacionVentaBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
     <Compile Include="TipoOperacionAlmacenBl.cs" />
     <Compile Include="TipoOperacionVentaBl.cs" />

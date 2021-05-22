@@ -1,8 +1,12 @@
 ﻿using bilecom.sunat.comprobante.creditnote;
 using bilecom.sunat.comprobante.debitnote;
 using bilecom.sunat.comprobante.invoice;
+using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -12,6 +16,7 @@ using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using static bilecom.enums.Enums;
 
@@ -19,105 +24,192 @@ namespace bilecom.sunat
 {
     public class Generar
     {
-        public static string RetornarXmlFirmado(string xmlString, string rutaCertificado, string claveCertificado, out string hash)
+        //public static string RetornarXmlFirmado(string xmlString, string rutaCertificado, string claveCertificado, out string hash)
+        //{
+        //    hash = null;
+
+        //    XmlDocument documentXml = new XmlDocument();
+
+        //    documentXml.PreserveWhitespace = true;
+        //    documentXml.LoadXml(xmlString);
+        //    var nodoExtension = documentXml.GetElementsByTagName("ExtensionContent", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2").Item(0);
+
+        //    if (nodoExtension == null)
+        //    {
+        //        throw new InvalidOperationException("No se pudo encontrar el nodo ExtensionContent en el XML");
+        //    }
+
+        //    nodoExtension.RemoveAll();
+
+        //    SignedXml firmado = new SignedXml(documentXml);
+
+        //    var xmlSignature = firmado.Signature;
+
+        //    byte[] certificadoByte = File.ReadAllBytes(rutaCertificado);
+        //    X509Certificate2 certificado = new X509Certificate2();
+        //    //certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+        //    certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.Exportable);
+        //    firmado.SigningKey = certificado.GetRSAPrivateKey();
+        //    //firmado.SigningKey = (RSA)certificado.PrivateKey;
+        //    //firmado.SigningKey = certificado.PrivateKey;
+
+        //    //digest info agregada en la seccion firma
+        //    var env = new XmlDsigEnvelopedSignatureTransform();
+        //    Reference reference = new Reference();
+        //    reference.AddTransform(env);
+
+        //    reference.Uri = "";
+        //    firmado.AddReference(reference);
+        //    firmado.SignedInfo.SignatureMethod = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
+
+        //    reference.DigestMethod = "http://www.w3.org/2001/04/xmlenc#sha256";
+
+        //    var keyInfoData = new KeyInfoX509Data(certificado);
+        //    keyInfoData.AddSubjectName(certificado.Subject);
+
+        //    // info para la llave publica 
+        //    KeyInfo keyInfo = new KeyInfo();
+        //    keyInfo.AddClause(keyInfoData);
+        //    //keyInfo.sub
+
+        //    xmlSignature.KeyInfo = keyInfo;
+        //    xmlSignature.Id = "signatureKG";
+        //    firmado.ComputeSignature();
+
+
+        //    // Recuperamos el valor Hash de la firma para este documento.
+        //    if (reference.DigestValue != null)
+        //    {
+        //        hash = Convert.ToBase64String(reference.DigestValue);
+        //    }
+            
+        //    XmlNode xmlNodeFirmado = firmado.GetXml();
+        //    xmlNodeFirmado.Prefix = "ds";
+
+        //    //XmlNode xmlNodeContent = documentXml.CreateElement("ext", "ExtensionContent", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+        //    //xmlNodeContent.AppendChild(xmlNodeFirmado);
+
+        //    //XmlNode xmlNode = documentXml.CreateElement("ext", "UBLExtension", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+        //    //xmlNode.AppendChild(xmlNodeContent);
+
+        //    nodoExtension.AppendChild(xmlNodeFirmado);
+
+        //    var settings = new XmlWriterSettings()
+        //    {
+        //        Encoding = Encoding.UTF8,
+        //        Indent = true,
+        //        IndentChars = "\t",
+        //        NewLineChars = Environment.NewLine
+
+        //    };
+
+        //    string resultado = String.Empty;
+        //    using (var memDoc = new MemoryStream())
+        //    {
+
+        //        using (var writer = XmlWriter.Create(memDoc, settings))
+        //        {
+        //            //XDocument xDocument = XDocument.Parse(documentXml.OuterXml);
+        //            //xDocument.WriteTo(writer);
+        //            documentXml.WriteTo(writer);
+        //        }
+
+        //        //resultado = Encoding.Unicode.GetString(memDoc.ToArray());
+        //        //resultado = Encoding.GetEncoding("ISO-8859-1").GetString(memDoc.ToArray());
+        //        //resultado = Convert.ToBase64String(memDoc.ToArray());
+        //        resultado = Encoding.UTF8.GetString(memDoc.ToArray());
+
+        //    }
+        //    return resultado;
+        //}
+
+        public static string RetornarXmlFirmado(string prefijoComprobanteBusqueda, string tnsString, string xmlString, string rutaCertificado, string claveCertificado, out string hash)
         {
             hash = null;
 
-            XmlDocument documentXml = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.PreserveWhitespace = true;
+            xmlDocument.LoadXml(xmlString);
 
-            documentXml.PreserveWhitespace = true;
-            documentXml.LoadXml(xmlString);
-            var nodoExtension = documentXml.GetElementsByTagName("ExtensionContent", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2").Item(0);
+            X509Certificate2 certificado = new X509Certificate2(rutaCertificado, claveCertificado);
 
-            if (nodoExtension == null)
-            {
-                throw new InvalidOperationException("No se pudo encontrar el nodo ExtensionContent en el XML");
-            }
+            XmlNamespaceManager nsMgr = new XmlNamespaceManager(xmlDocument.NameTable);
+            nsMgr.AddNamespace("tns", tnsString);
+            nsMgr.AddNamespace("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
 
-            nodoExtension.RemoveAll();
+            XmlElement elem = xmlDocument.CreateElement("ext:ExtensionContent", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
 
-            SignedXml firmado = new SignedXml(documentXml);
+            xmlDocument.SelectSingleNode($"{prefijoComprobanteBusqueda}/ext:UBLExtensions/ext:UBLExtension", nsMgr).AppendChild(elem);
 
-            var xmlSignature = firmado.Signature;
+            SignedXml signedXml = new SignedXml(xmlDocument);
 
-            byte[] certificadoByte = File.ReadAllBytes(rutaCertificado);
-            X509Certificate2 certificado = new X509Certificate2();
-            //certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.DefaultKeySet);
-            certificado.Import(certificadoByte, claveCertificado, X509KeyStorageFlags.Exportable);
-            //firmado.SigningKey = (RSA)certificado.PrivateKey;
-            firmado.SigningKey = certificado.PrivateKey;
+            signedXml.SigningKey = certificado.GetRSAPrivateKey();
+            System.Security.Cryptography.Xml.KeyInfo KeyInfo = new System.Security.Cryptography.Xml.KeyInfo();
 
-            //digest info agregada en la seccion firma
-            var env = new XmlDsigEnvelopedSignatureTransform();
-            Reference reference = new Reference();
-            reference.AddTransform(env);
+            System.Security.Cryptography.Xml.Reference Reference = new System.Security.Cryptography.Xml.Reference();
+            Reference.Uri = "";
 
-            reference.Uri = "";
-            firmado.AddReference(reference);
-            firmado.SignedInfo.SignatureMethod = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
+            Reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
+            signedXml.AddReference(Reference);
 
-            reference.DigestMethod = "http://www.w3.org/2000/09/xmldsig#sha1";
+            X509Chain X509Chain = new X509Chain();
+            X509Chain.Build(certificado);
 
+            X509ChainElement local_element = X509Chain.ChainElements[0];
+            KeyInfoX509Data x509Data = new KeyInfoX509Data(local_element.Certificate);
 
-            // info para la llave publica 
-            KeyInfo keyInfo = new KeyInfo();
-            keyInfo.AddClause(new KeyInfoX509Data(certificado));
+            string subjectName = local_element.Certificate.Subject;
 
-            xmlSignature.KeyInfo = keyInfo;
-            xmlSignature.Id = "SignatureJAREV";
-            firmado.ComputeSignature();
+            x509Data.AddSubjectName(subjectName);
+            KeyInfo.AddClause(x509Data);
+            signedXml.Signature.Id = "signatureKG";
+            signedXml.KeyInfo = KeyInfo;
+            signedXml.ComputeSignature();
+            XmlElement signature = signedXml.GetXml();
+            XmlNode dg = signature.GetElementsByTagName("DigestValue", "http://www.w3.org/2000/09/xmldsig#")[0];
+            XmlNode sg = signature.GetElementsByTagName("SignatureValue", "http://www.w3.org/2000/09/xmldsig#")[0];
+            hash = dg.InnerText;
+            //SignatureValue = sg.InnerText;
 
+            signature.Prefix = "ds";
+            //SetPrefix("ds", signature);
 
-            // Recuperamos el valor Hash de la firma para este documento.
-            if (reference.DigestValue != null)
-            {
-                hash = Convert.ToBase64String(reference.DigestValue);
-            }
+            elem.AppendChild(signature);
 
-            nodoExtension.AppendChild(firmado.GetXml());
+            MemoryStream msXMLFirmado = new MemoryStream();
 
-            var settings = new XmlWriterSettings() { Encoding = Encoding.GetEncoding("ISO-8859-1") };
-            string resultado = String.Empty;
-            using (var memDoc = new MemoryStream())
-            {
+            xmlDocument.Save(msXMLFirmado);
 
-                using (var writer = XmlWriter.Create(memDoc, settings))
-                {
-                    documentXml.WriteTo(writer);
-                }
+            //msXMLFirmado.Position = 1;
 
-                //resultado = Encoding.GetEncoding("ISO-8859-1").GetString(memDoc.ToArray());
-                resultado = Convert.ToBase64String(memDoc.ToArray());
-
-            }
-            return resultado;
+            return Encoding.UTF8.GetString(msXMLFirmado.ToArray()).Substring(1);
         }
 
-        //public static byte[] RetornarXmlComprimido(string xmlFirmadoString, string nombreArchivoXml)
-        //{
-        //    byte[] archivoZip = null;
+        public static byte[] RetornarXmlComprimido(string xmlFirmadoString, string nombreArchivoXml)
+        {
+            byte[] archivoZip = null;
 
 
-        //    using (var memoryStream = new MemoryStream())
-        //    {
-        //        using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
-        //        {
-        //            var demoFile = zipArchive.CreateEntry(nombreArchivoXml);
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    var demoFile = zipArchive.CreateEntry(nombreArchivoXml);
 
-        //            using (var entryStream = demoFile.Open())
-        //            {
-        //                using (var streamWriter = new StreamWriter(entryStream))
-        //                {
-        //                    streamWriter.Write(xmlFirmadoString);
-        //                }
-        //            }
-        //        }
+                    using (var entryStream = demoFile.Open())
+                    {
+                        using (var streamWriter = new StreamWriter(entryStream))
+                        {
+                            streamWriter.Write(xmlFirmadoString);
+                        }
+                    }
+                }
 
-        //        archivoZip = memoryStream.ToArray();
-        //    }
+                archivoZip = memoryStream.ToArray();
+            }
 
-        //    return archivoZip;
-        //}
+            return archivoZip;
+        }
 
         public static byte[] RetornarXmlComprimido(byte[] xmlFirmadoBytes, string nombreArchivoXml)
         {
@@ -181,41 +273,107 @@ namespace bilecom.sunat
             }
         }
 
+        //public static string GenerarXML(InvoiceType item)
+        //{
+        //    //byte[] xmlByte = null;
+
+        //    XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+
+        //    ns.Add("", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+        //    ns.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        //    ns.Add("ds", "http://www.w3.org/2000/09/xmldsig#");
+        //    ns.Add("qdt", "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2");
+        //    ns.Add("sac", "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1");
+        //    ns.Add("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+        //    ns.Add("udt", "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2");
+        //    ns.Add("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+        //    ns.Add("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+        //    ns.Add("ccts", "urn:un:unece:uncefact:documentation:2");
+
+        //    XmlSerializer nXmlSerializer = new XmlSerializer(typeof(InvoiceType));
+        //    XmlWriter xtWriter;
+        //    XmlWriterSettings setting = new XmlWriterSettings();
+        //    setting.Indent = true;
+        //    setting.IndentChars = "\t";
+        //    StringBuilder xmlString = new StringBuilder();
+        //    xtWriter = XmlWriter.Create(xmlString, setting);
+        //    xtWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
+        //    nXmlSerializer.Serialize(xtWriter, item, ns);
+        //    xtWriter.Close();
+
+        //    XmlDocument xmlDocument = new XmlDocument();
+        //    xmlDocument.LoadXml(xmlString.ToString());
+        //    XmlNamespaceManager xmlNamespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
+        //    xmlNamespaceManager.AddNamespace("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+        //    xmlNamespaceManager.AddNamespace("", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+
+        //    var xmlNode = xmlDocument.DocumentElement.SelectNodes("ext:UBLExtensions/ext:UBLExtension", xmlNamespaceManager);
+        //    xmlNode[0].AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "ext", "ExtensionContent", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"));
+
+        //    XDocument xDocument = XDocument.Parse(xmlDocument.OuterXml);
+
+        //    return xDocument.ToString();
+        //}
+
         public static string GenerarXML(InvoiceType item)
         {
-            //byte[] xmlByte = null;
+            XmlSerializer serializer = new XmlSerializer(typeof(InvoiceType));
+            XmlSerializerNamespaces oxmlnames = new XmlSerializerNamespaces();
+            oxmlnames.Add("", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+            oxmlnames.Add("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            oxmlnames.Add("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+            oxmlnames.Add("ccts", "urn:un:unece:uncefact:documentation:2");
+            oxmlnames.Add("ds", "http://www.w3.org/2000/09/xmldsig#");
+            oxmlnames.Add("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+            oxmlnames.Add("qdt", "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2");
+            oxmlnames.Add("sac", "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1");
+            oxmlnames.Add("udt", "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2");
+            oxmlnames.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-            XmlSerializer nXmlSerializer = new XmlSerializer(typeof(InvoiceType));
-            XmlWriter xtWriter;
-            XmlWriterSettings setting = new XmlWriterSettings();
-            setting.Indent = true;
-            setting.IndentChars = "\t";
-            //string RutaDocumento = Path.Combine(configuracionValor.RutaFacturacionElectronica, "BOLETAS");
+            MemoryStream ms = new MemoryStream();
+            serializer.Serialize(ms, item, oxmlnames);
+            ms.Position = 0;
 
-            //string ArchivoXML = $"{item}"EmpresaRuc + "-" + TipoFactura + "-" + Fac_serie + "-" + NumFactura;
-            //string file = Path.Combine(RutaDocumento, string.Format(@"{0}.xml", ArchivoXML));
-            //xtWriter = XmlWriter.Create(file, setting);
-            StringBuilder xmlString = new StringBuilder();
-            xtWriter = XmlWriter.Create(xmlString, setting);
-            xtWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"no\"");
-            nXmlSerializer.Serialize(xtWriter, item);
-            xtWriter.Close();
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.PreserveWhitespace = true;
+            xmlDocument.Load(ms);
 
-            //string text = File.ReadAllText(file);
+            //XmlNamespaceManager ns = new XmlNamespaceManager(xmlDocument.NameTable);
+            //ns.AddNamespace("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
 
-            //File.WriteAllText(file, text);
-            //File.WriteAllText(file, text, System.Text.Encoding.GetEncoding("ISO-8859-1"));
-            //return file;
+            XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", null);
+            xmlDocument.ReplaceChild(xmlDeclaration, xmlDocument.FirstChild);
 
-
-            return xmlString.ToString();
+            return xmlDocument.OuterXml;
         }
 
-        public byte[] GenerarXML(CreditNoteType item)
+        public static string GenerarXML(CreditNoteType item)
         {
-            byte[] xmlByte = null;
+            XmlSerializer serializer = new XmlSerializer(typeof(CreditNoteType));
+            XmlSerializerNamespaces oxmlnames = new XmlSerializerNamespaces();
+            oxmlnames.Add("", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2");
+            oxmlnames.Add("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            oxmlnames.Add("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+            oxmlnames.Add("ccts", "urn:un:unece:uncefact:documentation:2");
+            oxmlnames.Add("ds", "http://www.w3.org/2000/09/xmldsig#");
+            oxmlnames.Add("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+            oxmlnames.Add("qdt", "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2");
+            oxmlnames.Add("sac", "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1");
+            oxmlnames.Add("udt", "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2");
+            oxmlnames.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-            return xmlByte;
+            MemoryStream ms = new MemoryStream();
+            serializer.Serialize(ms, item, oxmlnames);
+            ms.Position = 0;
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.PreserveWhitespace = true;
+            xmlDocument.Load(ms);
+
+            XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", null);
+            xmlDocument.ReplaceChild(xmlDeclaration, xmlDocument.FirstChild);
+
+            return xmlDocument.OuterXml;
         }
 
         public byte[] GenerarXML(DebitNoteType item)
@@ -223,6 +381,26 @@ namespace bilecom.sunat
             byte[] xmlByte = null;
 
             return xmlByte;
+        }
+
+        public static byte[] GenerarQR(string rucEmpresa, string codigoSunatTipoComprobante, string serie, int nroComprobante, DateTime fechaEmision, string codigoSunatTipoDocumentoIdentidad, string nroDocumentoIdentidadCliente, decimal totalIGV, decimal totalImporte, string hash)
+        {
+            byte[] imagen = null;
+
+            QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
+            QrCode qrCode = new QrCode();
+
+            qrEncoder.TryEncode($"{rucEmpresa}|{codigoSunatTipoComprobante}|{serie}-{nroComprobante}|{totalIGV}|{totalImporte}|{fechaEmision:dd/MM/yyyy)}|{codigoSunatTipoDocumentoIdentidad}|{nroDocumentoIdentidadCliente}|{hash}", out qrCode);
+
+            GraphicsRenderer renderer = new GraphicsRenderer(new FixedCodeSize(400, QuietZoneModules.Zero), Brushes.Black, Brushes.White);
+
+            MemoryStream ms = new MemoryStream();
+
+            renderer.WriteToStream(qrCode.Matrix, ImageFormat.Png, ms);
+
+            imagen = ms.ToArray();
+
+            return imagen;
         }
     }
 }

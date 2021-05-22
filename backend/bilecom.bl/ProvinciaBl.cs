@@ -22,9 +22,23 @@ namespace bilecom.bl
                 lista = provinciaDa.Listar(cn);
                 cn.Close();
             }
-            catch (Exception ex){lista = null;}
-            finally{if (cn.State == ConnectionState.Open) cn.Close();}
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
+        }
+
+        public ProvinciaBe ObtenerProvincia(int provinciaId)
+        {
+            ProvinciaBe item = null;
+            try
+            {
+                cn.Open();
+                item = provinciaDa.Obtener(provinciaId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { item = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return item;
         }
     }
 }

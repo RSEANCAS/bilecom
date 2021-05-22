@@ -73,5 +73,37 @@
             data: data,
             columns: columns
         })
+    },
+    ArrayExtensions(arrayPrototypes = []) {
+        if (arrayPrototypes.some(x => x.toString().trim() == "distinct")) {
+            Array.prototype.distinct = function (keys = []) {
+                let esArray = Array.isArray(keys);
+                let data = this;
+                let newData = [];
+                if (esArray) {
+                    if (data.length == 0) return data;
+
+                    let row = data[0];
+                    let keysObject = Object.keys(row).filter(x => keys.some(y => x == y));
+
+                    for (let item of data) {
+                        let exists = false;
+
+                        let dataUnique = keysObject.map(x => item[x]);
+
+                        exists = newData.some((x) => {
+                            let dataItemUnique = keysObject.map(y => x[y].toString().trim());
+                            return dataItemUnique.join("") == dataUnique.join("");
+                        });
+
+                        if (exists) continue;
+
+                        newData.push(item);
+                    }
+                }
+
+                return newData;
+            }
+        }
     }
 }

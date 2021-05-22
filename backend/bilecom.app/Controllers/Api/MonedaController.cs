@@ -15,6 +15,13 @@ namespace bilecom.app.Controllers.Api
         MonedaBl monedaBl = new MonedaBl();
 
         [HttpGet]
+        [Route("listar-moneda")]
+        public List<MonedaBe> ListarMoneda()
+        {
+            return monedaBl.ListarMoneda();
+        }
+
+        [HttpGet]
         [Route("listar-moneda-por-empresa")]
         public List<MonedaBe> ListarMonedaPorEmpresa(int empresaId)
         {

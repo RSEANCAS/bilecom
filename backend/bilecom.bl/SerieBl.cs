@@ -13,13 +13,13 @@ namespace bilecom.bl
     {
         SerieDa serieDa = new SerieDa();
 
-        public List<SerieBe> ListarSeriePorTipoComprobante(int empresaId, int tipoComprobanteId)
+        public List<SerieBe> ListarSeriePorTipoComprobante(int empresaId, int ambienteSunatId, int tipoComprobanteId)
         {
             List<SerieBe> lista = new List<SerieBe>();
             try
             {
                 cn.Open();
-                lista = serieDa.ListarPorTipoComprobante(empresaId, tipoComprobanteId, cn);
+                lista = serieDa.ListarPorTipoComprobante(empresaId, ambienteSunatId, tipoComprobanteId, cn);
                 cn.Close();
             }
             catch (Exception) { lista = null; }
@@ -27,14 +27,14 @@ namespace bilecom.bl
             return lista;
         }
         
-        public List<SerieBe> BuscarSerie(int empresaId, int? tipoComprobanteId, string serial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        public List<SerieBe> BuscarSerie(int empresaId, int ambienteSunatId, int? tipoComprobanteId, string serial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
             List<SerieBe> lista = null;
             try
             {
                 cn.Open();
-                lista = serieDa.Buscar(empresaId, tipoComprobanteId, serial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                lista = serieDa.Buscar(empresaId, ambienteSunatId, tipoComprobanteId, serial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
             catch (Exception ex) { lista = null; }

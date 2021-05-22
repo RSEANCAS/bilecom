@@ -1472,10 +1472,12 @@ h6,
   box-shadow: 10px 0 20px -5px rgba(0, 0, 0, 0.15) !important;
 }
 @media (min-width: 768px) {
-  #container.mainnav-sm .brand-icon {
-    width: 59px;
-    height: 59px;
-  }
+    #container.mainnav-sm .brand-icon {
+        width: 59px;
+        height: 59px;
+        margin-left: -20px;
+        margin-top: 5px;
+    }
   #container.mainnav-sm ul:not(.shortcut-wrap) .shortcut-grid:hover,
   #container.mainnav-sm .popover.mainnav-shortcut {
     background-color: #ffffff;

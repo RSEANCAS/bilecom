@@ -4,10 +4,9 @@ const pageMantenimientoCliente = {
         this.Validar();
         this.InitEvents();
     },
-    InitEvents: function () {
-        pageMantenimientoCliente.CargarCombo();
-        pageMantenimientoCliente.ObtenerDatos();
 
+    InitEvents: function () {
+        pageMantenimientoCliente.CargarCombo(pageMantenimientoCliente.ObtenerDatos());
         $("#cmb-pais").change(pageMantenimientoCliente.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoCliente.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoCliente.CmbProvinciaChange);
@@ -234,7 +233,7 @@ const pageMantenimientoCliente = {
         pageMantenimientoCliente.ResponseDistritoListar(DistritoFiltro);
     },
 
-    CargarCombo: async function () {
+    CargarCombo: async function (fn = null) {
         let promises = [
             fetch(`${urlRoot}api/pais/listar-pais`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
@@ -256,11 +255,7 @@ const pageMantenimientoCliente = {
                 pageMantenimientoCliente.ResponseDistritoListar(DistritoLista);
                 pageMantenimientoCliente.ResponseTipoDocumentoIdentidadListar(TipoDocumentoIdentidadLista);
 
-                $("#cmb-pais").val(145).trigger('change');
-                $("#cmb-departamento").val(15).trigger('change');
-                $("#cmb-provincia").val(128).trigger('change');
-
-
+                if (typeof fn == 'function') fn();
             })
     },
 
@@ -275,6 +270,10 @@ const pageMantenimientoCliente = {
             fetch(url, init)
                 .then(r => r.json())
                 .then(pageMantenimientoCliente.ResponseObtenerDatos);
+        } else {
+            $("#cmb-pais").val(145).trigger('change');
+            $("#cmb-departamento").val(15).trigger('change');
+            $("#cmb-provincia").val(128).trigger('change');
         }
     },
 
@@ -317,7 +316,7 @@ const pageMantenimientoCliente = {
 
     ResponseEnviarFormulario: function (data) {
         let tipo = "", mensaje = "";
-        if (data == true) {
+        if (data > 0) {
             tipo = "success";
             mensaje = "¡Se ha guardado con éxito!";
         } else {
@@ -350,8 +349,8 @@ const pageMantenimientoCliente = {
         $("#txt-nombre-comercial").val(data.NombreComercial);
         $("#txt-correo").val(data.Correo);
         $("#txt-direccion").val(data.Direccion);
-        $("#cmb-tipo-documento-identidad").val(data.TipoDocumentoIdentidadId);
-        $("#cmb-distrito").val(data.DistritoId);
+        $("#cmb-tipo-documento-identidad").val(data.TipoDocumentoIdentidadId).trigger("change");
+        $("#cmb-distrito").val(data.DistritoId).trigger("change");
 
         $("#cmb-tipo-documento-identidad").prop("disabled", true);
         $("#txt-numero-documento-identidad").prop("disabled", true);

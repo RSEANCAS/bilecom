@@ -14,6 +14,8 @@ namespace bilecom.be
         public int EmpresaId { get; set; }
         public EmpresaBe Empresa { get; set; }
         public int FacturaId { get; set; }
+        public int AmbienteSunatId { get; set; }
+        public AmbienteSunatBe AmbienteSunat { get; set; }
         public int SerieId { get; set; }
         public SerieBe Serie { get; set; }
         public int NroComprobante { get; set; }
@@ -25,6 +27,8 @@ namespace bilecom.be
         public TipoOperacionVentaBe TipoOperacionVenta { get; set; }
         public int ClienteId { get; set; }
         public ClienteBe Cliente { get; set; }
+        public int? FormaPagoId { get; set; }
+        public FormaPagoBe FormaPago { get; set; }
         public bool FlagExportacion { get; set; }
         public bool FlagGratuito { get; set; }
         public bool FlagEmisorItinerante { get; set; }
@@ -63,6 +67,9 @@ namespace bilecom.be
         public decimal PorcentajeDescuentosGlobal { get; set; }
         public decimal TotalDescuentosGlobal { get; set; }
         public decimal ImporteTotal { get; set; }
+        public string ImporteTotalEnLetras { get; set; }
+        public string Observacion { get; set; }
+        public string Hash { get; set; }
         public bool FlagAnulado { get; set; }
         public string CodigoRespuestaSunat { get; set; }
         public string DescripcionRespuestaSunat { get; set; }
@@ -94,13 +101,27 @@ namespace bilecom.be
         public string RutaXml { get; set; }
         public string RutaPdf { get; set; }
         public string RutaCdr { get; set; }
+        public int? FormatoId { get; set; }
 
+
+        public string LogoFormatoBase64 { get; set; }
+        public string QRBase64 { get; set; }
 
         public int[] ListaFacturaGuiaRemisionEliminados { get; set; }
         public List<FacturaGuiaRemisionBe> ListaFacturaGuiaRemision { get; set; }
 
         public List<KeyValuePair<int, string>> ListaFacturaDocumentoEliminados { get; set; }
         public List<FacturaDocumentoBe> ListaFacturaDocumento { get; set; }
+        public string ListaFacturaOrdenCompraStr
+        {
+            get
+            {
+                if (ListaFacturaDocumento == null) return null;
+                if (ListaFacturaDocumento.Count == 0) return null;
+
+                return string.Join("", ListaFacturaDocumento.Select(x => x.SerieNroComprobante).ToArray());
+            }
+        }
 
         public int[] ListaFacturaDetalleEliminados { get; set; }
         public List<FacturaDetalleBe> ListaFacturaDetalle { get; set; }

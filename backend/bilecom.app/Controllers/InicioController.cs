@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace bilecom.app.Controllers
 {
-    public class InicioController : _BaseController
+    public class InicioController : Controller
     {
         // GET: Inicio
         [IsLogoutFilter]

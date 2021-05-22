@@ -40,5 +40,37 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public TipoOperacionVentaBe Obtener(int tipoOperacionVentaId, SqlConnection cn)
+        {
+            TipoOperacionVentaBe respuesta = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tipooperacionventa_obtener", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@tipoOperacionVentaId", tipoOperacionVentaId.GetNullable());
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            if (dr.Read())
+                            {
+                                respuesta = new TipoOperacionVentaBe();
+                                respuesta.TipoOperacionVentaId = dr.GetData<int>("TipoOperacionVentaId");
+                                respuesta.CodigoSunat = dr.GetData<string>("CodigoSunat");
+                                respuesta.Nombre = dr.GetData<string>("Nombre");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = null;
+            }
+            return respuesta;
+        }
     }
 }

@@ -41,16 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmbienteSunatDa.cs" />
     <Compile Include="CotizacionDa.cs" />
     <Compile Include="CategoriaProductoDa.cs" />
     <Compile Include="ClienteDa.cs" />
     <Compile Include="DepartamentoDa.cs" />
     <Compile Include="DistritoDa.cs" />
     <Compile Include="CotizacionDetalleDa.cs" />
+    <Compile Include="EmpresaAmbienteSunatDa.cs" />
+    <Compile Include="EmpresaConfiguracionDa.cs" />
     <Compile Include="EmpresaDa.cs" />
+    <Compile Include="EmpresaImagenDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="FacturaDetalleDa.cs" />
+<<<<<<< HEAD
     <Compile Include="FormatoCorreoDa.cs" />
+=======
+    <Compile Include="FormaPagoDa.cs" />
+>>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Compile Include="MonedaDa.cs" />
     <Compile Include="MovimientoDa.cs" />
     <Compile Include="MovimientoDetalleDa.cs" />
@@ -63,11 +71,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvinciaDa.cs" />
     <Compile Include="SerieDa.cs" />
+    <Compile Include="StockAlmacenDa.cs" />
     <Compile Include="TableroConteo_x_DocumentoDa.cs" />
     <Compile Include="TableroUltimosDocumentosDa.cs" />
     <Compile Include="TipoAfectacionIgvDa.cs" />
     <Compile Include="TipoCambioDa.cs" />
     <Compile Include="TipoComprobanteDa.cs" />
+    <Compile Include="FormatoDa.cs" />
+    <Compile Include="TipoComprobanteTipoOperacionVentaDa.cs" />
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
     <Compile Include="TipoOperacionAlmacenDa.cs" />
     <Compile Include="TipoOperacionVentaDa.cs" />

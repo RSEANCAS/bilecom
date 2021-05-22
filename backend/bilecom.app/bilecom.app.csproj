@@ -53,6 +53,9 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.8.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
+    <Reference Include="Select.HtmlToPdf, Version=20.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
+      <HintPath>..\packages\Select.HtmlToPdf.20.2.0\lib\net40\Select.HtmlToPdf.dll</HintPath>
+    </Reference>
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.8.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
@@ -391,10 +394,15 @@
     <Content Include="Assets\js\pages\categoriaproducto.js" />
     <Content Include="Assets\js\pages\cliente.js" />
     <Content Include="Assets\js\pages\common.js" />
+    <Content Include="Assets\js\pages\configuracion.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
+<<<<<<< HEAD
     <Content Include="Assets\js\pages\InicioRecuperacionContrasena.js" />
+=======
+    <Content Include="Assets\js\pages\kardex.js" />
+>>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -415,6 +423,7 @@
     <Content Include="Assets\js\pages\recuperarcontrasena.js" />
     <Content Include="Assets\js\pages\sede.js" />
     <Content Include="Assets\js\pages\serie.js" />
+    <Content Include="Assets\js\pages\stockalmacen.js" />
     <Content Include="Assets\js\pages\tiposede.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
@@ -2816,6 +2825,7 @@
     <Content Include="Assets\premium\icon-sets\thumbs\solid-icons\zodiac.png" />
     <Content Include="Assets\premium\line-icons-header.png" />
     <Content Include="Assets\premium\solid-icons-header.png" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2827,7 +2837,10 @@
     <Compile Include="Controllers\Api\CotizacionController.cs" />
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
+    <Compile Include="Controllers\Api\EmpresaConfiguracionController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
+    <Compile Include="Controllers\Api\FormaPagoController.cs" />
+    <Compile Include="Controllers\Api\FormatoController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
     <Compile Include="Controllers\Api\MovimientoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
@@ -2840,11 +2853,13 @@
     <Compile Include="Controllers\Api\ProvinciaController.cs" />
     <Compile Include="Controllers\Api\SedeController.cs" />
     <Compile Include="Controllers\Api\SerieController.cs" />
+    <Compile Include="Controllers\Api\StockAlmacenController.cs" />
     <Compile Include="Controllers\Api\TableroConteo_x_DocumentoController.cs" />
     <Compile Include="Controllers\Api\TableroUltimosDocumentosController.cs" />
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
     <Compile Include="Controllers\Api\TipoCambioController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
+    <Compile Include="Controllers\Api\TipoComprobanteTipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionAlmacenController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
@@ -2862,6 +2877,7 @@
     <Compile Include="Controllers\Filters\IsLogoutFilter.cs" />
     <Compile Include="Controllers\Filters\IsLoginFilter.cs" />
     <Compile Include="Controllers\Filters\_BaseFilter.cs" />
+    <Compile Include="Controllers\KardexController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -2872,9 +2888,8 @@
     <Compile Include="Controllers\AccesoController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\SerieController.cs" />
+    <Compile Include="Controllers\StockAlmacenController.cs" />
     <Compile Include="Controllers\TipoSedeController.cs" />
-    <Compile Include="Controllers\_BaseController.cs" />
-    <Compile Include="Controllers\_FilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3156,7 +3171,9 @@
     <Content Include="Assets\plugins\x-editable\LICENSE-MIT" />
     <Content Include="Assets\plugins\x-editable\README.md" />
     <Content Include="App_Data\certificado.p12" />
-    <Content Include="App_Data\CertificadoPFX.pfx" />
+    <Content Include="App_Data\certificado.pfx" />
+    <Content Include="App_Data\Web.config" />
+    <Content Include="App_Data\certificado.cer" />
     <None Include="packages.config" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -3187,8 +3204,13 @@
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Configuracion\Index.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Acceso\IniciarRecuperacion.cshtml" />
     <Content Include="Views\Acceso\RecuperarContrasena.cshtml" />
+=======
+    <Content Include="Views\StockAlmacen\Index.cshtml" />
+    <Content Include="Views\Kardex\Index.cshtml" />
+>>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

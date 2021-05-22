@@ -26,5 +26,19 @@ namespace bilecom.bl
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
+
+        public DepartamentoBe ObtenerDepartamento(int departamentoId)
+        {
+            DepartamentoBe item = null;
+            try
+            {
+                cn.Open();
+                item = departamentoDa.Obtener(departamentoId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { item = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return item;
+        }
     }
 }
