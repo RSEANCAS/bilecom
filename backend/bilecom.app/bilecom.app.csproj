@@ -398,11 +398,8 @@
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
-<<<<<<< HEAD
     <Content Include="Assets\js\pages\InicioRecuperacionContrasena.js" />
-=======
     <Content Include="Assets\js\pages\kardex.js" />
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -3204,13 +3201,10 @@
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Configuracion\Index.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Acceso\IniciarRecuperacion.cshtml" />
     <Content Include="Views\Acceso\RecuperarContrasena.cshtml" />
-=======
     <Content Include="Views\StockAlmacen\Index.cshtml" />
     <Content Include="Views\Kardex\Index.cshtml" />
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

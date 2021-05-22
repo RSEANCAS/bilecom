@@ -77,10 +77,7 @@ namespace bilecom.enums
         {
             Dolares = 2
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
         public enum TipoTributo
         {
             Igv = 1,
@@ -108,16 +105,17 @@ namespace bilecom.enums
             [Category("default")]
             NoEmitido = 4
         }
-<<<<<<< HEAD
+
         public enum TipoCodigo
         {
             CodigoToken = 1
         }
+
         public enum TipoFormatoCorreo
         {
             RecuperacionContrasena=1
-=======
-
+        }
+        
         public enum FormaPago
         {
             Credito = 2
@@ -129,7 +127,6 @@ namespace bilecom.enums
             Logo,
             LogoFormatoTipoContenido,
             LogoFormato
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
         }
     }
 }

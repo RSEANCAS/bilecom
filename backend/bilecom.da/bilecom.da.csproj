@@ -54,11 +54,8 @@
     <Compile Include="EmpresaImagenDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="FacturaDetalleDa.cs" />
-<<<<<<< HEAD
     <Compile Include="FormatoCorreoDa.cs" />
-=======
     <Compile Include="FormaPagoDa.cs" />
->>>>>>> a023519c67e432f0414547aa05bd861fd2d37a62
     <Compile Include="MonedaDa.cs" />
     <Compile Include="MovimientoDa.cs" />
     <Compile Include="MovimientoDetalleDa.cs" />
