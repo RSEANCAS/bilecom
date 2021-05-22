@@ -52,7 +52,9 @@
     <Compile Include="EmpresaConfiguracionDa.cs" />
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="EmpresaImagenDa.cs" />
+    <Compile Include="BoletaDa.cs" />
     <Compile Include="FacturaDa.cs" />
+    <Compile Include="BoletaDetalleDa.cs" />
     <Compile Include="FacturaDetalleDa.cs" />
     <Compile Include="FormatoCorreoDa.cs" />
     <Compile Include="FormaPagoDa.cs" />
@@ -103,21 +105,6 @@
       <Name>bilecom.ut</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\bilecom.da.dll" />
-    <Content Include="bin\Debug\bilecom.da.pdb" />
-    <Content Include="obj\Debug\bilecom.da.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\bilecom.da.dll" />
-    <Content Include="obj\Debug\bilecom.da.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="obj\Debug\bilecom.da.csproj.CopyComplete" />
-    <None Include="obj\Debug\bilecom.da.csprojAssemblyReference.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

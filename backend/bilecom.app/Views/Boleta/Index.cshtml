@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Titulo = "Facturas";
+    ViewBag.Titulo = "Boletas";
 }
 @section links_footer{
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
@@ -12,7 +12,7 @@
         <!--Page Title-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <div id="page-title">
-            <h1 class="page-header text-overflow">Lista de Facturas</h1>
+            <h1 class="page-header text-overflow">Lista de Boletas</h1>
         </div>
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <!--End page title-->
@@ -68,7 +68,7 @@
                         <div class="form-group text-right">
                             <label class="control-label">&nbsp;</label>
                             <div class="clear"></div>
-                            <a class="btn btn-dark" href="@Url.Content("~/Facturas/Nuevo")">Nuevo</a>
+                            <a class="btn btn-dark" href="@Url.Content("~/Boletas/Nuevo")">Nuevo</a>
                             <button id="btn-buscar" class="btn btn-primary" type="button">Buscar</button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <tr class="bg-primary">
                             <th rowspan="1" colspan="1" style="width:25px">N°</th>
                             <th>Serie</th>
-                            <th class="min-tablet">N° Factura</th>
+                            <th class="min-tablet">N° Boleta</th>
                             @* <th class="min-tablet">N° Pedido</th>*@
                             <th class="min-tablet">Fecha Emisión</th>
                             <th class="min-tablet">Fecha Vencimiento</th>
@@ -109,10 +109,10 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/factura.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/boleta.js")"></script>
     <script>
         $(document).ready(function () {
-            pageFactura.Init();
+            pageBoleta.Init();
         });
     </script>
 }

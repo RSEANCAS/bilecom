@@ -61,7 +61,9 @@
     <Compile Include="EmpresaTipoAfectacionIgvBe.cs" />
     <Compile Include="FacturaBe.cs" />
     <Compile Include="FacturaDetalleBe.cs" />
+    <Compile Include="BoletaDocumentoBe.cs" />
     <Compile Include="FacturaDocumentoBe.cs" />
+    <Compile Include="BoletaGuiaRemisionBe.cs" />
     <Compile Include="FacturaGuiaRemisionBe.cs" />
     <Compile Include="FormatoCorreoBe.cs" />
     <Compile Include="FormaPagoBe.cs" />

@@ -18,7 +18,8 @@ namespace bilecom.app.Controllers.Api
         [Route("listar-tableroultimosdocumentos")]
         public List<TableroUltimosDocumentosBe> Listar(int empresaId,int cantidadRegistros = 10)
         {
-            return bl.Listar(empresaId,cantidadRegistros);
+            var lista = bl.Listar(empresaId,cantidadRegistros);
+            return lista ?? new List<TableroUltimosDocumentosBe>();
         }
     }
 }

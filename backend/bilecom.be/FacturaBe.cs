@@ -16,6 +16,8 @@ namespace bilecom.be
         public int FacturaId { get; set; }
         public int AmbienteSunatId { get; set; }
         public AmbienteSunatBe AmbienteSunat { get; set; }
+        public int SedeId { get; set; }
+        public SedeBe Sede { get; set; }
         public int SerieId { get; set; }
         public SerieBe Serie { get; set; }
         public int NroComprobante { get; set; }
