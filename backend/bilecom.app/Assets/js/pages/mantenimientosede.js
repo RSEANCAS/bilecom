@@ -1,16 +1,21 @@
 ﻿var paisLista = [], departamentoLista = [], provinciaLista = [], distritoLista = [];
 const pageMantenimientoSede = {
     Init: function () {
-        this.Validar();
-        this.CargarCombo(this.InitEvents());
+        this.CargarCombo(() => {
+            this.InitEvents();
+            this.Validar();
+        });
         ;
     },
     InitEvents: function () {
-        pageMantenimientoSede.ObtenerDatos();
 
+        //this.CmbPaisChange();
+        //this.CmbDepartamentoChange();
+        //this.CmbProvinciaChange();
         $("#cmb-pais").change(pageMantenimientoSede.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoSede.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoSede.CmbProvinciaChange);
+        pageMantenimientoSede.ObtenerDatos();
 
     },
 
