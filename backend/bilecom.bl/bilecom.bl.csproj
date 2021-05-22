@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvinciaBl.cs" />
     <Compile Include="SerieBl.cs" />
+    <Compile Include="StockAlmacenBl.cs" />
     <Compile Include="TableroConteo_x_DocumentoBl.cs" />
     <Compile Include="TableroUltimosDocumentosBl.cs" />
     <Compile Include="TipoAfectacionIgvBl.cs" />

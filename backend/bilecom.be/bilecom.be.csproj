@@ -85,6 +85,7 @@
     <Compile Include="SedeBe.cs" />
     <Compile Include="SedeUsuarioBe.cs" />
     <Compile Include="SerieBe.cs" />
+    <Compile Include="StockAlmacenBe.cs" />
     <Compile Include="TableroConteo_x_DocumentoBe.cs" />
     <Compile Include="TableroUltimosDocumentosBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />

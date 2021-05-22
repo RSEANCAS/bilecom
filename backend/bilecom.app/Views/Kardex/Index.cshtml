@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Kardex ";
+}
+@section links_footer{
+    <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
+}
+
+<div id="content-container">
+    <div id="page-head">
+
+        <!--Page Title-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div id="page-title">
+            <h1 class="page-header text-overflow">Kardex por Producto</h1>
+        </div>
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End page title-->
+        <!--Breadcrumb-->
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        @*<ol class="breadcrumb">
+                <li><a href="#"><i class="demo-pli-home"></i></a></li>
+                <li><a href="#">Pages</a></li>
+                <li class="active">Blank page</li>
+            </ol>*@ 
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End breadcrumb-->
+
+    </div>
+
+
+    <!--Page content-->
+    <!--===================================================-->
+    <div id="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Filtros de búsqueda</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Almacen</font></font></span>
+                            <select class="form-control val-exc select2-show-accessible" name="cmb-almacen" id="cmb-almacen" data-bv-field="cmb-almacen" tabindex="-1" aria-hidden="false">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Producto</font></font></span>
+                            <select class="form-control val-exc select2-show-accessible" name="cmb-producto" id="cmb-producto" data-bv-field="cmb-producto" tabindex="-1" aria-hidden="false">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha Inicio</font></font></span>
+                            <div class="input-group date">
+                                <input type="text" id="txt-fecha-emision-desde" class="form-control">
+                                <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha Fin</font></font></span>
+                            <div class="input-group date">
+                                <input type="text" id="txt-fecha-emision-hasta" class="form-control">
+                                <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group text-center">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="clear"></div>
+                            <button id="btn-buscar" class="btn btn-primary" type="button">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <table id="tbl-lista" class="table table-striped table-bordered small" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-primary">
+                            <th rowspan="1" colspan="1" style="width:25px">N°</th>
+                            <th>Fecha</th>
+                            <th class="min-tablet">Tipo Movimiento</th>
+                            <th class="min-tablet">Motivo Movimiento</th>
+                            <th class="min-tablet">Documento</th>
+                            <th class="min-tablet">Documento Referencia</th>
+                            <th class="min-tablet">Cantidad</th>
+                            <th class="min-tablet">Nuevo Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!--===================================================-->
+    <!--End page content-->
+
+</div>
+@section scripts_footer{
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/kardex.js")"></script>
+    <script>
+        $(document).ready(function () {
+            pageKardex.Init();
+        });
+    </script>
+}

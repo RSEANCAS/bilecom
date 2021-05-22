@@ -397,6 +397,7 @@
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
+    <Content Include="Assets\js\pages\kardex.js" />
     <Content Include="Assets\js\pages\layout.js" />
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
@@ -416,6 +417,7 @@
     <Content Include="Assets\js\pages\proveedor.js" />
     <Content Include="Assets\js\pages\sede.js" />
     <Content Include="Assets\js\pages\serie.js" />
+    <Content Include="Assets\js\pages\stockalmacen.js" />
     <Content Include="Assets\js\pages\tiposede.js" />
     <Content Include="Assets\plugins\animate-css\animate.css" />
     <Content Include="Assets\plugins\animate-css\animate.min.css" />
@@ -2843,6 +2845,7 @@
     <Compile Include="Controllers\Api\ProvinciaController.cs" />
     <Compile Include="Controllers\Api\SedeController.cs" />
     <Compile Include="Controllers\Api\SerieController.cs" />
+    <Compile Include="Controllers\Api\StockAlmacenController.cs" />
     <Compile Include="Controllers\Api\TableroConteo_x_DocumentoController.cs" />
     <Compile Include="Controllers\Api\TableroUltimosDocumentosController.cs" />
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
@@ -2865,6 +2868,7 @@
     <Compile Include="Controllers\Filters\IsLogoutFilter.cs" />
     <Compile Include="Controllers\Filters\IsLoginFilter.cs" />
     <Compile Include="Controllers\Filters\_BaseFilter.cs" />
+    <Compile Include="Controllers\KardexController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
@@ -2874,6 +2878,7 @@
     <Compile Include="Controllers\ProveedorController.cs" />
     <Compile Include="Controllers\SedeController.cs" />
     <Compile Include="Controllers\SerieController.cs" />
+    <Compile Include="Controllers\StockAlmacenController.cs" />
     <Compile Include="Controllers\TipoSedeController.cs" />
     <Compile Include="Controllers\_BaseController.cs" />
     <Compile Include="Controllers\_FilterAttribute.cs" />
@@ -3190,6 +3195,8 @@
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Configuracion\Index.cshtml" />
+    <Content Include="Views\StockAlmacen\Index.cshtml" />
+    <Content Include="Views\Kardex\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
