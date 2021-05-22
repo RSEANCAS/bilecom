@@ -35,7 +35,7 @@
                 }
             },
             columns: [
-                { data: "SedeId" },
+                { data: "Fila" },
                 { data: "Nombre" },
                 { data: "TipoSede.Nombre" },
                 { data: "Direccion" },
