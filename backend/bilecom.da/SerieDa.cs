@@ -12,7 +12,7 @@ namespace bilecom.da
 {
     public class SerieDa
     {
-        public List<SerieBe> ListarPorTipoComprobante(int empresaId, int tipoComprobanteId, SqlConnection cn)
+        public List<SerieBe> ListarPorTipoComprobante(int empresaId, int ambienteSunatId, int tipoComprobanteId, SqlConnection cn)
         {
             List<SerieBe> lista = null;
             try
@@ -20,8 +20,9 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_serie_listar_x_tipocomprobante", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@empresaId", empresaId);
-                    cmd.Parameters.AddWithValue("@tipoComprobanteId", tipoComprobanteId);
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ambienteSunatId", ambienteSunatId.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoComprobanteId", tipoComprobanteId.GetNullable());
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -53,7 +54,7 @@ namespace bilecom.da
             return lista;
         }
 
-        public List<SerieBe> Buscar(int empresaId, int? tipoComprobanteId, string serial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
+        public List<SerieBe> Buscar(int empresaId, int ambienteSunatId, int? tipoComprobanteId, string serial, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
             List<SerieBe> lista = new List<SerieBe>();
@@ -61,6 +62,7 @@ namespace bilecom.da
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@ambienteSunatId", ambienteSunatId.GetNullable());
                 cmd.Parameters.AddWithValue("@tipoComprobanteId", tipoComprobanteId.GetNullable());
                 cmd.Parameters.AddWithValue("@serial", serial.GetNullable());
                 cmd.Parameters.AddWithValue("@pagina", pagina.GetNullable());
@@ -74,7 +76,8 @@ namespace bilecom.da
                         while (dr.Read())
                         {
                             SerieBe item = new SerieBe();
-                            item.SerieId = dr.GetData<int>("Fila");
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.SerieId = dr.GetData<int>("SerieId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
                             item.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");

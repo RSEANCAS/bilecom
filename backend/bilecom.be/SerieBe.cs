@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bilecom.be
 {
-    public class SerieBe
+    public class SerieBe : Base
     {
         public int EmpresaId { get; set; }
         public int SerieId { get; set; }
@@ -17,8 +17,6 @@ namespace bilecom.be
         public int ValorInicial { get; set; }
         public int? ValorFinal { get; set; }
         public int ValorActual { get; set; }
-        public bool FlagSinFinal { get; set; }
-        public string Usuario { get; set; }
-        public DateTime Fecha { get; set; }
+        public bool FlagSinFinal { get; set; }  
     }
 }

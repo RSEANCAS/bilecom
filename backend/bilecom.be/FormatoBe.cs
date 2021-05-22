@@ -8,8 +8,9 @@ namespace bilecom.be
 {
     public class FormatoBe
     {
-        public int TipoComprobanteId { get; set; }
         public int FormatoId { get; set; }
+        public int TipoComprobanteId { get; set; }
+        public TipoComprobanteBe TipoComprobante { get; set; }
         public string Nombre { get; set; }
         public string Html { get; set; }
     }

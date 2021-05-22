@@ -12,7 +12,7 @@ namespace bilecom.da
 {
     public class FacturaDa
     {
-        public List<FacturaBe> Buscar(int empresaId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
+        public List<FacturaBe> Buscar(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
             List<FacturaBe> lista = null;
@@ -20,6 +20,7 @@ namespace bilecom.da
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@ambienteSunatId", ambienteSunatId.GetNullable());
                 cmd.Parameters.AddWithValue("@nroDocumentoIdentidadCliente", nroDocumentoIdentidadCliente.GetNullable());
                 cmd.Parameters.AddWithValue("@razonSocialCliente", razonSocialCliente.GetNullable());
                 cmd.Parameters.AddWithValue("@fechaHoraEmisionDesde", fechaHoraEmisionDesde.GetNullable());
@@ -111,6 +112,7 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@totalBaseImponible", registro.TotalBaseImponible.GetNullable());
                     cmd.Parameters.AddWithValue("@totalDescuentos", registro.TotalDescuentos.GetNullable());
                     cmd.Parameters.AddWithValue("@importeTotal", registro.ImporteTotal.GetNullable());
+                    cmd.Parameters.AddWithValue("@ambienteSunatId", registro.AmbienteSunatId.GetNullable());
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@importeTotalEnLetras", SqlDbType = SqlDbType.VarChar, Size= -1, Value = DBNull.Value, Direction = ParameterDirection.InputOutput });
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
 

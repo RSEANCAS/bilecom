@@ -26,5 +26,19 @@ namespace bilecom.bl
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
+
+        public PaisBe ObtenerPais(int paisId)
+        {
+            PaisBe item = null;
+            try
+            {
+                cn.Open();
+                item = paisDa.Obtener(paisId, cn);
+                cn.Close();
+            }
+            catch (Exception ex) { item = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return item;
+        }
     }
 }

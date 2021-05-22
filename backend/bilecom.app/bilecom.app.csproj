@@ -394,6 +394,7 @@
     <Content Include="Assets\js\pages\categoriaproducto.js" />
     <Content Include="Assets\js\pages\cliente.js" />
     <Content Include="Assets\js\pages\common.js" />
+    <Content Include="Assets\js\pages\configuracion.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
@@ -2829,6 +2830,7 @@
     <Compile Include="Controllers\Api\CotizacionController.cs" />
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
+    <Compile Include="Controllers\Api\EmpresaConfiguracionController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\FormaPagoController.cs" />
     <Compile Include="Controllers\Api\FormatoController.cs" />
@@ -2849,6 +2851,7 @@
     <Compile Include="Controllers\Api\TipoAfectacionIgvController.cs" />
     <Compile Include="Controllers\Api\TipoCambioController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
+    <Compile Include="Controllers\Api\TipoComprobanteTipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionAlmacenController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
@@ -3157,8 +3160,9 @@
     <Content Include="Assets\plugins\x-editable\LICENSE-MIT" />
     <Content Include="Assets\plugins\x-editable\README.md" />
     <Content Include="App_Data\certificado.p12" />
-    <Content Include="App_Data\CertificadoPFX.pfx" />
+    <Content Include="App_Data\certificado.pfx" />
     <Content Include="App_Data\Web.config" />
+    <Content Include="App_Data\certificado.cer" />
     <None Include="packages.config" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />

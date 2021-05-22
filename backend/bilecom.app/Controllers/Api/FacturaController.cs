@@ -33,10 +33,10 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("buscar-factura")]
-        public DataPaginate<FacturaBe> BuscarFactura(int empresaId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaEmisionDesde, DateTime fechaEmisionHasta, int draw, int start, int length, string columnaOrden = "FacturaId", string ordenMax = "ASC")
+        public DataPaginate<FacturaBe> BuscarFactura(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaEmisionDesde, DateTime fechaEmisionHasta, int draw, int start, int length, string columnaOrden = "FacturaId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = facturaBl.BuscarFactura(empresaId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaEmisionDesde, fechaEmisionHasta, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var lista = facturaBl.BuscarFactura(empresaId, ambienteSunatId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaEmisionDesde, fechaEmisionHasta, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<FacturaBe>
             {
                 data = lista ?? new List<FacturaBe>(),
@@ -96,7 +96,7 @@ namespace bilecom.app.Controllers.Api
 
                     string contenidoXml = Generar.GenerarXML(invoiceType);
                     string hash = null;
-                    string contenidoXmlFirmado = Generar.RetornarXmlFirmado(contenidoXml, rutaCertificado, claveCertificado, out hash);
+                    string contenidoXmlFirmado = Generar.RetornarXmlFirmado("/tns:Invoice", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", contenidoXml, rutaCertificado, claveCertificado, out hash);
                     registro.Hash = hash;
 
                     var qr = Generar.GenerarQR(registro.Empresa.Ruc, TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value.ToString(), registro.Serie.Serial, registro.NroComprobante, registro.FechaHoraEmision, registro.Cliente.TipoDocumentoIdentidad.Codigo, registro.Cliente.NroDocumentoIdentidad, registro.TotalIgv, registro.ImporteTotal, registro.Hash);
@@ -142,27 +142,22 @@ namespace bilecom.app.Controllers.Api
                     byte[] contenidoPdfBytes = ut.HtmlToPdf.GetSelectPdf(html, PdfPageSize.A4);
                     //byte[] contenidoPdfBytes = ut.HtmlToPdf.GenerarPDF(html);
 
-                    byte[] contenidoXmlFirmadoBytes = Convert.FromBase64String(contenidoXmlFirmado);
+                    //byte[] contenidoXmlFirmadoBytes = Convert.FromBase64String(contenidoXmlFirmado);
                     //byte[] contenidoXmlFirmadoBytes = Encoding.UTF8.GetBytes(contenidoXmlFirmado);
-                    string nombreArchivo = $"{registro.Empresa.Ruc}-01-{registro.Serie.Serial}-{registro.NroComprobante:00000000}";
+                    string nombreArchivo = $"{registro.Empresa.Ruc}-01-{registro.Serie.Serial}-{registro.NroComprobante}";
                     string nombreArchivoXml = $"{nombreArchivo}.xml";
                     string nombreArchivoPdf = $"{nombreArchivo}.pdf";
                     string nombreArchivoZip = $"{nombreArchivo}.zip";
                     string nombreArchivoCdr = $"R-{nombreArchivo}.zip";
-                    byte[] contenidoZipBytes = Generar.RetornarXmlComprimido(contenidoXmlFirmadoBytes, nombreArchivoXml);
-                    //byte[] contenidoZipBytes = Generar.RetornarXmlComprimido(contenidoXmlFirmado, nombreArchivoXml);
-                    string codigoCdr = null, descripcionCdr = null;
-                    EstadoCdr? estadoCdr = null;
-                    byte[] cdrBytes = null;
-
-                    bool seEmitio = emitir.Venta(registro.Empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.ServicioWebUrlVenta, nombreArchivoZip, contenidoZipBytes, rucSOL, usuarioSOL, claveSOL, out cdrBytes, out codigoCdr, out descripcionCdr, out estadoCdr);
-
+                    //byte[] contenidoZipBytes = Generar.RetornarXmlComprimido(contenidoXmlFirmadoBytes, nombreArchivoXml);
+                    byte[] contenidoZipBytes = Generar.RetornarXmlComprimido(contenidoXmlFirmado, nombreArchivoXml);
                     string rutaCarpetaSunatComprobantesBase = AppSettings.Get<string>("Empresa.Almacenamiento.Sunat.Comprobantes");
                     string rutaCarpetaSunatComprobantes = rutaCarpetaSunatComprobantesBase
                         .Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory)
                         .Replace("{Ruc}", registro.Empresa.Ruc)
+                        .Replace("{AmbienteSunat}", registro.Empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre)
                         .Replace("{TipoComprobante}", TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value.ToString())
-                        .Replace("{Comprobante}", $"{registro.Serie.Serial}-{registro.NroComprobante:00000000}");
+                        .Replace("{Comprobante}", $"{registro.Serie.Serial}-{registro.NroComprobante}");
                     string rutaArchivoXml = Path.Combine(rutaCarpetaSunatComprobantes, nombreArchivoXml);
                     string rutaArchivoCdr = Path.Combine(rutaCarpetaSunatComprobantes, nombreArchivoCdr);
                     string rutaArchivoPdf = Path.Combine(rutaCarpetaSunatComprobantes, nombreArchivoPdf);
@@ -170,8 +165,14 @@ namespace bilecom.app.Controllers.Api
                     bool existeCarpeta = Directory.Exists(rutaCarpetaSunatComprobantes);
 
                     if (!existeCarpeta) Directory.CreateDirectory(rutaCarpetaSunatComprobantes);
-                    File.WriteAllBytes(rutaArchivoXml, contenidoXmlFirmadoBytes);
+                    File.WriteAllText(rutaArchivoXml, contenidoXmlFirmado);
+                    //File.WriteAllBytes(rutaArchivoXml, contenidoXmlFirmadoBytes);
                     File.WriteAllBytes(rutaArchivoPdf, contenidoPdfBytes);
+
+                    string codigoCdr = null, descripcionCdr = null;
+                    EstadoCdr? estadoCdr = null;
+                    byte[] cdrBytes = null;
+                    bool seEmitio = emitir.Venta(registro.Empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.ServicioWebUrlVenta, nombreArchivoZip, contenidoZipBytes, rucSOL, usuarioSOL, claveSOL, out cdrBytes, out codigoCdr, out descripcionCdr, out estadoCdr);
 
                     if (cdrBytes != null) File.WriteAllBytes(rutaArchivoCdr, cdrBytes);
 

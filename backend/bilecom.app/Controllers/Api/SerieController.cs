@@ -17,17 +17,17 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("listar-serie-por-tipocomprobante")]
-        public List<SerieBe> ListarSeriePorTipoComprobante(int empresaId, int tipoComprobanteId)
+        public List<SerieBe> ListarSeriePorTipoComprobante(int empresaId, int ambienteSunatId, int tipoComprobanteId)
         {
-            return serieBl.ListarSeriePorTipoComprobante(empresaId, tipoComprobanteId);
+            return serieBl.ListarSeriePorTipoComprobante(empresaId, ambienteSunatId, tipoComprobanteId);
         }
         
         [HttpGet]
         [Route("buscar-serie")]
-        public DataPaginate<SerieBe> BuscarSerie(int empresaId, int? tipoComprobanteId, string serial, int draw, int start, int length, string columnaOrden = "SerieId", string ordenMax = "ASC")
+        public DataPaginate<SerieBe> BuscarSerie(int empresaId, int ambienteSunatId, int? tipoComprobanteId, string serial, int draw, int start, int length, string columnaOrden = "SerieId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = serieBl.BuscarSerie(empresaId, tipoComprobanteId,serial, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var lista = serieBl.BuscarSerie(empresaId, ambienteSunatId, tipoComprobanteId,serial, start, length, columnaOrden, ordenMax, out totalRegistros);
             var respuesta = new DataPaginate<SerieBe>
             {
                 data = lista ?? new List<SerieBe>(),

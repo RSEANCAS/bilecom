@@ -106,13 +106,18 @@
                         </li>
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End Navigation toogle button-->
-                        <!--Search-->
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <li>
+                    </ul>
+                    <ul class="nav navbar-top-links" style="display: flex; align-items: center;">
+                        <li class="tgl-menu-btn">
+                            <div class="form-group form-inline mar-no">
+                                <label class="text-light text-bold">SEDE: </label>
+                                <select class="form-control">
+                                    <option>
+                                        SELECCIONE
+                                    </option>
+                                </select>
+                            </div>
                         </li>
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <!--End Search-->
-
                     </ul>
                     <ul class="nav navbar-top-links">
 
@@ -245,7 +250,7 @@
                                             <i class="demo-pli-information icon-lg icon-fw"></i> Help
                                         </a>*@
                                         <a href="@Url.Content("~/Configuracion")" class="list-group-item">
-                                            <i class="demo-pli-cog icon-lg icon-fw"></i> Configuración
+                                            <i class="demo-pli-gear icon-lg icon-fw"></i> Configuración
                                         </a>
                                         <a href="#" class="list-group-item btn-cerrar-sesion">
                                             <i class="demo-pli-unlock icon-lg icon-fw"></i> Salir
@@ -354,6 +359,8 @@
         const urlRoot = "@Url.Content("~")";
         const listaPerfil = @(Html.Raw(Json.Encode(listaPerfil)));
         const perfilId = @perfilId;
+        const ambienteSunatId = @empresa.EmpresaConfiguracion.AmbienteSunatId;
+        const ambienteSunatNombre = '@Html.Raw(empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre)';
         pageLayout.Init();
     </script>
     @*    <script src="@Url.Content("~/Assets/js/demo/dashboard.js")"></script>*@

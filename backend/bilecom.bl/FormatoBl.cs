@@ -12,6 +12,28 @@ namespace bilecom.bl
     public class FormatoBl : Conexion
     {
         FormatoDa formatoDa = new FormatoDa();
+        TipoComprobanteDa tipoComprobanteDa = new TipoComprobanteDa();
+
+        public List<FormatoBe> ListarFormato(bool withTipoComprobante = false)
+        {
+            List<FormatoBe> lista = null;
+            try
+            {
+                cn.Open();
+                lista = formatoDa.Listar(cn);
+                if(lista != null && withTipoComprobante)
+                {
+                    foreach(var item in lista)
+                    {
+                        item.TipoComprobante = tipoComprobanteDa.Obtener(item.TipoComprobanteId, cn);
+                    }
+                }
+                cn.Close();
+            }
+            catch (Exception ex) { lista = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return lista;
+        }
 
         public List<FormatoBe> ListarFormatoPorTipoComprobante(int tipoComprobanteId)
         {

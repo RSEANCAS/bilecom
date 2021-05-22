@@ -12,6 +12,39 @@ namespace bilecom.da
 {
     public class FormatoDa
     {
+        public List<FormatoBe> Listar(SqlConnection cn)
+        {
+            List<FormatoBe> lista = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_formato_listar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            lista = new List<FormatoBe>();
+                            while (dr.Read())
+                            {
+                                FormatoBe item = new FormatoBe();
+                                item.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
+                                item.FormatoId = dr.GetData<int>("FormatoId");
+                                item.Nombre = dr.GetData<string>("Nombre");
+                                item.Html = dr.GetData<string>("Html");
+                                lista.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lista = null;
+            }
+            return lista;
+        }
+
         public List<FormatoBe> ListarPorTipoComprobante(int tipoComprobanteId, SqlConnection cn)
         {
             List<FormatoBe> lista = null;

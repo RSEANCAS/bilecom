@@ -1,7 +1,9 @@
 ﻿const pageMantenimientoSerie = {
     Init: function () {
-        this.CargarCombo(this.InitEvents());
-        this.Validar();
+        this.CargarCombo(() => {
+            this.InitEvents();
+            this.Validar();
+        });
     },
 
     InitEvents: function () {
@@ -90,6 +92,7 @@
         let ObjectoJson = {
             SerieId: serieId,
             EmpresaId: empresaId,
+            AmbienteSunatId: ambienteSunatId,
             TipoComprobanteId: tipocomprobanteId,
             Serial: serial,
             ValorInicial: valorinicial,
@@ -110,7 +113,7 @@
     },
 
     ResponseObtenerDatos: function (data) {
-        $("#cmb-tipo-comprobante").val(data.tipocomprobanteId);
+        $("#cmb-tipo-comprobante").val(data.TipoComprobanteId).trigger("change");
         $("#txt-serial").val(data.Serial);
         $("#txt-valor-inicial").val(data.ValorInicial);
         $("#chk-flag-sin-final").prop("checked",data.FlagSinFinal);
