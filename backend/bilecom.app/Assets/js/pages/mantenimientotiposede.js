@@ -2,8 +2,9 @@
 const pageMantenimientoTipoSede = {
     Init: function () {
         this.CargarCombo(() => {
-            this.Validar();
             this.InitEvents();
+            this.Validar();
+            
         });
     },
 
@@ -25,7 +26,7 @@ const pageMantenimientoTipoSede = {
             let textoPlantilla = plantillaTipoSede.Text;
             $("#txt-tipo-sede").val(textoPlantilla);
         }
-        $("#txt-tipo-sede").prop("readonly", tieneValor);
+        $("#txt-tipo-sede").prop("checked", tieneValor);
         $("#chk-editable").prop("checked", tieneValor);
 
     },

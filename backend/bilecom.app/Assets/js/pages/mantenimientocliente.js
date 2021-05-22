@@ -16,13 +16,6 @@ const pageMantenimientoCliente = {
         $("#frm-cliente-mantenimiento")
             .bootstrapValidator({
                 fields: {
-                    "cmb-tipo-documento-identidad": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe seleccionar tipo de documento de identidad",
-                            }
-                        }
-                    },
                     "cmb-departamento": {
                         validators: {
                             notEmpty: {
@@ -34,13 +27,6 @@ const pageMantenimientoCliente = {
                         validators: {
                             notEmpty: {
                                 message: "Debe seleccionar provincia",
-                            }
-                        }
-                    },
-                    "cmb-distrito": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe seleccionar distrito",
                             }
                         }
                     },
