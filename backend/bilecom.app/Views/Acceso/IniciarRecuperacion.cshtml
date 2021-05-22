@@ -1,0 +1,70 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "IniciarRecuperacion";
+}
+    <h2 style="text-align:center;color:black">Iniciar Recuperación</h2>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href="@Url.Content("~/Assets/css/bootstrap.min.css")" rel="stylesheet">
+        <link href="@Url.Content("~/Assets/css/nifty.min.css")" rel="stylesheet">
+        <link href="@Url.Content("~/Assets/css/demo/nifty-demo-icons.min.css")" rel="stylesheet">
+        <link href="@Url.Content("~/Assets/plugins/pace/pace.min.css")" rel="stylesheet">
+        <script src="@Url.Content("~/Assets/plugins/pace/pace.min.js")"></script>
+        <link href="@Url.Content("~/Assets/css/demo/nifty-demo.min.css")" rel="stylesheet">
+
+        <link rel="icon" type="image/png" href="@Url.Content("~/Assets/img/logo_bilecom.png")">
+
+    </head>
+    <body>
+        <div id="container" class="cls-container">
+            <div id="bg-overlay"></div>
+            <div class="cls-content">
+                <div class="cls-content-sm panel">
+                    <div class="panel-body">
+                        <div class="mar-ver pad-btm">
+                            <img class="logo-jare" src="@Url.Content("~/Assets/img/logo_bilecom.png")" alt="Background Image" width="150">
+                            <p>Bilecom Accesos</p>
+                        </div>
+                        <form id="frm-iniciarrecuperacion" action="@Url.Content("~/Acceso/IniciarRecuperacion")" method="post">
+                            <div class="form-group">
+                                <input id="txt-ruc" name="txt-ruc" type="text" class="form-control" placeholder="RUC" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input id="txt-usuario" name="txt-usuario" type="text" class="form-control" placeholder="USUARIO" autofocus>
+                            </div>
+                            <button id="btnRecuperar" class="btn btn-primary btn-lg btn-block" type="button">RECUPERAR</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--jQuery [ REQUIRED ]-->
+        <script src="@Url.Content("~/Assets/js/jquery.min.js")"></script>
+
+
+        <!--BootstrapJS [ RECOMMENDED ]-->
+        <script src="@Url.Content("~/Assets/js/bootstrap.min.js")"></script>
+
+
+        <!--NiftyJS [ RECOMMENDED ]-->
+        <script src="@Url.Content("~/Assets/js/nifty.min.js")"></script>
+        <script src="@Url.Content("~/Assets/js/demo/bg-images.js")"></script>
+        <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js")"></script>
+        <script src="@Url.Content("~/Assets/js/demo/ui-alerts.js")"></script>
+        <script src="@Url.Content("~/Assets/js/pages/common.js")" charset="utf-8"></script>
+        <script src="@Url.Content("~/Assets/js/pages/InicioRecuperacionContrasena.js")" charset="utf-8"></script>
+        <script>
+        const urlRoot = "@Url.Content("~")";
+        $(document).ready(function () {
+            pageInicioRecuperarContrasena.Init();
+        });
+        </script>
+
+    </body>
+
+

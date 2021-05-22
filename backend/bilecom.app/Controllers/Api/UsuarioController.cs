@@ -11,7 +11,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web.Http;
+using static bilecom.enums.Enums;
 
 namespace bilecom.app.Controllers.Api
 {
@@ -22,6 +24,9 @@ namespace bilecom.app.Controllers.Api
         EmpresaBl empresaBl = new EmpresaBl();
         UsuarioBl usuarioBl = new UsuarioBl();
         PersonalBl personalBl = new PersonalBl();
+        TokenBl tokenBl = new TokenBl();
+        FormatoCorreoBl formatoCorreoBl = new FormatoCorreoBl();
+        Correo correo = new Correo();
 
         [HttpGet]
         [Route("validar-usuario")]
@@ -147,6 +152,69 @@ namespace bilecom.app.Controllers.Api
             {
                 return new HttpResponseMessage(HttpStatusCode.Unauthorized);
             }
+        }
+
+        [HttpPost]
+        [Route("recuperar-contrasena")]
+        public HttpResponseMessage RecuperarContrasena(string ruc, string usuario)
+        {
+            bool seProceso = false;
+            if (string.IsNullOrEmpty((ruc ?? "").Trim()))
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent("El ruc está vacío.");
+                return msg;
+            }
+            if (string.IsNullOrEmpty((usuario ?? "").Trim()))
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent("El usuario está vacío.");
+                return msg;
+            }
+            var empresa = empresaBl.ObtenerEmpresaPorRuc(ruc);
+            if (empresa == null)
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent($"El ruc {ruc} no se encuentra registrado.");
+                return msg;
+            }
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true);
+
+            if (user == null)
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent($"El usuario {usuario} no se encuentra registrado.");
+                return msg;
+            }
+            string codigoToken = null;
+            int tiempoExpiracion = AppSettings.Get<int>("RecuperarContrasena.TiempoExpiracion");
+            TokenBe token = new TokenBe();
+            token.EmpresaId = user.EmpresaId ?? 0;
+            token.UsuarioId = user.UsuarioId;
+            //token.CodigoToken = codigoToken;
+            token.TipoTokenId = (int)TipoCodigo.CodigoToken;
+            token.FechaInicio = DateTime.Now;
+            token.FechaFin = token.FechaInicio.AddMinutes(tiempoExpiracion);
+            token.Usuario = usuario;
+            token.Fecha = DateTime.Now;
+
+            bool seGuardoToken = tokenBl.GuardarToken(token, out codigoToken);
+            if (seGuardoToken)
+            {
+                var formatoCorreo = formatoCorreoBl.ObtenerFormatoCorreo((int)TipoFormatoCorreo.RecuperacionContrasena);
+                string url = AppSettings.Get<string>("Url.RecuperarContrasena");
+                string dataHtml = formatoCorreo.Html;
+                string usuarioIdStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(token.UsuarioId.ToString()));
+                string empresaIdStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(token.EmpresaId.ToString()));
+                string tipoTokenIdStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(token.TipoTokenId.ToString()));
+                dataHtml = dataHtml.Replace("[Usuario]", user.Nombre).Replace("[link]", url+"Acceso/RecuperarContrasena?token="+codigoToken+"|"+usuarioIdStr+"|"+empresaIdStr+"|"+tipoTokenIdStr);
+                bool seEnvioCorreo = correo.EnviarCorreo(user.Correo, "Recuperación de Contraseña", dataHtml);
+                if (seEnvioCorreo) seProceso = true;
+            }
+                   
+            HttpResponseMessage message = Request.CreateResponse(HttpStatusCode.OK, seProceso);
+
+            return message;
         }
     }
 }

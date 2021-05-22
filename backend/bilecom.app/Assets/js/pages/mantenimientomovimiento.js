@@ -1,5 +1,5 @@
 ﻿var serieLista = [], sedealmacenLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [],
-    detalleListaEliminados = [], tipoMovimientoLista = [], tipoOperacionAlmacen = [], tipoComprobanteLista = [];
+    detalleListaEliminados = [], tipoMovimientoLista = [], tipoOperacionAlmacen = [], tipoComprobanteLista = [], tipoProductoLista = [];
 
 const columnsDetalle = [
     { data: "Fila" },
@@ -387,6 +387,26 @@ const pageMantenimientoMovimiento = {
                 `<form id="frm-Movimiento-detalle" autocomplete="off">
                     ${(id == null ? "" : `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
                     <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Tipo Producto</span>
+                                <div id="div-detalle-tipo-producto"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Código</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-codigo" id="cmb-detalle-codigo" aria-hidden="false" style="width: 100%"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt">Código SUNAT</span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-detalle-codigo-sunat" id="cmb-detalle-codigo-sunat" aria-hidden="false" style="width: 100%" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Descripción</span>
@@ -453,6 +473,29 @@ const pageMantenimientoMovimiento = {
                 })
 
                 $("#txt-detalle-cantidad, #txt-detalle-precio-unitario").change(pageMantenimientoMovimiento.CalcularImporteTotal);
+                pageMantenimientoMovimiento.ResponseTipoProductoListar(tipoProductoLista);
+                $("#cmb-detalle-codigo").select2({
+                    allowClear: true,
+                    dropdownParent: $("#modal-detalle-agregar"),
+                    placeholder: '[Seleccione...]',
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: `${urlRoot}api/producto/buscar-producto-por-codigo`,
+                        data: function (params) {
+                            let user = common.ObtenerUsuario();
+                            let codigo = params.term;
+                            let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
+                            let sedeAlmacenId = $("#cmb-almacen").val();
+                            return { empresaId: user.Empresa.EmpresaId, codigo, tipoProductoId, sedeAlmacenId: sedeAlmacenId };
+                        },
+                        processResults: function (data) {
+                            let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Codigo }));
+                            return { results };
+                        }
+                    }
+                });
+
+                $("#cmb-detalle-codigo").change(pageMantenimientoMovimiento.CmbDetalleCodigoChange);
 
                 $("#cmb-detalle-descripcion").select2({
                     allowClear: true,
@@ -464,7 +507,9 @@ const pageMantenimientoMovimiento = {
                         data: function (params) {
                             let user = common.ObtenerUsuario();
                             let nombre = params.term;
-                            return { empresaId: user.Empresa.EmpresaId, nombre };
+                            let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
+                            let sedeAlmacenId = $("#cmb-almacen").val();
+                            return { empresaId: user.Empresa.EmpresaId, nombre, tipoProductoId, sedeAlmacenId: sedeAlmacenId };
                         },
                         processResults: function (data) {
                             let results = (data || []).map(x => Object.assign(x, { id: x.ProductoId, text: x.Nombre , stock:x.Stock}));
@@ -748,6 +793,7 @@ const pageMantenimientoMovimiento = {
         let promises = [
             fetch(`${urlRoot}api/sede/listar-sedealmacen?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdMovimiento}`),
+            fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipomovimiento/listar-tipomovimiento`),
@@ -756,13 +802,14 @@ const pageMantenimientoMovimiento = {
 
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SedeAlmacenLista, SerieLista, MonedaLista, TipoDocumentoIdentidadLista, TipoMovimientoLista,TipoComprobanteLista]) => {
+            .then(([SedeAlmacenLista, SerieLista, TipoProductoLista ,MonedaLista, TipoDocumentoIdentidadLista, TipoMovimientoLista,TipoComprobanteLista]) => {
                 sedealmacenLista = SedeAlmacenLista|| [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 tipoMovimientoLista = TipoMovimientoLista || [];
                 tipoComprobanteLista = TipoComprobanteLista || [];
+                tipoProductoLista = TipoProductoLista || [];
 
                 pageMantenimientoMovimiento.ResponseSedeAlmacen(sedealmacenLista);
                 pageMantenimientoMovimiento.ResponseSerieListar(serieLista);
@@ -879,12 +926,7 @@ const pageMantenimientoMovimiento = {
         });
 
     },
-    changeProducto: function () {
-        var s = $("#cmb-detalle-descripcion").select2("data");
-        if (s.length > 0) {
-            $("#txt-detalle-cantidad-actual").val(s[0].StockActual);
-        }
-    },
+    
     CmbReferenciaTipoChange: function () {
         let tipoDocumentoId = $("#cmb-referencia-tipo").val();
 
@@ -988,14 +1030,55 @@ const pageMantenimientoMovimiento = {
     },
     CondicionCantidad: function () {
         let l = $("#cmb-tipo-movimiento").val();
-        if ( l== 2) {
-            if ($("#txt-detalle-cantidad").val() > $("#txt-detalle-cantidad-actual").val()) {
+        if (l == 2) {
+            if (parseFloat($("#txt-detalle-cantidad").val()) > parseFloat($("#txt-detalle-cantidad-actual").val())) {
                 return false;
             }
             else {
                 return true;
             }
         } else { return true;}
-    }
-    
+    },
+    ResponseTipoProductoListar: function (data) {
+        let dataTipoProducto = data.map((x, i) => `<label class="radio-inline"><input type="radio" ${(i == 0 ? "checked" : "disabled")} id="rbt-detalle-tipo-producto-${x.TipoProductoId}" name="rbt-detalle-tipo-producto" value="${x.TipoProductoId}" /> ${x.Nombre}</label>`).join('');
+        $("#div-detalle-tipo-producto").html(dataTipoProducto);
+    },
+    CmbDetalleCodigoChange: function () {
+        let data = $("#cmb-detalle-codigo").select2('data');
+        if (data.length == 0) {
+            $("#cmb-detalle-codigo")
+            return;
+        }
+        data = data[0];
+
+        //$("#cmb-detalle-descripcion").select2('data', data);
+        let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
+
+        $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
+        $("#txt-detalle-cantidad-actual").val(data.StockActual);
+        pageMantenimientoMovimiento.CargarOtrosCamposProducto(data);
+    },
+    CargarOtrosCamposProducto(data) {
+        let existeCodigoSunat = data.CodigoSunat != null;
+        $("#cmb-detalle-codigo-sunat").prop("disabled", existeCodigoSunat);
+        if (existeCodigoSunat) {
+            let optionDefaultCodigoSunat = new Option(data.CodigoSunat, data.CodigoSunat, true, true);
+            $("#cmb-detalle-codigo-sunat").append(optionDefaultCodigoSunat);
+        }
+
+    },
+    changeProducto: function () {
+        var data = $("#cmb-detalle-descripcion").select2("data");
+        if (data.length == 0) {
+            $("#cmb-detalle-descripcion")
+            return;
+        }
+        data = data[0];
+
+        let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
+
+        $("#txt-detalle-cantidad-actual").val(data.StockActual);
+        $("#cmb-detalle-codigo").append(optionDefaultDescripcion);
+        pageMantenimientoMovimiento.CargarOtrosCamposProducto(data);
+    },
 }

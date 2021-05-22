@@ -36,6 +36,7 @@ namespace bilecom.da
                                 item.Nombre = dr.GetData<string>("Nombre");
                                 item.Contrasena = dr.GetData<byte[]>("Contraseña");
                                 item.PersonalId = dr.GetData<int>("PersonalId");
+                                item.Correo = dr.GetData<string>("Correo");
                                 item.FlagCambiarContraseña = dr.GetData<bool>("FlagCambiarContraseña");
                                 item.FlagActivo = dr.GetData<bool>("FlagActivo");
                             }

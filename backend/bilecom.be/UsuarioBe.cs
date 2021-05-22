@@ -13,6 +13,7 @@ namespace bilecom.be
         public string Nombre { get; set; }
         public byte[] Contrasena { get; set; }
         public int? PersonalId { get; set; }
+        public string Correo { get; set; }
         public PersonalBe Personal { get; set; }
         public bool FlagCambiarContraseña { get; set; }
         public bool FlagActivo { get; set; }
