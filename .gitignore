@@ -1,4 +1,3 @@
-*.dll
 backend/.vs
 backend/bilecom.app/App_Data
 backend/bilecom.app/App_Files
