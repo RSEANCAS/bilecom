@@ -110,6 +110,7 @@ const pageFactura = {
             url: `${urlRoot}api/factura/buscar-factura`,
             data: {
                 empresaId: user.Empresa.EmpresaId,
+                ambienteSunatId: ambienteSunatId,
                 nroDocumentoIdentidadCliente: pageFactura.ObtenerNroDocumentoIdentidadCliente,
                 razonSocialCliente: pageFactura.ObtenerRazonSocialCliente,
                 fechaEmisionDesde: pageFactura.ObtenerFechaEmisionDesde,
@@ -132,9 +133,9 @@ const pageFactura = {
             {
                 data: "FacturaId", render: function (data, type, row) {
                     var user = common.ObtenerUsuario();
-                    let nombreArchivo = `${user.Empresa.Ruc}-01-${row.Serie.Serial}-${Number(row.NroComprobante).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '')}`;
-                    let rutaArchivo = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/Comprobantes/01/${row.Serie.Serial}-${Number(row.NroComprobante).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '')}/${nombreArchivo}`;
-                    let rutaArchivoCdr = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/Comprobantes/01/${row.Serie.Serial}-${Number(row.NroComprobante).toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, '')}/R-${nombreArchivo}`;
+                    let nombreArchivo = `${user.Empresa.Ruc}-01-${row.Serie.Serial}-${row.NroComprobante}`;
+                    let rutaArchivo = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/01/${row.Serie.Serial}-${row.NroComprobante}/${nombreArchivo}`;
+                    let rutaArchivoCdr = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/01/${row.Serie.Serial}-${row.NroComprobante}/R-${nombreArchivo}`;
 
                     return `${row.FlagAnulado == true ? "" :
                         `<a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageFactura.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>

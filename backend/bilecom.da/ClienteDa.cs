@@ -44,7 +44,7 @@ namespace bilecom.da
                             item.NombreComercial = dr.GetData<string>("NombreComercial");
                             item.DistritoId = dr.GetData<int>("DistritoId");
                             item.Direccion = dr.GetData<string>("Direccion");
-                            item.Direccion = dr.GetData<string>("Correo");
+                            item.Correo = dr.GetData<string>("Correo");
                             lista.Add(item);
 
                             totalRegistros = dr.GetData<int>("Total");

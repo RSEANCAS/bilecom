@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmbienteSunatBl.cs" />
     <Compile Include="BoletaBl.cs" />
     <Compile Include="CategoriaProductoBl.cs" />
     <Compile Include="ClienteBl.cs" />
@@ -50,7 +51,9 @@
     <Compile Include="DepartamentoBl.cs" />
     <Compile Include="DistritoBl.cs" />
     <Compile Include="CotizacionBl.cs" />
+    <Compile Include="EmpresaAmbienteSunatBl.cs" />
     <Compile Include="EmpresaBl.cs" />
+    <Compile Include="EmpresaConfiguracionBl.cs" />
     <Compile Include="EmpresaImagenBl.cs" />
     <Compile Include="FacturaBl.cs" />
     <Compile Include="FormaPagoBl.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="TipoAfectacionIgvBl.cs" />
     <Compile Include="TipoCambioBl.cs" />
     <Compile Include="TipoComprobanteBl.cs" />
+    <Compile Include="TipoComprobanteTipoOperacionVentaBl.cs" />
     <Compile Include="TipoDocumentoIdentidadBl.cs" />
     <Compile Include="TipoOperacionAlmacenBl.cs" />
     <Compile Include="TipoOperacionVentaBl.cs" />

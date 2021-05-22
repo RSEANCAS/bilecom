@@ -15,14 +15,14 @@ namespace bilecom.bl
         FacturaDa facturaDa = new FacturaDa();
         FacturaDetalleDa facturaDetalleDa = new FacturaDetalleDa();
 
-        public List<FacturaBe> BuscarFactura(int empresaId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
+        public List<FacturaBe> BuscarFactura(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
             totalRegistros = 0;
             List<FacturaBe> lista = null;
             try
             {
                 cn.Open();
-                lista = facturaDa.Buscar(empresaId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                lista = facturaDa.Buscar(empresaId, ambienteSunatId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
                 cn.Close();
             }
             catch (Exception ex) { lista = null; }
@@ -78,6 +78,18 @@ namespace bilecom.bl
                                     if (!seGuardo) break;
                                 }
                             }
+
+                            //if(registro.ListaFacturaGuiaRemision != null)
+                            //{
+                            //    foreach(var item in registro.ListaFacturaGuiaRemision)
+                            //    {
+                            //        int? facturaGuiaRemision = null;
+                            //        item.FacturaId = (int)facturaId;
+                            //        item.EmpresaId = registro.EmpresaId;
+                            //        item.Usuario = registro.Usuario;
+                            //        seg
+                            //    }
+                            //}
                         }
 
                         if (seGuardo) scope.Complete();

@@ -1,5 +1,7 @@
+*.dll
 backend/.vs
 backend/bilecom.app/App_Data
+backend/bilecom.app/App_Files
 backend/bilecom.app/bin
 backend/bilecom.app/obj
 backend/bilecom.app.admin/bin

@@ -15,6 +15,13 @@ namespace bilecom.app.Controllers.Api
         FormatoBl formatoBl = new FormatoBl();
 
         [HttpGet]
+        [Route("listar-formato")]
+        public List<FormatoBe> ListarFormato(bool withTipoComprobante = false)
+        {
+            return formatoBl.ListarFormato(withTipoComprobante);
+        }
+
+        [HttpGet]
         [Route("listar-formato-por-tipocomprobante")]
         public List<FormatoBe> ListarFormatoPorTipoComprobante(int tipoComprobanteId)
         {

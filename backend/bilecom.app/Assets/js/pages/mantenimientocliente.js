@@ -4,10 +4,9 @@ const pageMantenimientoCliente = {
         this.Validar();
         this.InitEvents();
     },
+
     InitEvents: function () {
         pageMantenimientoCliente.CargarCombo(pageMantenimientoCliente.ObtenerDatos());
-        
-
         $("#cmb-pais").change(pageMantenimientoCliente.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoCliente.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoCliente.CmbProvinciaChange);

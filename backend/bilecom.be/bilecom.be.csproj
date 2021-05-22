@@ -92,6 +92,7 @@
     <Compile Include="TipoCambioBe.cs" />
     <Compile Include="TipoComprobanteBe.cs" />
     <Compile Include="FormatoBe.cs" />
+    <Compile Include="TipoComprobanteTipoOperacionVentaBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
     <Compile Include="TipoOperacionAlmacenBe.cs" />
     <Compile Include="TipoOperacionVentaBe.cs" />

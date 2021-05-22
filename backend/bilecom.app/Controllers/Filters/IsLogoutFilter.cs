@@ -23,7 +23,7 @@ namespace bilecom.app.Controllers.Filters
                 int empresaId = Data.Usuario.Empresa.EmpresaId;
                 int usuarioId = Data.Usuario.Id;
 
-                var empresa = empresaBl.ObtenerEmpresa(empresaId, withUbigeo: true, withConfiguracion: true, new List<enums.Enums.ColumnasEmpresaImagen> { enums.Enums.ColumnasEmpresaImagen.Logo, enums.Enums.ColumnasEmpresaImagen.LogoTipoContenido });
+                var empresa = empresaBl.ObtenerEmpresa(empresaId, withUbigeo: true, withConfiguracion: true, columnasEmpresaImagen: new List<enums.Enums.ColumnasEmpresaImagen> { enums.Enums.ColumnasEmpresaImagen.Logo, enums.Enums.ColumnasEmpresaImagen.LogoTipoContenido });
 
                 filterContext.Controller.ViewBag.Empresa = empresa;
                 filterContext.Controller.ViewBag.Data = Data;

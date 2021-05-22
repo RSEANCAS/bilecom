@@ -10,6 +10,7 @@ namespace bilecom.be
     {
         public int AmbienteSunatId { get; set; }
         public string Nombre { get; set; }
+        public string ColorHexadecimal { get; set; }
         public string ServicioWebUrlVenta { get; set; }
         public string ServicioWebUrlGuia { get; set; }
         public string ServicioWebUrlOtros { get; set; }

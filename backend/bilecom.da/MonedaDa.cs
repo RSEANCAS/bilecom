@@ -12,6 +12,40 @@ namespace bilecom.da
 {
     public class MonedaDa
     {
+        public List<MonedaBe> Listar(SqlConnection cn)
+        {
+            List<MonedaBe> lista = null;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_moneda_listar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.HasRows)
+                        {
+                            lista = new List<MonedaBe>();
+                            while (dr.Read())
+                            {
+                                MonedaBe item = new MonedaBe();
+                                item.MonedaId = dr.GetData<int>("MonedaId");
+                                item.Nombre = dr.GetData<string>("Nombre");
+                                item.Simbolo = dr.GetData<string>("Simbolo");
+                                item.Codigo = dr.GetData<string>("Codigo");
+                                lista.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lista = null;
+            }
+            return lista;
+        }
+
         public List<MonedaBe> ListarPorEmpresa(int empresaId, SqlConnection cn)
         {
             List<MonedaBe> lista = null;

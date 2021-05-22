@@ -41,6 +41,7 @@ namespace bilecom.da
             }
             return respuesta;
         }
+
         public List<TipoSedeBe> Buscar(int empresaId, string nombre, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
@@ -78,6 +79,7 @@ namespace bilecom.da
 
             return lista;
         }
+
         public TipoSedeBe Obtener(int empresaId, int tiposedeId, SqlConnection cn)
         {
             TipoSedeBe respuesta = null;

@@ -19,6 +19,5 @@ namespace bilecom.be
 
         public EmpresaImagenBe EmpresaImagen { get; set; }
         public EmpresaConfiguracionBe EmpresaConfiguracion { get; set; }
-
     }
 }

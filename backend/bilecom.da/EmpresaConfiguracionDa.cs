@@ -20,7 +20,6 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_empresaconfiguracion_obtener", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    //cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
@@ -37,6 +36,15 @@ namespace bilecom.da
                                 respuesta.ClaveCertificado = dr.GetData<string>("ClaveCertificado");
                                 respuesta.CuentaCorriente = dr.GetData<string>("CuentaCorriente");
                                 respuesta.ComentarioLegal = dr.GetData<string>("ComentarioLegal");
+                                respuesta.ComentarioLegalDetraccion = dr.GetData<string>("ComentarioLegalDetraccion");
+                                respuesta.CantidadDecimalGeneral = dr.GetData<int>("CantidadDecimalGeneral");
+                                respuesta.CantidadDecimalDetallado = dr.GetData<int>("CantidadDecimalDetallado");
+                                respuesta.FormatoId = dr.GetData<int>("FormatoId");
+                                respuesta.MonedaIdPorDefecto = dr.GetData<int?>("MonedaIdPorDefecto");
+                                respuesta.TipoAfectacionIgvIdPorDefecto = dr.GetData<int?>("TipoAfectacionIgvIdPorDefecto");
+                                respuesta.TipoComprobanteTipoOperacionVentaIdPorDefecto = dr.GetData<string>("TipoComprobanteTipoOperacionVentaIdPorDefecto");
+                                respuesta.TipoProductoIdPorDefecto = dr.GetData<int?>("TipoProductoIdPorDefecto");
+                                respuesta.UnidadMedidaIdPorDefecto = dr.GetData<int?>("UnidadMedidaIdPorDefecto");
                             }
                         }
                     }
