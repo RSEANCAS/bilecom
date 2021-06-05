@@ -58,15 +58,20 @@
                                 ${(tieneListaMenu == true ? '<i class="arrow"></i>' : "")}
                             </a>
                             ${(tieneListaMenu == true) ?
-                                `<ul class="collapse">
+                        `<ul class="collapse">
                                     ${pageLayout.ListarMenu(listaMenu, listaGeneral)}
                                 </ul>`
-                                : ""
-                            }
+                        : ""
+                    }
                         </li>`;
             }
         }
 
         return html;
+    },
+    CambiarSede: function (sedeId) {
+        let data = listaSede.find(x => x.SedeId == sedeId);
+        common.GuardarSedeActual(data);
+        location.reload();
     }
 }

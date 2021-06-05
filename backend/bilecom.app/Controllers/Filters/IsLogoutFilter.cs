@@ -9,6 +9,7 @@ namespace bilecom.app.Controllers.Filters
 {
     public class IsLogoutFilter : _BaseFilter
     {
+        SedeBl sedeBl = new SedeBl();
         PerfilBl perfilBl = new PerfilBl();
         EmpresaBl empresaBl = new EmpresaBl();
 
@@ -28,6 +29,7 @@ namespace bilecom.app.Controllers.Filters
                 filterContext.Controller.ViewBag.Empresa = empresa;
                 filterContext.Controller.ViewBag.Data = Data;
                 filterContext.Controller.ViewBag.ListaPerfil = perfilBl.ListarPerfilPorUsuario(empresaId, usuarioId, loadListaOpcion: true);
+                filterContext.Controller.ViewBag.ListaSede = sedeBl.ListarSedePorUsuario(empresaId, usuarioId);
             }
 
             base.OnActionExecuting(filterContext);

@@ -52,14 +52,14 @@ namespace bilecom.da
             return lista;
         }
 
-        public List<SedeBe> SedeAlmacenListar(int empresaId,SqlConnection cn)
+        public List<SedeBe> SedeAlmacenListar(int empresaId, SqlConnection cn)
         {
             List<SedeBe> lista = new List<SedeBe>();
             using (SqlCommand cmd = new SqlCommand("dbo.usp_sedealmacen_listar", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@EmpresaId", empresaId.GetNullable());
-                
+
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (dr.HasRows)
@@ -72,6 +72,37 @@ namespace bilecom.da
                             item.Nombre = dr.GetData<string>("NombreSede");
                             item.DistritoId = dr.GetData<int>("DistritoId");
                             item.Direccion = dr.GetData<string>("Direccion");
+                            lista.Add(item);
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public List<SedeBe> ListarPorUsuario(int usuarioId, int empresaId, SqlConnection cn)
+        {
+            List<SedeBe> lista = new List<SedeBe>();
+            using (SqlCommand cmd = new SqlCommand("dbo.usp_sede_listar_x_usuario", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@usuarioId", usuarioId.GetNullable());
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            SedeBe item = new SedeBe();
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.SedeId = dr.GetData<int>("SedeId");
+                            item.TipoSedeId = dr.GetData<int>("TipoSedeId");
+                            item.Nombre = dr.GetData<string>("Nombre");
+                            item.DistritoId = dr.GetData<int>("DistritoId");
+                            item.Direccion = dr.GetData<string>("Direccion");
+                            item.FlagActivo = dr.GetData<bool>("FlagActivo");
                             lista.Add(item);
                         }
                     }
@@ -110,12 +141,13 @@ namespace bilecom.da
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 respuesta = null;
             }
             return respuesta;
         }
+
         public bool Guardar(SedeBe sedeBe, SqlConnection cn)
         {
             bool seGuardo = false;

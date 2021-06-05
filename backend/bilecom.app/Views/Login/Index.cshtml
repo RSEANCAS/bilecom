@@ -95,19 +95,19 @@
                     </div>
                     <form id="frm-login" autocomplete="off">
                         <div class="form-group">
-                            <input id="txt-ruc" name="txt-ruc" type="text" class="form-control" placeholder="RUC" autofocus>
+                            <input id="txt-ruc" name="txt-ruc" type="text" class="form-control" placeholder="RUC" onkeypress="common.KeyPressPreventSubmitEnter(event)" autofocus>
                         </div>
                         <div class="form-group">
-                            <input id="txt-usuario" name="txt-usuario" type="text" class="form-control" placeholder="USUARIO" autofocus>
+                            <input id="txt-usuario" name="txt-usuario" type="text" class="form-control" placeholder="USUARIO" onkeypress="common.KeyPressPreventSubmitEnter(event)" autofocus>
                         </div>
                         <div class="form-group">
-                            <input id="txt-contraseña" name="txt-contraseña" type="password" class="form-control" placeholder="CONTRASEÑA">
+                            <input id="txt-contraseña" name="txt-contraseña" type="password" class="form-control" onkeypress="common.KeyPressPreventSubmitEnter(event)" placeholder="CONTRASEÑA">
                             <input type="hidden" id="hdn-token" name="hdn-token" />
                         </div>
                         <div class="form-group">
                         </div>
                         <div class="checkbox pad-btm text-left">
-                            <input id="chkRecordarCuenta" class="magic-checkbox" type="checkbox">
+                            <input id="chkRecordarCuenta" class="magic-checkbox" type="checkbox" onkeypress="common.KeyPressPreventSubmitEnter(event)">
                             <label for="chkRecordarCuenta">Recordar cuenta</label>
                         </div>
                         <button id="btnIngresar" class="btn btn-primary btn-lg btn-block" type="button">INGRESAR</button>

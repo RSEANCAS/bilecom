@@ -396,6 +396,7 @@
     <Content Include="Assets\js\pages\common.js" />
     <Content Include="Assets\js\pages\configuracion.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
+    <Content Include="Assets\js\pages\boleta.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
     <Content Include="Assets\js\pages\InicioRecuperacionContrasena.js" />
@@ -404,6 +405,7 @@
     <Content Include="Assets\js\pages\login.js" />
     <Content Include="Assets\js\pages\mantenimientocategoriaproducto.js" />
     <Content Include="Assets\js\pages\mantenimientocotizacion.js" />
+    <Content Include="Assets\js\pages\mantenimientoboleta.js" />
     <Content Include="Assets\js\pages\mantenimientomovimiento.js" />
     <Content Include="Assets\js\pages\mantenimientofactura.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
@@ -2835,6 +2837,7 @@
     <Compile Include="Controllers\Api\DepartamentoController.cs" />
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\EmpresaConfiguracionController.cs" />
+    <Compile Include="Controllers\Api\BoletaController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\FormaPagoController.cs" />
     <Compile Include="Controllers\Api\FormatoController.cs" />
@@ -2867,6 +2870,7 @@
     <Compile Include="Controllers\Api\UnidadMedidaController.cs" />
     <Compile Include="Controllers\Api\UsuarioController.cs" />
     <Compile Include="Controllers\Api\ClienteController.cs" />
+    <Compile Include="Controllers\BoletaController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
     <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
@@ -3205,6 +3209,8 @@
     <Content Include="Views\Acceso\RecuperarContrasena.cshtml" />
     <Content Include="Views\StockAlmacen\Index.cshtml" />
     <Content Include="Views\Kardex\Index.cshtml" />
+    <Content Include="Views\Boleta\Index.cshtml" />
+    <Content Include="Views\Boleta\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

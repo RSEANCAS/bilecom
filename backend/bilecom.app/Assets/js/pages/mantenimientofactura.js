@@ -1018,6 +1018,7 @@ const pageMantenimientoFactura = {
         let ObjectoJson = {
             EmpresaId: empresaId,
             FacturaId: facturaId,
+            SedeId: sedeId,
             SerieId: serieId,
             Serie: serie,
             FechaVencimiento: fechaVencimiento,

@@ -144,7 +144,7 @@ namespace bilecom.app.Controllers.Api
 
                     //byte[] contenidoXmlFirmadoBytes = Convert.FromBase64String(contenidoXmlFirmado);
                     //byte[] contenidoXmlFirmadoBytes = Encoding.UTF8.GetBytes(contenidoXmlFirmado);
-                    string nombreArchivo = $"{registro.Empresa.Ruc}-01-{registro.Serie.Serial}-{registro.NroComprobante}";
+                    string nombreArchivo = $"{registro.Empresa.Ruc}-{TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value}-{registro.Serie.Serial}-{registro.NroComprobante}";
                     string nombreArchivoXml = $"{nombreArchivo}.xml";
                     string nombreArchivoPdf = $"{nombreArchivo}.pdf";
                     string nombreArchivoZip = $"{nombreArchivo}.zip";

@@ -12,10 +12,11 @@ namespace bilecom.bl
     public class UsuarioBl : Conexion
     {
         UsuarioDa usuarioDa = new UsuarioDa();
+        SedeDa sedeDa = new SedeDa();
         PerfilDa perfilDa = new PerfilDa();
         OpcionDa opcionDa = new OpcionDa();
 
-        public UsuarioBe ObtenerUsuarioPorNombre(string nombre, int? empresaId, bool loadListaPerfil = false, bool loadListaOpcionxPerfil = false)
+        public UsuarioBe ObtenerUsuarioPorNombre(string nombre, int? empresaId, bool loadListaPerfil = false, bool loadListaOpcionxPerfil = false, bool LoadListaSede = false)
         {
             UsuarioBe item = null;
 
@@ -37,6 +38,7 @@ namespace bilecom.bl
                             }
                         }
                     }
+                    if (LoadListaSede) item.ListaSede = sedeDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
                 }
             }
             catch (Exception ex) { throw ex; }

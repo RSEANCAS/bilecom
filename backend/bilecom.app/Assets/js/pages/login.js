@@ -35,14 +35,12 @@
     ResponseThenAutenticarUsuario: function (data) {
         //let validatorFieldToken = data != null && typeof (data) == "object";
         if (data != null && typeof (data) == "object") {
-            common.GuardarToken(data.Token);
-            common.GuardarUsuario(data.Usuario);
-            common.GuardarFechaExpiracion(data.FechaExpiracion);
-            
-            let dataString = JSON.stringify(data);
-            let fechaExpires = common.ObtenerFechaExpiracion();
-            let cookieSession = `ss=${dataString}; expires=${fechaExpires.toUTCString()}`;
-            document.cookie = cookieSession;
+            common.GuardarDataCookie(data);
+
+            //let dataString = JSON.stringify(data);
+            //let fechaExpires = common.ObtenerFechaExpiracion();
+            //let cookieSession = `ss=${dataString}; expires=${fechaExpires.toUTCString()}`;
+            //document.cookie = cookieSession;
 
             location.reload();
 

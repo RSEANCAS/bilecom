@@ -82,6 +82,7 @@ namespace bilecom.da
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@facturaId", SqlDbType = SqlDbType.Int, Value = registro.FacturaId.GetNullable(), Direction = ParameterDirection.InputOutput });
+                    cmd.Parameters.AddWithValue("@sedeId", registro.SedeId.GetNullable());
                     cmd.Parameters.AddWithValue("@serieId", registro.SerieId.GetNullable());
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@nroComprobante", SqlDbType = SqlDbType.Int, Value = registro.NroComprobante.GetNullable(), Direction = ParameterDirection.InputOutput });
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@fechaHoraEmision", SqlDbType = SqlDbType.DateTime, Value = DBNull.Value, Direction = ParameterDirection.InputOutput });
