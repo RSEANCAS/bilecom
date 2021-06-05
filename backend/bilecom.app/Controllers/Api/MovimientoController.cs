@@ -31,7 +31,7 @@ namespace bilecom.app.Controllers.Api
         }
 
         [HttpGet]
-        [Route("obtener-movimiento")]
+        [Route("obtener-movimiento")] 
         public MovimientoBe ObtenerCotizacion(int empresaId, int movimientoId)
         {
             return movimientoBl.Obtener(empresaId, movimientoId, conCliente: true, conPersonal: true, conListaDetalleMovimiento: true, conProveedor: true);

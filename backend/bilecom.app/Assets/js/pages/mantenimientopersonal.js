@@ -5,12 +5,12 @@ const pageMantenimientoPersonal = {
         this.CargarCombo(this.InitEvents())
     },
     InitEvents: function () {
-        pageMantenimientoPersonal.ObtenerDatos();
-        
+
         $("#cmb-pais").change(pageMantenimientoPersonal.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoPersonal.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoPersonal.CmbProvinciaChange);
-        
+
+        pageMantenimientoPersonal.ObtenerDatos();
     },
 
     CmbPaisChange: function () {

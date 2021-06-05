@@ -9,6 +9,7 @@
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/ionicons/css/ionicons.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
 }
 
 <div id="content-container">
@@ -73,6 +74,15 @@
                                         </div>
                                     </div>
                                 }
+                                else
+                                {
+                                    <div class="col-sm-3" style="display:none;">
+                                        <div class="form-group">
+                                            <span class="bg-dark box-block pad-lft pad-rgt">N° Movimiento</span>
+                                            <input class="form-control" placeholder="N° Movimiento" name="txt-nro-movimiento" id="txt-nro-movimiento" data-bv-field="txt-nro-movimiento" value=0 readonly>
+                                        </div>
+                                    </div>
+                                }
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
@@ -89,13 +99,13 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Serie Ref.</span>
-                                        <input class="form-control" placeholder="Serie Ref." name="txt-referencia-serie" id="txt-referencia-serie" data-bv-field="txt-referencia-serie" maxlength="4" >
+                                        <input class="form-control" placeholder="Serie Ref." name="txt-referencia-serie" id="txt-referencia-serie" data-bv-field="txt-referencia-serie" maxlength="4">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Número Ref.</span>
-                                        <input class="form-control" placeholder="N° Ref." name="txt-referencia-numero" id="txt-referencia-numero" data-bv-field="txt-referencia-numero" >
+                                        <input class="form-control" placeholder="N° Ref." name="txt-referencia-numero" id="txt-referencia-numero" data-bv-field="txt-referencia-numero">
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +209,7 @@
 
 
 
-                    <div class="panel panel-bordered panel-dark" >
+                    <div class="panel panel-bordered panel-dark">
                         <div class="panel-heading">
                             <div class="panel-control">
                                 <label>
@@ -283,13 +293,13 @@
                                 <table class="table invoice-total">
                                     <tbody>
                                         @*<tr>
-                                <td><strong>Sub Total :</strong></td>
-                                <td>$538.06</td>
-                            </tr>
-                            <tr>
-                                <td><strong>TAX :</strong></td>
-                                <td>$73.98</td>
-                            </tr>*@
+                                                <td><strong>Sub Total :</strong></td>
+                                                <td>$538.06</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>TAX :</strong></td>
+                                                <td>$73.98</td>
+                                            </tr>*@
                                         <tr>
                                             <td><strong>TOTAL :</strong></td>
                                             <td id="lbl-total-importe" class="text-bold h4">0.00</td>
@@ -313,7 +323,7 @@
                             <button class="btn btn-success col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/Movimientos")">Cancelar</a>
+                            <a class="btn btn-danger col-sm-12 " id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/Movimientos")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -327,6 +337,7 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/jquery.dataTables.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientomovimiento.js")"></script>
     <script>
         const tipoComprobanteIdMovimiento = @((int)Enums.TipoComprobante.Movimiento);

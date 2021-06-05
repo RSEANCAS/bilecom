@@ -1,6 +1,6 @@
 ﻿var serieLista = [], sedealmacenLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [],
     detalleListaEliminados = [], tipoMovimientoLista = [], tipoOperacionAlmacen = [], tipoComprobanteLista = [], tipoProductoLista = [];
-
+const fechaActual = new Date();
 const columnsDetalle = [
     { data: "Fila" },
     { data: "Descripcion" },
@@ -19,6 +19,7 @@ const columnsDetalle = [
 ];
 const pageMantenimientoMovimiento = {
     Init: function () {
+        
         common.ConfiguracionDataTable();
         this.CargarCombo(() => {
             this.Validar();
@@ -436,6 +437,25 @@ const pageMantenimientoMovimiento = {
                                 <input class="form-control" name="txt-detalle-cantidad" id="txt-detalle-cantidad" placeholder="Cantidad">
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group" style="padding-top:15px">
+					                <span class="bg-success box-block pad-lft pad-rgt">&nbsp;</span>
+					                <input id="chk-activar-fecha-vencimiento" class="magic-checkbox" type="checkbox" >
+					                <label for="chk-activar-fecha-vencimiento">Activar fecha de vencimiento</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de Vencimiento</font></font></span>
+                                <div class="input-group date">
+                                    <input type="text" id="txt-fecha-vencimiento" class="form-control">
+                                    <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"></div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Precio Unitario</span>
@@ -471,6 +491,9 @@ const pageMantenimientoMovimiento = {
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
                     $("#frm-movimiento-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
+
+                $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true });
+                $("#txt-fecha-vencimiento").datepicker("setDate", fechaActual);
 
                 $("#txt-detalle-cantidad, #txt-detalle-precio-unitario").change(pageMantenimientoMovimiento.CalcularImporteTotal);
                 pageMantenimientoMovimiento.ResponseTipoProductoListar(tipoProductoLista);
@@ -670,7 +693,7 @@ const pageMantenimientoMovimiento = {
                                 message: "Solo se acepta números."
                             },
                             callback: {
-                                message: "Debe de ingresar numero de referencia.",
+                                message: "Debe de ingresar número de referencia.",
                                 callback: function (value, validator, $field) {
                                     let l = $("#cmb-referencia-tipo").val();
                                     if (l != 0) {
@@ -746,14 +769,16 @@ const pageMantenimientoMovimiento = {
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
         let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
-
+        //let fechaVencimiento = $("#txt-fecha-vencimiento").val();
+        let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
         let data = {
             MovimientoDetalleId: MovimientoDetalleId,
             ProductoId: productoId,
             Descripcion: descripcion,
             Cantidad: cantidad,
             PrecioUnitario: precioUnitario,
-            TotalImporte: totalImporte
+            TotalImporte: totalImporte,
+            FechaVencimiento: fechaVencimiento
         }
 
         if (detalleExiste == true) {
@@ -792,7 +817,7 @@ const pageMantenimientoMovimiento = {
         let user = common.ObtenerUsuario();
         let promises = [
             fetch(`${urlRoot}api/sede/listar-sedealmacen?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdMovimiento}`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdMovimiento}`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
