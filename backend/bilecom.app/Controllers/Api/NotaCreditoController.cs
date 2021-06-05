@@ -4,6 +4,7 @@ using bilecom.be.Custom;
 using bilecom.bl;
 using bilecom.enums;
 using bilecom.sunat;
+using bilecom.sunat.comprobante.creditnote;
 using bilecom.sunat.comprobante.invoice;
 using bilecom.ut;
 using Newtonsoft.Json;
@@ -86,9 +87,9 @@ namespace bilecom.app.Controllers.Api
                     string rutaCertificado = registro.Empresa.EmpresaConfiguracion.RutaCertificado.Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory);
                     string claveCertificado = registro.Empresa.EmpresaConfiguracion.ClaveCertificado;
 
-                    InvoiceType invoiceType = ComprobanteSunat.ObtenerComprobante(registro, ComprobanteSunat.VersionUBL._2_1);
+                    CreditNoteType creditNoteType = ComprobanteSunat.ObtenerComprobante(registro, ComprobanteSunat.VersionUBL._2_1);
 
-                    string contenidoXml = Generar.GenerarXML(invoiceType);
+                    string contenidoXml = Generar.GenerarXML(creditNoteType);
                     string hash = null;
                     string contenidoXmlFirmado = Generar.RetornarXmlFirmado("/tns:Invoice", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", contenidoXml, rutaCertificado, claveCertificado, out hash);
                     registro.Hash = hash;
