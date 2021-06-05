@@ -53,8 +53,10 @@
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="EmpresaImagenDa.cs" />
     <Compile Include="BoletaDa.cs" />
+    <Compile Include="NotaCreditoDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="BoletaDetalleDa.cs" />
+    <Compile Include="NotaCreditoDetalleDa.cs" />
     <Compile Include="FacturaDetalleDa.cs" />
     <Compile Include="FormatoCorreoDa.cs" />
     <Compile Include="FormaPagoDa.cs" />

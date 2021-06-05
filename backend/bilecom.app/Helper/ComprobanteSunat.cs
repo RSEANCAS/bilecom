@@ -1607,18 +1607,41 @@ namespace bilecom.app.Helper
             return invoiceType;
         }
 
+        public static CreditNoteType ObtenerComprobante(NotaCreditoBe item, VersionUBL version)
+        {
+            CreditNoteType creditNoteType = null;
+
+            switch (version)
+            {
+                case VersionUBL._2_1:
+                    creditNoteType = ObtenerComprobante_2_1(item, version);
+                    break;
+            }
+
+            return creditNoteType;
+        }
+
+        public static CreditNoteType ObtenerComprobante_2_1(NotaCreditoBe item, VersionUBL version)
+        {
+            CreditNoteType creditNoteType = new CreditNoteType();
+
+            System.Xml.XmlDocument xmlDocument = new System.Xml.XmlDocument();
+            string versionValue = version.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
+            string versionCustom = version.GetAttributeOfType<CategoryAttribute>().Category;
+            int cantidadDecimales = 2;
+            string formatoDecimales = "0." + (new String('0', cantidadDecimales));
+
+            creditNoteType.UBLVersionID = new sunat.comprobante.creditnote.UBLVersionIDType();
+            creditNoteType.UBLVersionID.Value = versionValue;
+
+            return creditNoteType;
+        }
+
         public static DebitNoteType ObtenerComprobante(NotaDebitoBe item)
         {
             DebitNoteType debitNoteType = new DebitNoteType();
 
             return debitNoteType;
-        }
-
-        public static CreditNoteType ObtenerComprobante(NotaCreditoBe item)
-        {
-            CreditNoteType creditNoteType = new CreditNoteType();
-
-            return creditNoteType;
         }
 
         
