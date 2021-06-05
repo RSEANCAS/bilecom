@@ -23,5 +23,6 @@ namespace bilecom.be
         public DateTime FechaModificacion { get; set; }
 
         public List<PerfilBe> ListaPerfil { get; set; }
+        public List<SedeBe> ListaSede { get; set; }
     }
 }

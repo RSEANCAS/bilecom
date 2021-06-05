@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace bilecom.da
 {
-    public class FacturaDa
+    public class BoletaDa
     {
-        public List<FacturaBe> Buscar(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
+        public List<BoletaBe> Buscar(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, SqlConnection cn, out int totalRegistros)
         {
             totalRegistros = 0;
-            List<FacturaBe> lista = null;
-            using (SqlCommand cmd = new SqlCommand("usp_factura_buscar", cn))
+            List<BoletaBe> lista = null;
+            using (SqlCommand cmd = new SqlCommand("usp_boleta_buscar", cn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
@@ -33,13 +33,13 @@ namespace bilecom.da
                 {
                     if (dr.HasRows)
                     {
-                        lista = new List<FacturaBe>();
+                        lista = new List<BoletaBe>();
 
                         while (dr.Read())
                         {
-                            FacturaBe item = new FacturaBe();
+                            BoletaBe item = new BoletaBe();
                             item.Fila = dr.GetData<int>("Fila");
-                            item.FacturaId = dr.GetData<int>("FacturaId");
+                            item.BoletaId = dr.GetData<int>("BoletaId");
                             item.SerieId = dr.GetData<int>("SerieId");
                             item.Serie = new SerieBe();
                             item.Serie.SerieId = dr.GetData<int>("SerieId");
@@ -68,20 +68,20 @@ namespace bilecom.da
             return lista;
         }
 
-        public bool Guardar(FacturaBe registro, SqlConnection cn, out int? facturaId, out int? nroComprobante, out DateTime? fechaHoraEmision, out string totalImporteEnLetras)
+        public bool Guardar(BoletaBe registro, SqlConnection cn, out int? boletaId, out int? nroComprobante, out DateTime? fechaHoraEmision, out string totalImporteEnLetras)
         {
-            facturaId = null;
+            boletaId = null;
             nroComprobante = null;
             fechaHoraEmision = null;
             totalImporteEnLetras = null;
             bool seGuardo = false;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_factura_guardar", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_boleta_guardar", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.Add(new SqlParameter { ParameterName = "@facturaId", SqlDbType = SqlDbType.Int, Value = registro.FacturaId.GetNullable(), Direction = ParameterDirection.InputOutput });
+                    cmd.Parameters.Add(new SqlParameter { ParameterName = "@boletaId", SqlDbType = SqlDbType.Int, Value = registro.BoletaId.GetNullable(), Direction = ParameterDirection.InputOutput });
                     cmd.Parameters.AddWithValue("@sedeId", registro.SedeId.GetNullable());
                     cmd.Parameters.AddWithValue("@serieId", registro.SerieId.GetNullable());
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@nroComprobante", SqlDbType = SqlDbType.Int, Value = registro.NroComprobante.GetNullable(), Direction = ParameterDirection.InputOutput });
@@ -121,7 +121,7 @@ namespace bilecom.da
                     seGuardo = filasAfectadas > 0;
                     if (seGuardo)
                     {
-                        facturaId = (int?)cmd.Parameters["@facturaId"].Value;
+                        boletaId = (int?)cmd.Parameters["@boletaId"].Value;
                         nroComprobante = (int?)cmd.Parameters["@nroComprobante"].Value;
                         fechaHoraEmision = (DateTime?)cmd.Parameters["@fechaHoraEmision"].Value;
                         totalImporteEnLetras = (string)cmd.Parameters["@importeTotalEnLetras"].Value;
@@ -135,16 +135,16 @@ namespace bilecom.da
             return seGuardo;
         }
 
-        public bool Anular(FacturaBe registro, SqlConnection cn)
+        public bool Anular(BoletaBe registro, SqlConnection cn)
         {
             bool seGuardo = false;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_factura_anular", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_boleta_anular", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@facturaId", registro.FacturaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@boletaId", registro.BoletaId.GetNullable());
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
@@ -158,16 +158,16 @@ namespace bilecom.da
             return seGuardo;
         }
 
-        public bool GuardarRespuestaSunat(FacturaBe registro, SqlConnection cn)
+        public bool GuardarRespuestaSunat(BoletaBe registro, SqlConnection cn)
         {
             bool seGuardo = false;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("dbo.usp_factura_guardar_respuestasunat", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_boleta_guardar_respuestasunat", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@facturaId", registro.FacturaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@boletaId", registro.BoletaId.GetNullable());
                     cmd.Parameters.AddWithValue("@codigoRespuestaSunat", registro.CodigoRespuestaSunat.GetNullable());
                     cmd.Parameters.AddWithValue("@descripcionRespuestaSunat", registro.DescripcionRespuestaSunat.GetNullable());
                     cmd.Parameters.AddWithValue("@estadoIdRespuestaSunat", registro.EstadoIdRespuestaSunat.GetNullable());

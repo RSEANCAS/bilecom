@@ -21,25 +21,25 @@ using static bilecom.enums.Enums;
 
 namespace bilecom.app.Controllers.Api
 {
-    [RoutePrefix("api/factura")]
-    public class FacturaController : ApiController
+    [RoutePrefix("api/boleta")]
+    public class BoletaController : ApiController
     {
         EmpresaBl empresaBl = new EmpresaBl();
         EmpresaImagenBl empresaImagenBl = new EmpresaImagenBl();
-        FacturaBl facturaBl = new FacturaBl();
+        BoletaBl boletaBl = new BoletaBl();
         FormatoBl formatoBl = new FormatoBl();
 
         Emitir emitir = new Emitir();
 
         [HttpGet]
-        [Route("buscar-factura")]
-        public DataPaginate<FacturaBe> BuscarFactura(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaEmisionDesde, DateTime fechaEmisionHasta, int draw, int start, int length, string columnaOrden = "FacturaId", string ordenMax = "ASC")
+        [Route("buscar-boleta")]
+        public DataPaginate<BoletaBe> BuscarBoleta(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaEmisionDesde, DateTime fechaEmisionHasta, int draw, int start, int length, string columnaOrden = "BoletaId", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
-            var lista = facturaBl.BuscarFactura(empresaId, ambienteSunatId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaEmisionDesde, fechaEmisionHasta, start, length, columnaOrden, ordenMax, out totalRegistros);
-            var respuesta = new DataPaginate<FacturaBe>
+            var lista = boletaBl.BuscarBoleta(empresaId, ambienteSunatId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaEmisionDesde, fechaEmisionHasta, start, length, columnaOrden, ordenMax, out totalRegistros);
+            var respuesta = new DataPaginate<BoletaBe>
             {
-                data = lista ?? new List<FacturaBe>(),
+                data = lista ?? new List<BoletaBe>(),
                 draw = draw,
                 recordsFiltered = totalRegistros,
                 recordsTotal = totalRegistros
@@ -49,23 +49,23 @@ namespace bilecom.app.Controllers.Api
 
 
         [HttpPost]
-        [Route("guardar-factura")]
-        public bool GuardarFactura(FacturaBe registro)
+        [Route("guardar-boleta")]
+        public bool GuardarBoleta(BoletaBe registro)
         {
             var cookieSS = Request.Headers.GetCookies("ss").FirstOrDefault();
             var user = JsonConvert.DeserializeObject<dynamic>(cookieSS["ss"].Value);
 
-            int? facturaId = null, nroComprobante = null;
+            int? boletaId = null, nroComprobante = null;
             DateTime? fechaHoraEmision = null;
             string totalImporteEnLetras = null;
-            bool respuesta = facturaBl.GuardarFactura(registro, out facturaId, out nroComprobante, out fechaHoraEmision, out totalImporteEnLetras);
+            bool respuesta = boletaBl.GuardarBoleta(registro, out boletaId, out nroComprobante, out fechaHoraEmision, out totalImporteEnLetras);
 
             if (respuesta)
             {
                 try
                 {
 
-                    if (facturaId.HasValue) registro.FacturaId = facturaId.Value;
+                    if (boletaId.HasValue) registro.BoletaId = boletaId.Value;
                     if (fechaHoraEmision.HasValue) registro.FechaHoraEmision = fechaHoraEmision.Value;
                     if (nroComprobante.HasValue) registro.NroComprobante = nroComprobante.Value;
                     if (totalImporteEnLetras != null) registro.ImporteTotalEnLetras = totalImporteEnLetras;
@@ -99,7 +99,7 @@ namespace bilecom.app.Controllers.Api
                     string contenidoXmlFirmado = Generar.RetornarXmlFirmado("/tns:Invoice", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", contenidoXml, rutaCertificado, claveCertificado, out hash);
                     registro.Hash = hash;
 
-                    var qr = Generar.GenerarQR(registro.Empresa.Ruc, TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value.ToString(), registro.Serie.Serial, registro.NroComprobante, registro.FechaHoraEmision, registro.Cliente.TipoDocumentoIdentidad.Codigo, registro.Cliente.NroDocumentoIdentidad, registro.TotalIgv, registro.ImporteTotal, registro.Hash);
+                    var qr = Generar.GenerarQR(registro.Empresa.Ruc, TipoComprobante.Boleta.GetAttributeOfType<DefaultValueAttribute>().Value.ToString(), registro.Serie.Serial, registro.NroComprobante, registro.FechaHoraEmision, registro.Cliente.TipoDocumentoIdentidad.Codigo, registro.Cliente.NroDocumentoIdentidad, registro.TotalIgv, registro.ImporteTotal, registro.Hash);
                     registro.QRBase64 = $"data:image/png;base64,{Convert.ToBase64String(qr)}";
 
                     var formato = formatoBl.Obtener(registro.FormatoId.Value);
@@ -117,9 +117,9 @@ namespace bilecom.app.Controllers.Api
                         .Replace("[DIRECCION]", registro.Cliente.Direccion)
                         .Replace("[FECHA_VENCIMIENTO]", registro.FechaVencimiento == null ? "" : registro.FechaVencimiento.Value.ToString("dd/MM/yyyy"))
                         .Replace("[CONDICION_PAGO]", registro.FormaPago.Descripcion)
-                        .Replace("[ORDEN_COMPRA]", registro.ListaFacturaOrdenCompraStr)
+                        .Replace("[ORDEN_COMPRA]", registro.ListaBoletaOrdenCompraStr)
                         .Replace("[MONEDA]", registro.Moneda.Nombre)
-                        .Replace("[DETALLE]", string.Join(Environment.NewLine, registro.ListaFacturaDetalle.Select(x => $"<li class='data row'><span class='text-center'>{x.Fila}</span><span class='text-right'>{x.Cantidad}</span><span>{x.UnidadMedida.Descripcion}</span><span>{x.Descripcion}</span><span class='text-right'>{x.ValorUnitario:0.00}</span><span class='text-right'>{x.Descuento:0.00}</span><span class='text-right'>{x.ValorVenta:0.00}</span><span class='text-right'>{x.PrecioUnitario:0.00}</span><span class='text-right'>{x.PrecioVenta:0.00}</span></li>").ToArray()))
+                        .Replace("[DETALLE]", string.Join(Environment.NewLine, registro.ListaBoletaDetalle.Select(x => $"<li class='data row'><span class='text-center'>{x.Fila}</span><span class='text-right'>{x.Cantidad}</span><span>{x.UnidadMedida.Descripcion}</span><span>{x.Descripcion}</span><span class='text-right'>{x.ValorUnitario:0.00}</span><span class='text-right'>{x.Descuento:0.00}</span><span class='text-right'>{x.ValorVenta:0.00}</span><span class='text-right'>{x.PrecioUnitario:0.00}</span><span class='text-right'>{x.PrecioVenta:0.00}</span></li>").ToArray()))
                         .Replace("[SIMBOLO_MONEDA]", registro.Moneda.Simbolo)
                         .Replace("[TOTAL_GRAVADO]", registro.TotalGravado.ToString("0.00"))
                         .Replace("[TOTAL_INAFECTO]", registro.TotalInafecto.ToString("0.00"))
@@ -144,7 +144,7 @@ namespace bilecom.app.Controllers.Api
 
                     //byte[] contenidoXmlFirmadoBytes = Convert.FromBase64String(contenidoXmlFirmado);
                     //byte[] contenidoXmlFirmadoBytes = Encoding.UTF8.GetBytes(contenidoXmlFirmado);
-                    string nombreArchivo = $"{registro.Empresa.Ruc}-{TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value}-{registro.Serie.Serial}-{registro.NroComprobante}";
+                    string nombreArchivo = $"{registro.Empresa.Ruc}-{TipoComprobante.Boleta.GetAttributeOfType<DefaultValueAttribute>().Value}-{registro.Serie.Serial}-{registro.NroComprobante}";
                     string nombreArchivoXml = $"{nombreArchivo}.xml";
                     string nombreArchivoPdf = $"{nombreArchivo}.pdf";
                     string nombreArchivoZip = $"{nombreArchivo}.zip";
@@ -156,7 +156,7 @@ namespace bilecom.app.Controllers.Api
                         .Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory)
                         .Replace("{Ruc}", registro.Empresa.Ruc)
                         .Replace("{AmbienteSunat}", registro.Empresa.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat.Nombre)
-                        .Replace("{TipoComprobante}", TipoComprobante.Factura.GetAttributeOfType<DefaultValueAttribute>().Value.ToString())
+                        .Replace("{TipoComprobante}", TipoComprobante.Boleta.GetAttributeOfType<DefaultValueAttribute>().Value.ToString())
                         .Replace("{Comprobante}", $"{registro.Serie.Serial}-{registro.NroComprobante}");
                     string rutaArchivoXml = Path.Combine(rutaCarpetaSunatComprobantes, nombreArchivoXml);
                     string rutaArchivoCdr = Path.Combine(rutaCarpetaSunatComprobantes, nombreArchivoCdr);
@@ -182,7 +182,7 @@ namespace bilecom.app.Controllers.Api
                     registro.RutaXml = rutaArchivoXml;
                     registro.RutaCdr = rutaArchivoCdr;
 
-                    bool seGuardoRespuestaSunat = facturaBl.GuardarRespuestaSunatFactura(registro);
+                    bool seGuardoRespuestaSunat = boletaBl.GuardarRespuestaSunatBoleta(registro);
                 }
                 catch (Exception ex)
                 {
@@ -200,10 +200,10 @@ namespace bilecom.app.Controllers.Api
         }
 
         [HttpPut]
-        [Route("anular-factura")]
-        public bool AnularFactura(FacturaBe registro)
+        [Route("anular-boleta")]
+        public bool AnularBoleta(BoletaBe registro)
         {
-            bool respuesta = facturaBl.AnularFactura(registro);
+            bool respuesta = boletaBl.AnularBoleta(registro);
             return respuesta;
         }
     }

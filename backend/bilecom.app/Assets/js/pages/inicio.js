@@ -8,16 +8,16 @@
     },
     InitEvents: function () {
         this.CargaConteo_x_Documento();
-        
+
     },
     CargaConteo_x_Documento: function () {
         var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
         let fechaActual = new Date();
-        
+
         let anyo = fechaActual.getFullYear();
         let mes = fechaActual.getMonth() + 1;
-        let nummes = mes -1 ;
+        let nummes = mes - 1;
         if (nummes == 0) {
             nummes = 11;
         }
@@ -25,7 +25,7 @@
         $("#span-mes").text(mesletras);
 
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
-        
+
         let url = `${urlRoot}api/tablero/conteo_x_documento-tablero?empresaId=${empresaId}&Anyo=${anyo}&Mes=${mes}`;
         let init = { method: 'GET' };
 
@@ -53,13 +53,13 @@
                 dataSrc: ""
             },
             columns: [
-                { data: "TipoDocumentoDescripcion",render: (data) => data.trim() },
+                { data: "TipoDocumentoDescripcion", render: (data) => data.trim() },
                 { data: "Serie", render: function (data, type, row) { return `${row.Serie}-` + ("00000000" + row.Numero).slice(-8) } },
                 { data: "FechaEmision", render: (data) => (new Date(data)).toLocaleDateString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" }) },
-                { data: "Total", render: (data,type,row) => row.SimboloMoneda+" "+ data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
+                { data: "Total", render: (data, type, row) => row.SimboloMoneda + " " + data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
                 { data: "ClienteRazonSocial", render: (data) => data.trim() },
                 {
-                    data: "EstadoSunatId", render: function (data,type, row) {
+                    data: "EstadoSunatId", render: function (data, type, row) {
                         let tipolabel = "";
                         if (data == 1) {
                             tipolabel = "label-success";
@@ -77,16 +77,16 @@
             ]
         })
     },
-    
+
     ResponseCargaConteo_x_Documento: function (data) {
 
         $("#span-fa-emitidos").text(data.TotalDocumentoFa);
         $("#span-fa-anulados").text(data.TotalAnuladoFa);
-        $("#span-bo-emitidos").text(data.TotalDocumentoBo); 
+        $("#span-bo-emitidos").text(data.TotalDocumentoBo);
         $("#span-bo-anulados").text(data.TotalAnuladoBo);
-        $("#span-nc-emitidos").text(data.TotalDocumentoNC); 
+        $("#span-nc-emitidos").text(data.TotalDocumentoNC);
         $("#span-nc-anulados").text(data.TotalAnuladoNC);
-        $("#span-nd-emitidos").text(data.TotalDocumentoND); 
+        $("#span-nd-emitidos").text(data.TotalDocumentoND);
         $("#span-nd-anulados").text(data.TotalAnuladoND);
     },
     ConfiguracionDataTableTablero() {
@@ -100,7 +100,7 @@
                 zeroRecords: "No se encontraron registros coincidentes",
                 loadingRecords: "Cargando...",
                 Processing: "Procesando...",
-                
+
             }
         })
     }

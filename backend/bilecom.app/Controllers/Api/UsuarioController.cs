@@ -89,7 +89,7 @@ namespace bilecom.app.Controllers.Api
                 return msg;
             }
 
-            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true);
+            var user = usuarioBl.ObtenerUsuarioPorNombre(usuario, empresa.EmpresaId, loadListaPerfil: true, LoadListaSede: true);
 
             if (user == null)
             {
@@ -106,6 +106,13 @@ namespace bilecom.app.Controllers.Api
             {
                 var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
                 msg.Content = new StringContent($"El usuario {usuario} no tiene ningún perfil asignado.");
+                return msg;
+            }
+
+            if (user.ListaSede == null)
+            {
+                var msg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                msg.Content = new StringContent($"El usuario {usuario} no tiene ninguna sede asignada.");
                 return msg;
             }
 
@@ -137,6 +144,7 @@ namespace bilecom.app.Controllers.Api
                         //ListaPerfil = user.ListaPerfil
                     },
                     PerfilActual = user.ListaPerfil[0],
+                    SedeActual = user.ListaSede[0]
                 };
 
                 string responseString = JsonConvert.SerializeObject(response);

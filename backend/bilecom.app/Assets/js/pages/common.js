@@ -1,4 +1,19 @@
 ﻿const common = {
+    GuardarDataCookie(data) {
+        common.GuardarToken(data.Token);
+        common.GuardarUsuario(data.Usuario);
+        common.GuardarFechaExpiracion(data.FechaExpiracion);
+
+        let dataString = JSON.stringify(data);
+        let fechaExpires = common.ObtenerFechaExpiracion();
+        let cookieSession = `ss=${dataString}; expires=${fechaExpires.toUTCString()}`;
+        document.cookie = cookieSession;
+    },
+    ObtenerDataCookie() {
+        let cookies = common.ListarCookies();
+        let data = cookies.find(x => x.key == "ss");
+        return JSON.parse(data.value);
+    },
     ObtenerToken() {
         let token = localStorage['ls.tk'];
         return token == null ? null : atob(token);
@@ -21,6 +36,40 @@
     },
     GuardarFechaExpiracion(data) {
         localStorage['ls.fe'] = btoa(data);
+    },
+    ObtenerPerfilActualCookie() {
+        let cookie = this.ObtenerDataCookie();
+        let perfilActual = cookie.PerfilActual;
+        return perfilActual == null ? null : perfilActual;
+    },
+    GuardarPerfilActualCookie(data) {
+        let cookie = this.ObtenerDataCookie();
+        cookie.PerfilActual = data;
+        common.GuardarDataCookie(cookie);
+    },
+    ObtenerSedeActual() {
+        let cookie = this.ObtenerDataCookie();
+        let sedeActual = cookie.SedeActual;
+        return sedeActual == null ? null : sedeActual;
+    },
+    GuardarSedeActual(data) {
+        let cookie = this.ObtenerDataCookie();
+        cookie.SedeActual = data;
+        common.GuardarDataCookie(cookie);
+    },
+    ListarCookies() {
+        let cookies = document.cookie.split(";").filter(x => x != '').map(x => {
+            let array = x.trim().split('=');
+            let data = { key: array[0], value: array[1] };
+            return data;
+        });
+
+        return cookies;
+    },
+    ObtenerCookie(key) {
+        let lista = common.ListarCookies();
+        let value = lista.find(x => x.key == key);
+        return value;
     },
     ResponseToJson(response) {
         if (response.status == 200) return response.json();
@@ -105,5 +154,21 @@
                 return newData;
             }
         }
+    },
+    KeyPressPreventSubmitEnter(e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            let inputElementLength = $(":input:visible:focus").length;
+            let inputElement = $(":input:visible:focus")[0];
+            if (inputElementLength == 1) {
+                let listaInputs = Array.from($(":input:visible"));
+                let index = listaInputs.findIndex(x => x == inputElement);
+                let newIndex = index == listaInputs.length - 1 ? 0 : index + 1;
+                listaInputs[newIndex].focus();
+            }
+        }
+        //$("#btnIngresar").trigger("click");
+        //$(e.currentTarget).closest("form").trigger("submit");
+        //if (e.keyCode == 13) return false;
     }
 }

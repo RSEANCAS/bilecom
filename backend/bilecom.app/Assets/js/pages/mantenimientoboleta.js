@@ -22,16 +22,16 @@ const columnsDetalle = [
     { data: "PrecioUnitario", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     { data: "ImporteTotal", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     {
-        data: "FacturaDetalleId", render: function (data, type, row) {
-            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoFactura.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
-                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoFactura.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
+        data: "BoletaDetalleId", render: function (data, type, row) {
+            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoBoleta.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
+                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoBoleta.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
         }
     },
 ];
 
 const fechaActual = new Date();
 
-const pageMantenimientoFactura = {
+const pageMantenimientoBoleta = {
     Init: function () {
         common.ConfiguracionDataTable();
         this.CargarCombo(() => {
@@ -42,14 +42,14 @@ const pageMantenimientoFactura = {
     },
 
     InitEvents: function () {
-        $("#btn-buscar-cliente").click(pageMantenimientoFactura.BtnBuscarClienteClick);
-        $("#btn-agregar-detalle").click(pageMantenimientoFactura.BtnAgregarDetalleClick);
+        $("#btn-buscar-cliente").click(pageMantenimientoBoleta.BtnBuscarClienteClick);
+        $("#btn-agregar-detalle").click(pageMantenimientoBoleta.BtnAgregarDetalleClick);
 
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
 
-        pageMantenimientoFactura.ObtenerDatos();
+        pageMantenimientoBoleta.ObtenerDatos();
 
-        $("#btn-nuevo-cliente").click(pageMantenimientoFactura.BtnNuevoClienteClick);
+        $("#btn-nuevo-cliente").click(pageMantenimientoBoleta.BtnNuevoClienteClick);
     },
 
     BtnBuscarClienteClick: function () {
@@ -98,7 +98,7 @@ const pageMantenimientoFactura = {
                 $(e.currentTarget).attr("id", "modal-busqueda-cliente");
 
                 $("#modal-busqueda-cliente").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
                 let user = common.ObtenerUsuario();
@@ -108,8 +108,8 @@ const pageMantenimientoFactura = {
                     url: `${urlRoot}api/cliente/buscar-cliente`,
                     data: {
                         empresaId: empresaId,
-                        nroDocumentoIdentidad: pageMantenimientoFactura.ObtenerFiltroClienteNroDocumentoIdentidad,
-                        razonSocial: pageMantenimientoFactura.ObtenerFiltroClienteNombres
+                        nroDocumentoIdentidad: pageMantenimientoBoleta.ObtenerFiltroClienteNroDocumentoIdentidad,
+                        razonSocial: pageMantenimientoBoleta.ObtenerFiltroClienteNombres
                     }
                 };
 
@@ -120,7 +120,7 @@ const pageMantenimientoFactura = {
                     { data: "RazonSocial" },
                     {
                         data: "ClienteId", render: function (data, type, row) {
-                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoFactura.BtnSeleccionarClienteClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
+                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoBoleta.BtnSeleccionarClienteClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
                         }
                     },
                 ];
@@ -136,7 +136,7 @@ const pageMantenimientoFactura = {
         bootbox.dialog({
             title: "Nuevo Cliente",
             message:
-                `<form id="frm-factura-cliente-nuevo" autocomplete="off">
+                `<form id="frm-boleta-cliente-nuevo" autocomplete="off">
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -161,13 +161,13 @@ const pageMantenimientoFactura = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Departamento</label>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbDepartamentoChange()"></select>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoBoleta.CmbDepartamentoChange()"></select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Provincia</label>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbProvinciaChange()"></select>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoBoleta.CmbProvinciaChange()"></select>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -196,12 +196,12 @@ const pageMantenimientoFactura = {
                     <!--<div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoFactura.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
+                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoBoleta.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoFactura.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
+                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoBoleta.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
                             </div>
                         </div>
                     </div>-->
@@ -212,7 +212,7 @@ const pageMantenimientoFactura = {
                     label: 'Guardar y Seleccionar',
                     className: 'btn-success',
                     callback: function () {
-                        $("#frm-factura-cliente-nuevo").trigger("submit");
+                        $("#frm-boleta-cliente-nuevo").trigger("submit");
                         return false;
                     },
 
@@ -221,7 +221,7 @@ const pageMantenimientoFactura = {
                     label: 'Cancelar',
                     classname: 'btn-danger',
                     callback: function () {
-                        pageMantenimientoFactura.BtnCierraNuevoCliente();
+                        pageMantenimientoBoleta.BtnCierraNuevoCliente();
                     }
                 }
             },
@@ -229,17 +229,17 @@ const pageMantenimientoFactura = {
                 $(e.currentTarget).attr("id", "modal-nuevo-cliente");
 
                 $("#modal-nuevo-cliente").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
-                pageMantenimientoFactura.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
-                pageMantenimientoFactura.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoBoleta.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoBoleta.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
-                pageMantenimientoFactura.CmbDepartamentoChange();
-                pageMantenimientoFactura.ValidarClienteNuevo();
+                pageMantenimientoBoleta.CmbDepartamentoChange();
+                pageMantenimientoBoleta.ValidarClienteNuevo();
                 //$("#btn-buscar-cliente-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-cliente", ajax, columns));
                 //$("#btn-buscar-cliente-dialog").trigger("click");
             },
@@ -248,7 +248,7 @@ const pageMantenimientoFactura = {
         });
     },
     BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
-        pageMantenimientoFactura.LlenarDatosCliente(data);
+        pageMantenimientoBoleta.LlenarDatosCliente(data);
         $(modal).modal('hide');
     },
 
@@ -256,19 +256,19 @@ const pageMantenimientoFactura = {
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
         let ProvinciaFiltro = provinciaLista.filter(x => x.DepartamentoId == departamentoId);
-        pageMantenimientoFactura.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+        pageMantenimientoBoleta.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
-        pageMantenimientoFactura.CmbProvinciaChange();
+        pageMantenimientoBoleta.CmbProvinciaChange();
     },
 
     CmbProvinciaChange: function () {
         let provinciaId = $("#cmb-cliente-provincia-nuevo").val();
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
-        pageMantenimientoFactura.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+        pageMantenimientoBoleta.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
     },
     LlenarDatosCliente(data) {
-        pageMantenimientoFactura.LimpiarDatosCliente();
+        pageMantenimientoBoleta.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
         $("#cmb-tipo-documento-identidad-cliente").val(data.TipoDocumentoIdentidadId).trigger('change');
         $("#txt-numero-documento-identidad-cliente").val(data.NroDocumentoIdentidad);
@@ -294,7 +294,7 @@ const pageMantenimientoFactura = {
                                 </label>
                             </div>`,
             message:
-                `<form id="frm-factura-detalle" autocomplete="off">
+                `<form id="frm-boleta-detalle" autocomplete="off">
                     ${(id == null ? "" : `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
                     <div class="row">
                         <div class="col-sm-4">
@@ -401,7 +401,7 @@ const pageMantenimientoFactura = {
                     label: 'Guardar',
                     className: 'btn-primary',
                     callback: function () {
-                        $("#frm-factura-detalle").trigger("submit");
+                        $("#frm-boleta-detalle").trigger("submit");
                         return false;
                     },
 
@@ -410,16 +410,16 @@ const pageMantenimientoFactura = {
             onShow: function (e) {
                 $(e.currentTarget).attr("id", "modal-detalle-agregar");
 
-                pageMantenimientoFactura.ResponseTipoProductoListar(tipoProductoLista);
-                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoFactura.RbtDetalleTipoProductoChange);
+                pageMantenimientoBoleta.ResponseTipoProductoListar(tipoProductoLista);
+                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoBoleta.RbtDetalleTipoProductoChange);
 
-                $("#chk-detalle-avanzado").change(pageMantenimientoFactura.ChkDetalleAvanzado);
+                $("#chk-detalle-avanzado").change(pageMantenimientoBoleta.ChkDetalleAvanzado);
 
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
 
-                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoFactura.CalcularImporteTotal);
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoBoleta.CalcularImporteTotal);
 
                 $("#cmb-detalle-codigo").select2({
                     allowClear: true,
@@ -441,7 +441,7 @@ const pageMantenimientoFactura = {
                     }
                 });
 
-                $("#cmb-detalle-codigo").change(pageMantenimientoFactura.CmbDetalleCodigoChange);
+                $("#cmb-detalle-codigo").change(pageMantenimientoBoleta.CmbDetalleCodigoChange);
 
                 $("#cmb-detalle-codigo-sunat").select2({ tags: true, placeholder: 'Ingrese Código Sunat', dropdownParent: $("#modal-detalle-agregar") });
 
@@ -465,17 +465,17 @@ const pageMantenimientoFactura = {
                     }
                 });
 
-                $("#cmb-detalle-descripcion").change(pageMantenimientoFactura.CmbDetalleDescripcionChange);
+                $("#cmb-detalle-descripcion").change(pageMantenimientoBoleta.CmbDetalleDescripcionChange);
 
-                pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+                pageMantenimientoBoleta.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
                 //$("input[name='rbt-detalle-tipo-producto']").trigger("change");
 
-                pageMantenimientoFactura.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
+                pageMantenimientoBoleta.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
 
                 let registroExiste = id != null;
 
                 if (registroExiste == true) {
-                    let index = detalleLista.findIndex(x => x.FacturaDetalleId == id);
+                    let index = detalleLista.findIndex(x => x.BoletaDetalleId == id);
                     let data = detalleLista[index];
 
                     let optionDefault = new Option(data.Descripcion, data.ProductoId, true, true);
@@ -485,7 +485,7 @@ const pageMantenimientoFactura = {
                     $("#txt-detalle-precio-unitario").val(data.PrecioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     $("#txt-detalle-importe-total").val(data.ImporteTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 }
-                pageMantenimientoFactura.ValidarDetalle();
+                pageMantenimientoBoleta.ValidarDetalle();
             },
             animateIn: 'zoomInDown',
             animateOut: 'zoomOutUp'
@@ -510,11 +510,11 @@ const pageMantenimientoFactura = {
             callback: function (result) {
                 if (result == true) {
                     //debugger;
-                    let index = detalleLista.findIndex(x => x.FacturaDetalleId == id);
-                    if (detalleLista[index].FacturaDetalleId > 0) detalleListaEliminados.push(detalleLista[index].FacturaDetalleId);
+                    let index = detalleLista.findIndex(x => x.BoletaDetalleId == id);
+                    if (detalleLista[index].BoletaDetalleId > 0) detalleListaEliminados.push(detalleLista[index].BoletaDetalleId);
                     detalleLista.splice(index, 1);
-                    pageMantenimientoFactura.ListarDetalle();
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                    pageMantenimientoBoleta.ListarDetalle();
+                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 }
             }
         })
@@ -548,7 +548,7 @@ const pageMantenimientoFactura = {
         let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
         $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoBoleta.CargarOtrosCamposProducto(data);
     },
 
     CmbDetalleDescripcionChange: function () {
@@ -563,7 +563,7 @@ const pageMantenimientoFactura = {
         let optionDefaultCodigo = new Option(data.Codigo, data.ProductoId, true, true);
         $("#cmb-detalle-codigo").append(optionDefaultCodigo);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoBoleta.CargarOtrosCamposProducto(data);
     },
 
     CargarOtrosCamposProducto(data) {
@@ -574,20 +574,20 @@ const pageMantenimientoFactura = {
             $("#cmb-detalle-codigo-sunat").append(optionDefaultCodigoSunat);
         }
 
-        //pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        //pageMantenimientoBoleta.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
         $("#cmb-detalle-unidad-medida").val(data.UnidadMedidaId).trigger("change");
         $("#cmb-detalle-tipo-afectacion-igv").val(data.TipoAfectacionIgvId).trigger("change");
     },
 
     RbtDetalleTipoProductoChange: function () {
-        pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        pageMantenimientoBoleta.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
     },
 
     ListarDetalle: function () {
         detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
         $("#hdn-detalle").val(detalleLista.length);
-        pageMantenimientoFactura.MostrarTotales();
+        pageMantenimientoBoleta.MostrarTotales();
     },
 
     MostrarTotales: function () {
@@ -596,7 +596,7 @@ const pageMantenimientoFactura = {
     },
 
     Validar: function () {
-        $("#frm-factura-mantenimiento")
+        $("#frm-boleta-mantenimiento")
             .bootstrapValidator({
                 excluded: [],
                 fields: {
@@ -623,11 +623,11 @@ const pageMantenimientoFactura = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoFactura.EnviarFormulario();
+                pageMantenimientoBoleta.EnviarFormulario();
             });
     },
     ValidarClienteNuevo: function () {
-        $("#frm-factura-cliente-nuevo")
+        $("#frm-boleta-cliente-nuevo")
             .bootstrapValidator({
                 fields: {
                     "cmb-cliente-tipo-documento-identidad-nuevo": {
@@ -764,11 +764,11 @@ const pageMantenimientoFactura = {
             .on('success.form.bv', function (e) {
                 e.preventDefault();
                 
-                pageMantenimientoFactura.BtnGuardarySeleccionar();
+                pageMantenimientoBoleta.BtnGuardarySeleccionar();
             });
     },
     ValidarDetalle: function () {
-        $("#frm-factura-detalle")
+        $("#frm-boleta-detalle")
             .bootstrapValidator({
                 fields: {
                     "cmb-detalle-descripcion": {
@@ -799,14 +799,14 @@ const pageMantenimientoFactura = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoFactura.GuardarDetalle();
+                pageMantenimientoBoleta.GuardarDetalle();
                 $("#modal-detalle-agregar").modal('hide');
             });
     },
 
     GuardarDetalle: function () {
-        let facturaDetalleId = pageMantenimientoFactura.ObtenerFacturaDetalleId();
-        let detalleExiste = detalleLista.some(x => x.FacturaDetalleId == facturaDetalleId);
+        let boletaDetalleId = pageMantenimientoBoleta.ObtenerBoletaDetalleId();
+        let detalleExiste = detalleLista.some(x => x.BoletaDetalleId == boletaDetalleId);
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let unidadMedidaId = $("#cmb-detalle-unidad-medida").val();
@@ -831,7 +831,7 @@ const pageMantenimientoFactura = {
         let totalImporte = tipoAfectacionIgv.FlagGratuito ? 0 : Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
         let data = {
-            FacturaDetalleId: facturaDetalleId,
+            BoletaDetalleId: boletaDetalleId,
             TipoProductoId: tipoProductoId,
             Cantidad: cantidad,
             UnidadMedidaId: unidadMedidaId,
@@ -859,22 +859,22 @@ const pageMantenimientoFactura = {
         }
 
         if (detalleExiste == true) {
-            let index = detalleLista.findIndex(x => x.FacturaDetalleId == facturaDetalleId);
+            let index = detalleLista.findIndex(x => x.BoletaDetalleId == boletaDetalleId);
             detalleLista[index] = Object.assign(detalleLista[index], data);
         }
         else detalleLista.push(data);
 
-        pageMantenimientoFactura.ListarDetalle();
+        pageMantenimientoBoleta.ListarDetalle();
     },
 
-    ObtenerFacturaDetalleId: function () {
-        let facturaDetalleId = $("#hdn-detalle-id").val();
-        if (facturaDetalleId != null) return Number(facturaDetalleId);
+    ObtenerBoletaDetalleId: function () {
+        let boletaDetalleId = $("#hdn-detalle-id").val();
+        if (boletaDetalleId != null) return Number(boletaDetalleId);
 
-        let listaIdNegativos = detalleLista.filter(x => x.FacturaDetalleId < 0);
-        facturaDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.FacturaDetalleId).sort((a, b) => a - b)[0];
-        facturaDetalleId--;
-        return facturaDetalleId;
+        let listaIdNegativos = detalleLista.filter(x => x.BoletaDetalleId < 0);
+        boletaDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.BoletaDetalleId).sort((a, b) => a - b)[0];
+        boletaDetalleId--;
+        return boletaDetalleId;
     },
 
     CalcularImporteTotal: function () {
@@ -907,16 +907,16 @@ const pageMantenimientoFactura = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdBoleta}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdBoleta}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
             fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`),
             fetch(`${urlRoot}api/formapago/listar-formapago`),
-            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdBoleta}`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
             fetch(`${urlRoot}api/provincia/listar-provincia`),
             fetch(`${urlRoot}api/distrito/listar-distrito`)
@@ -938,26 +938,26 @@ const pageMantenimientoFactura = {
                 provinciaLista = ProvinciaLista || [];
                 distritoLista = DistritoLista || [];
 
-                pageMantenimientoFactura.ResponseSerieListar(serieLista);
-                pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
-                pageMantenimientoFactura.ResponseTipoOperacionVentaListar(tipoOperacionVentaLista);
-                pageMantenimientoFactura.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
-                pageMantenimientoFactura.ResponseFormaPagoListar(formaPagoLista);
-                pageMantenimientoFactura.ResponseFormatoListar(formatoLista);
+                pageMantenimientoBoleta.ResponseSerieListar(serieLista);
+                pageMantenimientoBoleta.ResponseMonedaListar(monedaLista);
+                pageMantenimientoBoleta.ResponseTipoOperacionVentaListar(tipoOperacionVentaLista);
+                pageMantenimientoBoleta.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
+                pageMantenimientoBoleta.ResponseFormaPagoListar(formaPagoLista);
+                pageMantenimientoBoleta.ResponseFormatoListar(formatoLista);
                 if (typeof fnNext == "function") fnNext();
             })
     },
 
     ObtenerDatos: function () {
-        if (facturaId != null) {
+        if (boletaId != null) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-            let url = `${urlRoot}api/factura/obtener-factura?empresaId=${empresaId}&facturaId=${facturaId}`;
+            let url = `${urlRoot}api/boleta/obtener-boleta?empresaId=${empresaId}&boletaId=${boletaId}`;
             let init = { method: 'GET' };
 
             fetch(url, init)
                 .then(common.ResponseToJson)
-                .then(pageMantenimientoFactura.ResponseObtenerDatos);
+                .then(pageMantenimientoBoleta.ResponseObtenerDatos);
         }
     },
 
@@ -990,12 +990,12 @@ const pageMantenimientoFactura = {
             RazonSocial: $("#txt-nombres-completos-cliente").val(),
             Direccion: $("#txt-direccion-cliente").val()
         };
-        let totalGravado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalInafecto = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExportacion = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalGratuito = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGravado = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExonerado = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalInafecto = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExportacion = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGratuito = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalIGV = detalleLista.map(x => x.IGV).reduce((a, b) => a + b, 0);
         let totalISC = detalleLista.map(x => x.ISC).reduce((a, b) => a + b, 0);
         let totalOtrosCargos = 0;
@@ -1017,7 +1017,7 @@ const pageMantenimientoFactura = {
 
         let ObjectoJson = {
             EmpresaId: empresaId,
-            FacturaId: facturaId,
+            BoletaId: boletaId,
             SedeId: sedeId,
             SerieId: serieId,
             Serie: serie,
@@ -1069,18 +1069,18 @@ const pageMantenimientoFactura = {
             TipoTributoOtrosTributos: tipoTributoOth,
             AmbienteSunatId: ambienteSunatId,
             Usuario: user.Nombre,
-            ListaFacturaDetalle: detalleLista,
-            ListaFacturaDetalleEliminados: detalleListaEliminados
+            ListaBoletaDetalle: detalleLista,
+            ListaBoletaDetalleEliminados: detalleListaEliminados
         }
 
-        let url = `${urlRoot}api/factura/guardar-factura`;
+        let url = `${urlRoot}api/boleta/guardar-boleta`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoFactura.ResponseEnviarFormulario);
+            .then(pageMantenimientoBoleta.ResponseEnviarFormulario);
     },
 
     ResponseEnviarFormulario: function (data) {
@@ -1106,7 +1106,7 @@ const pageMantenimientoFactura = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Facturas`
+                    location.href = `${urlRoot}Boletas`
                 }
             }
         });
@@ -1117,10 +1117,10 @@ const pageMantenimientoFactura = {
         $("#cmb-serie").val(data.SerieId).trigger("change");
         $("#cmb-moneda").val(data.MonedaId).trigger("change");
         $("#txt-nro-comprobante").val(data.NroComprobante.toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, ''));
-        pageMantenimientoFactura.LlenarDatosCliente(data.Cliente);
-        pageMantenimientoFactura.LlenarDatosPersonal(data.Personal);
-        detalleLista = data.ListaFacturaDetalle;
-        pageMantenimientoFactura.ListarDetalle();
+        pageMantenimientoBoleta.LlenarDatosCliente(data.Cliente);
+        pageMantenimientoBoleta.LlenarDatosPersonal(data.Personal);
+        detalleLista = data.ListaBoletaDetalle;
+        pageMantenimientoBoleta.ListarDetalle();
     },
 
     ResponseSerieListar: function (data) {
@@ -1230,7 +1230,7 @@ const pageMantenimientoFactura = {
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
-        pageMantenimientoFactura.datosclienteNuevo = {
+        pageMantenimientoBoleta.datosclienteNuevo = {
             ClienteId: clienteId,
             EmpresaId: empresaId,
             TipoDocumentoIdentidadId: tipodocumentoidentidadId,
@@ -1244,13 +1244,13 @@ const pageMantenimientoFactura = {
             Usuario: user
         }
         let url = `${urlRoot}api/cliente/guardar-cliente`;
-        let params = JSON.stringify(pageMantenimientoFactura.datosclienteNuevo);
+        let params = JSON.stringify(pageMantenimientoBoleta.datosclienteNuevo);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoFactura.ResponseClienteNuevoGuardar);
+            .then(pageMantenimientoBoleta.ResponseClienteNuevoGuardar);
         
     },
     ResponseClienteNuevoGuardar: function (data) {
@@ -1260,9 +1260,9 @@ const pageMantenimientoFactura = {
             //$("#hdn-cliente-id").val(data);
             tipo = "success";
             mensaje = "¡Se ha guardado y seleccionado con éxito!";
-            pageMantenimientoFactura.datosclienteNuevo.ClienteId = data;
-            pageMantenimientoFactura.BtnSeleccionarClienteClick(pageMantenimientoFactura.datosclienteNuevo,"#modal-nuevo-cliente");
-            pageMantenimientoFactura.BtnCierraNuevoCliente();
+            pageMantenimientoBoleta.datosclienteNuevo.ClienteId = data;
+            pageMantenimientoBoleta.BtnSeleccionarClienteClick(pageMantenimientoBoleta.datosclienteNuevo,"#modal-nuevo-cliente");
+            pageMantenimientoBoleta.BtnCierraNuevoCliente();
         } else {
             tipo = "danger";
             mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
@@ -1281,13 +1281,13 @@ const pageMantenimientoFactura = {
             timer: 1800,
             onHide: function () {
                 //if (data == true) {
-                //    location.href = `${urlRoot}Facturas`
+                //    location.href = `${urlRoot}Boletas`
                 //}
             }
         });
     },
     LimpiarDatosClienteNuevo: function () {
-        pageMantenimientoFactura.datosclienteNuevo = {
+        pageMantenimientoBoleta.datosclienteNuevo = {
             ClienteId: 0,
             EmpresaId: 0,
             TipoDocumentoIdentidadId: 0,
