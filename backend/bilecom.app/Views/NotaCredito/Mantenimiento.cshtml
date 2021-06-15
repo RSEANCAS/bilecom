@@ -18,10 +18,57 @@
             <h2 class="page-header text-overflow">@ViewBag.Titulo</h2>
         </div>
     </div>
-    <form id="frm-factura-mantenimiento" name="frm-factura-mantenimiento" method="post">
+    <form id="frm-notacredito-mantenimiento" name="frm-notacredito-mantenimiento" method="post">
         <div id="page-content">
             <div class="panel">
                 <div class="panel-body">
+                    <div class="panel panel-bordered panel-dark">
+                        <div class="panel-heading">
+                            <div class="panel-control">
+                                <button id="btn-buscar-comprobante-venta" class="btn btn-default" type="button">
+                                    <i class="ion-search"></i>
+                                    <span>Buscar</span>
+                                </button>
+                            </div>
+                            <h3 class="panel-title">Datos del Comprobante de Venta</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-cliente" id="cmb-tipo-documento-identidad-cliente" data-bv-field="cmb-tipo-documento-identidad-cliente" tabindex="-1" aria-hidden="false" disabled></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
+                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-cliente" id="txt-numero-documento-identidad-cliente" data-bv-field="txt-numero-documento-identidad-cliente" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
+                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-cliente" id="txt-nombres-completos-cliente" data-bv-field="txt-nombres-completos-cliente" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
+                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-cliente" id="txt-direccion-cliente" data-bv-field="txt-direccion-cliente" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group pad-no mar-no">
+                                        <input type="hidden" id="hdn-cliente-id" name="hdn-cliente-id" data-bv-field="hdn-cliente-id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="panel panel-bordered panel-dark">
                         <div class="panel-heading">
                             <h3 class="panel-title">Datos Generales</h3>
@@ -63,20 +110,8 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Operación</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-operacion-venta" id="cmb-tipo-operacion-venta" data-bv-field="cmb-tipo-operacion-venta" tabindex="-1" aria-hidden="false"></select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Moneda</span>
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-moneda" id="cmb-moneda" data-bv-field="cmb-moneda" tabindex="-1" aria-hidden="false"></select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Forma de Pago</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-forma-pago" id="cmb-forma-pago" data-bv-field="cmb-forma-pago" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -179,13 +214,13 @@
                                 <table class="table invoice-total">
                                     <tbody>
                                         @*<tr>
-                                                <td><strong>Sub Total :</strong></td>
-                                                <td>$538.06</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>TAX :</strong></td>
-                                                <td>$73.98</td>
-                                            </tr>*@
+                                <td><strong>Sub Total :</strong></td>
+                                <td>$538.06</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TAX :</strong></td>
+                                <td>$73.98</td>
+                            </tr>*@
                                         <tr>
                                             <td><strong>TOTAL :</strong></td>
                                             <td id="lbl-total-importe" class="text-bold h4">0.00</td>
@@ -209,7 +244,7 @@
                             <button class="btn btn-success col-sm-12" id="btn-guardar" name="btn-guardar" type="submit">Guardar</button>
                         </div>
                         <div class="col-sm-3">
-                            <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/Facturas")">Cancelar</a>
+                            <a class="btn btn-danger col-sm-12" id="btn-cancelar" name="btn-cancelar" href="@Url.Content("~/NotasCredito")">Cancelar</a>
                         </div>
                     </div>
                 </div>
@@ -225,10 +260,10 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/switchery/switchery.min.js")"></script>
-    <script src="@Url.Content("~/Assets/js/pages/mantenimientofactura.js")"></script>
+    <script src="@Url.Content("~/Assets/js/pages/mantenimientonotacredito.js")"></script>
     <script>
-        const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
-        const facturaId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
+        const tipoComprobanteIdNotaCredito = @((int)Enums.TipoComprobante.NotaCredito);
+        const notaCreditoId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
 
         const tipoTributoIdIgv = @((int)Enums.TipoTributo.Igv);
         const tipoTributoIdIsc = @((int)Enums.TipoTributo.Isc);
@@ -245,7 +280,7 @@
         const tdiPasaporte = "@((int)Enums.TipoDocumentoIdentidad.Pasaporte)"
 
         $(document).ready(function () {
-            pageMantenimientoFactura.Init();
+            pageMantenimientoNotaCredito.Init();
         });
     </script>
 }

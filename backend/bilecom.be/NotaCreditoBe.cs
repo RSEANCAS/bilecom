@@ -31,15 +31,29 @@ namespace bilecom.be
         public int ComprobanteId { get; set; }
         public decimal TotalGravado { get; set; }
         public decimal TotalExonerado { get; set; }
+        public int? TipoTributoIdExonerado { get; set; }
+        public TipoTributoBe TipoTributoExonerado { get; set; }
         public decimal TotalInafecto { get; set; }
+        public int? TipoTributoIdInafecto { get; set; }
+        public TipoTributoBe TipoTributoInafecto { get; set; }
         public decimal TotalExportacion { get; set; }
+        public int? TipoTributoIdExportacion { get; set; }
+        public TipoTributoBe TipoTributoExportacion { get; set; }
         public decimal TotalGratuito { get; set; }
+        public int? TipoTributoIdGratuito { get; set; }
+        public TipoTributoBe TipoTributoGratuito { get; set; }
         public decimal TotalVentaArrozPilado { get; set; }
         public decimal TotalIgv { get; set; }
+        public int? TipoTributoIdIgv { get; set; }
+        public TipoTributoBe TipoTributoIgv { get; set; }
         public decimal TotalIsc { get; set; }
+        public int? TipoTributoIdIsc { get; set; }
+        public TipoTributoBe TipoTributoIsc { get; set; }
         public decimal TotalOtrosTributos { get; set; }
-        public decimal TotalOtrosCargos { get; set; }
+        public int? TipoTributoIdOtrosTributos { get; set; }
+        public TipoTributoBe TipoTributoOtrosTributos { get; set; }
         public decimal TotalBaseImponible { get; set; }
+        public decimal TotalOtrosCargos { get; set; }
         public decimal TotalDescuentos { get; set; }
         public decimal ImporteTotal { get; set; }
         public string ImporteTotalEnLetras { get; set; }
