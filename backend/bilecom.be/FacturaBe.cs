@@ -58,11 +58,11 @@ namespace bilecom.be
         public decimal TotalIsc { get; set; }
         public int? TipoTributoIdIsc { get; set; }
         public TipoTributoBe TipoTributoIsc { get; set; }
-        public decimal TotalOtrosCargos { get; set; }
         public decimal TotalOtrosTributos { get; set; }
         public int? TipoTributoIdOtrosTributos { get; set; }
         public TipoTributoBe TipoTributoOtrosTributos { get; set; }
         public decimal TotalBaseImponible { get; set; }
+        public decimal TotalOtrosCargos { get; set; }
         public decimal TotalDescuentos { get; set; }
         public decimal PorcentajeOtrosCargosGlobal { get; set; }
         public decimal TotalOtrosCargosGlobal { get; set; }

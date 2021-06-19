@@ -42,7 +42,8 @@
     ResponseTipoComprobanteListar: function (data) {
         $("#cmb-tipo-comprobante").empty();
         let datatipocomprobante = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoComprobanteId, text: item.Nombre }); });
-        $("#cmb-tipo-comprobante").select2({ data: datatipocomprobante, width: '100%', placeholder: '[TODOS...]' });
+        $("#cmb-tipo-comprobante").select2({ data: datatipocomprobante, width: '100%', placeholder: '[TODOS...]', allowClear: true });
+        $("#cmb-tipo-comprobante").val(null).trigger("change");
     },
 
     CreateDataTable: function (id) {

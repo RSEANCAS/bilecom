@@ -397,6 +397,8 @@
     <Content Include="Assets\js\pages\configuracion.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\boleta.js" />
+    <Content Include="Assets\js\pages\mantenimientofactura - Copia.js" />
+    <Content Include="Assets\js\pages\notacredito.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
     <Content Include="Assets\js\pages\InicioRecuperacionContrasena.js" />
@@ -407,7 +409,7 @@
     <Content Include="Assets\js\pages\mantenimientocotizacion.js" />
     <Content Include="Assets\js\pages\mantenimientoboleta.js" />
     <Content Include="Assets\js\pages\mantenimientomovimiento.js" />
-    <Content Include="Assets\js\pages\mantenimientofactura.js" />
+    <Content Include="Assets\js\pages\mantenimientonotacredito.js" />
     <Content Include="Assets\js\pages\mantenimientosede.js" />
     <Content Include="Assets\js\pages\mantenimientoserie.js" />
     <Content Include="Assets\js\pages\mantenimientotiposede.js" />
@@ -2838,6 +2840,7 @@
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\EmpresaConfiguracionController.cs" />
     <Compile Include="Controllers\Api\BoletaController.cs" />
+    <Compile Include="Controllers\Api\NotaCreditoController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\FormaPagoController.cs" />
     <Compile Include="Controllers\Api\FormatoController.cs" />
@@ -2883,6 +2886,8 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\InicioController.cs" />
     <Compile Include="Controllers\MovimientoController.cs" />
+    <Compile Include="Controllers\NotaCreditoController.cs" />
+    <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProveedorController.cs" />
@@ -3211,6 +3216,8 @@
     <Content Include="Views\Kardex\Index.cshtml" />
     <Content Include="Views\Boleta\Index.cshtml" />
     <Content Include="Views\Boleta\Mantenimiento.cshtml" />
+    <Content Include="Views\NotaCredito\Index.cshtml" />
+    <Content Include="Views\NotaCredito\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3221,6 +3228,7 @@
   <ItemGroup>
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\NotaDebito\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
