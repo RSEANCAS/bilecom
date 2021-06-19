@@ -4,10 +4,12 @@
             this.InitEvents();
             this.Validar();
         });
+        
     },
 
     InitEvents: function () {
         pageMantenimientoSerie.ObtenerDatos();
+        $("#cmb-tipo-comprobante").change();
     },
 
     Validar: function () {
@@ -23,12 +25,17 @@
                     },
                     "txt-serial": {
                         validators: {
+                            stringLength: {
+                                min: 3,
+                                max: 3,
+                                message: "Máximo 3 dígitos."
+                            },
                             notEmpty: {
                                 message: "Debe ingresar Serial.",
                             },
                             regexp: {
-                                regexp: /^[a-zA-Z0-9]{1}?[0-9]{3}?$/g,
-                                message: 'Solo puede ingresar caracteres numericos'
+                                regexp: /^[a-zA-Z0-9]/,
+                                message: 'Solo puede ingresar caracteres alfanumericos'
                             }
                         }
                     },
@@ -40,6 +47,24 @@
                             regexp: {
                                 regexp: /^[0-9]/,
                                 message: 'Solo puede ingresar caracteres numericos'
+                            }
+                            
+                        }
+                    },
+                    "cmb-tipo-comprobante-referencia": {
+                        validators: {
+                            callback: {
+                                message: "Debe seleccionar tipo de comprobante de referencia.",
+                                callback: function (value, validator, $field) {
+                                    let l = $("#cmb-tipo-comprobante").val();
+                                    if (l == 3 || l==4) {
+                                        if ($("#cmb-tipo-comprobante-referencia").val().trim() == "") {
+                                            return false;
+                                        }
+                                        else { return true; }
+                                    }
+                                    else { return true; }
+                                }
                             }
                         }
                     }
@@ -72,7 +97,7 @@
             .then(r => Promise.all(r.map(x => x.json())))
             .then(([TipoComprobanteLista]) => {
                 pageMantenimientoSerie.ResponseTipoComprobanteListar(TipoComprobanteLista || []);
-
+                pageMantenimientoSerie.ResponseTipoComprobanteReferenciaListar(TipoComprobanteLista || []);
                 if (typeof fn == 'function') fn();
             })
     },
@@ -80,7 +105,7 @@
     EnviarFormulario: function () {
         let serieId = $("#txt-opcion").val();
         let tipocomprobanteId = $("#cmb-tipo-comprobante").val();
-        let serial = $("#txt-serial").val();
+        let serial = $("#txt-identificador").val().trim()+""+$("#txt-serial").val().trim();
         let valorinicial = $("#txt-valor-inicial").val();
         let valorfinal = $("#txt-valor-final").val();
         let valoractual = $("#txt-valor-actual").val();
@@ -88,6 +113,7 @@
         flagSinFinal = Boolean(flagSinFinal);
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
+        let tipocomprobantereferenciaId = $("#cmb-tipo-comprobante-referencia").val();
 
         let ObjectoJson = {
             SerieId: serieId,
@@ -99,7 +125,8 @@
             ValorFinal: valorfinal,
             ValorActual: valoractual,
             FlagSinFinal: flagSinFinal,
-            Usuario: user
+            Usuario: user,
+            TipoComprobanteReferenciaId: tipocomprobantereferenciaId
         }
 
         let url = `${urlRoot}api/serie/guardar-serie`;
@@ -153,5 +180,35 @@
         $("#cmb-tipo-comprobante").empty();
         let datatipocomprobante = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoComprobanteId, text: item.Nombre }); });
         $("#cmb-tipo-comprobante").select2({ data: datatipocomprobante, width: '100%', placeholder: '[TODOS...]' });
+    },
+    ResponseTipoComprobanteReferenciaListar: function (data) {
+        $("#cmb-tipo-comprobante-referencia").empty();
+        data = data.filter(x => x.TipoComprobanteId == 1 || x.TipoComprobanteId == 2);
+        let datatipocomprobantereferencia = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoComprobanteId, text: item.Nombre }); });
+        $("#cmb-tipo-comprobante-referencia").select2({ data: datatipocomprobantereferencia, width: '100%', placeholder: '[TODOS...]' });
+    },
+    CmbChangeTipoComprobante: function () {
+        let valorTipoComprobante = $("#cmb-tipo-comprobante").val();
+        if (valorTipoComprobante == 3 || valorTipoComprobante == 4) {
+            $("#namegruporeferencia").show();
+            $("#cmb-tipo-comprobante-referencia").val(1);
+            $("#cmb-tipo-comprobante-referencia").change();
+        }else
+        {
+            $("#cmb-tipo-comprobante-referencia").val("");
+            $("#namegruporeferencia").hide();
+        }
     }
+
 }
+
+$("#cmb-tipo-comprobante").change(function () {
+    let data = $("#cmb-tipo-comprobante").select2('data');
+    $("#txt-identificador").val(data[0].IdentificadorSerie);
+    pageMantenimientoSerie.CmbChangeTipoComprobante();
+})
+
+$("#cmb-tipo-comprobante-referencia").change(function () {
+    let data = $("#cmb-tipo-comprobante-referencia").select2('data');
+    $("#txt-identificador").val(data[0].IdentificadorSerie);
+})

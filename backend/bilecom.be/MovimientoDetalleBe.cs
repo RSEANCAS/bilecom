@@ -17,6 +17,7 @@ namespace bilecom.be
         public decimal PrecioUnitario { get; set; }
         public decimal TotalImporte { get; set; }
         public string Usuario { get; set; }
+        public bool FlagFechaVencimiento { get; set; }
         public DateTime FechaVencimiento{ get; set; }
     }
 }

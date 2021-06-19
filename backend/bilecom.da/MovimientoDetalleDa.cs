@@ -62,6 +62,7 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@Cantidad", registro.Cantidad.GetNullable());
                     cmd.Parameters.AddWithValue("@PrecioUnitario", registro.PrecioUnitario.GetNullable());
                     cmd.Parameters.AddWithValue("@TotalImporte", registro.TotalImporte.GetNullable());
+                    cmd.Parameters.AddWithValue("@FlagFechaVencimiento", registro.FlagFechaVencimiento.GetNullable());
                     cmd.Parameters.AddWithValue("@FechaVencimiento", registro.FechaVencimiento.GetNullable());
                     cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
 

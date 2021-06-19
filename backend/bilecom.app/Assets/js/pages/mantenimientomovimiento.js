@@ -17,9 +17,10 @@ const columnsDetalle = [
         }
     },
 ];
+
 const pageMantenimientoMovimiento = {
     Init: function () {
-        
+
         common.ConfiguracionDataTable();
         this.CargarCombo(() => {
             this.Validar();
@@ -448,7 +449,7 @@ const pageMantenimientoMovimiento = {
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de Vencimiento</font></font></span>
                                 <div class="input-group date">
-                                    <input type="text" id="txt-fecha-vencimiento" class="form-control">
+                                    <input type="text" id="txt-fecha-vencimiento" class="form-control" readonly>
                                     <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
                                 </div>
                             </div>
@@ -484,6 +485,8 @@ const pageMantenimientoMovimiento = {
                 }
             },
             onShow: function (e) {
+                $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual, language: 'es' });
+
                 $("#txt-detalle-almacen").val($("#cmb-almacen").text());
 
                 $(e.currentTarget).attr("id", "modal-detalle-agregar");
@@ -769,7 +772,7 @@ const pageMantenimientoMovimiento = {
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
         let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
-        //let fechaVencimiento = $("#txt-fecha-vencimiento").val();
+        let flagFechaVencimiento = $('#chk-activar-fecha-vencimiento').prop("checked"); 
         let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
         let data = {
             MovimientoDetalleId: MovimientoDetalleId,
@@ -778,6 +781,7 @@ const pageMantenimientoMovimiento = {
             Cantidad: cantidad,
             PrecioUnitario: precioUnitario,
             TotalImporte: totalImporte,
+            FlagFechaVencimiento: flagFechaVencimiento,
             FechaVencimiento: fechaVencimiento
         }
 
