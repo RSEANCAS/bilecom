@@ -27,7 +27,7 @@
                                 message: "Debe ingresar Serial.",
                             },
                             regexp: {
-                                regexp: /^[a-zA-Z0-9]{1}?[0-9]{3}?$/g,
+                                regexp: /^[a-zA-Z0-9]{1}?[0-9]{3}?$|^[a-zA-Z0-9]{2}?[0-9]{2}?$/g,
                                 message: 'Solo puede ingresar caracteres numericos'
                             }
                         }

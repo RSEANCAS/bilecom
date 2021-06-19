@@ -9374,22 +9374,41 @@ namespace bilecom.sunat.comprobante.creditnote {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2")]
-    public partial class TimeType {
-        
-        private System.DateTime valueField;
-        
+    //public partial class TimeType {
+
+    //    private System.DateTime valueField;
+
+    //    /// <remarks/>
+    //    [System.Xml.Serialization.XmlTextAttribute(DataType="time")]
+    //    public System.DateTime Value {
+    //        get {
+    //            return this.valueField;
+    //        }
+    //        set {
+    //            this.valueField = value;
+    //        }
+    //    }
+    //}
+    public partial class TimeType
+    {
+
+        private string valueField;
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute(DataType="time")]
-        public System.DateTime Value {
-            get {
+        [System.Xml.Serialization.XmlTextAttribute(DataType = "normalizedString")]
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
