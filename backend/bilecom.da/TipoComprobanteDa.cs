@@ -31,6 +31,7 @@ namespace bilecom.da
                                 item.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
                                 item.Codigo = dr.GetData<string>("Codigo");
                                 item.Nombre = dr.GetData<string>("Nombre");
+                                item.IdentificadorSerie = dr.GetData<string>("IdentificadorSerie");
                                 lista.Add(item);
                             }
                         }

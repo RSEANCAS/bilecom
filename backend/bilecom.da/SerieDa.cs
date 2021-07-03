@@ -123,6 +123,7 @@ namespace bilecom.da
                                 respuesta.ValorFinal = dr.GetData<int>("ValorFinal");
                                 respuesta.FlagSinFinal = dr.GetData<bool>("FlagSinFinal");
                                 respuesta.ValorActual = dr.GetData<int>("ValorActual");
+                                respuesta.TipoComprobanteReferenciaId = dr.GetData<int>("TipoComprobanteReferenciaId");
                             }
                         }
                     }
@@ -147,6 +148,7 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@SerieId", serieBe.SerieId.GetNullable());
                     cmd.Parameters.AddWithValue("@ambienteSunatId", serieBe.AmbienteSunatId.GetNullable());
                     cmd.Parameters.AddWithValue("@TipoComprobanteId", serieBe.TipoComprobanteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@TipoComprobanteReferenciaId", serieBe.TipoComprobanteReferenciaId.GetNullable());
                     cmd.Parameters.AddWithValue("@Serial", serieBe.Serial.GetNullable());
                     cmd.Parameters.AddWithValue("@ValorInicial", serieBe.ValorInicial.GetNullable());
                     cmd.Parameters.AddWithValue("@ValorFinal", serieBe.ValorFinal.GetNullable());
