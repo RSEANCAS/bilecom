@@ -11,6 +11,8 @@ namespace bilecom.app.Controllers
     public class AccesoController : Controller
     {
         TokenBl tokenBl = new TokenBl();
+        EmpresaBl empresaBl = new EmpresaBl();
+        UsuarioBl usuarioBl = new UsuarioBl();
         // GET: RecuperarContrasena
         public ActionResult Index()
         {
@@ -47,7 +49,23 @@ namespace bilecom.app.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.UsuarioId = usuarioId;
+            ViewBag.EmpresaId = empresaId;
+            ViewBag.Token = token;
             return View();
+        }
+        [HttpPost]
+        public ActionResult CambiarContrasena(int usuarioid, int empresaid, string contrasena, string token)
+        {
+            var empresa = empresaBl.ObtenerEmpresa(empresaid);
+            if (empresa == null) return HttpNotFound();
+            var usuario = usuarioBl.ObtenerUsuario(empresaid, usuarioid);
+            if (usuario == null) return HttpNotFound();
+            var seCambio = usuarioBl.CambiarContrasena(empresaid, usuarioid, contrasena, usuario.Nombre);
+
+            if (seCambio) return RedirectToAction("Index", "Login");
+            else return RedirectToAction("RecuperarContrasena", "Acceso", new { token = token });
+
         }
     }
 }

@@ -12,9 +12,10 @@ namespace bilecom.ut
     {
         public bool EnviarCorreo(string correoCliente, string asunto, string html)
         {
+            bool seEnvio = true;
             try
             {
-                bool seEnvio = true;
+                
                 string CorreoEmisor = "antony.lazaroyepez@gmail.com";
                 string password = "laureanoyepez";
                 MailMessage mailMessage = new MailMessage(CorreoEmisor, correoCliente, asunto, html);
@@ -34,7 +35,7 @@ namespace bilecom.ut
             }
             catch (Exception ex)
             {
-
+                seEnvio = false;
                 throw ex;
             }
         }

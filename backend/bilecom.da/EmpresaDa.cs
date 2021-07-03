@@ -99,6 +99,9 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@razonSocial", registro.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@nombreComercial", registro.EmpresaId.GetNullable());
                     cmd.Parameters.AddWithValue("@creadoPor", registro.CreadoPor.GetNullable());
+
+                    int FilaAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = (FilaAfectadas != -1);
                 }
             }
             catch (Exception ex)

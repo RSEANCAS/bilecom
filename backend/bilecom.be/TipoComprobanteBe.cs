@@ -11,5 +11,6 @@ namespace bilecom.be
         public int TipoComprobanteId { get; set; }
         public string Codigo { get; set; }
         public string Nombre { get; set; }
+        public string IdentificadorSerie { get; set; }
     }
 }

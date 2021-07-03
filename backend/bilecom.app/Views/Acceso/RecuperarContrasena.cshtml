@@ -4,7 +4,7 @@
     ViewBag.Title = "RecuperarContrasena";
 }
 
-<h2 style="text-align:center;color:black">RecuperarContraseña</h2>
+<h2 style="text-align:center;color:black">Recuperar Contraseña</h2>
 
 <head>
     <meta charset="utf-8">
@@ -31,14 +31,17 @@
                         <img class="logo-jare" src="@Url.Content("~/Assets/img/logo_bilecom.png")" alt="Background Image" width="150">
                         <p>Bilecom Accesos</p>
                     </div>
-                    <form id="frm-recuperarcontrasena" action="@Url.Content("~/Acceso/RecuperarContrasena")" method="post">
+                    <form id="frm-recuperarcontrasena" action="@Url.Content("~/Acceso/CambiarContrasena")" method="post">
+                        <input type="hidden" name="usuarioid" value="@ViewBag.UsuarioId" />
+                        <input type="hidden" name="empresaid" value="@ViewBag.EmpresaId" />
+                        <input type="hidden" name="token" value="@ViewBag.Token" />
                         <div class="form-group">
-                            <input id="txt-password" name="txt-password" type="text" class="form-control" placeholder="CONTRASEÑA" autofocus>
+                            <input id="contrasena" name="contrasena" type="text" class="form-control" placeholder="CONTRASEÑA" autofocus>
                         </div>
                         <div class="form-group">
-                            <input id="txt-repita-password" name="txt-repita-password" type="text" class="form-control" placeholder="REPITA CONTRASEÑA" autofocus>
+                            <input id="txt-repita-contrasena" name="txt-repita-contrasena" type="text" class="form-control" placeholder="REPITA CONTRASEÑA" autofocus>
                         </div>
-                        <button id="btnCambiar" class="btn btn-primary btn-lg btn-block" type="button">CAMBIAR</button>
+                        <button id="btnCambiar" type="submit" class="btn btn-primary btn-lg btn-block">CAMBIAR</button>
                     </form>
                 </div>
             </div>

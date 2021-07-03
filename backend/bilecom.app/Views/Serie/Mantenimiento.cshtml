@@ -36,10 +36,21 @@
                                 <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-tipo-comprobante" style=""></i>
                             </div>
                         </div>
+                        <div class="col-sm-3" style="display:none" id="namegruporeferencia">
+                            <div class="form-group">
+                                <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo Comprobante Referencia</font></font></span>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-comprobante-referencia" id="cmb-tipo-comprobante-referencia" data-bv-field="cmb-tipo-comprobante-referencia" tabindex="-1" aria-hidden="false">
+                                </select>
+                                <i class="form-control-feedback bv-no-label fa fa-times-circle fa-lg" data-bv-icon-for="cmb-tipo-comprobante-referencia"></i>
+                            </div>
+                        </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">Serial</span>
-                                <input class="form-control" placeholder="Serial" name="txt-serial" id="txt-serial" data-bv-field="txt-serial" required>
+                                <div class="input-group">
+                                    <input class="form-control" style="width:38px !important" placeholder="Serial" name="txt-identificador" id="txt-identificador" data-bv-field="txt-identificador" maxlength="1" required disabled>
+                                    <input class="form-control" style="width:210px !important" placeholder="Serial" name="txt-serial" id="txt-serial" data-bv-field="txt-serial" maxlength="3" required>
+                                </div>
                             </div>
                         </div>
                     </div>

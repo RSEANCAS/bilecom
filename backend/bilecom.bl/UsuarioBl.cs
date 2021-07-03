@@ -1,5 +1,6 @@
 ﻿using bilecom.be;
 using bilecom.da;
+using bilecom.ut;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -45,6 +46,51 @@ namespace bilecom.bl
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return item;
+        }
+        public UsuarioBe ObtenerUsuario(int empresaId,int usuarioId, bool loadListaPerfil = false, bool loadListaOpcionxPerfil = false, bool LoadListaSede = false)
+        {
+            UsuarioBe item = null;
+
+            try
+            {
+                cn.Open();
+
+                item = usuarioDa.Obtener(empresaId, usuarioId, cn);
+                if (item != null)
+                {
+                    if (loadListaPerfil) item.ListaPerfil = perfilDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
+                    if (item.ListaPerfil != null)
+                    {
+                        if (loadListaOpcionxPerfil)
+                        {
+                            foreach (var itemPerfil in item.ListaPerfil)
+                            {
+                                itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, item.EmpresaId.Value, cn);
+                            }
+                        }
+                    }
+                    if (LoadListaSede) item.ListaSede = sedeDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+
+            return item;
+        }
+        public bool CambiarContrasena(int empresaId, int usuarioId, string contrasena, string modificadoPor)
+        {
+            bool seCambio = false;
+            byte[] _contrasena = null;
+            try
+            {
+                cn.Open();
+                _contrasena = Seguridad.MD5Byte(contrasena);
+                seCambio = usuarioDa.CambiarContrasena(empresaId, usuarioId, _contrasena, modificadoPor, cn);
+            }
+            catch (Exception ex) { throw ex; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+
+            return seCambio;
         }
     }
 }
