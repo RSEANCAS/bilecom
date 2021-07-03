@@ -25,10 +25,11 @@
                     <div class="panel panel-bordered panel-dark">
                         <div class="panel-heading">
                             <div class="panel-control">
-                                <button id="btn-buscar-comprobante-venta" class="btn btn-default" type="button">
-                                    <i class="ion-search"></i>
-                                    <span>Buscar</span>
-                                </button>
+                                <label>
+                                    <input type="checkbox" id="chk-comprobante-externo" name="chk-comprobante-externo" />
+                                    Es un comprobante de venta externo
+                                    <span class="add-tooltip" data-toggle="tooltip" data-original-title="Puede ser un comprobante electrónico de sunat o un comprobante físico"><i class="ion-help-circled"></i></span>
+                                </label>
                             </div>
                             <h3 class="panel-title">Datos del Comprobante de Venta</h3>
                         </div>
@@ -36,33 +37,33 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Doc. Identidad</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-documento-identidad-cliente" id="cmb-tipo-documento-identidad-cliente" data-bv-field="cmb-tipo-documento-identidad-cliente" tabindex="-1" aria-hidden="false" disabled></select>
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo Comprobante</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-comprobante" id="cmb-tipo-comprobante" data-bv-field="cmb-tipo-comprobante" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Doc. Identidad</span>
-                                        <input class="form-control" placeholder="N° Doc. Identidad" name="txt-numero-documento-identidad-cliente" id="txt-numero-documento-identidad-cliente" data-bv-field="txt-numero-documento-identidad-cliente" readonly>
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Serie</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-serie-tipo-comprobante" id="cmb-serie-tipo-comprobante" data-bv-field="cmb-serie-tipo-comprobante" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Nombres y/o Razón Social</span>
-                                        <input class="form-control" placeholder="Nombres y/o Razón Social" name="txt-nombres-completos-cliente" id="txt-nombres-completos-cliente" data-bv-field="txt-nombres-completos-cliente" readonly>
+                                        <span class="bg-dark box-block pad-lft pad-rgt">N° Comprobante</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-nro-comprobante" id="cmb-nro-comprobante" data-bv-field="cmb-nro-comprobante" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Dirección</span>
-                                        <input class="form-control" placeholder="Dirección" name="txt-direccion-cliente" id="txt-direccion-cliente" data-bv-field="txt-direccion-cliente" readonly>
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Fecha Emisión</span>
+                                        <input class="form-control" placeholder="Fecha Emisión" name="txt-fecha-emision-comprobante" id="txt-fecha-emision-comprobante" data-bv-field="txt-fecha-emision-comprobante" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group pad-no mar-no">
-                                        <input type="hidden" id="hdn-cliente-id" name="hdn-cliente-id" data-bv-field="hdn-cliente-id" />
+                                        <input type="hidden" id="hdn-comprobante-id" name="hdn-comprobante-id" data-bv-field="hdn-comprobante-id" />
                                     </div>
                                 </div>
                             </div>
@@ -120,10 +121,16 @@
                                         <select class="form-control val-exc select2-show-accessible" name="cmb-formato" id="cmb-formato" data-bv-field="cmb-formato" tabindex="-1" aria-hidden="false"></select>
                                     </div>
                                 </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Nota de Crédito</span>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-nota" id="cmb-tipo-nota" data-bv-field="cmb-tipo-nota" tabindex="-1" aria-hidden="false"></select>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <span class="bg-dark box-block pad-lft pad-rgt">Observación</span>
-                                        <textarea class="form-control" placeholder="Observación" name="txt-observacion" id="txt-observacion" data-bv-field="txt-observacion" rows="3"></textarea>
+                                        <span class="bg-dark box-block pad-lft pad-rgt">Motivo</span>
+                                        <textarea class="form-control" placeholder="Motivo" name="txt-motivo" id="txt-motivo" data-bv-field="txt-motivo" rows="3"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -263,6 +270,8 @@
     <script src="@Url.Content("~/Assets/js/pages/mantenimientonotacredito.js")"></script>
     <script>
         const tipoComprobanteIdNotaCredito = @((int)Enums.TipoComprobante.NotaCredito);
+        const tipoComprobanteIdFactura = @((int)Enums.TipoComprobante.Factura);
+        const tipoComprobanteIdBoleta = @((int)Enums.TipoComprobante.Boleta);
         const notaCreditoId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");
 
         const tipoTributoIdIgv = @((int)Enums.TipoTributo.Igv);

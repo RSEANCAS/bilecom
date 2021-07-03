@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace bilecom.bl
     {
         BoletaDa boletaDa = new BoletaDa();
         BoletaDetalleDa boletaDetalleDa = new BoletaDetalleDa();
+        ClienteDa clienteDa = new ClienteDa();
 
         public List<BoletaBe> BuscarBoleta(int empresaId, int ambienteSunatId, string nroDocumentoIdentidadCliente, string razonSocialCliente, DateTime fechaHoraEmisionDesde, DateTime fechaHoraEmisionHasta, int pagina, int cantidadRegistros, string columnaOrden, string ordenMax, out int totalRegistros)
         {
@@ -28,6 +30,27 @@ namespace bilecom.bl
             catch (Exception ex) { lista = null; }
             finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
+        }
+
+        public BoletaBe ObtenerBoleta(int empresaId, int boletaId, bool conCliente = false, bool conDetalle = false)
+        {
+            BoletaBe item = null;
+            try
+            {
+                cn.Open();
+                item = boletaDa.Obtener(empresaId, boletaId, cn);
+
+                if (item != null)
+                {
+                    if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
+                    if (conDetalle) item.ListaBoletaDetalle = boletaDetalleDa.Listar(empresaId, boletaId, cn);
+                }
+                cn.Close();
+            }
+            catch (SqlException ex) { item = null; }
+            catch (Exception ex) { item = null; }
+            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            return item;
         }
 
         public bool GuardarBoleta(BoletaBe registro, out int? boletaId, out int? nroComprobante, out DateTime? fechaHoraEmision, out string totalImporteEnLetras)

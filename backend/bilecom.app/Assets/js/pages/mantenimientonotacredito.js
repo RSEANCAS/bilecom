@@ -1,4 +1,4 @@
-var serieLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
+var tipoComprobanteLista = [], serieTipoComprobanteLista = [], serieLista = [], monedaLista = [], tipoNotaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
 var departamentoLista = [], provinciaLista = [], distritoLista = [];
 
 var datosclienteNuevo = {
@@ -34,19 +34,20 @@ const fechaActual = new Date();
 const pageMantenimientoNotaCredito = {
     Init: function () {
         common.ConfiguracionDataTable();
+        this.InitEvents();
         this.CargarCombo(() => {
-            this.InitEvents();
             this.Validar();
             this.ListarDetalle();
         });
     },
 
     InitEvents: function () {
+        $("#chk-comprobante-externo").change(pageMantenimientoNotaCredito.ChkComprobanteExternoChange).trigger("change");
         $("#btn-buscar-cliente").click(pageMantenimientoNotaCredito.BtnBuscarClienteClick);
         $("#btn-agregar-detalle").click(pageMantenimientoNotaCredito.BtnAgregarDetalleClick);
 
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
-
+        $("#cmb-tipo-comprobante").change(pageMantenimientoNotaCredito.CmbTipoComprobanteChange);
         pageMantenimientoNotaCredito.ObtenerDatos();
 
         $("#btn-nuevo-cliente").click(pageMantenimientoNotaCredito.BtnNuevoClienteClick);
@@ -132,6 +133,7 @@ const pageMantenimientoNotaCredito = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnNuevoClienteClick: function () {
         bootbox.dialog({
             title: "Nuevo Cliente",
@@ -247,11 +249,104 @@ const pageMantenimientoNotaCredito = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
         pageMantenimientoNotaCredito.LlenarDatosCliente(data);
         $(modal).modal('hide');
     },
 
+    ChkComprobanteExternoChange: function () {
+        let checked = $("#chk-comprobante-externo").prop("checked");
+
+        if (checked) {
+            $("#btn-nuevo-cliente").removeClass("hidden");
+            $("#btn-buscar-cliente").removeClass("hidden");
+        } else {
+            $("#btn-nuevo-cliente").addClass("hidden");
+            $("#btn-buscar-cliente").addClass("hidden");
+        }
+
+        $("#cmb-tipo-comprobante").trigger("change");
+
+        let select2ConfigNroComprobante = {
+            allowClear: true,
+            placeholder: '[Seleccione...]',
+        }
+
+        if (checked) {
+            select2ConfigNroComprobante.tags = true;
+        } else {
+            select2ConfigNroComprobante.minimumInputLength = 1;
+            select2ConfigNroComprobante.ajax = {
+                url: `${urlRoot}api/common/buscar-comprobante-venta`,
+                data: function (params) {
+                    let user = common.ObtenerUsuario();
+                    let nroComprobante = params.term;
+                    let serieId = $("#cmb-serie-tipo-comprobante").val();
+                    let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+                    return { empresaId: user.Empresa.EmpresaId, ambienteSunatId, tipoComprobanteId, serieId, nroComprobante };
+                },
+                processResults: function (data) {
+                    let results = (data || []).map(x => Object.assign(x, { id: x.ComprobanteId, text: x.NroComprobante }));
+                    return { results };
+                }
+            };
+        }
+
+        $("#cmb-nro-comprobante").empty().select2(select2ConfigNroComprobante);
+        if (checked) {
+            $("#cmb-nro-comprobante").off("change");
+        } else {
+            $("#cmb-nro-comprobante").change(pageMantenimientoNotaCredito.CmbNroComprobanteChange);
+        }
+
+        $("#txt-fecha-emision-comprobante").val("");
+        $("#txt-fecha-emision-comprobante").prop("readonly", !checked);
+        pageMantenimientoNotaCredito.LimpiarDatosCliente();
+    },
+
+    CmbTipoComprobanteChange: function () {
+        let checkedComprobanteExterno = $("#chk-comprobante-externo").prop("checked");
+
+        if (checkedComprobanteExterno) {
+            pageMantenimientoNotaCredito.ResponseSerieTipoComprobanteListar([]);
+            return;
+        }
+
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let user = common.ObtenerUsuario();
+        fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteId}`)
+            .then(common.ResponseToJson)
+            .then(SerieTipoComprobanteLista => {
+                serieTipoComprobanteLista = SerieTipoComprobanteLista || [];
+                pageMantenimientoNotaCredito.ResponseSerieTipoComprobanteListar(serieTipoComprobanteLista);
+            })
+    },
+
+    CmbNroComprobanteChange: function () {
+        let data = $("#cmb-nro-comprobante").select2('data');
+        if (data.length == 0) {
+            $("#txt-fecha-emision-comprobante").val("");
+            pageMantenimientoNotaCredito.LimpiarDatosCliente();
+            detalleLista = [];
+            pageMantenimientoNotaCredito.ListarDetalle();
+            return;
+        }
+        data = data[0];
+        let user = common.ObtenerUsuario();
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let empresaId = user.Empresa.EmpresaId;
+
+        let url = `${urlRoot}api/common/obtener-comprobante-venta?empresaId=${empresaId}&tipoComprobanteId=${tipoComprobanteId}&comprobanteId=${data.ComprobanteId}`;
+
+        fetch(url)
+            .then(common.ResponseToJson)
+            .then(pageMantenimientoNotaCredito.ResponseComprobanteObtener);
+        //let fechaHoraEmision = new Date(data.FechaHoraEmision);
+        //let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
+        //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        //pageMantenimientoNotaCredito.LlenarDatosCliente(data.Cliente);
+    },
 
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
@@ -267,6 +362,7 @@ const pageMantenimientoNotaCredito = {
         pageMantenimientoNotaCredito.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
     },
+
     LlenarDatosCliente(data) {
         pageMantenimientoNotaCredito.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
@@ -626,13 +722,14 @@ const pageMantenimientoNotaCredito = {
                 pageMantenimientoNotaCredito.EnviarFormulario();
             });
     },
+
     ValidarClienteNuevo: function () {
         $("#frm-notacredito-cliente-nuevo")
             .bootstrapValidator({
                 fields: {
                     "cmb-cliente-tipo-documento-identidad-nuevo": {
                         validators: {
-                            notEmpty: {message:"Debe seleccionar tipo de documento de identidad."}
+                            notEmpty: { message: "Debe seleccionar tipo de documento de identidad." }
                         }
                     },
                     "txt-cliente-nro-documento-identidad-nuevo": {
@@ -763,10 +860,11 @@ const pageMantenimientoNotaCredito = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                
+
                 pageMantenimientoNotaCredito.BtnGuardarySeleccionar();
             });
     },
+
     ValidarDetalle: function () {
         $("#frm-notacredito-detalle")
             .bootstrapValidator({
@@ -867,6 +965,50 @@ const pageMantenimientoNotaCredito = {
         pageMantenimientoNotaCredito.ListarDetalle();
     },
 
+    GuardarDetalleDeComprobante: function (item) {
+        let notaCreditoDetalleId = pageMantenimientoNotaCredito.ObtenerNotaCreditoDetalleId();
+        //let detalleExiste = detalleLista.some(x => x.NotaCreditoDetalleId == notaCreditoDetalleId);
+        let data = {
+            NotaCreditoDetalleId: notaCreditoDetalleId,
+            TipoProductoId: item.TipoProductoId,
+            Cantidad: item.Cantidad,
+            UnidadMedidaId: item.UnidadMedidaId,
+            UnidadMedida: item.UnidadMedida,
+            ProductoId: item.ProductoId,
+            CodigoSunat: item.CodigoSunat,
+            Codigo: item.Codigo,
+            Descripcion: item.Descripcion,
+            FlagAplicaICPBER: false,
+            TipoAfectacionIgvId: item.TipoAfectacionIgvId,
+            TipoAfectacionIgv: item.TipoAfectacionIgv,
+            TipoTributoIdIGV: item.TipoTributoIdIGV,
+            TipoTributoIGV: item.TipoTributoIGV,
+            Descuento: item.Descuento,
+            ISC: item.ISC,
+            PorcentajeIGV: item.PorcentajeIGV,
+            IGV: item.IGV,
+            ICPBER: 0,
+            PorcentajeICPBER: 0,
+            ValorUnitario: item.ValorUnitario,
+            PrecioUnitario: item.PrecioUnitario,
+            ValorVenta: item.ValorVenta,
+            PrecioVenta: item.PrecioVenta,
+            ImporteTotal: item.ImporteTotal,
+            TipoComprobanteId: item.TipoComprobanteId,
+            ComprobanteId: item.ComprobanteId,
+            ComprobanteDetalleId: item.ComprobanteDetalleId
+        }
+
+        //if (detalleExiste == true) {
+        //    let index = detalleLista.findIndex(x => x.NotaCreditoDetalleId == notaCreditoDetalleId);
+        //    detalleLista[index] = Object.assign(detalleLista[index], data);
+        //}
+        //else detalleLista.push(data);
+        detalleLista.push(data);
+
+        pageMantenimientoNotaCredito.ListarDetalle();
+    },
+
     ObtenerNotaCreditoDetalleId: function () {
         let notaCreditoDetalleId = $("#hdn-detalle-id").val();
         if (notaCreditoDetalleId != null) return Number(notaCreditoDetalleId);
@@ -907,8 +1049,10 @@ const pageMantenimientoNotaCredito = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
+            fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`),
             fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdNotaCredito}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
+            fetch(`${urlRoot}api/tiponota/listar-tiponota-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdNotaCredito}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
@@ -921,10 +1065,12 @@ const pageMantenimientoNotaCredito = {
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+            .then(([TipoComprobanteLista, SerieLista, MonedaLista, TipoNotaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+                tipoComprobanteLista = TipoComprobanteLista || [];
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
+                tipoNotaLista = TipoNotaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 unidadMedidaLista = UnidadMedidaLista || [];
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
@@ -934,8 +1080,10 @@ const pageMantenimientoNotaCredito = {
                 provinciaLista = ProvinciaLista || [];
                 distritoLista = DistritoLista || [];
 
+                pageMantenimientoNotaCredito.ResponseTipoComprobanteListar(tipoComprobanteLista);
                 pageMantenimientoNotaCredito.ResponseSerieListar(serieLista);
                 pageMantenimientoNotaCredito.ResponseMonedaListar(monedaLista);
+                pageMantenimientoNotaCredito.ResponseTipoNotaListar(tipoNotaLista);
                 pageMantenimientoNotaCredito.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
                 pageMantenimientoNotaCredito.ResponseFormatoListar(formatoLista);
                 if (typeof fnNext == "function") fnNext();
@@ -1059,7 +1207,7 @@ const pageMantenimientoNotaCredito = {
             TipoTributoIgv: tipoTributoIgv,
             TipoTributoIdIsc: totalISC > 0 ? tipoTributoIdIsc : null,
             TipoTributoIsc: tipoTributoIsc,
-            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago: null,
+            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago : null,
             TipoTributoOtrosTributos: tipoTributoOth,
             AmbienteSunatId: ambienteSunatId,
             Usuario: user.Nombre,
@@ -1117,6 +1265,20 @@ const pageMantenimientoNotaCredito = {
         pageMantenimientoNotaCredito.ListarDetalle();
     },
 
+    ResponseTipoComprobanteListar: function (data) {
+        let dataTipoComprobante = data.filter(x => [tipoComprobanteIdFactura, tipoComprobanteIdBoleta].includes(x.TipoComprobanteId)).map(x => Object.assign(x, { id: x.TipoComprobanteId, text: x.Nombre }));
+        $("#cmb-tipo-comprobante").select2({ data: dataTipoComprobante, width: '100%', placeholder: '[Seleccione...]' }).trigger("change");
+    },
+
+    ResponseSerieTipoComprobanteListar: function (data) {
+        let checkedComprobanteExterno = $("#chk-comprobante-externo").prop("checked");
+        let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
+        let select2Config = { data: dataSerie, width: '100%', placeholder: '[Seleccione...]' };
+        if (checkedComprobanteExterno) select2Config.tags = true;
+
+        $("#cmb-serie-tipo-comprobante").empty().select2(select2Config);
+    },
+
     ResponseSerieListar: function (data) {
         let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
         $("#cmb-serie").select2({ data: dataSerie, width: '100%', placeholder: '[Seleccione...]' });
@@ -1127,12 +1289,17 @@ const pageMantenimientoNotaCredito = {
         $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[Seleccione...]' });
     },
 
+    ResponseTipoNotaListar: function (data) {
+        let dataTipoNota = data.map(x => Object.assign(x, { id: x.TipoNotaId, text: x.Descripcion }));
+        $("#cmb-tipo-nota").select2({ data: dataTipoNota, width: '100%', placeholder: '[Seleccione...]' });
+    },
+
     ResponseTipoDocumentoIdentidadListar: function (data) {
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]' });
         $("#cmb-tipo-documento-identidad-cliente").val("").trigger("change");
     },
-    
+
     ResponseTipoProductoListar: function (data) {
         let dataTipoProducto = data.map((x, i) => `<label class="radio-inline"><input type="radio" ${(i == 0 ? "checked" : "")} id="rbt-detalle-tipo-producto-${x.TipoProductoId}" name="rbt-detalle-tipo-producto" value="${x.TipoProductoId}" /> ${x.Nombre}</label>`).join('');
         $("#div-detalle-tipo-producto").html(dataTipoProducto);
@@ -1176,31 +1343,59 @@ const pageMantenimientoNotaCredito = {
         return $("#txt-filtro-personal-nombres-completos").val();
 
     },
+
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
-        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]',dropdownParent});
+        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseProvinciaListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-provincia-nuevo").empty();
         let dataprovincia = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.ProvinciaId, text: item.Nombre }); });
-        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseDistritoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-distrito-nuevo").empty();
         let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
-        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
+
     ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
         data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
     },
+
+    ResponseComprobanteObtener: function (data) {
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let fechaHoraEmision = new Date(data.FechaHoraEmision);
+        let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
+        $("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        pageMantenimientoNotaCredito.LlenarDatosCliente(data.Cliente);
+
+        if (tipoComprobanteId == tipoComprobanteIdBoleta) data.ListaDetalle = data.ListaBoletaDetalle || [];
+        if (tipoComprobanteId == tipoComprobanteIdFactura) data.ListaDetalle = data.ListaFacturaDetalle || [];
+        detalleLista = [];
+        data.ListaDetalle.forEach(x => {
+            x.TipoComprobanteId = tipoComprobanteId;
+            if (tipoComprobanteId == tipoComprobanteIdBoleta) {
+                x.ComprobanteId = x.BoletaId;
+                x.ComprobanteDetalleId = x.BoletaDetalleId;
+            }
+            if (tipoComprobanteId == tipoComprobanteIdFactura) {
+                x.ComprobanteId = x.FacturaId;
+                x.ComprobanteDetalleId = x.FacturaDetalleId;
+            }
+            pageMantenimientoNotaCredito.GuardarDetalleDeComprobante(x)
+        });
+    },
+
     BtnCierraNuevoCliente: function () {
         $("#modal-nuevo-cliente").modal('hide');
     },
+
     BtnGuardarySeleccionar: function () {
         let clienteId = 0;
         let nombres = $("#txt-cliente-nombres-razonsocial-nuevo").val();
@@ -1235,17 +1430,18 @@ const pageMantenimientoNotaCredito = {
         fetch(url, init)
             .then(r => r.json())
             .then(pageMantenimientoNotaCredito.ResponseClienteNuevoGuardar);
-        
+
     },
+
     ResponseClienteNuevoGuardar: function (data) {
-        
+
         let tipo = "", mensaje = "";
         if (data > 0) {
             //$("#hdn-cliente-id").val(data);
             tipo = "success";
             mensaje = "¡Se ha guardado y seleccionado con éxito!";
             pageMantenimientoNotaCredito.datosclienteNuevo.ClienteId = data;
-            pageMantenimientoNotaCredito.BtnSeleccionarClienteClick(pageMantenimientoNotaCredito.datosclienteNuevo,"#modal-nuevo-cliente");
+            pageMantenimientoNotaCredito.BtnSeleccionarClienteClick(pageMantenimientoNotaCredito.datosclienteNuevo, "#modal-nuevo-cliente");
             pageMantenimientoNotaCredito.BtnCierraNuevoCliente();
         } else {
             tipo = "danger";
@@ -1270,6 +1466,7 @@ const pageMantenimientoNotaCredito = {
             }
         });
     },
+
     LimpiarDatosClienteNuevo: function () {
         pageMantenimientoNotaCredito.datosclienteNuevo = {
             ClienteId: 0,

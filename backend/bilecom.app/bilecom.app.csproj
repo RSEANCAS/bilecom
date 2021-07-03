@@ -397,7 +397,7 @@
     <Content Include="Assets\js\pages\configuracion.js" />
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\boleta.js" />
-    <Content Include="Assets\js\pages\mantenimientofactura - Copia.js" />
+    <Content Include="Assets\js\pages\mantenimientofactura.js" />
     <Content Include="Assets\js\pages\notacredito.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
@@ -2864,6 +2864,7 @@
     <Compile Include="Controllers\Api\TipoComprobanteController.cs" />
     <Compile Include="Controllers\Api\TipoComprobanteTipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoDocumentoIdentidadController.cs" />
+    <Compile Include="Controllers\Api\TipoNotaController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionAlmacenController.cs" />
     <Compile Include="Controllers\Api\TipoOperacionVentaController.cs" />
     <Compile Include="Controllers\Api\TipoMovimientoController.cs" />

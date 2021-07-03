@@ -132,6 +132,7 @@ const pageMantenimientoFactura = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnNuevoClienteClick: function () {
         bootbox.dialog({
             title: "Nuevo Cliente",
@@ -247,11 +248,11 @@ const pageMantenimientoFactura = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
         pageMantenimientoFactura.LlenarDatosCliente(data);
         $(modal).modal('hide');
     },
-
 
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
@@ -267,6 +268,7 @@ const pageMantenimientoFactura = {
         pageMantenimientoFactura.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
     },
+
     LlenarDatosCliente(data) {
         pageMantenimientoFactura.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
@@ -626,6 +628,7 @@ const pageMantenimientoFactura = {
                 pageMantenimientoFactura.EnviarFormulario();
             });
     },
+
     ValidarClienteNuevo: function () {
         $("#frm-factura-cliente-nuevo")
             .bootstrapValidator({
@@ -767,6 +770,7 @@ const pageMantenimientoFactura = {
                 pageMantenimientoFactura.BtnGuardarySeleccionar();
             });
     },
+
     ValidarDetalle: function () {
         $("#frm-factura-detalle")
             .bootstrapValidator({
@@ -1152,7 +1156,7 @@ const pageMantenimientoFactura = {
     ResponseUnidadMedidaListar: function (data, dropdownParent = null) {
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
 
-        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.UnidadMedidaId, text: x.Descripcion }));
         $("#cmb-detalle-unidad-medida").empty();
         $("#cmb-detalle-unidad-medida").select2({ data: dataUnidadMedida, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-unidad-medida").val("").trigger("change");
@@ -1192,6 +1196,7 @@ const pageMantenimientoFactura = {
         return $("#txt-filtro-personal-nombres-completos").val();
 
     },
+
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
@@ -1209,14 +1214,17 @@ const pageMantenimientoFactura = {
         let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
         $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
     },
+
     ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
         data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
     },
+
     BtnCierraNuevoCliente: function () {
         $("#modal-nuevo-cliente").modal('hide');
     },
+
     BtnGuardarySeleccionar: function () {
         let clienteId = 0;
         let nombres = $("#txt-cliente-nombres-razonsocial-nuevo").val();
@@ -1253,6 +1261,7 @@ const pageMantenimientoFactura = {
             .then(pageMantenimientoFactura.ResponseClienteNuevoGuardar);
         
     },
+
     ResponseClienteNuevoGuardar: function (data) {
         
         let tipo = "", mensaje = "";
@@ -1286,6 +1295,7 @@ const pageMantenimientoFactura = {
             }
         });
     },
+
     LimpiarDatosClienteNuevo: function () {
         pageMantenimientoFactura.datosclienteNuevo = {
             ClienteId: 0,

@@ -47,6 +47,13 @@ namespace bilecom.app.Controllers.Api
             return respuesta;
         }
 
+        [HttpGet]
+        [Route("obtener-factura")]
+        public FacturaBe ObtenerFactura(int empresaId, int facturaId, bool conCliente = false, bool conDetalle = false)
+        {
+            var item = facturaBl.ObtenerFactura(empresaId, facturaId, conCliente: conCliente, conDetalle: conDetalle);
+            return item;
+        }
 
         [HttpPost]
         [Route("guardar-factura")]

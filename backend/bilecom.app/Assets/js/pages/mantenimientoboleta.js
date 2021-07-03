@@ -1152,7 +1152,7 @@ const pageMantenimientoBoleta = {
     ResponseUnidadMedidaListar: function (data, dropdownParent = null) {
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
 
-        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.UnidadMedidaId, text: x.Descripcion }));
         $("#cmb-detalle-unidad-medida").empty();
         $("#cmb-detalle-unidad-medida").select2({ data: dataUnidadMedida, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-unidad-medida").val("").trigger("change");

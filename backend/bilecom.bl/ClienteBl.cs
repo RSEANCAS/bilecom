@@ -28,13 +28,13 @@ namespace bilecom.bl
             return lista;
         }
 
-        public ClienteBe Obtener(int EmpresaId, int ClienteId)
+        public ClienteBe Obtener(int empresaId, int clienteId)
         {
             ClienteBe respuesta = null;
             try
             {
                 cn.Open();
-                respuesta = clienteDa.Obtener(EmpresaId, ClienteId, cn);
+                respuesta = clienteDa.Obtener(empresaId, clienteId, cn);
                 cn.Close();
             }
             catch (Exception ex) { respuesta = null; }

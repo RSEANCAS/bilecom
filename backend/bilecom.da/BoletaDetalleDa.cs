@@ -57,5 +57,65 @@ namespace bilecom.da
             }
             return seGuardo;
         }
+
+        public List<BoletaDetalleBe> Listar(int empresaId, int boletaId, SqlConnection cn)
+        {
+            List<BoletaDetalleBe> lista = null;
+            using (SqlCommand cmd = new SqlCommand("usp_boletadetalle_lista", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@boletaId", boletaId.GetNullable());
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        lista = new List<BoletaDetalleBe>();
+
+                        while (dr.Read())
+                        {
+                            BoletaDetalleBe item = new BoletaDetalleBe();
+
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.BoletaId = dr.GetData<int>("BoletaId");
+                            item.BoletaDetalleId = dr.GetData<int>("BoletaDetalleId");
+                            item.TipoProductoId = dr.GetData<int>("TipoProductoId");
+                            item.Cantidad = dr.GetData<decimal>("Cantidad");
+                            item.UnidadMedidaId = dr.GetData<int>("UnidadMedidaId");
+                            item.UnidadMedida = new UnidadMedidaBe();
+                            item.UnidadMedida.UnidadMedidaId = dr.GetData<int>("UnidadMedidaId");
+                            item.UnidadMedida.Descripcion = dr.GetData<string>("DescripcionUnidadMedida");
+                            item.ProductoId = dr.GetData<int>("ProductoId");
+                            item.CodigoSunat = dr.GetData<string>("CodigoSunat");
+                            item.Codigo = dr.GetData<string>("Codigo");
+                            item.Descripcion = dr.GetData<string>("Descripcion");
+                            item.TipoAfectacionIgvId = dr.GetData<int>("TipoAfectacionIgvId");
+                            item.Descuento = dr.GetData<decimal>("Descuento");
+                            item.PorcentajeISC = dr.GetData<decimal>("PorcentajeISC");
+                            item.ISC = dr.GetData<decimal>("ISC");
+                            item.TipoTributoIdISC = dr.GetData<int?>("TipoTributoIdISC");
+                            item.PorcentajeIGV = dr.GetData<decimal>("PorcentajeIGV");
+                            item.IGV = dr.GetData<decimal>("IGV");
+                            item.TipoTributoIdIGV = dr.GetData<int?>("TipoTributoIdIGV");
+                            item.PorcentajeOTH = dr.GetData<decimal>("PorcentajeOTH");
+                            item.OTH = dr.GetData<decimal>("OTH");
+                            item.TipoTributoIdOTH = dr.GetData<int?>("TipoTributoIdOTH");
+                            item.FlagAplicaICPBER = dr.GetData<bool>("FlagAplicaICPBER");
+                            item.ICPBER = dr.GetData<decimal>("ICPBER");
+                            item.PorcentajeICPBER = dr.GetData<decimal>("PorcentajeICPBER");
+                            item.ValorUnitario = dr.GetData<decimal>("ValorUnitario");
+                            item.PrecioUnitario = dr.GetData<decimal>("PrecioUnitario");
+                            item.ValorVenta = dr.GetData<decimal>("ValorVenta");
+                            item.PrecioVenta = dr.GetData<decimal>("PrecioVenta");
+                            item.ImporteTotal = dr.GetData<decimal>("ImporteTotal");
+
+                            lista.Add(item);
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
     }
 }
