@@ -85,9 +85,10 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@serieId", registro.SerieId.GetNullable());
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@nroComprobante", SqlDbType = SqlDbType.Int, Value = registro.NroComprobante.GetNullable(), Direction = ParameterDirection.InputOutput });
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@fechaHoraEmision", SqlDbType = SqlDbType.DateTime, Value = DBNull.Value, Direction = ParameterDirection.InputOutput });
+                    cmd.Parameters.AddWithValue("@monedaId", registro.FechaVencimiento.GetNullable());
                     cmd.Parameters.AddWithValue("@monedaId", registro.MonedaId.GetNullable());
                     cmd.Parameters.AddWithValue("@formatoId", registro.FormatoId.GetNullable());
-                    cmd.Parameters.AddWithValue("@observacion", registro.Observacion.GetNullable());
+                    cmd.Parameters.AddWithValue("@observacion", registro.Motivo.GetNullable());
                     cmd.Parameters.AddWithValue("@clienteID", registro.ClienteId.GetNullable());
                     cmd.Parameters.AddWithValue("@totalGravado", registro.TotalGravado.GetNullable());
                     cmd.Parameters.AddWithValue("@totalExonerado", registro.TotalExonerado.GetNullable());

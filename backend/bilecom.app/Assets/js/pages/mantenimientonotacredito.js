@@ -46,6 +46,7 @@ const pageMantenimientoNotaCredito = {
         $("#btn-buscar-cliente").click(pageMantenimientoNotaCredito.BtnBuscarClienteClick);
         $("#btn-agregar-detalle").click(pageMantenimientoNotaCredito.BtnAgregarDetalleClick);
 
+        $("#txt-fecha-emision-comprobante").datepicker({ format: "dd/mm/yyyy", autoclose: true });
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
         $("#cmb-tipo-comprobante").change(pageMantenimientoNotaCredito.CmbTipoComprobanteChange);
         pageMantenimientoNotaCredito.ObtenerDatos();
@@ -696,6 +697,13 @@ const pageMantenimientoNotaCredito = {
             .bootstrapValidator({
                 excluded: [],
                 fields: {
+                    "cmb-nro-comprobante": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar un comprobante.",
+                            }
+                        }
+                    },
                     "hdn-cliente-id": {
                         validators: {
                             notEmpty: {
@@ -1109,6 +1117,12 @@ const pageMantenimientoNotaCredito = {
     },
 
     EnviarFormulario: function () {
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        //let serieTipoComprobanteId = $("#cmb-serie-tipo-comprobante").val();
+        let comprobanteId = $("#cmb-nro-comprobante").val();
+        //let fechaEmisionComprobante = $("#txt-fecha-emision-comprobante").datepicker('getDate').toISOString();
+        
+
         let serieId = $("#cmb-serie").val();
         let serie = $("#cmb-serie").select2("data")[0];
         serie = { Serial: serie.Serial };
@@ -1116,14 +1130,16 @@ const pageMantenimientoNotaCredito = {
         let moneda = $("#cmb-moneda").select2("data")[0];
         moneda = { MonedaId: moneda.MonedaId, Nombre: moneda.Nombre, Simbolo: moneda.Simbolo, Codigo: moneda.Codigo };
         let monedaId = $("#cmb-moneda").val();
-        let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
-        let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
-        tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
-        let formaPagoId = $("#cmb-forma-pago").val();
-        let formaPago = $("#cmb-forma-pago").select2("data")[0];
-        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
+        //let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
+        //let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
+        //tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
+        //let formaPagoId = $("#cmb-forma-pago").val();
+        //let formaPago = $("#cmb-forma-pago").select2("data")[0];
+        //formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
         let formatoId = $("#cmb-formato").val();
-        let observacion = $("#txt-observacion").val();
+        let tipoNotaId = $("#cmb-tipo-nota").val();
+        let motivo = $("#txt-motivo").val();
+        //let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();
         let tipoDocumentoIdentidadCliente = $("#cmb-tipo-documento-identidad-cliente").select2("data")[0];
         let cliente = {
@@ -1161,17 +1177,21 @@ const pageMantenimientoNotaCredito = {
             EmpresaId: empresaId,
             NotaCreditoId: notaCreditoId,
             SedeId: sedeId,
+            TipoComprobanteId: tipoComprobanteId,
+            ComprobanteId: comprobanteId,
             SerieId: serieId,
             Serie: serie,
             FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
             Moneda: moneda,
-            TipoOperacionVentaId: tipoOperacionVentaId,
-            TipoOperacionVenta: tipoOperacionVenta,
-            FormaPagoId: formaPagoId,
-            FormaPago: formaPago,
+            //TipoOperacionVentaId: tipoOperacionVentaId,
+            //TipoOperacionVenta: tipoOperacionVenta,
+            //FormaPagoId: formaPagoId,
+            //FormaPago: formaPago,
             FormatoId: formatoId,
-            Observacion: observacion,
+            TipoNotaId: tipoNotaId,
+            Motivo: motivo,
+            //Observacion: observacion,
             FlagExportacion: false,
             FlagGratuito: false,
             FlagEmisorItinerante: false,
@@ -1193,8 +1213,9 @@ const pageMantenimientoNotaCredito = {
             TotalOtrosTributos: totalOtrosTributos,
             TotalBaseImponible: totalBaseImponible,
             TotaDescuentos: totalDescuentoDetalle,
-            ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
-            Observacion: observacion,
+            ImporteTotal: importeTotal,
+            //ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
+            //Observacion: observacion,
             TipoTributoIdExonerado: totalExonerado > 0 ? tipoTributoIdExonerado : null,
             TipoTributoExonerado: tipoTributoExonerado,
             TipoTributoIdInafecto: totalInafecto > 0 ? tipoTributoIdInafecto : null,
@@ -1372,7 +1393,8 @@ const pageMantenimientoNotaCredito = {
         let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
         let fechaHoraEmision = new Date(data.FechaHoraEmision);
         let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
-        $("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        $("#txt-fecha-emision-comprobante").datepicker("setDate", fechaHoraEmision);
         pageMantenimientoNotaCredito.LlenarDatosCliente(data.Cliente);
 
         if (tipoComprobanteId == tipoComprobanteIdBoleta) data.ListaDetalle = data.ListaBoletaDetalle || [];

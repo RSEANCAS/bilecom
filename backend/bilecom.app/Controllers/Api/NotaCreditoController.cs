@@ -126,7 +126,7 @@ namespace bilecom.app.Controllers.Api
                         .Replace("[BENEFICIARIO]", registro.Empresa.RazonSocial)
                         .Replace("[CUENTA_CORRIENTE]", registro.Empresa.EmpresaConfiguracion.CuentaCorriente)
                         .Replace("[COMENTARIO_LEGAL]", registro.Empresa.EmpresaConfiguracion.ComentarioLegal)
-                        .Replace("[OBSERVACIONES]", registro.Observacion)
+                        .Replace("[OBSERVACIONES]", registro.Motivo)
                         .Replace("[LETRAS_MONTOAPAGAR]", registro.ImporteTotalEnLetras)
                         .Replace("[TOTAL_MONTOAPAGAR]", registro.ImporteTotal.ToString("0.00"))
                         .Replace("[QR]", registro.QRBase64);
