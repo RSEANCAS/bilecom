@@ -97,6 +97,18 @@ const pageNotaCredito = {
         return fechaEmisionHasta.toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" });
     },
 
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
@@ -114,7 +126,9 @@ const pageNotaCredito = {
                 nroDocumentoIdentidadCliente: pageNotaCredito.ObtenerNroDocumentoIdentidadCliente,
                 razonSocialCliente: pageNotaCredito.ObtenerRazonSocialCliente,
                 fechaEmisionDesde: pageNotaCredito.ObtenerFechaEmisionDesde,
-                fechaEmisionHasta: pageNotaCredito.ObtenerFechaEmisionHasta
+                fechaEmisionHasta: pageNotaCredito.ObtenerFechaEmisionHasta,
+                columnaOrden: pageNotaCredito.ObtenerNombreColumna,
+                ordenMax: pageNotaCredito.ObtenerOrdenColumna
             }
         };
 

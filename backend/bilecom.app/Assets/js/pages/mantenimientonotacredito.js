@@ -1118,8 +1118,13 @@ const pageMantenimientoNotaCredito = {
 
     EnviarFormulario: function () {
         let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
-        //let serieTipoComprobanteId = $("#cmb-serie-tipo-comprobante").val();
+        let tipoComprobante = $("#cmb-tipo-comprobante").select2("data")[0];
+        tipoComprobante = { Codigo: tipoComprobante.Codigo };
+        let serieTipoComprobante = $("#cmb-serie-tipo-comprobante").select2("data")[0];
+        serieTipoComprobante = { Serial: serieTipoComprobante.Serial };
         let comprobanteId = $("#cmb-nro-comprobante").val();
+        let comprobante = $("#cmb-nro-comprobante").select2("data")[0];
+        comprobante = { NroComprobante: comprobante.NroComprobante };
         //let fechaEmisionComprobante = $("#txt-fecha-emision-comprobante").datepicker('getDate').toISOString();
         
 
@@ -1138,6 +1143,8 @@ const pageMantenimientoNotaCredito = {
         //formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
         let formatoId = $("#cmb-formato").val();
         let tipoNotaId = $("#cmb-tipo-nota").val();
+        let tipoNota = $("#cmb-tipo-nota").select2("data")[0];
+        tipoNota = { TipoNotaId: tipoNota.TipoNotaId, CodigoSunat: tipoNota.CodigoSunat };
         let motivo = $("#txt-motivo").val();
         //let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();
@@ -1178,7 +1185,9 @@ const pageMantenimientoNotaCredito = {
             NotaCreditoId: notaCreditoId,
             SedeId: sedeId,
             TipoComprobanteId: tipoComprobanteId,
+            TipoComprobante: tipoComprobante,
             ComprobanteId: comprobanteId,
+            ComprobanteStr: `${serieTipoComprobante.Serial}-${comprobante.NroComprobante}`,
             SerieId: serieId,
             Serie: serie,
             FechaVencimiento: fechaVencimiento,
@@ -1190,6 +1199,7 @@ const pageMantenimientoNotaCredito = {
             //FormaPago: formaPago,
             FormatoId: formatoId,
             TipoNotaId: tipoNotaId,
+            TipoNota: tipoNota,
             Motivo: motivo,
             //Observacion: observacion,
             FlagExportacion: false,
@@ -1269,7 +1279,7 @@ const pageMantenimientoNotaCredito = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}NotaCreditos`
+                    location.href = `${urlRoot}NotasCredito`
                 }
             }
         });

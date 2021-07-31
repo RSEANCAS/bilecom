@@ -21,6 +21,7 @@ namespace bilecom.be
         public string CodigoSunat { get; set; }
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
+        public bool FlagAplicaICPBER { get; set; }
         public int TipoAfectacionIgvId { get; set; }
         public TipoAfectacionIgvBe TipoAfectacionIgv { get; set; }
         public decimal Descuento { get; set; }

@@ -1645,7 +1645,7 @@ namespace bilecom.app.Helper
             //if (item.TotalOtrosCargosGlobal > 0) cantidadCargos++;
             //if (item.TotalDescuentosGlobal > 0) cantidadCargos++;
 
-            #region Datos de la Boleta electrónica
+            #region Datos de la Nota de Crédito electrónica
             // 01. UBL
             creditNoteType.UBLVersionID = new sunat.comprobante.creditnote.UBLVersionIDType();
             creditNoteType.UBLVersionID.Value = versionValue;
@@ -1664,12 +1664,31 @@ namespace bilecom.app.Helper
             creditNoteType.IssueTime.Value = item.FechaHoraEmision.ToString("hh:mm:ss");
 
             // 05. TIPO COMPROBANTE
-            creditNoteType.CreditNoteTypeCode = new sunat.comprobante.creditnote.CreditNoteTypeCodeType();
-            creditNoteType.CreditNoteTypeCode.Value = TipoComprobante.NotaCredito.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
+            //creditNoteType.CreditNoteTypeCode = new sunat.comprobante.creditnote.CreditNoteTypeCodeType();
+            //creditNoteType.CreditNoteTypeCode.Value = TipoComprobante.NotaCredito.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
             //creditNoteType.CreditNoteTypeCode.listID = item.TipoOperacionVenta.CodigoSunat;
             //invoiceType.InvoiceTypeCode.listAgencyName = "PE:SUNAT";
             //invoiceType.InvoiceTypeCode.listName = "Tipo de Documento";
             //invoiceType.InvoiceTypeCode.listURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01";
+
+            // XX. MOTIVO
+            creditNoteType.DiscrepancyResponse = new sunat.comprobante.creditnote.ResponseType[1];
+            creditNoteType.DiscrepancyResponse[0] = new sunat.comprobante.creditnote.ResponseType();
+            creditNoteType.DiscrepancyResponse[0].ReferenceID = new sunat.comprobante.creditnote.ReferenceIDType();
+            creditNoteType.DiscrepancyResponse[0].ReferenceID.Value = item.ComprobanteStr;
+            creditNoteType.DiscrepancyResponse[0].ResponseCode = new sunat.comprobante.creditnote.ResponseCodeType();
+            creditNoteType.DiscrepancyResponse[0].ResponseCode.Value = item.TipoNota.CodigoSunat;
+            creditNoteType.DiscrepancyResponse[0].Description = new sunat.comprobante.creditnote.DescriptionType[1];
+            creditNoteType.DiscrepancyResponse[0].Description[0] = new sunat.comprobante.creditnote.DescriptionType();
+            creditNoteType.DiscrepancyResponse[0].Description[0].Value = item.Motivo;
+
+            creditNoteType.BillingReference = new sunat.comprobante.creditnote.BillingReferenceType[1];
+            creditNoteType.BillingReference[0] = new sunat.comprobante.creditnote.BillingReferenceType();
+            creditNoteType.BillingReference[0].InvoiceDocumentReference = new sunat.comprobante.creditnote.DocumentReferenceType();
+            creditNoteType.BillingReference[0].InvoiceDocumentReference.ID = new sunat.comprobante.creditnote.IDType();
+            creditNoteType.BillingReference[0].InvoiceDocumentReference.ID.Value = item.ComprobanteStr;
+            creditNoteType.BillingReference[0].InvoiceDocumentReference.DocumentTypeCode = new sunat.comprobante.creditnote.DocumentTypeCodeType();
+            creditNoteType.BillingReference[0].InvoiceDocumentReference.DocumentTypeCode.Value = item.TipoComprobante.Codigo;
 
             creditNoteType.ID = new sunat.comprobante.creditnote.IDType();
             creditNoteType.ID.Value = $"{item.Serie.Serial}-{item.NroComprobante}";
@@ -2267,6 +2286,662 @@ namespace bilecom.app.Helper
             return debitNoteType;
         }
 
-        
+        public static DebitNoteType ObtenerComprobante_2_1(NotaDebitoBe item, VersionUBL version)
+        {
+            DebitNoteType debitNoteType = new DebitNoteType();
+
+            System.Xml.XmlDocument xmlDocument = new System.Xml.XmlDocument();
+            string versionValue = version.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
+            string versionCustom = version.GetAttributeOfType<CategoryAttribute>().Category;
+            int cantidadDecimales = 2;
+            string formatoDecimales = "0." + (new String('0', cantidadDecimales));
+            decimal totalImpuestos = decimal.Parse((item.TotalIgv + item.TotalIsc + item.TotalOtrosTributos).ToString(formatoDecimales));
+            int cantidadImpuestos = 0;
+            if (item.TotalExportacion > 0) cantidadImpuestos++;
+            if (item.TotalInafecto > 0) cantidadImpuestos++;
+            if (item.TotalExonerado > 0) cantidadImpuestos++;
+            if (item.TotalGratuito > 0) cantidadImpuestos++;
+            if (item.TotalIgv > 0) cantidadImpuestos++;
+            if (item.TotalIsc > 0) cantidadImpuestos++;
+            if (item.TotalOtrosTributos > 0) cantidadImpuestos++;
+            //if (item.TotalVentaArrozPilado > 0) cantidadImpuestos++;
+
+            //int cantidadCargos = 0;
+            //if (item.TotalOtrosCargosGlobal > 0) cantidadCargos++;
+            //if (item.TotalDescuentosGlobal > 0) cantidadCargos++;
+
+            #region Datos de la Nota de Crédito electrónica
+            // 01. UBL
+            debitNoteType.UBLVersionID = new sunat.comprobante.debitnote.UBLVersionIDType();
+            debitNoteType.UBLVersionID.Value = versionValue;
+
+            // 02. CUSTOMIZATIONID
+            debitNoteType.CustomizationID = new sunat.comprobante.debitnote.CustomizationIDType();
+            debitNoteType.CustomizationID.Value = versionCustom;
+            //invoiceType.CustomizationID.schemeAgencyName = "PE:SUNAT";
+
+            // 03. FECHA DE EMISION
+            debitNoteType.IssueDate = new sunat.comprobante.debitnote.IssueDateType();
+            debitNoteType.IssueDate.Value = item.FechaHoraEmision;
+
+            // 04. HORA DE EMISION
+            debitNoteType.IssueTime = new sunat.comprobante.debitnote.IssueTimeType();
+            debitNoteType.IssueTime.Value = item.FechaHoraEmision.ToString("hh:mm:ss");
+
+            // 05. TIPO COMPROBANTE
+            //creditNoteType.CreditNoteTypeCode = new sunat.comprobante.debitnote.CreditNoteTypeCodeType();
+            //creditNoteType.CreditNoteTypeCode.Value = TipoComprobante.NotaCredito.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
+            //creditNoteType.CreditNoteTypeCode.listID = item.TipoOperacionVenta.CodigoSunat;
+            //invoiceType.InvoiceTypeCode.listAgencyName = "PE:SUNAT";
+            //invoiceType.InvoiceTypeCode.listName = "Tipo de Documento";
+            //invoiceType.InvoiceTypeCode.listURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01";
+
+            // XX. MOTIVO
+            debitNoteType.DiscrepancyResponse = new sunat.comprobante.debitnote.ResponseType[1];
+            debitNoteType.DiscrepancyResponse[0] = new sunat.comprobante.debitnote.ResponseType();
+            debitNoteType.DiscrepancyResponse[0].ReferenceID = new sunat.comprobante.debitnote.ReferenceIDType();
+            debitNoteType.DiscrepancyResponse[0].ReferenceID.Value = item.ComprobanteStr;
+            debitNoteType.DiscrepancyResponse[0].ResponseCode = new sunat.comprobante.debitnote.ResponseCodeType();
+            debitNoteType.DiscrepancyResponse[0].ResponseCode.Value = item.TipoNota.CodigoSunat;
+            debitNoteType.DiscrepancyResponse[0].Description = new sunat.comprobante.debitnote.DescriptionType[1];
+            debitNoteType.DiscrepancyResponse[0].Description[0] = new sunat.comprobante.debitnote.DescriptionType();
+            debitNoteType.DiscrepancyResponse[0].Description[0].Value = item.Motivo;
+
+            debitNoteType.BillingReference = new sunat.comprobante.debitnote.BillingReferenceType[1];
+            debitNoteType.BillingReference[0] = new sunat.comprobante.debitnote.BillingReferenceType();
+            debitNoteType.BillingReference[0].InvoiceDocumentReference = new sunat.comprobante.debitnote.DocumentReferenceType();
+            debitNoteType.BillingReference[0].InvoiceDocumentReference.ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.BillingReference[0].InvoiceDocumentReference.ID.Value = item.ComprobanteStr;
+            debitNoteType.BillingReference[0].InvoiceDocumentReference.DocumentTypeCode = new sunat.comprobante.debitnote.DocumentTypeCodeType();
+            debitNoteType.BillingReference[0].InvoiceDocumentReference.DocumentTypeCode.Value = item.TipoComprobante.Codigo;
+
+            debitNoteType.ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.ID.Value = $"{item.Serie.Serial}-{item.NroComprobante}";
+
+            // 06. TIPO MONEDA
+            debitNoteType.DocumentCurrencyCode = new sunat.comprobante.debitnote.DocumentCurrencyCodeType();
+            debitNoteType.DocumentCurrencyCode.Value = item.Moneda.Codigo;
+            //invoiceType.DocumentCurrencyCode.listID = "ISO 4217 Alpha";
+            //invoiceType.DocumentCurrencyCode.listName = "Currency";
+            //invoiceType.DocumentCurrencyCode.listAgencyName = "United Nations Economic Commission for Europe";
+
+            // 07. FECHA DE VENCIMIENTO
+            //if (item.FechaVencimiento.HasValue)
+            //{
+            //    creditNoteType.DueDate = new sunat.comprobante.debitnote.DueDateType();
+            //    creditNoteType.DueDate.Value = item.FechaVencimiento.Value;
+            //}
+
+            //invoiceType.ProfileID = new sunat.comprobante.debitnote.ProfileIDType();
+            //invoiceType.ProfileID.Value = item.TipoOperacionVenta.CodigoSunat;
+            //invoiceType.ProfileID.schemeName = "SUNAT:Identificador de Tipo de Operación";
+            //invoiceType.ProfileID.schemeAgencyName = "PE:SUNAT";
+            //invoiceType.ProfileID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo17";
+            #endregion
+
+            #region Firma Digital
+            // 08. FIRMA DIGITAL
+            debitNoteType.UBLExtensions = new sunat.comprobante.debitnote.UBLExtensionType[1];
+            debitNoteType.UBLExtensions[0] = new sunat.comprobante.debitnote.UBLExtensionType();
+            //invoiceType.UBLExtensions[0].ExtensionContent = xmlDocument.CreateElement("ext:ExtensionContent", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+            //invoiceType.UBLExtensions[0].ExtensionContent.InnerXml = null;
+            //invoiceType.UBLExtensions[0].ExtensionContent = new System.Xml.XmlDocument().CreateElement("ext:firma", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+
+            debitNoteType.Signature = new sunat.comprobante.debitnote.SignatureType[1];
+            debitNoteType.Signature[0] = new sunat.comprobante.debitnote.SignatureType();
+            debitNoteType.Signature[0].ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.Signature[0].ID.Value = "IDSignKG";
+
+            debitNoteType.Signature[0].SignatoryParty = new sunat.comprobante.debitnote.PartyType();
+            debitNoteType.Signature[0].SignatoryParty.PartyIdentification = new sunat.comprobante.debitnote.PartyIdentificationType[1];
+            debitNoteType.Signature[0].SignatoryParty.PartyIdentification[0] = new sunat.comprobante.debitnote.PartyIdentificationType();
+            debitNoteType.Signature[0].SignatoryParty.PartyIdentification[0].ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.Signature[0].SignatoryParty.PartyIdentification[0].ID.Value = item.Empresa.Ruc;
+            debitNoteType.Signature[0].SignatoryParty.PartyName = new sunat.comprobante.debitnote.PartyNameType[1];
+            debitNoteType.Signature[0].SignatoryParty.PartyName[0] = new sunat.comprobante.debitnote.PartyNameType();
+            debitNoteType.Signature[0].SignatoryParty.PartyName[0].Name = new sunat.comprobante.debitnote.NameType1();
+            debitNoteType.Signature[0].SignatoryParty.PartyName[0].Name.Value = xmlDocument.CreateCDataSection(item.Empresa.RazonSocial).OuterXml;
+
+            debitNoteType.Signature[0].DigitalSignatureAttachment = new sunat.comprobante.debitnote.AttachmentType();
+            debitNoteType.Signature[0].DigitalSignatureAttachment.ExternalReference = new sunat.comprobante.debitnote.ExternalReferenceType();
+            debitNoteType.Signature[0].DigitalSignatureAttachment.ExternalReference.URI = new sunat.comprobante.debitnote.URIType();
+            debitNoteType.Signature[0].DigitalSignatureAttachment.ExternalReference.URI.Value = "#signatureKG";
+            #endregion
+
+            #region Datos del Emisor
+            // 09. NÚMERO DE RUC
+            debitNoteType.AccountingSupplierParty = new sunat.comprobante.debitnote.SupplierPartyType();
+            debitNoteType.AccountingSupplierParty.Party = new sunat.comprobante.debitnote.PartyType();
+            debitNoteType.AccountingSupplierParty.Party.PartyIdentification = new sunat.comprobante.debitnote.PartyIdentificationType[1];
+            debitNoteType.AccountingSupplierParty.Party.PartyIdentification[0] = new sunat.comprobante.debitnote.PartyIdentificationType();
+            debitNoteType.AccountingSupplierParty.Party.PartyIdentification[0].ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.AccountingSupplierParty.Party.PartyIdentification[0].ID.Value = item.Empresa.Ruc;
+            debitNoteType.AccountingSupplierParty.Party.PartyIdentification[0].ID.schemeID = TipoDocumentoIdentidad.RUC.GetAttributeOfType<DefaultValueAttribute>().Value.ToString();
+            //invoiceType.AccountingSupplierParty.Party.PartyIdentification[0].ID.schemeName = "Documento de Identidad";
+            //invoiceType.AccountingSupplierParty.Party.PartyIdentification[0].ID.schemeAgencyName = "PE:SUNAT";
+            //invoiceType.AccountingSupplierParty.Party.PartyIdentification[0].ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06";
+
+            // 10. NOMBRE COMERCIAL
+            debitNoteType.AccountingSupplierParty.Party.PartyName = new sunat.comprobante.debitnote.PartyNameType[1];
+            debitNoteType.AccountingSupplierParty.Party.PartyName[0] = new sunat.comprobante.debitnote.PartyNameType();
+            debitNoteType.AccountingSupplierParty.Party.PartyName[0].Name = new sunat.comprobante.debitnote.NameType1();
+            debitNoteType.AccountingSupplierParty.Party.PartyName[0].Name.Value = item.Empresa.NombreComercial;
+
+            // 11. RAZON SOCIAL O NOMBRES
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity = new sunat.comprobante.debitnote.PartyLegalEntityType[1];
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0] = new sunat.comprobante.debitnote.PartyLegalEntityType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationName = new sunat.comprobante.debitnote.RegistrationNameType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationName.Value = item.Empresa.RazonSocial;
+
+            // 12. DOMICILIO FISCAL
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress = new sunat.comprobante.debitnote.AddressType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressLine = new sunat.comprobante.debitnote.AddressLineType[1];
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressLine[0] = new sunat.comprobante.debitnote.AddressLineType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressLine[0].Line = new sunat.comprobante.debitnote.LineType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressLine[0].Line.Value = item.Empresa.Direccion;
+
+            // 12. URBANIZACIÓN
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.CitySubdivisionName = new sunat.comprobante.debitnote.CitySubdivisionNameType();
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.CitySubdivisionName.Value = "";
+
+            // 12. PROVINCIA
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.CityName = new sunat.comprobante.debitnote.CityNameType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.CityName.Value = item.Empresa.Distrito.Provincia.Nombre;
+
+            // 12. UBIGEO
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.ID.Value = item.Empresa.Distrito.CodigoUbigeo;
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.ID.schemeAgencyName = "PE:INEI";
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.ID.schemeName = "Ubigeos";
+
+            // 12. CODIGO LOCAL
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressTypeCode = new sunat.comprobante.debitnote.AddressTypeCodeType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressTypeCode.Value = "0000";
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressTypeCode.listAgencyName = "PE:SUNAT";
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.AddressTypeCode.listName = "Establecimientos anexos";
+
+            // 12. DEPARTAMENTO
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.CountrySubentity = new sunat.comprobante.debitnote.CountrySubentityType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.CountrySubentity.Value = item.Empresa.Distrito.Provincia.Departamento.Nombre;
+
+            // 12. DISTRITO
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.District = new sunat.comprobante.debitnote.DistrictType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.District.Value = item.Empresa.Distrito.Nombre;
+
+            // 12. PAIS
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.Country = new sunat.comprobante.debitnote.CountryType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.Country.IdentificationCode = new sunat.comprobante.debitnote.IdentificationCodeType();
+            debitNoteType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.Country.IdentificationCode.Value = item.Empresa.Distrito.Provincia.Departamento.Pais.CodigoSunat;
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.Country.IdentificationCode.listID = "ISO 3166-1";
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.Country.IdentificationCode.listAgencyName = "United Nations Economic Commission for Europe";
+            //invoiceType.AccountingSupplierParty.Party.PartyLegalEntity[0].RegistrationAddress.Country.IdentificationCode.listName = "Country";
+
+            // 13. DIRECCIÓN DE DELIVERY POR IMPLEMENTAR
+
+            // 14. LOCAL DE DESPACHO POR DELIVERY POR IMPLEMENTAR
+            #endregion
+
+            #region Datos del Cliente
+            // 15. TIPO Y NÚMERO DOCUMENTO IDENTIDAD
+            debitNoteType.AccountingCustomerParty = new sunat.comprobante.debitnote.CustomerPartyType();
+            debitNoteType.AccountingCustomerParty.Party = new sunat.comprobante.debitnote.PartyType();
+            debitNoteType.AccountingCustomerParty.Party.PartyIdentification = new sunat.comprobante.debitnote.PartyIdentificationType[1];
+            debitNoteType.AccountingCustomerParty.Party.PartyIdentification[0] = new sunat.comprobante.debitnote.PartyIdentificationType();
+            debitNoteType.AccountingCustomerParty.Party.PartyIdentification[0].ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.AccountingCustomerParty.Party.PartyIdentification[0].ID.Value = item.Cliente.NroDocumentoIdentidad;
+            debitNoteType.AccountingCustomerParty.Party.PartyIdentification[0].ID.schemeID = item.Cliente.TipoDocumentoIdentidad.Codigo;
+            //invoiceType.AccountingCustomerParty.Party.PartyIdentification[0].ID.schemeName = "Documento de Identidad";
+            //invoiceType.AccountingCustomerParty.Party.PartyIdentification[0].ID.schemeAgencyName = "PE:SUNAT";
+            //invoiceType.AccountingCustomerParty.Party.PartyIdentification[0].ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06";
+
+            // 16. RAZÓN SOCIAL O NOMBRES
+            debitNoteType.AccountingCustomerParty.Party.PartyLegalEntity = new sunat.comprobante.debitnote.PartyLegalEntityType[1];
+            debitNoteType.AccountingCustomerParty.Party.PartyLegalEntity[0] = new sunat.comprobante.debitnote.PartyLegalEntityType();
+            debitNoteType.AccountingCustomerParty.Party.PartyLegalEntity[0].RegistrationName = new sunat.comprobante.debitnote.RegistrationNameType();
+            debitNoteType.AccountingCustomerParty.Party.PartyLegalEntity[0].RegistrationName.Value = item.Cliente.RazonSocial;
+            #endregion
+
+            #region Datos del Detalle
+            if (item.ListaNotaDebitoDetalle != null)
+            {
+                int tamañoListaDetalle = item.ListaNotaDebitoDetalle.Count;
+                debitNoteType.DebitNoteLine = new sunat.comprobante.debitnote.DebitNoteLineType[tamañoListaDetalle];
+                for (int i = 0; i < tamañoListaDetalle; i++)
+                {
+                    NotaDebitoDetalleBe itemBoletaDetalle = item.ListaNotaDebitoDetalle[i];
+
+                    decimal totalImpuestosDetalle = decimal.Parse((itemBoletaDetalle.IGV + itemBoletaDetalle.ISC + itemBoletaDetalle.OTH).ToString(formatoDecimales));
+                    int cantidadImpuestosDetalle = 1;
+                    //if (itemBoletaDetalle.IGV > 0) cantidadImpuestos++;
+                    if (itemBoletaDetalle.ISC > 0) cantidadImpuestosDetalle++;
+                    if (itemBoletaDetalle.OTH > 0) cantidadImpuestosDetalle++;
+
+                    // 19. NÚMERO DE ORDEN
+                    debitNoteType.DebitNoteLine[i] = new sunat.comprobante.debitnote.DebitNoteLineType();
+                    debitNoteType.DebitNoteLine[i].ID = new sunat.comprobante.debitnote.IDType();
+                    debitNoteType.DebitNoteLine[i].ID.Value = (i + 1).ToString();
+
+                    // 20. UNIDAD DE MEDIDA
+                    debitNoteType.DebitNoteLine[i].DebitedQuantity = new sunat.comprobante.debitnote.DebitedQuantityType();
+                    debitNoteType.DebitNoteLine[i].DebitedQuantity.unitCode = itemBoletaDetalle.UnidadMedida.Id;
+                    //invoiceType.DebitNoteLine[i].InvoicedQuantity.unitCodeListID = "UN/ECE rec 20";
+                    //invoiceType.DebitNoteLine[i].InvoicedQuantity.unitCodeListAgencyName = "United Nations Economic Commission for Europe";
+
+                    // 21. CANTIDAD
+                    debitNoteType.DebitNoteLine[i].DebitedQuantity.Value = decimal.Parse(itemBoletaDetalle.Cantidad.ToString("0.00000"));
+
+                    //// 22. CÓDIGO
+                    debitNoteType.DebitNoteLine[i].Item = new sunat.comprobante.debitnote.ItemType();
+                    //invoiceType.DebitNoteLine[i].Item.SellersItemIdentification = new sunat.comprobante.debitnote.ItemIdentificationType();
+                    //invoiceType.DebitNoteLine[i].Item.SellersItemIdentification.ID = new sunat.comprobante.debitnote.IDType();
+                    //invoiceType.DebitNoteLine[i].Item.SellersItemIdentification.ID.Value = itemBoletaDetalle.Codigo;
+
+                    //// 23. CÓDIGO PRODUCTO
+                    //invoiceType.DebitNoteLine[i].Item.CommodityClassification = new sunat.comprobante.debitnote.CommodityClassificationType[1];
+                    //invoiceType.DebitNoteLine[i].Item.CommodityClassification[0] = new sunat.comprobante.debitnote.CommodityClassificationType();
+                    //invoiceType.DebitNoteLine[i].Item.CommodityClassification[0].ItemClassificationCode = new sunat.comprobante.debitnote.ItemClassificationCodeType();
+                    //invoiceType.DebitNoteLine[i].Item.CommodityClassification[0].ItemClassificationCode.Value = itemBoletaDetalle.CodigoSunat;
+                    ////invoiceType.DebitNoteLine[i].Item.CommodityClassification[0].ItemClassificationCode.listID = "UNSPSC";
+                    ////invoiceType.DebitNoteLine[i].Item.CommodityClassification[0].ItemClassificationCode.listAgencyName = "GS1 US";
+                    ////invoiceType.DebitNoteLine[i].Item.CommodityClassification[0].ItemClassificationCode.listName = "Item Classification";
+
+                    // 24. CÓDIGO PRODUCTO GS1 POR IMPLEMENTAR
+
+                    // 25. NÚMERO DE PLACA DE VEHÍCULO POR IMPLEMENTAR
+
+                    // 26. DESCRIPCIÓN
+                    debitNoteType.DebitNoteLine[i].Item.Description = new sunat.comprobante.debitnote.DescriptionType[1];
+                    debitNoteType.DebitNoteLine[i].Item.Description[0] = new sunat.comprobante.debitnote.DescriptionType();
+                    debitNoteType.DebitNoteLine[i].Item.Description[0].Value = itemBoletaDetalle.Descripcion;
+
+                    // 27. VALOR UNITARIO
+                    debitNoteType.DebitNoteLine[i].Price = new sunat.comprobante.debitnote.PriceType();
+                    debitNoteType.DebitNoteLine[i].Price.PriceAmount = new sunat.comprobante.debitnote.PriceAmountType();
+                    debitNoteType.DebitNoteLine[i].Price.PriceAmount.Value = decimal.Parse((itemBoletaDetalle.TipoAfectacionIgv.FlagGratuito ? 0M : itemBoletaDetalle.ValorUnitario).ToString(formatoDecimales));
+                    debitNoteType.DebitNoteLine[i].Price.PriceAmount.currencyID = item.Moneda.Codigo;
+
+                    // 28. PRECIO UNITARIO - 29 VALOR REFERENCIAL
+                    debitNoteType.DebitNoteLine[i].PricingReference = new sunat.comprobante.debitnote.PricingReferenceType();
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice = new sunat.comprobante.debitnote.PriceType[1];
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0] = new sunat.comprobante.debitnote.PriceType();
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceAmount = new sunat.comprobante.debitnote.PriceAmountType();
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceAmount.Value = decimal.Parse(itemBoletaDetalle.PrecioUnitario.ToString(formatoDecimales));
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceAmount.currencyID = item.Moneda.Codigo;
+
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceTypeCode = new sunat.comprobante.debitnote.PriceTypeCodeType();
+                    debitNoteType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceTypeCode.Value = !itemBoletaDetalle.TipoAfectacionIgv.FlagGratuito ? "01" : "02";
+                    //invoiceType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceTypeCode.listName = "Tipo de Precio";
+                    //invoiceType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceTypeCode.listAgencyName = "PE:SUNAT";
+                    //invoiceType.DebitNoteLine[i].PricingReference.AlternativeConditionPrice[0].PriceTypeCode.listURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo16";
+
+                    // 30. TOTAL IMPUESTOS
+                    debitNoteType.DebitNoteLine[i].TaxTotal = new sunat.comprobante.debitnote.TaxTotalType[1];
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0] = new sunat.comprobante.debitnote.TaxTotalType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxAmount.Value = totalImpuestosDetalle;
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                    // 31. IMPUESTOS
+                    int iImpuestoDetalle = 0;
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal = new sunat.comprobante.debitnote.TaxSubtotalType[cantidadImpuestosDetalle];
+
+                    // 31. IMPUESTOS - IGV
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount.Value = decimal.Parse(itemBoletaDetalle.ValorVenta.ToString(formatoDecimales));
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount.Value = decimal.Parse(itemBoletaDetalle.IGV.ToString(formatoDecimales));
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.Percent = new sunat.comprobante.debitnote.PercentType1();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.Percent.Value = decimal.Parse(itemBoletaDetalle.PorcentajeIGV.ToString("0.00000"));
+
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxExemptionReasonCode = new sunat.comprobante.debitnote.TaxExemptionReasonCodeType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxExemptionReasonCode.Value = itemBoletaDetalle.TipoAfectacionIgv.Id;
+                    //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxExemptionReasonCode.listAgencyName = "PE:SUNAT";
+                    //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxExemptionReasonCode.listName = "Afectacion del IGV";
+                    //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxExemptionReasonCode.listURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07";
+
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.Value = itemBoletaDetalle.TipoTributoIGV.Codigo;
+                    //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                    //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                    //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.Name.Value = itemBoletaDetalle.TipoTributoIGV.Nombre;
+
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                    debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.TaxTypeCode.Value = itemBoletaDetalle.TipoTributoIGV.CodigoNombre;
+
+                    iImpuestoDetalle++;
+
+                    // 31. IMPUESTOS - OTH
+                    if (itemBoletaDetalle.OTH > 0)
+                    {
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount.Value = decimal.Parse(itemBoletaDetalle.ValorVenta.ToString(formatoDecimales));
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount.Value = decimal.Parse(itemBoletaDetalle.OTH.ToString(formatoDecimales));
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.Percent = new sunat.comprobante.debitnote.PercentType1();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.Percent.Value = decimal.Parse(itemBoletaDetalle.PorcentajeOTH.ToString("0.00000"));
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.Value = itemBoletaDetalle.TipoTributoOTH.Codigo;
+                        //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                        //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                        //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.Name.Value = itemBoletaDetalle.TipoTributoOTH.Nombre;
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.TaxTypeCode.Value = itemBoletaDetalle.TipoTributoOTH.CodigoNombre;
+
+                        iImpuestoDetalle++;
+                    }
+
+                    // 32. IMPUESTOS - ISC
+                    if (itemBoletaDetalle.ISC > 0)
+                    {
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount.Value = decimal.Parse(itemBoletaDetalle.ValorVenta.ToString(formatoDecimales));
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount.Value = decimal.Parse(itemBoletaDetalle.ISC.ToString(formatoDecimales));
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.Percent = new sunat.comprobante.debitnote.PercentType1();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.Percent.Value = decimal.Parse(itemBoletaDetalle.PorcentajeISC.ToString("0.00000"));
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.Value = itemBoletaDetalle.TipoTributoISC.Codigo;
+                        //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                        //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                        //invoiceType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.Name.Value = itemBoletaDetalle.TipoTributoISC.Nombre;
+
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                        debitNoteType.DebitNoteLine[i].TaxTotal[0].TaxSubtotal[iImpuestoDetalle].TaxCategory.TaxScheme.TaxTypeCode.Value = itemBoletaDetalle.TipoTributoISC.CodigoNombre;
+                    }
+
+                    // 33. VALOR VENTA
+                    debitNoteType.DebitNoteLine[i].LineExtensionAmount = new sunat.comprobante.debitnote.LineExtensionAmountType();
+                    debitNoteType.DebitNoteLine[i].LineExtensionAmount.Value = decimal.Parse(itemBoletaDetalle.ValorVenta.ToString(formatoDecimales));
+                    debitNoteType.DebitNoteLine[i].LineExtensionAmount.currencyID = item.Moneda.Codigo;
+                }
+            }
+            #endregion
+
+            #region Totales de la Boleta
+            // 35. TOTAL IMPUESTOS
+            debitNoteType.TaxTotal = new sunat.comprobante.debitnote.TaxTotalType[1];
+            debitNoteType.TaxTotal[0] = new sunat.comprobante.debitnote.TaxTotalType();
+            debitNoteType.TaxTotal[0].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+            debitNoteType.TaxTotal[0].TaxAmount.Value = totalImpuestos;
+            debitNoteType.TaxTotal[0].TaxAmount.currencyID = item.Moneda.Codigo;
+
+            // 36. TOTAL EXPORTACION
+            int iImpuesto = 0;
+            debitNoteType.TaxTotal[0].TaxSubtotal = new sunat.comprobante.debitnote.TaxSubtotalType[cantidadImpuestos];
+            if (item.TotalExportacion > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalExportacion.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(0M.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoExportacion.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoExportacion.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoExportacion.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 37. TOTAL INAFECTO
+            if (item.TotalInafecto > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalInafecto.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(0M.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoInafecto.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoInafecto.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoInafecto.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 38. TOTAL EXONERADO
+            if (item.TotalExonerado > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalExonerado.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(0M.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoExonerado.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoExonerado.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoExonerado.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 39. TOTAL GRATUITO
+            if (item.TotalGratuito > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalGratuito.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(0M.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoGratuito.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoGratuito.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoGratuito.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 40-41. TOTAL IGV
+            if (item.TotalIgv > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalGravado.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(item.TotalIgv.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoIgv.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoIgv.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoIgv.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 42. TOTAL ISC
+            if (item.TotalIsc > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalBaseImponible.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(item.TotalIsc.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoIsc.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoIsc.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoIsc.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 43. TOTAL OTROS TRIBUTOS
+            if (item.TotalOtrosTributos > 0)
+            {
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto] = new sunat.comprobante.debitnote.TaxSubtotalType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount = new sunat.comprobante.debitnote.TaxableAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.Value = decimal.Parse(item.TotalBaseImponible.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxableAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount = new sunat.comprobante.debitnote.TaxAmountType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.Value = decimal.Parse(item.TotalOtrosTributos.ToString(formatoDecimales));
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxAmount.currencyID = item.Moneda.Codigo;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory = new sunat.comprobante.debitnote.TaxCategoryType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme = new sunat.comprobante.debitnote.TaxSchemeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID = new sunat.comprobante.debitnote.IDType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.Value = item.TipoTributoOtrosTributos.Codigo;
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeName = "Codigo de tributos";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeAgencyName = "PE:SUNAT";
+                //invoiceType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.ID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo05";
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name = new sunat.comprobante.debitnote.NameType1();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.Name.Value = item.TipoTributoOtrosTributos.Nombre;
+
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode = new sunat.comprobante.debitnote.TaxTypeCodeType();
+                debitNoteType.TaxTotal[0].TaxSubtotal[iImpuesto].TaxCategory.TaxScheme.TaxTypeCode.Value = item.TipoTributoOtrosTributos.CodigoNombre;
+
+                iImpuesto++;
+            }
+
+            // 45. TOTAL DESCUENTOS
+            debitNoteType.RequestedMonetaryTotal = new sunat.comprobante.debitnote.MonetaryTotalType();
+            debitNoteType.RequestedMonetaryTotal.AllowanceTotalAmount = new sunat.comprobante.debitnote.AllowanceTotalAmountType();
+            debitNoteType.RequestedMonetaryTotal.AllowanceTotalAmount.Value = decimal.Parse(item.TotalDescuentos.ToString(formatoDecimales));
+            debitNoteType.RequestedMonetaryTotal.AllowanceTotalAmount.currencyID = item.Moneda.Codigo;
+
+            // 46. TOTAL CARGOS
+            debitNoteType.RequestedMonetaryTotal.ChargeTotalAmount = new sunat.comprobante.debitnote.ChargeTotalAmountType();
+            debitNoteType.RequestedMonetaryTotal.ChargeTotalAmount.Value = decimal.Parse(item.TotalOtrosCargos.ToString(formatoDecimales));
+            debitNoteType.RequestedMonetaryTotal.ChargeTotalAmount.currencyID = item.Moneda.Codigo;
+
+            // 47. TOTAL IMPORTE
+            debitNoteType.RequestedMonetaryTotal.PayableAmount = new sunat.comprobante.debitnote.PayableAmountType();
+            debitNoteType.RequestedMonetaryTotal.PayableAmount.Value = decimal.Parse(item.ImporteTotal.ToString(formatoDecimales));
+            debitNoteType.RequestedMonetaryTotal.PayableAmount.currencyID = item.Moneda.Codigo;
+
+            // 48. TOTAL VALOR VENTA
+            debitNoteType.RequestedMonetaryTotal.LineExtensionAmount = new sunat.comprobante.debitnote.LineExtensionAmountType();
+            debitNoteType.RequestedMonetaryTotal.LineExtensionAmount.Value = decimal.Parse(item.TotalBaseImponible.ToString(formatoDecimales));
+            debitNoteType.RequestedMonetaryTotal.LineExtensionAmount.currencyID = item.Moneda.Codigo;
+
+            // 49. TOTAL PRECIO VENTA
+            debitNoteType.RequestedMonetaryTotal.TaxInclusiveAmount = new sunat.comprobante.debitnote.TaxInclusiveAmountType();
+            debitNoteType.RequestedMonetaryTotal.TaxInclusiveAmount.Value = decimal.Parse(item.ImporteTotal.ToString(formatoDecimales));
+            debitNoteType.RequestedMonetaryTotal.TaxInclusiveAmount.currencyID = item.Moneda.Codigo;
+            #endregion
+
+            #region Adicionales
+            //invoiceType.PaymentTerms = new sunat.comprobante.debitnote.PaymentTermsType[1];
+            //invoiceType.PaymentTerms[0] = new sunat.comprobante.debitnote.PaymentTermsType();
+            //invoiceType.PaymentTerms[0].ID = new sunat.comprobante.debitnote.IDType();
+            debitNoteType.Note = new sunat.comprobante.debitnote.NoteType[1];
+            debitNoteType.Note[0] = new sunat.comprobante.debitnote.NoteType();
+            debitNoteType.Note[0].languageLocaleID = "1000";
+            debitNoteType.Note[0].Value = xmlDocument.CreateCDataSection(item.ImporteTotalEnLetras).OuterXml;
+
+            #endregion
+
+            return debitNoteType;
+        }
     }
 }

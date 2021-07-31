@@ -30,7 +30,16 @@ namespace bilecom.be
         public int TipoComprobanteId { get; set; }
         public TipoComprobanteBe TipoComprobante { get; set; }
         public int ComprobanteId { get; set; }
+        public string ComprobanteStr { get; set; }
+        public TipoNotaBe TipoNota { get; set; }
         public int TipoNotaId { get; set; }
+        public bool FlagExportacion { get; set; }
+        public bool FlagGratuito { get; set; }
+        public bool FlagEmisorItinerante { get; set; }
+        public bool FlagAnticipo { get; set; }
+        public bool FlagISC { get; set; }
+        public bool FlagOtrosCargos { get; set; }
+        public bool FlagOtrosTributos { get; set; }
         public decimal TotalGravado { get; set; }
         public decimal TotalExonerado { get; set; }
         public int? TipoTributoIdExonerado { get; set; }

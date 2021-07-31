@@ -31,7 +31,7 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@productoId", registro.ProductoId.GetNullable());
                     cmd.Parameters.AddWithValue("@codigo", registro.Codigo.GetNullable());
                     cmd.Parameters.AddWithValue("@descripcion", registro.Descripcion.GetNullable());
-                    //cmd.Parameters.AddWithValue("@flagAplicaICPBER", registro.FlagAplicaICPBER.GetNullable());
+                    cmd.Parameters.AddWithValue("@flagAplicaICPBER", registro.FlagAplicaICPBER.GetNullable());
                     cmd.Parameters.AddWithValue("@tipoAfectacionIgvId", registro.TipoAfectacionIgvId.GetNullable());
                     cmd.Parameters.AddWithValue("@descuento", registro.Descuento.GetNullable());
                     cmd.Parameters.AddWithValue("@isc", registro.ISC.GetNullable());
@@ -44,6 +44,9 @@ namespace bilecom.da
                     cmd.Parameters.AddWithValue("@valorVenta", registro.ValorVenta.GetNullable());
                     cmd.Parameters.AddWithValue("@precioVenta", registro.PrecioVenta.GetNullable());
                     cmd.Parameters.AddWithValue("@importeTotal", registro.ImporteTotal.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoComprobanteId", registro.TipoComprobanteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@comprobanteId", registro.ComprobanteId.GetNullable());
+                    cmd.Parameters.AddWithValue("@comprobanteDetalleId", registro.ComprobanteDetalleId.GetNullable());
                     //cmd.Parameters.AddWithValue("@usuario", registro.Usuario.GetNullable());
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
