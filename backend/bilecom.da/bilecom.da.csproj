@@ -64,6 +64,8 @@
     <Compile Include="MonedaDa.cs" />
     <Compile Include="MovimientoDa.cs" />
     <Compile Include="MovimientoDetalleDa.cs" />
+    <Compile Include="NotaDebitoDa.cs" />
+    <Compile Include="NotaDebitoDetalleDa.cs" />
     <Compile Include="OpcionDa.cs" />
     <Compile Include="PaisDa.cs" />
     <Compile Include="PerfilDa.cs" />

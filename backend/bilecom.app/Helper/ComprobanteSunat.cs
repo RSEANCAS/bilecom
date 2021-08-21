@@ -2279,9 +2279,16 @@ namespace bilecom.app.Helper
             return creditNoteType;
         }
 
-        public static DebitNoteType ObtenerComprobante(NotaDebitoBe item)
+        public static DebitNoteType ObtenerComprobante(NotaDebitoBe item, VersionUBL version)
         {
             DebitNoteType debitNoteType = new DebitNoteType();
+
+            switch (version)
+            {
+                case VersionUBL._2_1:
+                    debitNoteType = ObtenerComprobante_2_1(item, version);
+                    break;
+            }
 
             return debitNoteType;
         }

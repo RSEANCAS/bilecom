@@ -1,4 +1,4 @@
-var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formaPagoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
+var tipoComprobanteLista = [], serieTipoComprobanteLista = [], serieLista = [], monedaLista = [], tipoNotaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
 var departamentoLista = [], provinciaLista = [], distritoLista = [];
 
 var datosclienteNuevo = {
@@ -22,34 +22,36 @@ const columnsDetalle = [
     { data: "PrecioUnitario", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     { data: "ImporteTotal", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     {
-        data: "BoletaDetalleId", render: function (data, type, row) {
-            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoBoleta.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
-                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoBoleta.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
+        data: "NotaDebitoDetalleId", render: function (data, type, row) {
+            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoNotaDebito.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
+                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoNotaDebito.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
         }
     },
 ];
 
 const fechaActual = new Date();
 
-const pageMantenimientoBoleta = {
+const pageMantenimientoNotaDebito = {
     Init: function () {
         common.ConfiguracionDataTable();
+        this.InitEvents();
         this.CargarCombo(() => {
-            this.InitEvents();
             this.Validar();
             this.ListarDetalle();
         });
     },
 
     InitEvents: function () {
-        $("#btn-buscar-cliente").click(pageMantenimientoBoleta.BtnBuscarClienteClick);
-        $("#btn-agregar-detalle").click(pageMantenimientoBoleta.BtnAgregarDetalleClick);
+        $("#chk-comprobante-externo").change(pageMantenimientoNotaDebito.ChkComprobanteExternoChange).trigger("change");
+        $("#btn-buscar-cliente").click(pageMantenimientoNotaDebito.BtnBuscarClienteClick);
+        $("#btn-agregar-detalle").click(pageMantenimientoNotaDebito.BtnAgregarDetalleClick);
 
+        $("#txt-fecha-emision-comprobante").datepicker({ format: "dd/mm/yyyy", autoclose: true });
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
+        $("#cmb-tipo-comprobante").change(pageMantenimientoNotaDebito.CmbTipoComprobanteChange);
+        pageMantenimientoNotaDebito.ObtenerDatos();
 
-        pageMantenimientoBoleta.ObtenerDatos();
-
-        $("#btn-nuevo-cliente").click(pageMantenimientoBoleta.BtnNuevoClienteClick);
+        $("#btn-nuevo-cliente").click(pageMantenimientoNotaDebito.BtnNuevoClienteClick);
     },
 
     BtnBuscarClienteClick: function () {
@@ -98,7 +100,7 @@ const pageMantenimientoBoleta = {
                 $(e.currentTarget).attr("id", "modal-busqueda-cliente");
 
                 $("#modal-busqueda-cliente").on("hide.bs.modal", function () {
-                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
                 let user = common.ObtenerUsuario();
@@ -108,8 +110,8 @@ const pageMantenimientoBoleta = {
                     url: `${urlRoot}api/cliente/buscar-cliente`,
                     data: {
                         empresaId: empresaId,
-                        nroDocumentoIdentidad: pageMantenimientoBoleta.ObtenerFiltroClienteNroDocumentoIdentidad,
-                        razonSocial: pageMantenimientoBoleta.ObtenerFiltroClienteNombres
+                        nroDocumentoIdentidad: pageMantenimientoNotaDebito.ObtenerFiltroClienteNroDocumentoIdentidad,
+                        razonSocial: pageMantenimientoNotaDebito.ObtenerFiltroClienteNombres
                     }
                 };
 
@@ -120,7 +122,7 @@ const pageMantenimientoBoleta = {
                     { data: "RazonSocial" },
                     {
                         data: "ClienteId", render: function (data, type, row) {
-                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoBoleta.BtnSeleccionarClienteClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
+                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoNotaDebito.BtnSeleccionarClienteClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
                         }
                     },
                 ];
@@ -137,7 +139,7 @@ const pageMantenimientoBoleta = {
         bootbox.dialog({
             title: "Nuevo Cliente",
             message:
-                `<form id="frm-boleta-cliente-nuevo" autocomplete="off">
+                `<form id="frm-notadebito-cliente-nuevo" autocomplete="off">
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -162,13 +164,13 @@ const pageMantenimientoBoleta = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Departamento</label>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoBoleta.CmbDepartamentoChange()"></select>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaDebito.CmbDepartamentoChange()"></select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Provincia</label>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoBoleta.CmbProvinciaChange()"></select>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaDebito.CmbProvinciaChange()"></select>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -197,12 +199,12 @@ const pageMantenimientoBoleta = {
                     <!--<div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoBoleta.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
+                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoNotaDebito.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoBoleta.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
+                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoNotaDebito.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
                             </div>
                         </div>
                     </div>-->
@@ -213,7 +215,7 @@ const pageMantenimientoBoleta = {
                     label: 'Guardar y Seleccionar',
                     className: 'btn-success',
                     callback: function () {
-                        $("#frm-boleta-cliente-nuevo").trigger("submit");
+                        $("#frm-notadebito-cliente-nuevo").trigger("submit");
                         return false;
                     },
 
@@ -222,7 +224,7 @@ const pageMantenimientoBoleta = {
                     label: 'Cancelar',
                     classname: 'btn-danger',
                     callback: function () {
-                        pageMantenimientoBoleta.BtnCierraNuevoCliente();
+                        pageMantenimientoNotaDebito.BtnCierraNuevoCliente();
                     }
                 }
             },
@@ -230,17 +232,17 @@ const pageMantenimientoBoleta = {
                 $(e.currentTarget).attr("id", "modal-nuevo-cliente");
 
                 $("#modal-nuevo-cliente").on("hide.bs.modal", function () {
-                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
-                pageMantenimientoBoleta.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
-                pageMantenimientoBoleta.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoNotaDebito.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoNotaDebito.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
-                pageMantenimientoBoleta.CmbDepartamentoChange();
-                pageMantenimientoBoleta.ValidarClienteNuevo();
+                pageMantenimientoNotaDebito.CmbDepartamentoChange();
+                pageMantenimientoNotaDebito.ValidarClienteNuevo();
                 //$("#btn-buscar-cliente-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-cliente", ajax, columns));
                 //$("#btn-buscar-cliente-dialog").trigger("click");
             },
@@ -250,27 +252,120 @@ const pageMantenimientoBoleta = {
     },
 
     BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
-        pageMantenimientoBoleta.LlenarDatosCliente(data);
+        pageMantenimientoNotaDebito.LlenarDatosCliente(data);
         $(modal).modal('hide');
+    },
+
+    ChkComprobanteExternoChange: function () {
+        let checked = $("#chk-comprobante-externo").prop("checked");
+
+        if (checked) {
+            $("#btn-nuevo-cliente").removeClass("hidden");
+            $("#btn-buscar-cliente").removeClass("hidden");
+        } else {
+            $("#btn-nuevo-cliente").addClass("hidden");
+            $("#btn-buscar-cliente").addClass("hidden");
+        }
+
+        $("#cmb-tipo-comprobante").trigger("change");
+
+        let select2ConfigNroComprobante = {
+            allowClear: true,
+            placeholder: '[Seleccione...]',
+        }
+
+        if (checked) {
+            select2ConfigNroComprobante.tags = true;
+        } else {
+            select2ConfigNroComprobante.minimumInputLength = 1;
+            select2ConfigNroComprobante.ajax = {
+                url: `${urlRoot}api/common/buscar-comprobante-venta`,
+                data: function (params) {
+                    let user = common.ObtenerUsuario();
+                    let nroComprobante = params.term;
+                    let serieId = $("#cmb-serie-tipo-comprobante").val();
+                    let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+                    return { empresaId: user.Empresa.EmpresaId, ambienteSunatId, tipoComprobanteId, serieId, nroComprobante };
+                },
+                processResults: function (data) {
+                    let results = (data || []).map(x => Object.assign(x, { id: x.ComprobanteId, text: x.NroComprobante }));
+                    return { results };
+                }
+            };
+        }
+
+        $("#cmb-nro-comprobante").empty().select2(select2ConfigNroComprobante);
+        if (checked) {
+            $("#cmb-nro-comprobante").off("change");
+        } else {
+            $("#cmb-nro-comprobante").change(pageMantenimientoNotaDebito.CmbNroComprobanteChange);
+        }
+
+        $("#txt-fecha-emision-comprobante").val("");
+        $("#txt-fecha-emision-comprobante").prop("readonly", !checked);
+        pageMantenimientoNotaDebito.LimpiarDatosCliente();
+    },
+
+    CmbTipoComprobanteChange: function () {
+        let checkedComprobanteExterno = $("#chk-comprobante-externo").prop("checked");
+
+        if (checkedComprobanteExterno) {
+            pageMantenimientoNotaDebito.ResponseSerieTipoComprobanteListar([]);
+            return;
+        }
+
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let user = common.ObtenerUsuario();
+        fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteId}`)
+            .then(common.ResponseToJson)
+            .then(SerieTipoComprobanteLista => {
+                serieTipoComprobanteLista = SerieTipoComprobanteLista || [];
+                pageMantenimientoNotaDebito.ResponseSerieTipoComprobanteListar(serieTipoComprobanteLista);
+            })
+    },
+
+    CmbNroComprobanteChange: function () {
+        let data = $("#cmb-nro-comprobante").select2('data');
+        if (data.length == 0) {
+            $("#txt-fecha-emision-comprobante").val("");
+            pageMantenimientoNotaDebito.LimpiarDatosCliente();
+            detalleLista = [];
+            pageMantenimientoNotaDebito.ListarDetalle();
+            return;
+        }
+        data = data[0];
+        let user = common.ObtenerUsuario();
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let empresaId = user.Empresa.EmpresaId;
+
+        let url = `${urlRoot}api/common/obtener-comprobante-venta?empresaId=${empresaId}&tipoComprobanteId=${tipoComprobanteId}&comprobanteId=${data.ComprobanteId}`;
+
+        fetch(url)
+            .then(common.ResponseToJson)
+            .then(pageMantenimientoNotaDebito.ResponseComprobanteObtener);
+        //let fechaHoraEmision = new Date(data.FechaHoraEmision);
+        //let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
+        //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        //pageMantenimientoNotaDebito.LlenarDatosCliente(data.Cliente);
     },
 
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
         let ProvinciaFiltro = provinciaLista.filter(x => x.DepartamentoId == departamentoId);
-        pageMantenimientoBoleta.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+        pageMantenimientoNotaDebito.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
-        pageMantenimientoBoleta.CmbProvinciaChange();
+        pageMantenimientoNotaDebito.CmbProvinciaChange();
     },
 
     CmbProvinciaChange: function () {
         let provinciaId = $("#cmb-cliente-provincia-nuevo").val();
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
-        pageMantenimientoBoleta.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+        pageMantenimientoNotaDebito.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
     },
 
     LlenarDatosCliente(data) {
-        pageMantenimientoBoleta.LimpiarDatosCliente();
+        pageMantenimientoNotaDebito.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
         $("#cmb-tipo-documento-identidad-cliente").val(data.TipoDocumentoIdentidadId).trigger('change');
         $("#txt-numero-documento-identidad-cliente").val(data.NroDocumentoIdentidad);
@@ -296,7 +391,7 @@ const pageMantenimientoBoleta = {
                                 </label>
                             </div>`,
             message:
-                `<form id="frm-boleta-detalle" autocomplete="off">
+                `<form id="frm-notadebito-detalle" autocomplete="off">
                     ${(id == null ? "" : `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
                     <div class="row">
                         <div class="col-sm-4">
@@ -356,7 +451,7 @@ const pageMantenimientoBoleta = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">IGV %</span>
-                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly>
+                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly value="18.00">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -403,7 +498,7 @@ const pageMantenimientoBoleta = {
                     label: 'Guardar',
                     className: 'btn-primary',
                     callback: function () {
-                        $("#frm-boleta-detalle").trigger("submit");
+                        $("#frm-notadebito-detalle").trigger("submit");
                         return false;
                     },
 
@@ -412,16 +507,16 @@ const pageMantenimientoBoleta = {
             onShow: function (e) {
                 $(e.currentTarget).attr("id", "modal-detalle-agregar");
 
-                pageMantenimientoBoleta.ResponseTipoProductoListar(tipoProductoLista);
-                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoBoleta.RbtDetalleTipoProductoChange);
+                pageMantenimientoNotaDebito.ResponseTipoProductoListar(tipoProductoLista);
+                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoNotaDebito.RbtDetalleTipoProductoChange);
 
-                $("#chk-detalle-avanzado").change(pageMantenimientoBoleta.ChkDetalleAvanzado);
+                $("#chk-detalle-avanzado").change(pageMantenimientoNotaDebito.ChkDetalleAvanzado);
 
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
-                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
 
-                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento, #cmb-detalle-tipo-afectacion-igv").change(pageMantenimientoBoleta.CalcularImporteTotal);
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoNotaDebito.CalcularImporteTotal);
 
                 $("#cmb-detalle-codigo").select2({
                     allowClear: true,
@@ -443,7 +538,7 @@ const pageMantenimientoBoleta = {
                     }
                 });
 
-                $("#cmb-detalle-codigo").change(pageMantenimientoBoleta.CmbDetalleCodigoChange);
+                $("#cmb-detalle-codigo").change(pageMantenimientoNotaDebito.CmbDetalleCodigoChange);
 
                 $("#cmb-detalle-codigo-sunat").select2({ tags: true, placeholder: 'Ingrese Código Sunat', dropdownParent: $("#modal-detalle-agregar") });
 
@@ -467,17 +562,17 @@ const pageMantenimientoBoleta = {
                     }
                 });
 
-                $("#cmb-detalle-descripcion").change(pageMantenimientoBoleta.CmbDetalleDescripcionChange);
+                $("#cmb-detalle-descripcion").change(pageMantenimientoNotaDebito.CmbDetalleDescripcionChange);
 
-                pageMantenimientoBoleta.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+                pageMantenimientoNotaDebito.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
                 //$("input[name='rbt-detalle-tipo-producto']").trigger("change");
 
-                pageMantenimientoBoleta.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
+                pageMantenimientoNotaDebito.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
 
                 let registroExiste = id != null;
 
                 if (registroExiste == true) {
-                    let index = detalleLista.findIndex(x => x.BoletaDetalleId == id);
+                    let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == id);
                     let data = detalleLista[index];
 
                     let optionDefault = new Option(data.Descripcion, data.ProductoId, true, true);
@@ -487,7 +582,7 @@ const pageMantenimientoBoleta = {
                     $("#txt-detalle-precio-unitario").val(data.PrecioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     $("#txt-detalle-importe-total").val(data.ImporteTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 }
-                pageMantenimientoBoleta.ValidarDetalle();
+                pageMantenimientoNotaDebito.ValidarDetalle();
             },
             animateIn: 'zoomInDown',
             animateOut: 'zoomOutUp'
@@ -512,11 +607,11 @@ const pageMantenimientoBoleta = {
             callback: function (result) {
                 if (result == true) {
                     //debugger;
-                    let index = detalleLista.findIndex(x => x.BoletaDetalleId == id);
-                    if (detalleLista[index].BoletaDetalleId > 0) detalleListaEliminados.push(detalleLista[index].BoletaDetalleId);
+                    let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == id);
+                    if (detalleLista[index].NotaDebitoDetalleId > 0) detalleListaEliminados.push(detalleLista[index].NotaDebitoDetalleId);
                     detalleLista.splice(index, 1);
-                    pageMantenimientoBoleta.ListarDetalle();
-                    $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                    pageMantenimientoNotaDebito.ListarDetalle();
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 }
             }
         })
@@ -545,17 +640,12 @@ const pageMantenimientoBoleta = {
             return;
         }
         data = data[0];
-        delete data.disabled;
-        delete data.selected;
-        delete data.element;
-        delete data._resultId;
-        data = { ...data, id: data.ProductoId, text: data.Nombre };
 
-        let optionDefaultDescripcion = $(new Option(data.Nombre, data.ProductoId, true, true)).data({ data });
-
+        //$("#cmb-detalle-descripcion").select2('data', data);
+        let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
         $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoNotaDebito.CargarOtrosCamposProducto(data);
     },
 
     CmbDetalleDescripcionChange: function () {
@@ -565,17 +655,12 @@ const pageMantenimientoBoleta = {
             return;
         }
         data = data[0];
-        delete data.disabled;
-        delete data.selected;
-        delete data.element;
-        delete data._resultId;
-        data = { ...data, id: data.ProductoId, text: data.Codigo };
 
-        let optionDefaultCodigo = $(new Option(data.Codigo, data.ProductoId, true, true)).data({ data });
-
+        //$("#cmb-detalle-codigo").select2('data', data);
+        let optionDefaultCodigo = new Option(data.Codigo, data.ProductoId, true, true);
         $("#cmb-detalle-codigo").append(optionDefaultCodigo);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoNotaDebito.CargarOtrosCamposProducto(data);
     },
 
     CargarOtrosCamposProducto(data) {
@@ -586,20 +671,20 @@ const pageMantenimientoBoleta = {
             $("#cmb-detalle-codigo-sunat").append(optionDefaultCodigoSunat);
         }
 
-        //pageMantenimientoBoleta.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        //pageMantenimientoNotaDebito.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
         $("#cmb-detalle-unidad-medida").val(data.UnidadMedidaId).trigger("change");
         $("#cmb-detalle-tipo-afectacion-igv").val(data.TipoAfectacionIgvId).trigger("change");
     },
 
     RbtDetalleTipoProductoChange: function () {
-        pageMantenimientoBoleta.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        pageMantenimientoNotaDebito.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
     },
 
     ListarDetalle: function () {
         detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
         $("#hdn-detalle").val(detalleLista.length);
-        pageMantenimientoBoleta.MostrarTotales();
+        pageMantenimientoNotaDebito.MostrarTotales();
     },
 
     MostrarTotales: function () {
@@ -608,10 +693,17 @@ const pageMantenimientoBoleta = {
     },
 
     Validar: function () {
-        $("#frm-boleta-mantenimiento")
+        $("#frm-notadebito-mantenimiento")
             .bootstrapValidator({
                 excluded: [],
                 fields: {
+                    "cmb-nro-comprobante": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar un comprobante.",
+                            }
+                        }
+                    },
                     "hdn-cliente-id": {
                         validators: {
                             notEmpty: {
@@ -635,17 +727,17 @@ const pageMantenimientoBoleta = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoBoleta.EnviarFormulario();
+                pageMantenimientoNotaDebito.EnviarFormulario();
             });
     },
 
     ValidarClienteNuevo: function () {
-        $("#frm-boleta-cliente-nuevo")
+        $("#frm-notadebito-cliente-nuevo")
             .bootstrapValidator({
                 fields: {
                     "cmb-cliente-tipo-documento-identidad-nuevo": {
                         validators: {
-                            notEmpty: {message:"Debe seleccionar tipo de documento de identidad."}
+                            notEmpty: { message: "Debe seleccionar tipo de documento de identidad." }
                         }
                     },
                     "txt-cliente-nro-documento-identidad-nuevo": {
@@ -776,13 +868,13 @@ const pageMantenimientoBoleta = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                
-                pageMantenimientoBoleta.BtnGuardarySeleccionar();
+
+                pageMantenimientoNotaDebito.BtnGuardarySeleccionar();
             });
     },
 
     ValidarDetalle: function () {
-        $("#frm-boleta-detalle")
+        $("#frm-notadebito-detalle")
             .bootstrapValidator({
                 fields: {
                     "cmb-detalle-descripcion": {
@@ -813,14 +905,14 @@ const pageMantenimientoBoleta = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoBoleta.GuardarDetalle();
+                pageMantenimientoNotaDebito.GuardarDetalle();
                 $("#modal-detalle-agregar").modal('hide');
             });
     },
 
     GuardarDetalle: function () {
-        let boletaDetalleId = pageMantenimientoBoleta.ObtenerBoletaDetalleId();
-        let detalleExiste = detalleLista.some(x => x.BoletaDetalleId == boletaDetalleId);
+        let notaDebitoDetalleId = pageMantenimientoNotaDebito.ObtenerNotaDebitoDetalleId();
+        let detalleExiste = detalleLista.some(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let unidadMedidaId = $("#cmb-detalle-unidad-medida").val();
@@ -845,7 +937,7 @@ const pageMantenimientoBoleta = {
         let totalImporte = tipoAfectacionIgv.FlagGratuito ? 0 : Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
         let data = {
-            BoletaDetalleId: boletaDetalleId,
+            NotaDebitoDetalleId: notaDebitoDetalleId,
             TipoProductoId: tipoProductoId,
             Cantidad: cantidad,
             UnidadMedidaId: unidadMedidaId,
@@ -873,22 +965,66 @@ const pageMantenimientoBoleta = {
         }
 
         if (detalleExiste == true) {
-            let index = detalleLista.findIndex(x => x.BoletaDetalleId == boletaDetalleId);
+            let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
             detalleLista[index] = Object.assign(detalleLista[index], data);
         }
         else detalleLista.push(data);
 
-        pageMantenimientoBoleta.ListarDetalle();
+        pageMantenimientoNotaDebito.ListarDetalle();
     },
 
-    ObtenerBoletaDetalleId: function () {
-        let boletaDetalleId = $("#hdn-detalle-id").val();
-        if (boletaDetalleId != null) return Number(boletaDetalleId);
+    GuardarDetalleDeComprobante: function (item) {
+        let notaDebitoDetalleId = pageMantenimientoNotaDebito.ObtenerNotaDebitoDetalleId();
+        //let detalleExiste = detalleLista.some(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
+        let data = {
+            NotaDebitoDetalleId: notaDebitoDetalleId,
+            TipoProductoId: item.TipoProductoId,
+            Cantidad: item.Cantidad,
+            UnidadMedidaId: item.UnidadMedidaId,
+            UnidadMedida: item.UnidadMedida,
+            ProductoId: item.ProductoId,
+            CodigoSunat: item.CodigoSunat,
+            Codigo: item.Codigo,
+            Descripcion: item.Descripcion,
+            FlagAplicaICPBER: false,
+            TipoAfectacionIgvId: item.TipoAfectacionIgvId,
+            TipoAfectacionIgv: item.TipoAfectacionIgv,
+            TipoTributoIdIGV: item.TipoTributoIdIGV,
+            TipoTributoIGV: item.TipoTributoIGV,
+            Descuento: item.Descuento,
+            ISC: item.ISC,
+            PorcentajeIGV: item.PorcentajeIGV,
+            IGV: item.IGV,
+            ICPBER: 0,
+            PorcentajeICPBER: 0,
+            ValorUnitario: item.ValorUnitario,
+            PrecioUnitario: item.PrecioUnitario,
+            ValorVenta: item.ValorVenta,
+            PrecioVenta: item.PrecioVenta,
+            ImporteTotal: item.ImporteTotal,
+            TipoComprobanteId: item.TipoComprobanteId,
+            ComprobanteId: item.ComprobanteId,
+            ComprobanteDetalleId: item.ComprobanteDetalleId
+        }
 
-        let listaIdNegativos = detalleLista.filter(x => x.BoletaDetalleId < 0);
-        boletaDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.BoletaDetalleId).sort((a, b) => a - b)[0];
-        boletaDetalleId--;
-        return boletaDetalleId;
+        //if (detalleExiste == true) {
+        //    let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
+        //    detalleLista[index] = Object.assign(detalleLista[index], data);
+        //}
+        //else detalleLista.push(data);
+        detalleLista.push(data);
+
+        pageMantenimientoNotaDebito.ListarDetalle();
+    },
+
+    ObtenerNotaDebitoDetalleId: function () {
+        let notaDebitoDetalleId = $("#hdn-detalle-id").val();
+        if (notaDebitoDetalleId != null) return Number(notaDebitoDetalleId);
+
+        let listaIdNegativos = detalleLista.filter(x => x.NotaDebitoDetalleId < 0);
+        notaDebitoDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.NotaDebitoDetalleId).sort((a, b) => a - b)[0];
+        notaDebitoDetalleId--;
+        return notaDebitoDetalleId;
     },
 
     CalcularImporteTotal: function () {
@@ -896,8 +1032,8 @@ const pageMantenimientoBoleta = {
         let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '');
         let descuentoString = $("#txt-detalle-descuento").val().replace(/,/g, '');
 
-        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data").length == 0 ? null : $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
-        let porcentajeIgvString = tipoAfectacionIgv == null ? "0" : tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : "18.00";
+        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
+        let porcentajeIgvString = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : $("#txt-detalle-porcentaje-igv").val().replace(/,/g, "");
         let porcentajeIgv = Number(porcentajeIgvString);
 
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
@@ -905,9 +1041,9 @@ const pageMantenimientoBoleta = {
         let valorUnitario = precioUnitario / (1 + (porcentajeIgv / 100));
         let valorVenta = valorUnitario * cantidad;
         let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
-        let importeTotal = (cantidad * precioUnitario) - descuento;
-        let igv = tipoAfectacionIgv == null ? 0 : tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : valorVenta * (porcentajeIgv / 100);
-        importeTotal = tipoAfectacionIgv == null ? 0 : tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
+        let importeTotal = cantidad * (precioUnitario - descuento);
+        let igv = tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : importeTotal - valorVenta;
+        importeTotal = tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
 
 
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
@@ -921,57 +1057,57 @@ const pageMantenimientoBoleta = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdBoleta}`),
+            fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdNotaDebito}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdBoleta}`),
+            fetch(`${urlRoot}api/tiponota/listar-tiponota-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdNotaDebito}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
             fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`),
-            fetch(`${urlRoot}api/formapago/listar-formapago`),
-            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdBoleta}`),
+            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdNotaDebito}`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
             fetch(`${urlRoot}api/provincia/listar-provincia`),
             fetch(`${urlRoot}api/distrito/listar-distrito`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormaPagoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+            .then(([TipoComprobanteLista, SerieLista, MonedaLista, TipoNotaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+                tipoComprobanteLista = TipoComprobanteLista || [];
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
-                tipoOperacionVentaLista = TipoOperacionVentaLista || [];
+                tipoNotaLista = TipoNotaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 unidadMedidaLista = UnidadMedidaLista || [];
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
                 tipoTributoLista = TipoTributoLista || [];
-                formaPagoLista = FormaPagoLista || [];
                 formatoLista = FormatoLista || [];
                 departamentoLista = DepartamentoLista || [];
                 provinciaLista = ProvinciaLista || [];
                 distritoLista = DistritoLista || [];
 
-                pageMantenimientoBoleta.ResponseSerieListar(serieLista);
-                pageMantenimientoBoleta.ResponseMonedaListar(monedaLista);
-                pageMantenimientoBoleta.ResponseTipoOperacionVentaListar(tipoOperacionVentaLista);
-                pageMantenimientoBoleta.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
-                pageMantenimientoBoleta.ResponseFormaPagoListar(formaPagoLista);
-                pageMantenimientoBoleta.ResponseFormatoListar(formatoLista);
+                pageMantenimientoNotaDebito.ResponseTipoComprobanteListar(tipoComprobanteLista);
+                pageMantenimientoNotaDebito.ResponseSerieListar(serieLista);
+                pageMantenimientoNotaDebito.ResponseMonedaListar(monedaLista);
+                pageMantenimientoNotaDebito.ResponseTipoNotaListar(tipoNotaLista);
+                pageMantenimientoNotaDebito.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
+                pageMantenimientoNotaDebito.ResponseFormatoListar(formatoLista);
                 if (typeof fnNext == "function") fnNext();
             })
     },
 
     ObtenerDatos: function () {
-        if (boletaId != null) {
+        if (notaDebitoId != null) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-            let url = `${urlRoot}api/boleta/obtener-boleta?empresaId=${empresaId}&boletaId=${boletaId}`;
+            let url = `${urlRoot}api/notadebito/obtener-notadebito?empresaId=${empresaId}&notaDebitoId=${notaDebitoId}`;
             let init = { method: 'GET' };
 
             fetch(url, init)
                 .then(common.ResponseToJson)
-                .then(pageMantenimientoBoleta.ResponseObtenerDatos);
+                .then(pageMantenimientoNotaDebito.ResponseObtenerDatos);
         }
     },
 
@@ -981,6 +1117,17 @@ const pageMantenimientoBoleta = {
     },
 
     EnviarFormulario: function () {
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let tipoComprobante = $("#cmb-tipo-comprobante").select2("data")[0];
+        tipoComprobante = { Codigo: tipoComprobante.Codigo };
+        let serieTipoComprobante = $("#cmb-serie-tipo-comprobante").select2("data")[0];
+        serieTipoComprobante = { Serial: serieTipoComprobante.Serial };
+        let comprobanteId = $("#cmb-nro-comprobante").val();
+        let comprobante = $("#cmb-nro-comprobante").select2("data")[0];
+        comprobante = { NroComprobante: comprobante.NroComprobante };
+        //let fechaEmisionComprobante = $("#txt-fecha-emision-comprobante").datepicker('getDate').toISOString();
+        
+
         let serieId = $("#cmb-serie").val();
         let serie = $("#cmb-serie").select2("data")[0];
         serie = { Serial: serie.Serial };
@@ -988,14 +1135,18 @@ const pageMantenimientoBoleta = {
         let moneda = $("#cmb-moneda").select2("data")[0];
         moneda = { MonedaId: moneda.MonedaId, Nombre: moneda.Nombre, Simbolo: moneda.Simbolo, Codigo: moneda.Codigo };
         let monedaId = $("#cmb-moneda").val();
-        let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
-        let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
-        tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
-        let formaPagoId = $("#cmb-forma-pago").val();
-        let formaPago = $("#cmb-forma-pago").select2("data")[0];
-        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
+        //let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
+        //let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
+        //tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
+        //let formaPagoId = $("#cmb-forma-pago").val();
+        //let formaPago = $("#cmb-forma-pago").select2("data")[0];
+        //formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
         let formatoId = $("#cmb-formato").val();
-        let observacion = $("#txt-observacion").val();
+        let tipoNotaId = $("#cmb-tipo-nota").val();
+        let tipoNota = $("#cmb-tipo-nota").select2("data")[0];
+        tipoNota = { TipoNotaId: tipoNota.TipoNotaId, CodigoSunat: tipoNota.CodigoSunat };
+        let motivo = $("#txt-motivo").val();
+        //let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();
         let tipoDocumentoIdentidadCliente = $("#cmb-tipo-documento-identidad-cliente").select2("data")[0];
         let cliente = {
@@ -1004,12 +1155,12 @@ const pageMantenimientoBoleta = {
             RazonSocial: $("#txt-nombres-completos-cliente").val(),
             Direccion: $("#txt-direccion-cliente").val()
         };
-        let totalGravado = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExonerado = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalInafecto = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExportacion = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalGratuito = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoBoleta.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGravado = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExonerado = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalInafecto = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExportacion = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGratuito = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalIGV = detalleLista.map(x => x.IGV).reduce((a, b) => a + b, 0);
         let totalISC = detalleLista.map(x => x.ISC).reduce((a, b) => a + b, 0);
         let totalOtrosCargos = 0;
@@ -1031,19 +1182,26 @@ const pageMantenimientoBoleta = {
 
         let ObjectoJson = {
             EmpresaId: empresaId,
-            BoletaId: boletaId,
+            NotaDebitoId: notaDebitoId,
             SedeId: sedeId,
+            TipoComprobanteId: tipoComprobanteId,
+            TipoComprobante: tipoComprobante,
+            ComprobanteId: comprobanteId,
+            ComprobanteStr: `${serieTipoComprobante.Serial}-${comprobante.NroComprobante}`,
             SerieId: serieId,
             Serie: serie,
             FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
             Moneda: moneda,
-            TipoOperacionVentaId: tipoOperacionVentaId,
-            TipoOperacionVenta: tipoOperacionVenta,
-            FormaPagoId: formaPagoId,
-            FormaPago: formaPago,
+            //TipoOperacionVentaId: tipoOperacionVentaId,
+            //TipoOperacionVenta: tipoOperacionVenta,
+            //FormaPagoId: formaPagoId,
+            //FormaPago: formaPago,
             FormatoId: formatoId,
-            Observacion: observacion,
+            TipoNotaId: tipoNotaId,
+            TipoNota: tipoNota,
+            Motivo: motivo,
+            //Observacion: observacion,
             FlagExportacion: false,
             FlagGratuito: false,
             FlagEmisorItinerante: false,
@@ -1065,8 +1223,9 @@ const pageMantenimientoBoleta = {
             TotalOtrosTributos: totalOtrosTributos,
             TotalBaseImponible: totalBaseImponible,
             TotaDescuentos: totalDescuentoDetalle,
-            ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
-            Observacion: observacion,
+            ImporteTotal: importeTotal,
+            //ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
+            //Observacion: observacion,
             TipoTributoIdExonerado: totalExonerado > 0 ? tipoTributoIdExonerado : null,
             TipoTributoExonerado: tipoTributoExonerado,
             TipoTributoIdInafecto: totalInafecto > 0 ? tipoTributoIdInafecto : null,
@@ -1079,22 +1238,22 @@ const pageMantenimientoBoleta = {
             TipoTributoIgv: tipoTributoIgv,
             TipoTributoIdIsc: totalISC > 0 ? tipoTributoIdIsc : null,
             TipoTributoIsc: tipoTributoIsc,
-            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago: null,
+            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago : null,
             TipoTributoOtrosTributos: tipoTributoOth,
             AmbienteSunatId: ambienteSunatId,
             Usuario: user.Nombre,
-            ListaBoletaDetalle: detalleLista,
-            ListaBoletaDetalleEliminados: detalleListaEliminados
+            ListaNotaDebitoDetalle: detalleLista,
+            ListaNotaDebitoDetalleEliminados: detalleListaEliminados
         }
 
-        let url = `${urlRoot}api/boleta/guardar-boleta`;
+        let url = `${urlRoot}api/notadebito/guardar-notadebito`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoBoleta.ResponseEnviarFormulario);
+            .then(pageMantenimientoNotaDebito.ResponseEnviarFormulario);
     },
 
     ResponseEnviarFormulario: function (data) {
@@ -1120,7 +1279,7 @@ const pageMantenimientoBoleta = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Boletas`
+                    location.href = `${urlRoot}NotasDebito`
                 }
             }
         });
@@ -1131,10 +1290,24 @@ const pageMantenimientoBoleta = {
         $("#cmb-serie").val(data.SerieId).trigger("change");
         $("#cmb-moneda").val(data.MonedaId).trigger("change");
         $("#txt-nro-comprobante").val(data.NroComprobante.toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, ''));
-        pageMantenimientoBoleta.LlenarDatosCliente(data.Cliente);
-        pageMantenimientoBoleta.LlenarDatosPersonal(data.Personal);
-        detalleLista = data.ListaBoletaDetalle;
-        pageMantenimientoBoleta.ListarDetalle();
+        pageMantenimientoNotaDebito.LlenarDatosCliente(data.Cliente);
+        pageMantenimientoNotaDebito.LlenarDatosPersonal(data.Personal);
+        detalleLista = data.ListaNotaDebitoDetalle;
+        pageMantenimientoNotaDebito.ListarDetalle();
+    },
+
+    ResponseTipoComprobanteListar: function (data) {
+        let dataTipoComprobante = data.filter(x => [tipoComprobanteIdFactura, tipoComprobanteIdBoleta].includes(x.TipoComprobanteId)).map(x => Object.assign(x, { id: x.TipoComprobanteId, text: x.Nombre }));
+        $("#cmb-tipo-comprobante").select2({ data: dataTipoComprobante, width: '100%', placeholder: '[Seleccione...]' }).trigger("change");
+    },
+
+    ResponseSerieTipoComprobanteListar: function (data) {
+        let checkedComprobanteExterno = $("#chk-comprobante-externo").prop("checked");
+        let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
+        let select2Config = { data: dataSerie, width: '100%', placeholder: '[Seleccione...]' };
+        if (checkedComprobanteExterno) select2Config.tags = true;
+
+        $("#cmb-serie-tipo-comprobante").empty().select2(select2Config);
     },
 
     ResponseSerieListar: function (data) {
@@ -1147,9 +1320,9 @@ const pageMantenimientoBoleta = {
         $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[Seleccione...]' });
     },
 
-    ResponseTipoOperacionVentaListar: function (data) {
-        let dataTipoOperacionVenta = data.map(x => Object.assign(x, { id: x.TipoOperacionVentaId, text: x.Nombre }));
-        $("#cmb-tipo-operacion-venta").select2({ data: dataTipoOperacionVenta, width: '100%', placeholder: '[Seleccione...]' });
+    ResponseTipoNotaListar: function (data) {
+        let dataTipoNota = data.map(x => Object.assign(x, { id: x.TipoNotaId, text: x.Descripcion }));
+        $("#cmb-tipo-nota").select2({ data: dataTipoNota, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseTipoDocumentoIdentidadListar: function (data) {
@@ -1157,7 +1330,7 @@ const pageMantenimientoBoleta = {
         $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]' });
         $("#cmb-tipo-documento-identidad-cliente").val("").trigger("change");
     },
-    
+
     ResponseTipoProductoListar: function (data) {
         let dataTipoProducto = data.map((x, i) => `<label class="radio-inline"><input type="radio" ${(i == 0 ? "checked" : "")} id="rbt-detalle-tipo-producto-${x.TipoProductoId}" name="rbt-detalle-tipo-producto" value="${x.TipoProductoId}" /> ${x.Nombre}</label>`).join('');
         $("#div-detalle-tipo-producto").html(dataTipoProducto);
@@ -1166,7 +1339,7 @@ const pageMantenimientoBoleta = {
     ResponseUnidadMedidaListar: function (data, dropdownParent = null) {
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
 
-        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.UnidadMedidaId, text: x.Descripcion }));
+        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
         $("#cmb-detalle-unidad-medida").empty();
         $("#cmb-detalle-unidad-medida").select2({ data: dataUnidadMedida, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-unidad-medida").val("").trigger("change");
@@ -1177,11 +1350,6 @@ const pageMantenimientoBoleta = {
         $("#cmb-detalle-tipo-afectacion-igv").empty();
         $("#cmb-detalle-tipo-afectacion-igv").select2({ data: dataTipoAfectacionIgv, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-tipo-afectacion-igv").val("").trigger("change");
-    },
-
-    ResponseFormaPagoListar: function (data) {
-        let dataFormaPago = data.map(x => Object.assign(x, { id: x.FormaPagoId, text: x.Descripcion }));
-        $("#cmb-forma-pago").select2({ data: dataFormaPago, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseFormatoListar: function (data) {
@@ -1210,25 +1378,50 @@ const pageMantenimientoBoleta = {
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
-        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]',dropdownParent});
+        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseProvinciaListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-provincia-nuevo").empty();
         let dataprovincia = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.ProvinciaId, text: item.Nombre }); });
-        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseDistritoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-distrito-nuevo").empty();
         let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
-        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
         data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
+    },
+
+    ResponseComprobanteObtener: function (data) {
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let fechaHoraEmision = new Date(data.FechaHoraEmision);
+        let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
+        //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        $("#txt-fecha-emision-comprobante").datepicker("setDate", fechaHoraEmision);
+        pageMantenimientoNotaDebito.LlenarDatosCliente(data.Cliente);
+
+        if (tipoComprobanteId == tipoComprobanteIdBoleta) data.ListaDetalle = data.ListaBoletaDetalle || [];
+        if (tipoComprobanteId == tipoComprobanteIdFactura) data.ListaDetalle = data.ListaFacturaDetalle || [];
+        detalleLista = [];
+        data.ListaDetalle.forEach(x => {
+            x.TipoComprobanteId = tipoComprobanteId;
+            if (tipoComprobanteId == tipoComprobanteIdBoleta) {
+                x.ComprobanteId = x.BoletaId;
+                x.ComprobanteDetalleId = x.BoletaDetalleId;
+            }
+            if (tipoComprobanteId == tipoComprobanteIdFactura) {
+                x.ComprobanteId = x.FacturaId;
+                x.ComprobanteDetalleId = x.FacturaDetalleId;
+            }
+            pageMantenimientoNotaDebito.GuardarDetalleDeComprobante(x)
+        });
     },
 
     BtnCierraNuevoCliente: function () {
@@ -1248,7 +1441,7 @@ const pageMantenimientoBoleta = {
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
-        pageMantenimientoBoleta.datosclienteNuevo = {
+        pageMantenimientoNotaDebito.datosclienteNuevo = {
             ClienteId: clienteId,
             EmpresaId: empresaId,
             TipoDocumentoIdentidadId: tipodocumentoidentidadId,
@@ -1262,26 +1455,26 @@ const pageMantenimientoBoleta = {
             Usuario: user
         }
         let url = `${urlRoot}api/cliente/guardar-cliente`;
-        let params = JSON.stringify(pageMantenimientoBoleta.datosclienteNuevo);
+        let params = JSON.stringify(pageMantenimientoNotaDebito.datosclienteNuevo);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoBoleta.ResponseClienteNuevoGuardar);
-        
+            .then(pageMantenimientoNotaDebito.ResponseClienteNuevoGuardar);
+
     },
 
     ResponseClienteNuevoGuardar: function (data) {
-        
+
         let tipo = "", mensaje = "";
         if (data > 0) {
             //$("#hdn-cliente-id").val(data);
             tipo = "success";
             mensaje = "¡Se ha guardado y seleccionado con éxito!";
-            pageMantenimientoBoleta.datosclienteNuevo.ClienteId = data;
-            pageMantenimientoBoleta.BtnSeleccionarClienteClick(pageMantenimientoBoleta.datosclienteNuevo,"#modal-nuevo-cliente");
-            pageMantenimientoBoleta.BtnCierraNuevoCliente();
+            pageMantenimientoNotaDebito.datosclienteNuevo.ClienteId = data;
+            pageMantenimientoNotaDebito.BtnSeleccionarClienteClick(pageMantenimientoNotaDebito.datosclienteNuevo, "#modal-nuevo-cliente");
+            pageMantenimientoNotaDebito.BtnCierraNuevoCliente();
         } else {
             tipo = "danger";
             mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
@@ -1300,14 +1493,14 @@ const pageMantenimientoBoleta = {
             timer: 1800,
             onHide: function () {
                 //if (data == true) {
-                //    location.href = `${urlRoot}Boletas`
+                //    location.href = `${urlRoot}NotaDebitos`
                 //}
             }
         });
     },
 
     LimpiarDatosClienteNuevo: function () {
-        pageMantenimientoBoleta.datosclienteNuevo = {
+        pageMantenimientoNotaDebito.datosclienteNuevo = {
             ClienteId: 0,
             EmpresaId: 0,
             TipoDocumentoIdentidadId: 0,

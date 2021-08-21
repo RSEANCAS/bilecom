@@ -12,7 +12,12 @@
         let usuario = $("#txt-usuario").val();
         let contraseña = $("#txt-contraseña").val();
 
-        let formIsValid = $("#frm-login").data("bootstrapValidator").isValid();
+        $("#frm-login").data("bootstrapValidator").revalidateField('txt-ruc');
+        $("#frm-login").data("bootstrapValidator").revalidateField('txt-usuario');
+        $("#frm-login").data("bootstrapValidator").revalidateField('txt-contraseña');
+
+        let formIsValid = $("#frm-login").data("bootstrapValidator").getInvalidFields().length == 0;
+        //let formIsValid = $("#frm-login").data("bootstrapValidator").isValid();
 
         if (!formIsValid) return;
 

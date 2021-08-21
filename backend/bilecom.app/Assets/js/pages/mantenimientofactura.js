@@ -356,7 +356,7 @@ const pageMantenimientoFactura = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">IGV %</span>
-                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly value="18.00">
+                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -421,7 +421,7 @@ const pageMantenimientoFactura = {
                     $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
 
-                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoFactura.CalcularImporteTotal);
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento, #cmb-detalle-tipo-afectacion-igv").change(pageMantenimientoFactura.CalcularImporteTotal);
 
                 $("#cmb-detalle-codigo").select2({
                     allowClear: true,
@@ -545,9 +545,14 @@ const pageMantenimientoFactura = {
             return;
         }
         data = data[0];
+        delete data.disabled;
+        delete data.selected;
+        delete data.element;
+        delete data._resultId;
+        data = { ...data, id: data.ProductoId, text: data.Nombre };
 
-        //$("#cmb-detalle-descripcion").select2('data', data);
-        let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
+        let optionDefaultDescripcion = $(new Option(data.Nombre, data.ProductoId, true, true)).data({ data });
+
         $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
 
         pageMantenimientoFactura.CargarOtrosCamposProducto(data);
@@ -560,9 +565,14 @@ const pageMantenimientoFactura = {
             return;
         }
         data = data[0];
+        delete data.disabled;
+        delete data.selected;
+        delete data.element;
+        delete data._resultId;
+        data = { ...data, id: data.ProductoId, text: data.Codigo };
+        
+        let optionDefaultCodigo = $(new Option(data.Codigo, data.ProductoId, true, true)).data({ data });
 
-        //$("#cmb-detalle-codigo").select2('data', data);
-        let optionDefaultCodigo = new Option(data.Codigo, data.ProductoId, true, true);
         $("#cmb-detalle-codigo").append(optionDefaultCodigo);
 
         pageMantenimientoFactura.CargarOtrosCamposProducto(data);
@@ -886,8 +896,8 @@ const pageMantenimientoFactura = {
         let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '');
         let descuentoString = $("#txt-detalle-descuento").val().replace(/,/g, '');
 
-        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
-        let porcentajeIgvString = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : $("#txt-detalle-porcentaje-igv").val().replace(/,/g, "");
+        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data").length == 0 ? null : $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
+        let porcentajeIgvString = tipoAfectacionIgv == null ? "0" : tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : "18.00";
         let porcentajeIgv = Number(porcentajeIgvString);
 
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
@@ -895,9 +905,9 @@ const pageMantenimientoFactura = {
         let valorUnitario = precioUnitario / (1 + (porcentajeIgv / 100));
         let valorVenta = valorUnitario * cantidad;
         let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
-        let importeTotal = cantidad * (precioUnitario - descuento);
-        let igv = tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : importeTotal - valorVenta;
-        importeTotal = tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
+        let importeTotal = (cantidad * precioUnitario) - descuento;
+        let igv = tipoAfectacionIgv == null ? 0 : tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : valorVenta * (porcentajeIgv / 100);
+        importeTotal = tipoAfectacionIgv == null ? 0 : tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
 
 
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));

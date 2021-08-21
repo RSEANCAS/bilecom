@@ -398,6 +398,8 @@
     <Content Include="Assets\js\pages\cotizacion.js" />
     <Content Include="Assets\js\pages\boleta.js" />
     <Content Include="Assets\js\pages\mantenimientofactura.js" />
+    <Content Include="Assets\js\pages\mantenimientonotadebito.js" />
+    <Content Include="Assets\js\pages\notadebito.js" />
     <Content Include="Assets\js\pages\notacredito.js" />
     <Content Include="Assets\js\pages\factura.js" />
     <Content Include="Assets\js\pages\inicio.js" />
@@ -2846,6 +2848,7 @@
     <Compile Include="Controllers\Api\FormatoController.cs" />
     <Compile Include="Controllers\Api\MonedaController.cs" />
     <Compile Include="Controllers\Api\MovimientoController.cs" />
+    <Compile Include="Controllers\Api\NotaDebitoController.cs" />
     <Compile Include="Controllers\Api\PaisController.cs" />
     <Compile Include="Controllers\Api\PersonalController.cs" />
     <Compile Include="Controllers\Api\EmpresaController.cs" />
@@ -3219,6 +3222,8 @@
     <Content Include="Views\Boleta\Mantenimiento.cshtml" />
     <Content Include="Views\NotaCredito\Index.cshtml" />
     <Content Include="Views\NotaCredito\Mantenimiento.cshtml" />
+    <Content Include="Views\NotaDebito\Index.cshtml" />
+    <Content Include="Views\NotaDebito\Mantenimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3229,7 +3234,6 @@
   <ItemGroup>
     <Folder Include="Assets\plugins\flot-charts\examples\gauge\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\NotaDebito\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bilecom.be\bilecom.be.csproj">
