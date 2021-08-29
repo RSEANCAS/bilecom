@@ -95,9 +95,9 @@ namespace bilecom.da
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter { ParameterName = "@empresaId", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.InputOutput, Value = registro.EmpresaId.GetNullable() });
-                    cmd.Parameters.AddWithValue("@ruc", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@razonSocial", registro.EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@nombreComercial", registro.EmpresaId.GetNullable());
+                    //cmd.Parameters.AddWithValue("@ruc", registro.EmpresaId.GetNullable());
+                    //cmd.Parameters.AddWithValue("@razonSocial", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@nombreComercial", registro.NombreComercial.GetNullable());
                     cmd.Parameters.AddWithValue("@creadoPor", registro.CreadoPor.GetNullable());
 
                     int FilaAfectadas = cmd.ExecuteNonQuery();

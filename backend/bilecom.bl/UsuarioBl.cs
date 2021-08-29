@@ -4,6 +4,7 @@ using bilecom.ut;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,27 +24,32 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-
-                item = usuarioDa.ObtenerPorNombre(nombre, empresaId, cn);
-                if (item != null)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    if (loadListaPerfil) item.ListaPerfil = perfilDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
-                    if (item.ListaPerfil != null)
+                    cn.Open();
+
+                    item = usuarioDa.ObtenerPorNombre(nombre, empresaId, cn);
+                    if (item != null)
                     {
-                        if (loadListaOpcionxPerfil)
+                        if (loadListaPerfil) item.ListaPerfil = perfilDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
+                        if (item.ListaPerfil != null)
                         {
-                            foreach(var itemPerfil in item.ListaPerfil)
+                            if (loadListaOpcionxPerfil)
                             {
-                                itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, item.EmpresaId.Value, cn);
+                                foreach (var itemPerfil in item.ListaPerfil)
+                                {
+                                    itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, item.EmpresaId.Value, cn);
+                                }
                             }
                         }
+                        if (LoadListaSede) item.ListaSede = sedeDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
                     }
-                    if (LoadListaSede) item.ListaSede = sedeDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
+
+                    cn.Close();
                 }
             }
             catch (Exception ex) { throw ex; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return item;
         }
@@ -53,27 +59,32 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-
-                item = usuarioDa.Obtener(empresaId, usuarioId, cn);
-                if (item != null)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    if (loadListaPerfil) item.ListaPerfil = perfilDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
-                    if (item.ListaPerfil != null)
+                    cn.Open();
+
+                    item = usuarioDa.Obtener(empresaId, usuarioId, cn);
+                    if (item != null)
                     {
-                        if (loadListaOpcionxPerfil)
+                        if (loadListaPerfil) item.ListaPerfil = perfilDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
+                        if (item.ListaPerfil != null)
                         {
-                            foreach (var itemPerfil in item.ListaPerfil)
+                            if (loadListaOpcionxPerfil)
                             {
-                                itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, item.EmpresaId.Value, cn);
+                                foreach (var itemPerfil in item.ListaPerfil)
+                                {
+                                    itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, item.EmpresaId.Value, cn);
+                                }
                             }
                         }
+                        if (LoadListaSede) item.ListaSede = sedeDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
                     }
-                    if (LoadListaSede) item.ListaSede = sedeDa.ListarPorUsuario(item.UsuarioId, item.EmpresaId.Value, cn);
+
+                    cn.Close();
                 }
             }
             catch (Exception ex) { throw ex; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return item;
         }
@@ -83,12 +94,16 @@ namespace bilecom.bl
             byte[] _contrasena = null;
             try
             {
-                cn.Open();
-                _contrasena = Seguridad.MD5Byte(contrasena);
-                seCambio = usuarioDa.CambiarContrasena(empresaId, usuarioId, _contrasena, modificadoPor, cn);
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    _contrasena = Seguridad.MD5Byte(contrasena);
+                    seCambio = usuarioDa.CambiarContrasena(empresaId, usuarioId, _contrasena, modificadoPor, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { throw ex; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return seCambio;
         }

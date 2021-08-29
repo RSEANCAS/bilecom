@@ -20,12 +20,15 @@ namespace bilecom.bl
             List<SedeBe> lista = null;
             try
             {
-                cn.Open();
-                lista = sedeDa.Buscar(empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = sedeDa.Buscar(empresaId, nombre, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                    cn.Close();
+                }
             }
             catch (Exception) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return lista;
         }
@@ -35,12 +38,15 @@ namespace bilecom.bl
             List<SedeBe> lista = null;
             try
             {
-                cn.Open();
-                lista = sedeDa.SedeAlmacenListar(empresaId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = sedeDa.SedeAlmacenListar(empresaId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return lista;
         }
@@ -50,12 +56,15 @@ namespace bilecom.bl
             List<SedeBe> lista = null;
             try
             {
-                cn.Open();
-                lista = sedeDa.ListarPorUsuario(usuarioId, empresaId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = sedeDa.ListarPorUsuario(usuarioId, empresaId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return lista;
         }
@@ -65,25 +74,32 @@ namespace bilecom.bl
             SedeBe respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = sedeDa.Obtener(empresaId, sedeId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = sedeDa.Obtener(empresaId, sedeId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { respuesta = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
+
         public bool Guardar(SedeBe sedeBe)
         {
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = sedeDa.Guardar(sedeBe, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = sedeDa.Guardar(sedeBe, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
 
@@ -92,12 +108,15 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = sedeDa.Eliminar(empresaId, sedeId, Usuario, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = sedeDa.Eliminar(empresaId, sedeId, Usuario, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
     }

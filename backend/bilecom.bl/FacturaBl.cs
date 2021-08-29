@@ -23,12 +23,15 @@ namespace bilecom.bl
             List<FacturaBe> lista = null;
             try
             {
-                cn.Open();
-                lista = facturaDa.Buscar(empresaId, ambienteSunatId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = facturaDa.Buscar(empresaId, ambienteSunatId, nroDocumentoIdentidadCliente, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -37,19 +40,22 @@ namespace bilecom.bl
             FacturaBe item = null;
             try
             {
-                cn.Open();
-                item = facturaDa.Obtener(empresaId, facturaId, cn);
-
-                if(item != null)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
-                    if (conDetalle) item.ListaFacturaDetalle = facturaDetalleDa.Listar(empresaId, facturaId, cn);
+                    cn.Open();
+                    item = facturaDa.Obtener(empresaId, facturaId, cn);
+
+                    if (item != null)
+                    {
+                        if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
+                        if (conDetalle) item.ListaFacturaDetalle = facturaDetalleDa.Listar(empresaId, facturaId, cn);
+                    }
+                    cn.Close();
                 }
-                cn.Close();
             }
             catch (SqlException ex) { item = null; }
             catch (Exception ex) { item = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return item;
         }
 
@@ -65,62 +71,65 @@ namespace bilecom.bl
                 {
                     using (TransactionScope scope = new TransactionScope())
                     {
-                        cn.Open();
-                        seGuardo = facturaDa.Guardar(registro, cn, out facturaId, out nroComprobante, out fechaHoraEmision, out totalImporteEnLetras);
-                        // Si seGuardo es True entonces 
-                        if (seGuardo)
+                        using (var cn = new SqlConnection(CadenaConexion))
                         {
-                            //if (registro.ListaFacturaDetalleEliminados != null)
-                            //{
-                            //    foreach (int facturaDetalleId in registro.ListaFacturaDetalleEliminados)
-                            //    {
-                            //        FacturaDetalleBe registroDetalleEliminar = new FacturaDetalleBe();
-                            //        registroDetalleEliminar.EmpresaId = registro.EmpresaId;
-                            //        registroDetalleEliminar.FacturaId = (int)facturaId;
-                            //        registroDetalleEliminar.FacturaDetalleId = facturaDetalleId;
-                            //        registroDetalleEliminar.Usuario = registro.Usuario;
-                            //        seGuardo = facturaDetalleDa.Eliminar(registroDetalleEliminar, cn);
-
-                            //        if (!seGuardo) break;
-                            //    }
-                            //}
-
-                            // Si la Lista de Detalle es diferente de Null
-                            if (registro.ListaFacturaDetalle != null)
+                            cn.Open();
+                            seGuardo = facturaDa.Guardar(registro, cn, out facturaId, out nroComprobante, out fechaHoraEmision, out totalImporteEnLetras);
+                            // Si seGuardo es True entonces 
+                            if (seGuardo)
                             {
-                                //Entonces recorro la misma Lista de detalle con el Item
-                                foreach (var item in registro.ListaFacturaDetalle)
-                                {
-                                    int? facturaDetalleId = null;
+                                //if (registro.ListaFacturaDetalleEliminados != null)
+                                //{
+                                //    foreach (int facturaDetalleId in registro.ListaFacturaDetalleEliminados)
+                                //    {
+                                //        FacturaDetalleBe registroDetalleEliminar = new FacturaDetalleBe();
+                                //        registroDetalleEliminar.EmpresaId = registro.EmpresaId;
+                                //        registroDetalleEliminar.FacturaId = (int)facturaId;
+                                //        registroDetalleEliminar.FacturaDetalleId = facturaDetalleId;
+                                //        registroDetalleEliminar.Usuario = registro.Usuario;
+                                //        seGuardo = facturaDetalleDa.Eliminar(registroDetalleEliminar, cn);
 
-                                    item.FacturaId = (int)facturaId;
-                                    item.EmpresaId = registro.EmpresaId;
-                                    item.Usuario = registro.Usuario;
-                                    seGuardo = facturaDetalleDa.Guardar(item, cn, out facturaDetalleId);
-                                    //seGuardo = new 
-                                    if (!seGuardo) break;
+                                //        if (!seGuardo) break;
+                                //    }
+                                //}
+
+                                // Si la Lista de Detalle es diferente de Null
+                                if (registro.ListaFacturaDetalle != null)
+                                {
+                                    //Entonces recorro la misma Lista de detalle con el Item
+                                    foreach (var item in registro.ListaFacturaDetalle)
+                                    {
+                                        int? facturaDetalleId = null;
+
+                                        item.FacturaId = (int)facturaId;
+                                        item.EmpresaId = registro.EmpresaId;
+                                        item.Usuario = registro.Usuario;
+                                        seGuardo = facturaDetalleDa.Guardar(item, cn, out facturaDetalleId);
+                                        //seGuardo = new 
+                                        if (!seGuardo) break;
+                                    }
                                 }
+
+                                //if(registro.ListaFacturaGuiaRemision != null)
+                                //{
+                                //    foreach(var item in registro.ListaFacturaGuiaRemision)
+                                //    {
+                                //        int? facturaGuiaRemision = null;
+                                //        item.FacturaId = (int)facturaId;
+                                //        item.EmpresaId = registro.EmpresaId;
+                                //        item.Usuario = registro.Usuario;
+                                //        seg
+                                //    }
+                                //}
                             }
 
-                            //if(registro.ListaFacturaGuiaRemision != null)
-                            //{
-                            //    foreach(var item in registro.ListaFacturaGuiaRemision)
-                            //    {
-                            //        int? facturaGuiaRemision = null;
-                            //        item.FacturaId = (int)facturaId;
-                            //        item.EmpresaId = registro.EmpresaId;
-                            //        item.Usuario = registro.Usuario;
-                            //        seg
-                            //    }
-                            //}
+                            if (seGuardo) scope.Complete();
+                            cn.Close();
                         }
-
-                        if (seGuardo) scope.Complete();
-                        cn.Close();
                     }
                 }
                 catch (Exception ex) { seGuardo = false; }
-                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+                //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             }
             return seGuardo;
         }
@@ -131,12 +140,15 @@ namespace bilecom.bl
             {
                 try
                 {
-                    cn.Open();
-                    seGuardo = facturaDa.Anular(registro, cn);
-                    cn.Close();
+                    using (var cn = new SqlConnection(CadenaConexion))
+                    {
+                        cn.Open();
+                        seGuardo = facturaDa.Anular(registro, cn);
+                        cn.Close();
+                    }
                 }
                 catch (Exception ex) { seGuardo = false; }
-                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+                //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             }
             return seGuardo;
         }
@@ -147,12 +159,15 @@ namespace bilecom.bl
             {
                 try
                 {
-                    cn.Open();
-                    seGuardo = facturaDa.GuardarRespuestaSunat(registro, cn);
-                    cn.Close();
+                    using (var cn = new SqlConnection(CadenaConexion))
+                    {
+                        cn.Open();
+                        seGuardo = facturaDa.GuardarRespuestaSunat(registro, cn);
+                        cn.Close();
+                    }
                 }
                 catch (Exception ex) { seGuardo = false; }
-                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+                //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             }
             return seGuardo;
         }

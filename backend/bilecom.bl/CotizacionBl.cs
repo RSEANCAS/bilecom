@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,15 @@ namespace bilecom.bl
             List<CotizacionBe> lista = null;
             try
             {
-                cn.Open();
-                lista = cotizacionDa.Buscar(empresaId, nombresCompletosPersonal, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = cotizacionDa.Buscar(empresaId, nombresCompletosPersonal, razonSocialCliente, fechaHoraEmisionDesde, fechaHoraEmisionHasta, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                    cn.Close();
+                }
             }
             catch (Exception) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -40,20 +44,23 @@ namespace bilecom.bl
             CotizacionBe item = null;
             try
             {
-                cn.Open();
-                item = cotizacionDa.Obtener(empresaId, cotizacionId, cn);
-                if(item != null)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    if (conSerie) item.Serie = serieDa.Obtener(empresaId, item.SerieId, cn);
-                    if (conMoneda) item.Moneda = monedaDa.Obtener(item.MonedaId, cn);
-                    if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
-                    if (conPersonal) item.Personal = personalDa.Obtener(empresaId, item.PersonalId, cn);
-                    if (conListaDetalleCotizacion) item.ListaCotizacionDetalle = cotizacionDetalleDa.Listar(empresaId, item.CotizacionId, cn);
+                    cn.Open();
+                    item = cotizacionDa.Obtener(empresaId, cotizacionId, cn);
+                    if (item != null)
+                    {
+                        if (conSerie) item.Serie = serieDa.Obtener(empresaId, item.SerieId, cn);
+                        if (conMoneda) item.Moneda = monedaDa.Obtener(item.MonedaId, cn);
+                        if (conCliente) item.Cliente = clienteDa.Obtener(empresaId, item.ClienteId, cn);
+                        if (conPersonal) item.Personal = personalDa.Obtener(empresaId, item.PersonalId, cn);
+                        if (conListaDetalleCotizacion) item.ListaCotizacionDetalle = cotizacionDetalleDa.Listar(empresaId, item.CotizacionId, cn);
+                    }
+                    cn.Close();
                 }
-                cn.Close();
             }
             catch (Exception) { item = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return item;
         }
 
@@ -66,48 +73,51 @@ namespace bilecom.bl
                 {
                     using (TransactionScope scope = new TransactionScope())
                     {
-                        cn.Open();
-                        seGuardo = cotizacionDa.Guardar(registro, cn, out cotizacionId);
-                        // Si seGuardo es True entonces 
-                        if (seGuardo)
+                        using (var cn = new SqlConnection(CadenaConexion))
                         {
-                            if(registro.ListaCotizacionDetalleEliminados != null)
+                            cn.Open();
+                            seGuardo = cotizacionDa.Guardar(registro, cn, out cotizacionId);
+                            // Si seGuardo es True entonces 
+                            if (seGuardo)
                             {
-                                foreach (int cotizacionDetalleId in registro.ListaCotizacionDetalleEliminados)
+                                if (registro.ListaCotizacionDetalleEliminados != null)
                                 {
-                                    CotizacionDetalleBe registroDetalleEliminar = new CotizacionDetalleBe();
-                                    registroDetalleEliminar.EmpresaId = registro.EmpresaId;
-                                    registroDetalleEliminar.CotizacionId = (int)cotizacionId;
-                                    registroDetalleEliminar.CotizacionDetalleId = cotizacionDetalleId;
-                                    registroDetalleEliminar.Usuario = registro.Usuario;
-                                    seGuardo = cotizacionDetalleDa.Eliminar(registroDetalleEliminar, cn);
+                                    foreach (int cotizacionDetalleId in registro.ListaCotizacionDetalleEliminados)
+                                    {
+                                        CotizacionDetalleBe registroDetalleEliminar = new CotizacionDetalleBe();
+                                        registroDetalleEliminar.EmpresaId = registro.EmpresaId;
+                                        registroDetalleEliminar.CotizacionId = (int)cotizacionId;
+                                        registroDetalleEliminar.CotizacionDetalleId = cotizacionDetalleId;
+                                        registroDetalleEliminar.Usuario = registro.Usuario;
+                                        seGuardo = cotizacionDetalleDa.Eliminar(registroDetalleEliminar, cn);
 
-                                    if (!seGuardo) break;
+                                        if (!seGuardo) break;
+                                    }
+                                }
+
+                                // Si la Lista de Detalle es diferente de Null
+                                if (registro.ListaCotizacionDetalle != null)
+                                {
+                                    //Entonces recorro la misma Lista de detalle con el Item
+                                    foreach (var item in registro.ListaCotizacionDetalle)
+                                    {
+                                        item.CotizacionId = (int)cotizacionId;
+                                        item.EmpresaId = registro.EmpresaId;
+                                        item.Usuario = registro.Usuario;
+                                        seGuardo = cotizacionDetalleDa.Guardar(item, cn);
+                                        //seGuardo = new 
+                                        if (!seGuardo) break;
+                                    }
                                 }
                             }
 
-                            // Si la Lista de Detalle es diferente de Null
-                            if (registro.ListaCotizacionDetalle != null)
-                            {
-                                //Entonces recorro la misma Lista de detalle con el Item
-                                foreach (var item in registro.ListaCotizacionDetalle)
-                                {
-                                    item.CotizacionId = (int)cotizacionId;
-                                    item.EmpresaId = registro.EmpresaId;
-                                    item.Usuario = registro.Usuario;
-                                    seGuardo = cotizacionDetalleDa.Guardar(item, cn);
-                                    //seGuardo = new 
-                                    if (!seGuardo) break;
-                                }
-                            }
+                            if (seGuardo) scope.Complete();
+                            cn.Close();
                         }
-
-                        if (seGuardo) scope.Complete();
-                        cn.Close();
                     }
                 }
                 catch (Exception ex) { seGuardo = false; }
-                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+                //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             }
             return seGuardo;
         }
@@ -118,12 +128,15 @@ namespace bilecom.bl
             {
                 try
                 {
-                    cn.Open();
-                    seGuardo = cotizacionDa.Anular(registro, cn);
-                    cn.Close();
+                    using (var cn = new SqlConnection(CadenaConexion))
+                    {
+                        cn.Open();
+                        seGuardo = cotizacionDa.Anular(registro, cn);
+                        cn.Close();
+                    }
                 }
                 catch (Exception ex) { seGuardo = false; }
-                finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+                //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             }
             return seGuardo;
         }

@@ -12,18 +12,19 @@
         let usuario = $("#txt-usuario").val();
         let contraseña = $("#txt-contraseña").val();
 
-        $("#frm-login").data("bootstrapValidator").revalidateField('txt-ruc');
-        $("#frm-login").data("bootstrapValidator").revalidateField('txt-usuario');
-        $("#frm-login").data("bootstrapValidator").revalidateField('txt-contraseña');
+        //$("#frm-login").data("bootstrapValidator").revalidateField('txt-ruc');
+        //$("#frm-login").data("bootstrapValidator").revalidateField('txt-usuario');
+        //$("#frm-login").data("bootstrapValidator").revalidateField('txt-contraseña');
 
-        let formIsValid = $("#frm-login").data("bootstrapValidator").getInvalidFields().length == 0;
-        //let formIsValid = $("#frm-login").data("bootstrapValidator").isValid();
+        //let formIsValid = $("#frm-login").data("bootstrapValidator").getInvalidFields().length == 0;
+        $("#frm-login").data("bootstrapValidator").validate();
+        let formIsValid = $("#frm-login").data("bootstrapValidator").isValid();
 
         if (!formIsValid) return;
 
         let url = `${urlRoot}api/usuario/autenticar-usuario?ruc=${ruc}&usuario=${usuario}&contraseña=${contraseña}`;
         
-        let init = { method: 'POST', credentials: 'include'};
+        let init = { method: 'POST'};
 
         fetch(url, init)
             .then(common.ResponseToJson)
@@ -123,6 +124,7 @@
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
+                //return true;
             })
     },
 }

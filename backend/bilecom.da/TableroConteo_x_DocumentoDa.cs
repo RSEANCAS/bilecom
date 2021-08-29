@@ -12,17 +12,17 @@ namespace bilecom.da
 {
     public class TableroConteo_x_DocumentoDa
     {
-        public TableroConteo_x_DocumentoBe Obtener(int EmpresaId,int Anyo, int Mes,SqlConnection cn)
+        public TableroConteo_x_DocumentoBe Obtener(int empresaId, int anio, int mes, SqlConnection cn)
         {
             TableroConteo_x_DocumentoBe respuesta = null;
             try
             {
-                using(SqlCommand cmd = new SqlCommand("dbo.usp_tablero_conteo_x_documento", cn))
+                using (SqlCommand cmd = new SqlCommand("dbo.usp_tablero_conteo_x_documento", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@EmpresaId", EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@Anyo", Anyo.GetNullable());
-                    cmd.Parameters.AddWithValue("@Mes", Mes.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@anio", anio.GetNullable());
+                    cmd.Parameters.AddWithValue("@mes", mes.GetNullable());
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.HasRows)
@@ -34,7 +34,7 @@ namespace bilecom.da
                                 respuesta.TotalAnuladoFa = dr.GetData<int>("TotalAnuladoFa");
                                 respuesta.TotalDocumentoBo = dr.GetData<int>("TotalDocumentoBo");
                                 respuesta.TotalAnuladoBo = dr.GetData<int>("TotalAnuladoBo");
-                                respuesta.TotalDocumentoNC = dr.GetData<int>("TotalDocumentoNC"); 
+                                respuesta.TotalDocumentoNC = dr.GetData<int>("TotalDocumentoNC");
                                 respuesta.TotalAnuladoNC = dr.GetData<int>("TotalAnuladoNC");
                                 respuesta.TotalDocumentoND = dr.GetData<int>("TotalDocumentoND");
                                 respuesta.TotalAnuladoND = dr.GetData<int>("TotalAnuladoND");
@@ -43,7 +43,7 @@ namespace bilecom.da
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 respuesta = null;
             }

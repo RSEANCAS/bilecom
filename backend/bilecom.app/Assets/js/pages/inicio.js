@@ -26,7 +26,7 @@
 
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-        let url = `${urlRoot}api/tablero/conteo_x_documento-tablero?empresaId=${empresaId}&Anyo=${anyo}&Mes=${mes}`;
+        let url = `${urlRoot}api/tablero/conteo_x_documento-tablero?empresaId=${empresaId}&anio=${anyo}&mes=${mes}`;
         let init = { method: 'GET' };
 
         fetch(url, init)

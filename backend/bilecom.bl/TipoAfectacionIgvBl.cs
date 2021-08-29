@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,18 +20,18 @@ namespace bilecom.bl
             List<TipoAfectacionIgvBe> respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = tipoAfectacionIgvDa.Listar(cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = tipoAfectacionIgvDa.Listar(cn);
+                    cn.Close();
+                }
             }
             catch(Exception ex)
             {
                 respuesta = null;
             }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
 
@@ -39,25 +40,25 @@ namespace bilecom.bl
             List<TipoAfectacionIgvBe> respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = new TipoAfectacionIgvDa().ListarPorEmpresa(empresaId, cn);
-                if(respuesta != null)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    foreach(var item in respuesta)
+                    cn.Open();
+                    respuesta = new TipoAfectacionIgvDa().ListarPorEmpresa(empresaId, cn);
+                    if (respuesta != null)
                     {
-                        item.TipoTributo = tipoTributoDa.Obtener(item.TipoTributoId, cn);
+                        foreach (var item in respuesta)
+                        {
+                            item.TipoTributo = tipoTributoDa.Obtener(item.TipoTributoId, cn);
+                        }
                     }
+                    cn.Close();
                 }
-                cn.Close();
             }
             catch (Exception ex)
             {
                 respuesta = null;
             }
-            finally
-            {
-                if (cn.State == ConnectionState.Open) cn.Close();
-            }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
     }

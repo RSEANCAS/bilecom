@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,19 +20,22 @@ namespace bilecom.bl
             List<FormatoBe> lista = null;
             try
             {
-                cn.Open();
-                lista = formatoDa.Listar(cn);
-                if(lista != null && withTipoComprobante)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    foreach(var item in lista)
+                    cn.Open();
+                    lista = formatoDa.Listar(cn);
+                    if (lista != null && withTipoComprobante)
                     {
-                        item.TipoComprobante = tipoComprobanteDa.Obtener(item.TipoComprobanteId, cn);
+                        foreach (var item in lista)
+                        {
+                            item.TipoComprobante = tipoComprobanteDa.Obtener(item.TipoComprobanteId, cn);
+                        }
                     }
+                    cn.Close();
                 }
-                cn.Close();
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -40,12 +44,15 @@ namespace bilecom.bl
             List<FormatoBe> lista = null;
             try
             {
-                cn.Open();
-                lista = formatoDa.ListarPorTipoComprobante(tipoComprobanteId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = formatoDa.ListarPorTipoComprobante(tipoComprobanteId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -54,12 +61,15 @@ namespace bilecom.bl
             FormatoBe respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = formatoDa.Obtener(FormatoId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = formatoDa.Obtener(FormatoId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { respuesta = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace bilecom.bl
 {
@@ -20,12 +21,15 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-                lista = productoDa.Buscar(categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = productoDa.Buscar(categoriaNombre, nombre, empresaId, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                    cn.Close();
+                }
             }
             catch (Exception ex){lista = null;}
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -35,12 +39,15 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-                lista = productoDa.BuscarPorCodigo(tipoProductoId, codigo, empresaId,  cn, sedeAlmacenId);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = productoDa.BuscarPorCodigo(tipoProductoId, codigo, empresaId, cn, sedeAlmacenId);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -50,12 +57,15 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-                lista = productoDa.BuscarPorNombre(tipoProductoId, nombre, empresaId, cn, sedeAlmacenId);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = productoDa.BuscarPorNombre(tipoProductoId, nombre, empresaId, cn, sedeAlmacenId);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -64,12 +74,15 @@ namespace bilecom.bl
             ProductoBe respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = new ProductoDa().Obtener(EmpresaId, productoId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = new ProductoDa().Obtener(EmpresaId, productoId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { respuesta = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
         public bool ProductoGuardar(ProductoBe registro)
@@ -77,12 +90,15 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = productoDa.Guardar(registro, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = productoDa.Guardar(registro, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
 
@@ -91,12 +107,15 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = productoDa.Eliminar(empresaId, productoId, Usuario, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = productoDa.Eliminar(empresaId, productoId, Usuario, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
     }

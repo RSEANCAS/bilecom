@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,23 +21,28 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-
-                lista = perfilDa.ListarPorUsuario(usuarioId, empresaId, cn);
-
-                if (lista != null)
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    if (loadListaOpcion)
+                    cn.Open();
+
+                    lista = perfilDa.ListarPorUsuario(usuarioId, empresaId, cn);
+
+                    if (lista != null)
                     {
-                        foreach (var itemPerfil in lista)
+                        if (loadListaOpcion)
                         {
-                            itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, empresaId, cn);
+                            foreach (var itemPerfil in lista)
+                            {
+                                itemPerfil.ListaOpcion = opcionDa.ListarPorPerfil(itemPerfil.PerfilId, empresaId, cn);
+                            }
                         }
                     }
+
+                    cn.Close();
                 }
             }
             catch (Exception ex) { throw ex; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
 
             return lista;
         }

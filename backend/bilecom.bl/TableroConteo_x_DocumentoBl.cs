@@ -2,31 +2,32 @@
 using bilecom.da;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace bilecom.bl
 {
-    public class TableroConteo_x_DocumentoBl:Conexion
+    public class TableroConteo_x_DocumentoBl : Conexion
     {
-        public TableroConteo_x_DocumentoBe Obtener(int EmpresaId, int Anyo, int Mes)
+        public TableroConteo_x_DocumentoBe Obtener(int empresaId, int anio, int mes)
         {
             TableroConteo_x_DocumentoBe respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = new TableroConteo_x_DocumentoDa().Obtener(EmpresaId,Anyo,Mes,cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = new TableroConteo_x_DocumentoDa().Obtener(empresaId, anio, mes, cn);
+                    cn.Close();
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 respuesta = null;
             }
-            finally
-            {
-                if (cn.State == System.Data.ConnectionState.Open) cn.Close();
-            }
+            //finally { if (cn.State == System.Data.ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
     }

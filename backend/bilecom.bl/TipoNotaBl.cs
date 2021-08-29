@@ -19,13 +19,16 @@ namespace bilecom.bl
             List<TipoNotaBe> lista = new List<TipoNotaBe>();
             try
             {
-                cn.Open();
-                lista = tipoNotaDa.ListarPorTipoComprobante(tipoComprobanteId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = tipoNotaDa.ListarPorTipoComprobante(tipoComprobanteId, cn);
+                    cn.Close();
+                }
             }
             catch (SqlException ex) { lista = null; }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
     }
