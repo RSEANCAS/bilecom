@@ -10,8 +10,10 @@ namespace bilecom.be
     public class EmpresaImagenBe
     {
         public int EmpresaId { get; set; }
+        public string LogoNombre { get; set; }
         public string LogoTipoContenido { get; set; }
         public byte[] Logo { get; set; }
+        public string LogoFormatoNombre { get; set; }
         public string LogoFormatoTipoContenido { get; set; }
         public byte[] LogoFormato { get; set; }
     }

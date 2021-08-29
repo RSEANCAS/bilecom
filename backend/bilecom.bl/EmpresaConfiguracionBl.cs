@@ -14,6 +14,7 @@ namespace bilecom.bl
     {
         AmbienteSunatDa ambienteSunatDa = new AmbienteSunatDa();
         EmpresaDa empresaDa = new EmpresaDa();
+        EmpresaImagenDa empresaImagenDa = new EmpresaImagenDa();
         EmpresaConfiguracionDa empresaConfiguracionDa = new EmpresaConfiguracionDa();
         EmpresaAmbienteSunatDa empresaAmbienteSunatDa = new EmpresaAmbienteSunatDa();
         EmpresaMonedaDa empresaMonedaDa = new EmpresaMonedaDa();
@@ -71,9 +72,14 @@ namespace bilecom.bl
                     {
                         cn.Open();
                         seGuardo = empresaConfiguracionDa.Guardar(registro, cn);
-                        if (seGuardo && saveEmpresa)
+                        if (seGuardo && saveEmpresa && registro.Empresa != null)
                         {
                             seGuardo = empresaDa.Guardar(registro.Empresa, cn, out int? empresaId);
+
+                            if(seGuardo && registro.Empresa.EmpresaImagen != null)
+                            {
+                                seGuardo = empresaImagenDa.Guardar(registro.Empresa.EmpresaImagen, cn);
+                            }
                         }
 
                         if (seGuardo && saveEmpresa && registro.ListaMonedaPorDefecto != null)

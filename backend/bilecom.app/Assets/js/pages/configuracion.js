@@ -366,10 +366,10 @@ const pageConfiguracion = {
 
     EnviarFormulario: function () {
         let imageLogoBlob = Dropzone.forElement("#fle-imagen-logo-container").files[0];
-        let imageLogoFile = new File([imageLogoBlob], imageLogoBlob.name);
+        let imageLogoFile = new File([imageLogoBlob], imageLogoBlob.name, { type: imageLogoBlob.type });
 
         let imageLogoFormatoBlob = Dropzone.forElement("#fle-imagen-logo-formato-container").files[0];
-        let imageLogoFormatoFile = new File([imageLogoFormatoBlob], imageLogoFormatoBlob.name);
+        let imageLogoFormatoFile = new File([imageLogoFormatoBlob], imageLogoFormatoBlob.name, { type: imageLogoFormatoBlob.type});
 
         // DATOS DE LA EMPRESA
         let nombreComercialEmpresa = $("#txt-nombre-comercial").val();
@@ -489,10 +489,11 @@ const pageConfiguracion = {
         $("#cmb-provincia").val(data.Distrito.ProvinciaId).trigger("change");
         $("#cmb-distrito").val(data.DistritoId).trigger("change");
         $("#txt-direccion").val(data.Direccion);
-        let extensionLogo = data.EmpresaImagen.LogoTipoContenido.split('/')[1];
+        //let extensionLogo = data.EmpresaImagen.LogoTipoContenido.split('/')[1];
         let logoBase64 = `data:${data.EmpresaImagen.LogoTipoContenido};base64,${data.EmpresaImagen.Logo}`;
         let blob = pageConfiguracion.dataURItoBlob(logoBase64);
-        blob.name = 'Logo.' + extensionLogo;
+        blob.name = data.EmpresaImagen.LogoNombre;
+        blob.contentType = data.EmpresaImagen.LogoTipoContenido;
         let fileLogoDropZone = Dropzone.forElement("#fle-imagen-logo-container");
         fileLogoDropZone.addFile(blob);
         fileLogoDropZone.emit("complete", blob);
@@ -519,10 +520,11 @@ const pageConfiguracion = {
             $("#txt-cantidad-decimal-general").val(data.EmpresaConfiguracion.CantidadDecimalGeneral);
             $("#txt-cantidad-decimal-detallado").val(data.EmpresaConfiguracion.CantidadDecimalDetallado);
         }
-        let extensionLogoFormato = data.EmpresaImagen.LogoFormatoTipoContenido.split('/')[1];
+        //let extensionLogoFormato = data.EmpresaImagen.LogoFormatoTipoContenido.split('/')[1];
         let logoFormatoBase64 = `data:${data.EmpresaImagen.LogoFormatoTipoContenido};base64,${data.EmpresaImagen.LogoFormato}`;
         let blobFormato = pageConfiguracion.dataURItoBlob(logoFormatoBase64);
-        blobFormato.name = 'Logo-Formato.' + extensionLogoFormato;
+        blobFormato.name = data.EmpresaImagen.LogoFormatoNombre;
+        blobFormato.contentType = data.EmpresaImagen.LogoFormatoTipoContenido;
         let fileLogoFormatoDropZone = Dropzone.forElement("#fle-imagen-logo-formato-container");
         fileLogoFormatoDropZone.addFile(blobFormato);
         fileLogoFormatoDropZone.emit("complete", blobFormato);

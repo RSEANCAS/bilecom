@@ -123,8 +123,10 @@ namespace bilecom.enums
 
         public enum ColumnasEmpresaImagen
         {
+            LogoNombre,
             LogoTipoContenido,
             Logo,
+            LogoFormatoNombre,
             LogoFormatoTipoContenido,
             LogoFormato
         }

@@ -56,8 +56,11 @@ namespace bilecom.app.Controllers.Api
             registro.Empresa.EmpresaId = registro.EmpresaId;
             registro.Empresa.NombreComercial = System.Web.HttpContext.Current.Request.Form["Empresa.NombreComercial"];
             registro.Empresa.EmpresaImagen = new EmpresaImagenBe();
+            registro.Empresa.EmpresaImagen.EmpresaId = registro.EmpresaId;
+            registro.Empresa.EmpresaImagen.LogoNombre = logoFile.FileName;
             registro.Empresa.EmpresaImagen.Logo = msLogoFile.ToArray();
             registro.Empresa.EmpresaImagen.LogoTipoContenido = logoFile.ContentType;
+            registro.Empresa.EmpresaImagen.LogoFormatoNombre = logoFileFormato.FileName;
             registro.Empresa.EmpresaImagen.LogoFormato = msLogoFormatoFile.ToArray();
             registro.Empresa.EmpresaImagen.LogoFormatoTipoContenido = logoFileFormato.ContentType;
             registro.ListaMonedaPorDefecto = listaMonedaPorDefecto;

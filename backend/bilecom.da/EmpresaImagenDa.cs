@@ -33,8 +33,10 @@ namespace bilecom.da
                             if (dr.Read())
                             {
                                 respuesta.EmpresaId = dr.GetData<int>("EmpresaId");
-                                if(columnas.Contains(ColumnasEmpresaImagen.LogoTipoContenido)) respuesta.LogoTipoContenido = dr.GetData<string>("LogoTipoContenido");
+                                if (columnas.Contains(ColumnasEmpresaImagen.LogoNombre)) respuesta.LogoNombre = dr.GetData<string>("LogoNombre");
+                                if (columnas.Contains(ColumnasEmpresaImagen.LogoTipoContenido)) respuesta.LogoTipoContenido = dr.GetData<string>("LogoTipoContenido");
                                 if (columnas.Contains(ColumnasEmpresaImagen.Logo)) respuesta.Logo = dr.GetData<byte[]>("Logo");
+                                if (columnas.Contains(ColumnasEmpresaImagen.LogoFormatoNombre)) respuesta.LogoFormatoNombre = dr.GetData<string>("LogoFormatoNombre");
                                 if (columnas.Contains(ColumnasEmpresaImagen.LogoFormatoTipoContenido)) respuesta.LogoFormatoTipoContenido = dr.GetData<string>("LogoFormatoTipoContenido");
                                 if (columnas.Contains(ColumnasEmpresaImagen.LogoFormato)) respuesta.LogoFormato = dr.GetData<byte[]>("LogoFormato");
                             }
@@ -47,6 +49,36 @@ namespace bilecom.da
                 respuesta = null;
             }
             return respuesta;
+        }
+
+        public bool Guardar(EmpresaImagenBe registro, SqlConnection cn)
+        {
+            bool seGuardo = false;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("usp_empresaimagen_guardar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@logoNombre", registro.LogoNombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@logoTipoContenido", registro.LogoTipoContenido.GetNullable());
+                    cmd.Parameters.AddWithValue("@logo", registro.Logo.GetNullable());
+                    cmd.Parameters.AddWithValue("@logoFormatoNombre", registro.LogoFormatoNombre.GetNullable());
+                    cmd.Parameters.AddWithValue("@logoFormatoTipoContenido", registro.LogoFormatoTipoContenido.GetNullable());
+                    cmd.Parameters.AddWithValue("@logoFormato", registro.LogoFormato.GetNullable());
+
+                    int FilaAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = (FilaAfectadas != -1);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return seGuardo;
         }
     }
 }
