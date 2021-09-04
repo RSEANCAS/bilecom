@@ -85,7 +85,7 @@
                 emptyTable: "No hay datos disponibles",
                 zeroRecords: "No se encontraron registros coincidentes",
                 loadingRecords: "Cargando...",
-                Processing: "Procesando...",
+                processing: "Procesando...",
                 infoEmpty: "Mostrando 0 a 0 de 0 registros",
                 paginate: {
                     first: "Primero",

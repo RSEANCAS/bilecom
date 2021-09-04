@@ -6,11 +6,15 @@
     },
 
     InitEvents: function () {
+        $("#txt-nombre").keyup(pageTipoSede.BtnBuscarClick);
         $("#btn-buscar").click(pageTipoSede.BtnBuscarClick);
     },
 
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageTipoSede.CreateDataTable("#tbl-lista")
     },
 

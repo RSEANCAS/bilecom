@@ -8,11 +8,16 @@
     },
 
     InitEvents: function () {
+        $("#cmb-tipo-comprobante").change(pageSerie.BtnBuscarClick);
+        $("#txt-serial").keyup(pageSerie.BtnBuscarClick);
         $("#btn-buscar").click(pageSerie.BtnBuscarClick);
     },
 
     BtnBuscarClick: function (e) {
-        e.preventDefault();
+        if (!(e.type == "change" && e.currentTarget.tagName.toLowerCase() == "select")) e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageSerie.CreateDataTable("#tbl-lista")
     },
 

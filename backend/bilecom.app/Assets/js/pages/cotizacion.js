@@ -6,17 +6,21 @@
     },
 
     InitEvents: function () {
+        ("#txt-razon-social-cliente, #txt-nombres-completos-personal").keyup(pageCotizacion.BtnBuscarClick);
         $("#btn-buscar").click(pageCotizacion.BtnBuscarClick);
 
         let fechaActual = new Date();
-        $("#txt-fecha-emision-desde").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-desde").datepicker("setDate", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
-        $("#txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-hasta").datepicker("setDate", fechaActual);
+        let fechaInicial = new Date(fechaActual.getFullYear(), fechaActual.getMonth());
+        $("#txt-fecha-emision-desde, #txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true }).on("changeDate", pageCotizacion.BtnBuscarClick);
+        $("#txt-fecha-emision-desde").datepicker("update", fechaInicial);
+        $("#txt-fecha-emision-hasta").datepicker("update", fechaActual);
     },
 
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageCotizacion.CreateDataTable("#tbl-lista")
     },
 

@@ -5,18 +5,23 @@ const pageStockAlmacen = {
         common.ConfiguracionDataTable();
         //  this.Validar();
         this.CargarCombo(this.InitEvents());
-        
-        
+
+
         //$("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
         //pageStockAlmacen.CargarCombo(pageMantenimientoCliente.ObtenerDatos());
-        $("input[name=rd-filtro][value=1]").prop("checked", true);
+        //$("input[name=rd-filtro][value=1]").prop("checked", true);
+        $("#cmb-almacen").change(pageStockAlmacen.BtnBuscarClick);
+        $("input[name=rd-filtro]").change(pageStockAlmacen.BtnBuscarClick);
         $("#btn-buscar").click(pageStockAlmacen.BtnBuscarClick);
     },
     BtnBuscarClick: function (e) {
-        //e.preventDefault();
-
+        console.log("%O", e.currentTarget);
+        if (!(e.type == "change" && (e.currentTarget.tagName.toLowerCase() == "select" || e.currentTarget.type == "radio"))) e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageStockAlmacen.CreateDataTable("#tbl-lista")
     },
     CargarCombo: async function (fn = null) {
@@ -29,7 +34,7 @@ const pageStockAlmacen = {
             .then(r => Promise.all(r.map(x => x.json())))
             .then(([SedealmacenLista]) => {
                 sedealmacenLista = SedealmacenLista;
-                
+
                 pageStockAlmacen.ResponseSedeAlmacen(sedealmacenLista);
 
                 if (typeof fn == 'function') fn();

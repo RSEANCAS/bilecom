@@ -5,10 +5,14 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
+        $("#txt-numero-documento-identidad, #txt-nombres-completos").keyup(pagePersonal.BtnBuscarClick);
         $("#btn-buscar").click(pagePersonal.BtnBuscarClick);
     },
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pagePersonal.CreateDataTable("#tbl-lista")
     },
     ObtenerNroDocumentoIdentidad: function () {

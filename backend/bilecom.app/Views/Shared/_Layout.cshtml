@@ -168,13 +168,19 @@
                         <!--User dropdown-->
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <li id="dropdown-user" class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-                                <span class="ic-user pull-right">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right" style="align-items: center; display: flex;">
+                                <span class="ic-user pull-left">
                                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                                     <!--You can use an image instead of an icon.-->
                                     <!--<img class="img-circle img-user media-object" src="img/profile-photos/1.png" alt="Profile Picture">-->
                                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                                     <i class="demo-pli-male"></i>
+                                </span>
+                                &nbsp;
+                                @ViewBag.Data.Usuario.Nombre
+                                &nbsp;
+                                <span class="ic-user pull-right dropdown-toggle">
+                                    <i class="dropdown-caret"></i>
                                 </span>
                                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                                 <!--You can also display a user name in the navbar.-->
@@ -186,6 +192,7 @@
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                 <ul class="head-list">
                                     <li>
+                                        <a href="@Url.Content("~/Configuracion")"><i class="demo-pli-gear icon-lg icon-fw"></i> Configuración</a>
                                         <a href="#" id="btn-cerrar-sesion" class="btn-cerrar-sesion"><i class="demo-pli-unlock icon-lg icon-fw"></i> Salir</a>
                                     </li>
                                 </ul>
@@ -247,7 +254,19 @@
                                         <div class="pad-btm">
                                             <img class="img img-md" src="@(empresa.EmpresaImagen == null ? @Url.Content("~/Assets/img/profile-photos/1.png") : $"data:{empresa.EmpresaImagen.LogoTipoContenido};base64,{Convert.ToBase64String(empresa.EmpresaImagen.Logo)}")" alt="Profile Picture">
                                         </div>
-                                        <a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
+                                        <div class="box-block">
+                                            <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.Ruc</p>
+                                            @if (!string.IsNullOrEmpty((string)ViewBag.Data.Usuario.Empresa.NombreComercial))
+                                            {
+                                                <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.NombreComercial</p>
+                                                <span class="mnp-desc data-user-perfil-nombre">@ViewBag.Data.Usuario.Empresa.RazonSocial</span>
+                                            }
+                                            else
+                                            {
+                                                <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.RazonSocial</p>
+                                            }
+                                        </div>
+                                        @*<a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
                                             <span class="pull-right dropdown-toggle">
                                                 <i class="dropdown-caret"></i>
                                             </span>
@@ -261,13 +280,13 @@
                                             {
                                                 <p class="mnp-name data-user-nombre">@ViewBag.Data.Usuario.Empresa.RazonSocial</p>
                                             }
-                                        </a>
+                                        </a>*@
                                         @if (listaPerfil.Count > 1)
                                         {
                                             <a id="btn-cambiar-perfil" href="#" class="btn btn-xs btn-primary">Cambiar Perfil</a>
                                         }
                                     </div>
-                                    <div id="profile-nav" class="collapse list-group bg-trans">
+                                    <!--<div id="profile-nav" class="collapse list-group bg-trans">-->
                                         @*<a href="#" class="list-group-item">
                                                 <i class="demo-pli-male icon-lg icon-fw"></i> View Profile
                                             </a>
@@ -277,13 +296,13 @@
                                             <a href="#" class="list-group-item">
                                                 <i class="demo-pli-information icon-lg icon-fw"></i> Help
                                             </a>*@
-                                        <a href="@Url.Content("~/Configuracion")" class="list-group-item">
+                                        <!--<a href="@Url.Content("~/Configuracion")" class="list-group-item">
                                             <i class="demo-pli-gear icon-lg icon-fw"></i> Configuración
                                         </a>
                                         <a href="#" class="list-group-item btn-cerrar-sesion">
                                             <i class="demo-pli-unlock icon-lg icon-fw"></i> Salir
                                         </a>
-                                    </div>
+                                    </div>-->
                                 </div>
 
                                 <!--Shortcut buttons-->

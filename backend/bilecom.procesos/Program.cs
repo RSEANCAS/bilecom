@@ -1,9 +1,11 @@
-﻿using bilecom.ut;
+﻿using bilecom.procesos.manager;
+using bilecom.ut;
 using System.ServiceProcess;
 
 namespace bilecom.procesos
 {
     static class Program
+    //class Program
     {
         /// <summary>
         /// Punto de entrada principal para la aplicación.
@@ -14,7 +16,8 @@ namespace bilecom.procesos
 
             if (isDebugger)
             {
-                TareaTipoCambio.GuardarTipoCambio();
+                SunatManager.ProcesarPadronSunat();
+                //TareaTipoCambio.GuardarTipoCambio();
             }
             else
             {

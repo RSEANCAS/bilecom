@@ -510,7 +510,7 @@ const pageMantenimientoCotizacion = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdCotizacion}`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdCotizacion}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`)]
         Promise.all(promises)

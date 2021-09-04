@@ -16,8 +16,10 @@ namespace bilecom.ut
             try
             {
                 
-                string CorreoEmisor = "antony.lazaroyepez@gmail.com";
-                string password = "laureanoyepez";
+                string CorreoEmisor = "rseancas@gmail.com";
+                //string CorreoEmisor = "antony.lazaroyepez@gmail.com";
+                string password = "**S34nc4sB**";
+                //string password = "laureanoyepez";
                 MailMessage mailMessage = new MailMessage(CorreoEmisor, correoCliente, asunto, html);
                 mailMessage.IsBodyHtml = true;
                 mailMessage.Priority = MailPriority.Normal;
@@ -25,19 +27,19 @@ namespace bilecom.ut
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 25;
                 smtp.EnableSsl = true;
-                smtp.UseDefaultCredentials = false;
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                //smtp.UseDefaultCredentials = false;
+                //smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Credentials = new NetworkCredential(CorreoEmisor, password);
                 smtp.Send(mailMessage);
                 smtp.Dispose();
-                return seEnvio;
 
             }
             catch (Exception ex)
             {
                 seEnvio = false;
-                throw ex;
+                //throw ex;
             }
+            return seEnvio;
         }
     }
 }
