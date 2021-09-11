@@ -315,7 +315,6 @@ const pageMantenimientoCliente = {
             tipo = "danger";
             mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
         }
-
         $.niftyNoty({
             type: tipo,
             container: "floating",
@@ -328,7 +327,7 @@ const pageMantenimientoCliente = {
             focus: true,
             timer: 1800,
             onHide: function () {
-                if (data == true) {
+                if (data > 0) {
                     location.href = `${urlRoot}Clientes`
                 }
             }
