@@ -5,10 +5,14 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
+        $("#txt-numero-documento-identidad, #txt-nombres-o-razon-social").keyup(pageProveedor.BtnBuscarClick);
         $("#btn-buscar").click(pageProveedor.BtnBuscarClick);
     },
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageProveedor.CreateDataTable("#tbl-lista")
     },
     ObtenerNroDocumentoIdentidad: function () {

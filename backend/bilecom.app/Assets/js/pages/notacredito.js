@@ -7,16 +7,19 @@ const pageNotaCredito = {
     },
 
     InitEvents: function () {
+        $("#txt-razon-social-cliente, #txt-nro-documento-identidad-cliente").keyup(pageNotaCredito.BtnBuscarClick);
         $("#btn-buscar").click(pageNotaCredito.BtnBuscarClick);
 
-        $("#txt-fecha-emision-desde").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-desde").datepicker("setDate", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
-        $("#txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-hasta").datepicker("setDate", fechaActual);
+        $("#txt-fecha-emision-desde, #txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true }).on("changeDate", pageNotaCredito.BtnBuscarClick);
+        $("#txt-fecha-emision-desde").datepicker("update", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
+        $("#txt-fecha-emision-hasta").datepicker("update", fechaActual);
     },
 
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageNotaCredito.CreateDataTable("#tbl-lista")
     },
 
@@ -147,9 +150,9 @@ const pageNotaCredito = {
             {
                 data: "NotaCreditoId", render: function (data, type, row) {
                     var user = common.ObtenerUsuario();
-                    let nombreArchivo = `${user.Empresa.Ruc}-01-${row.Serie.Serial}-${row.NroComprobante}`;
-                    let rutaArchivo = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/01/${row.Serie.Serial}-${row.NroComprobante}/${nombreArchivo}`;
-                    let rutaArchivoCdr = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/01/${row.Serie.Serial}-${row.NroComprobante}/R-${nombreArchivo}`;
+                    let nombreArchivo = `${user.Empresa.Ruc}-07-${row.Serie.Serial}-${row.NroComprobante}`;
+                    let rutaArchivo = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/07/${row.Serie.Serial}-${row.NroComprobante}/${nombreArchivo}`;
+                    let rutaArchivoCdr = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/07/${row.Serie.Serial}-${row.NroComprobante}/R-${nombreArchivo}`;
 
                     return `${row.FlagAnulado == true ? "" :
                         `<a class="btn btn-sm btn-danger btn-hover-danger fa fa-ban add-tooltip" href="javascript:pageNotaCredito.BtnAnularClick(${data})" data-original-title="Anular" data-container="body"></a>

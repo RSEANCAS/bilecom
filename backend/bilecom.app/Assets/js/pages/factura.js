@@ -7,16 +7,20 @@ const pageFactura = {
     },
 
     InitEvents: function () {
+        $("#txt-nro-documento-identidad-cliente, #txt-razon-social-cliente").keyup(pageFactura.BtnBuscarClick);
         $("#btn-buscar").click(pageFactura.BtnBuscarClick);
 
-        $("#txt-fecha-emision-desde").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-desde").datepicker("setDate", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
-        $("#txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-hasta").datepicker("setDate", fechaActual);
+        let fechaInicial = new Date(fechaActual.getFullYear(), fechaActual.getMonth());
+        $("#txt-fecha-emision-desde, #txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true }).on("changeDate", pageFactura.BtnBuscarClick);
+        $("#txt-fecha-emision-desde").datepicker("update", fechaInicial);
+        $("#txt-fecha-emision-hasta").datepicker("update", fechaActual);
     },
 
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageFactura.CreateDataTable("#tbl-lista")
     },
 

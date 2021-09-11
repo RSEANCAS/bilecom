@@ -5,10 +5,14 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
+        $("#txt-nombre, #txt-categoria").keyup(pageProducto.BtnBuscarClick);
         $("#btn-buscar").click(pageProducto.BtnBuscarClick);
     },
     BtnBuscarClick: function (e) {
         e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageProducto.CreateDataTable("#tbl-lista")
     },
 

@@ -555,7 +555,7 @@ const pageMantenimientoBoleta = {
 
         $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoBoleta.CargarOtrosCamposProducto(data);
     },
 
     CmbDetalleDescripcionChange: function () {
@@ -575,7 +575,7 @@ const pageMantenimientoBoleta = {
 
         $("#cmb-detalle-codigo").append(optionDefaultCodigo);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoBoleta.CargarOtrosCamposProducto(data);
     },
 
     CargarOtrosCamposProducto(data) {

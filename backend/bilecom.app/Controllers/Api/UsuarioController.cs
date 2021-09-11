@@ -215,7 +215,7 @@ namespace bilecom.app.Controllers.Api
                 string usuarioIdStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(token.UsuarioId.ToString()));
                 string empresaIdStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(token.EmpresaId.ToString()));
                 string tipoTokenIdStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(token.TipoTokenId.ToString()));
-                dataHtml = dataHtml.Replace("[Usuario]", user.Nombre).Replace("[link]", url+"Acceso/RecuperarContrasena?token="+codigoToken+"|"+usuarioIdStr+"|"+empresaIdStr+"|"+tipoTokenIdStr);
+                dataHtml = dataHtml.Replace("[Usuario]", user.Nombre).Replace("[Codigo]", codigoToken).Replace("[link]", url+"Acceso/RecuperarContrasena?token="+codigoToken+"|"+usuarioIdStr+"|"+empresaIdStr+"|"+tipoTokenIdStr);
                 bool seEnvioCorreo = correo.EnviarCorreo(user.Correo, "Recuperación de Contraseña", dataHtml);
                 if (seEnvioCorreo) seProceso = true;
             }

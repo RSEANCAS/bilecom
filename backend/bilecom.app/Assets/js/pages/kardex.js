@@ -28,17 +28,19 @@ const pageKardex = {
         //$("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
-        
-        $("#txt-fecha-emision-desde").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-desde").datepicker("setDate", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
-        $("#txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true });
-        $("#txt-fecha-emision-hasta").datepicker("setDate", fechaActual);
+        $("#cmb-almacen, #cmb-producto").change(pageKardex.BtnBuscarClick);
+
+        $("#txt-fecha-emision-desde, #txt-fecha-emision-hasta").datepicker({ format: "dd/mm/yyyy", autoclose: true }).on("changeDate", pageKardex.BtnBuscarClick);
+        $("#txt-fecha-emision-desde").datepicker("update", new Date(fechaActual.getFullYear(), fechaActual.getMonth()));
+        $("#txt-fecha-emision-hasta").datepicker("update", fechaActual);
 
         $("#btn-buscar").click(pageKardex.BtnBuscarClick);
     },
     BtnBuscarClick: function (e) {
-        //e.preventDefault();
-
+        if (!(e.type == "change" && e.currentTarget.tagName.toLowerCase() == "select")) e.preventDefault();
+        if (["keyup"].includes(e.type)) {
+            if (e.keyCode != 13) return;
+        }
         pageKardex.CreateDataTable("#tbl-lista")
     },
     CargarCombo: async function (fn = null) {
