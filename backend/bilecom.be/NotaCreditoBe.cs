@@ -22,6 +22,7 @@ namespace bilecom.be
         public SerieBe Serie { get; set; }
         public int NroComprobante { get; set; }
         public DateTime FechaHoraEmision { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
         public int MonedaId { get; set; }
         public MonedaBe Moneda { get; set; }
         public int ClienteId { get; set; }
@@ -29,6 +30,16 @@ namespace bilecom.be
         public int TipoComprobanteId { get; set; }
         public TipoComprobanteBe TipoComprobante { get; set; }
         public int ComprobanteId { get; set; }
+        public string ComprobanteStr { get; set; }
+        public TipoNotaBe TipoNota { get; set; }
+        public int TipoNotaId { get; set; }
+        public bool FlagExportacion { get; set; }
+        public bool FlagGratuito { get; set; }
+        public bool FlagEmisorItinerante { get; set; }
+        public bool FlagAnticipo { get; set; }
+        public bool FlagISC { get; set; }
+        public bool FlagOtrosCargos { get; set; }
+        public bool FlagOtrosTributos { get; set; }
         public decimal TotalGravado { get; set; }
         public decimal TotalExonerado { get; set; }
         public int? TipoTributoIdExonerado { get; set; }
@@ -57,7 +68,7 @@ namespace bilecom.be
         public decimal TotalDescuentos { get; set; }
         public decimal ImporteTotal { get; set; }
         public string ImporteTotalEnLetras { get; set; }
-        public string Observacion { get; set; }
+        public string Motivo { get; set; }
         public string Hash { get; set; }
 
         public bool FlagAnulado { get; set; }

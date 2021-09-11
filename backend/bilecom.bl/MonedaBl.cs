@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,12 +19,15 @@ namespace bilecom.bl
             List<MonedaBe> lista = new List<MonedaBe>();
             try
             {
-                cn.Open();
-                lista = monedaDa.Listar(cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = monedaDa.Listar(cn);
+                    cn.Close();
+                }
             }
             catch (Exception) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -32,12 +36,15 @@ namespace bilecom.bl
             List<MonedaBe> lista = new List<MonedaBe>();
             try
             {
-                cn.Open();
-                lista = monedaDa.ListarPorEmpresa(empresaId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = monedaDa.ListarPorEmpresa(empresaId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
     }

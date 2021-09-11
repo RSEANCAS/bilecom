@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +52,7 @@
     <Compile Include="CategoriaProductoBe.cs" />
     <Compile Include="Custom\BootStrapValidator.cs" />
     <Compile Include="CotizacionDetalleBe.cs" />
+    <Compile Include="Custom\ComprobanteCustom.cs" />
     <Compile Include="Custom\DataPaginate.cs" />
     <Compile Include="DepartamentoBe.cs" />
     <Compile Include="DistritoBe.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="FormatoBe.cs" />
     <Compile Include="TipoComprobanteTipoOperacionVentaBe.cs" />
     <Compile Include="TipoDocumentoIdentidadBe.cs" />
+    <Compile Include="TipoNotaBe.cs" />
     <Compile Include="TipoOperacionAlmacenBe.cs" />
     <Compile Include="TipoOperacionVentaBe.cs" />
     <Compile Include="TipoMovimientoBe.cs" />

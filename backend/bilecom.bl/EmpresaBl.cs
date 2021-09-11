@@ -2,6 +2,7 @@
 using bilecom.da;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,47 +33,50 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-                item = empresaDa.Obtener(empresaId, cn);
-                if(item != null && (withUbigeo || withConfiguracion))
+                using (var cn = new SqlConnection(CadenaConexion))
                 {
-                    if (withUbigeo)
+                    cn.Open();
+                    item = empresaDa.Obtener(empresaId, cn);
+                    if (item != null && (withUbigeo || withConfiguracion))
                     {
-                        item.Distrito = distritoDa.Obtener(item.DistritoId, cn);
-                        item.Distrito.Provincia = provinciaDa.Obtener(item.Distrito.ProvinciaId, cn);
-                        item.Distrito.Provincia.Departamento = departamentoDa.Obtener(item.Distrito.Provincia.DepartamentoId, cn);
-                        item.Distrito.Provincia.Departamento.Pais = paisDa.Obtener(item.Distrito.Provincia.Departamento.PaisId, cn);
-                    }
-
-                    if (withConfiguracion)
-                    {
-                        item.EmpresaConfiguracion = empresaConfiguracionDa.Obtener(empresaId, cn);
-                        if (item.EmpresaConfiguracion != null)
+                        if (withUbigeo)
                         {
-                            item.EmpresaConfiguracion.EmpresaAmbienteSunat = empresaAmbienteSunatDa.Obtener(item.EmpresaId, item.EmpresaConfiguracion.AmbienteSunatId, cn);
-                            if (item.EmpresaConfiguracion.EmpresaAmbienteSunat != null) item.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat = ambienteSunatDa.Obtener(item.EmpresaConfiguracion.AmbienteSunatId, cn);
+                            item.Distrito = distritoDa.Obtener(item.DistritoId, cn);
+                            item.Distrito.Provincia = provinciaDa.Obtener(item.Distrito.ProvinciaId, cn);
+                            item.Distrito.Provincia.Departamento = departamentoDa.Obtener(item.Distrito.Provincia.DepartamentoId, cn);
+                            item.Distrito.Provincia.Departamento.Pais = paisDa.Obtener(item.Distrito.Provincia.Departamento.PaisId, cn);
+                        }
 
-                            if (withListaMoneda || withListaTipoAfectacionIgv || withListaTipoComprobanteTipoOperacionVenta || withListaTipoProducto || withListaUnidadMedida)
+                        if (withConfiguracion)
+                        {
+                            item.EmpresaConfiguracion = empresaConfiguracionDa.Obtener(empresaId, cn);
+                            if (item.EmpresaConfiguracion != null)
                             {
-                                if (withListaMoneda) item.EmpresaConfiguracion.ListaMoneda = monedaDa.ListarPorEmpresa(empresaId, cn);
-                                if (withListaTipoAfectacionIgv) item.EmpresaConfiguracion.ListaTipoAfectacionIgv = tipoAfectacionIgvDa.ListarPorEmpresa(empresaId, cn);
-                                if (withListaTipoComprobanteTipoOperacionVenta) item.EmpresaConfiguracion.ListaTipoComprobanteTipoOperacionVenta = tipoComprobanteTipoOperacionVentaDa.ListarPorEmpresa(empresaId, cn);
-                                if (withListaTipoProducto) item.EmpresaConfiguracion.ListaTipoProducto = tipoProductoDa.ListarPorEmpresa(empresaId, cn);
-                                if (withListaUnidadMedida) item.EmpresaConfiguracion.ListaUnidadMedida = unidadMedidaDa.ListarPorEmpresa(empresaId, cn);
+                                item.EmpresaConfiguracion.EmpresaAmbienteSunat = empresaAmbienteSunatDa.Obtener(item.EmpresaId, item.EmpresaConfiguracion.AmbienteSunatId, cn);
+                                if (item.EmpresaConfiguracion.EmpresaAmbienteSunat != null) item.EmpresaConfiguracion.EmpresaAmbienteSunat.AmbienteSunat = ambienteSunatDa.Obtener(item.EmpresaConfiguracion.AmbienteSunatId, cn);
+
+                                if (withListaMoneda || withListaTipoAfectacionIgv || withListaTipoComprobanteTipoOperacionVenta || withListaTipoProducto || withListaUnidadMedida)
+                                {
+                                    if (withListaMoneda) item.EmpresaConfiguracion.ListaMoneda = monedaDa.ListarPorEmpresa(empresaId, cn);
+                                    if (withListaTipoAfectacionIgv) item.EmpresaConfiguracion.ListaTipoAfectacionIgv = tipoAfectacionIgvDa.ListarPorEmpresa(empresaId, cn);
+                                    if (withListaTipoComprobanteTipoOperacionVenta) item.EmpresaConfiguracion.ListaTipoComprobanteTipoOperacionVenta = tipoComprobanteTipoOperacionVentaDa.ListarPorEmpresa(empresaId, cn);
+                                    if (withListaTipoProducto) item.EmpresaConfiguracion.ListaTipoProducto = tipoProductoDa.ListarPorEmpresa(empresaId, cn);
+                                    if (withListaUnidadMedida) item.EmpresaConfiguracion.ListaUnidadMedida = unidadMedidaDa.ListarPorEmpresa(empresaId, cn);
+                                }
                             }
                         }
-                    }
 
-                    if(columnasEmpresaImagen != null)
-                    {
-                        item.EmpresaImagen = empresaImagenDa.ObtenerDinamico(empresaId, columnasEmpresaImagen, cn);
+                        if (columnasEmpresaImagen != null)
+                        {
+                            item.EmpresaImagen = empresaImagenDa.ObtenerDinamico(empresaId, columnasEmpresaImagen, cn);
+                        }
                     }
+                    //cn.Close();
+                    cn.Close();
                 }
-                //cn.Close();
-                cn.Close();
             }
             catch (Exception ex) { throw ex; }
-            finally { if(cn.State == System.Data.ConnectionState.Open) cn.Close(); }
+            //finally { if(cn.State == System.Data.ConnectionState.Open) cn.Close(); }
 
             return item;
         }
@@ -83,12 +87,15 @@ namespace bilecom.bl
 
             try
             {
-                cn.Open();
-
-                item = empresaDa.ObtenerPorRuc(ruc, cn);
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    item = empresaDa.ObtenerPorRuc(ruc, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { throw ex; }
-            finally { if (cn.State == System.Data.ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == System.Data.ConnectionState.Open) cn.Close(); }
 
             return item;
         }

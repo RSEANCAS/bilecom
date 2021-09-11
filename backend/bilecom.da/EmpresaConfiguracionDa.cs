@@ -39,10 +39,10 @@ namespace bilecom.da
                                 respuesta.ComentarioLegalDetraccion = dr.GetData<string>("ComentarioLegalDetraccion");
                                 respuesta.CantidadDecimalGeneral = dr.GetData<int>("CantidadDecimalGeneral");
                                 respuesta.CantidadDecimalDetallado = dr.GetData<int>("CantidadDecimalDetallado");
-                                respuesta.FormatoId = dr.GetData<int>("FormatoId");
+                                respuesta.FormatoIds = dr.GetData<string>("FormatoIds");
                                 respuesta.MonedaIdPorDefecto = dr.GetData<int?>("MonedaIdPorDefecto");
                                 respuesta.TipoAfectacionIgvIdPorDefecto = dr.GetData<int?>("TipoAfectacionIgvIdPorDefecto");
-                                respuesta.TipoComprobanteTipoOperacionVentaIdPorDefecto = dr.GetData<string>("TipoComprobanteTipoOperacionVentaIdPorDefecto");
+                                respuesta.TipoComprobanteTipoOperacionVentaIdsPorDefecto = dr.GetData<string>("TipoComprobanteTipoOperacionVentaIdsPorDefecto");
                                 respuesta.TipoProductoIdPorDefecto = dr.GetData<int?>("TipoProductoIdPorDefecto");
                                 respuesta.UnidadMedidaIdPorDefecto = dr.GetData<int?>("UnidadMedidaIdPorDefecto");
                             }
@@ -55,6 +55,45 @@ namespace bilecom.da
                 respuesta = null;
             }
             return respuesta;
+        }
+
+        public bool Guardar(EmpresaConfiguracionBe registro, SqlConnection cn)
+        {
+            bool seGuardo = false;
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("usp_empresaconfiguracion_guardar", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@empresaId", registro.EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@ambienteSunatId", (registro.AmbienteSunatId == 0 ? null : (int?)registro.AmbienteSunatId).GetNullable());
+                    cmd.Parameters.AddWithValue("@rutaCertificado", registro.RutaCertificado.GetNullable());
+                    cmd.Parameters.AddWithValue("@claveCertificado", registro.ClaveCertificado.GetNullable());
+                    cmd.Parameters.AddWithValue("@cuentaCorriente", registro.CuentaCorriente.GetNullable());
+                    cmd.Parameters.AddWithValue("@comentarioLegal", registro.ComentarioLegal.GetNullable());
+                    cmd.Parameters.AddWithValue("@comentarioLegalDetraccion", registro.ComentarioLegalDetraccion.GetNullable());
+                    cmd.Parameters.AddWithValue("@cantidadDecimalGeneral", registro.CantidadDecimalGeneral.GetNullable());
+                    cmd.Parameters.AddWithValue("@cantidadDecimalDetallado", registro.CantidadDecimalDetallado.GetNullable());
+                    cmd.Parameters.AddWithValue("@formatoIds", registro.FormatoIds.GetNullable());
+                    cmd.Parameters.AddWithValue("@monedaIdPorDefecto", registro.MonedaIdPorDefecto.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoAfectacionIgvIdPorDefecto", registro.TipoAfectacionIgvIdPorDefecto.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoComprobanteTipoOperacionVentaIdsPorDefecto", registro.TipoComprobanteTipoOperacionVentaIdsPorDefecto.GetNullable());
+                    cmd.Parameters.AddWithValue("@tipoProductoIdPorDefecto", registro.TipoProductoIdPorDefecto.GetNullable());
+                    cmd.Parameters.AddWithValue("@unidadMedidaIdPorDefecto", registro.UnidadMedidaIdPorDefecto.GetNullable());
+                    cmd.Parameters.AddWithValue("@creadoPor", registro.Usuario.GetNullable());
+
+                    int FilaAfectadas = cmd.ExecuteNonQuery();
+                    seGuardo = (FilaAfectadas != -1);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return seGuardo;
         }
     }
 }

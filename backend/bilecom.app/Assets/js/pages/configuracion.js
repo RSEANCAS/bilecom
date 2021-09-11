@@ -38,197 +38,197 @@ const pageConfiguracion = {
         $("#frm-configuracion")
             .bootstrapValidator({
                 fields: {
-                    "cmb-tipo-documento-identidad": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe seleccionar tipo de documento de identidad",
-                            }
-                        }
-                    },
-                    "cmb-departamento": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe seleccionar departamento",
-                            }
-                        }
-                    },
-                    "cmb-provincia": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe seleccionar provincia",
-                            }
-                        }
-                    },
-                    "cmb-distrito": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe seleccionar distrito",
-                            }
-                        }
-                    },
-                    "txt-nombres": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe ingresar nombres o razón social",
-                            },
-                            callback: {
-                                message: 'El nombre o razón social no es válido',
-                                callback: function (value, validator, $field) {
-                                    let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
-                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {
-                                        if (value === "") {
-                                            return true;
-                                        }
-                                        if (!(/^[a-zA-ZñÑá-úÁ-Ú ]*$/).test(value)) {
-                                            return {
-                                                valid: false,
-                                                message: "Nombre o razón social inválido"
-                                            }
-                                        }
-                                    }
-                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
-                                        if (value === "") {
-                                            return true;
-                                        }
-                                        if (!(/^[a-zA-Z0-9ñÑá-úÁ-Ú ]+$/)) {
-                                            return {
-                                                valid: false,
-                                                message: "Nombre o razón social inválido"
-                                            }
-                                        }
-                                    }
-                                    return true;
-                                }
-                            },
+                    //"cmb-tipo-documento-identidad": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe seleccionar tipo de documento de identidad",
+                    //        }
+                    //    }
+                    //},
+                    //"cmb-departamento": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe seleccionar departamento",
+                    //        }
+                    //    }
+                    //},
+                    //"cmb-provincia": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe seleccionar provincia",
+                    //        }
+                    //    }
+                    //},
+                    //"cmb-distrito": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe seleccionar distrito",
+                    //        }
+                    //    }
+                    //},
+                    //"txt-nombres": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe ingresar nombres o razón social",
+                    //        },
+                    //        callback: {
+                    //            message: 'El nombre o razón social no es válido',
+                    //            callback: function (value, validator, $field) {
+                    //                let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
+                    //                if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {
+                    //                    if (value === "") {
+                    //                        return true;
+                    //                    }
+                    //                    if (!(/^[a-zA-ZñÑá-úÁ-Ú ]*$/).test(value)) {
+                    //                        return {
+                    //                            valid: false,
+                    //                            message: "Nombre o razón social inválido"
+                    //                        }
+                    //                    }
+                    //                }
+                    //                if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
+                    //                    if (value === "") {
+                    //                        return true;
+                    //                    }
+                    //                    if (!(/^[a-zA-Z0-9ñÑá-úÁ-Ú ]+$/)) {
+                    //                        return {
+                    //                            valid: false,
+                    //                            message: "Nombre o razón social inválido"
+                    //                        }
+                    //                    }
+                    //                }
+                    //                return true;
+                    //            }
+                    //        },
 
-                        }
-                    },
-                    "txt-nombre-comercial": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe ingresar nombre comercial",
-                            },
-                            regexp: {
-                                regexp: /^[a-zA-Z0-9-ñÑá-úÁ-Ú ]+$/,
-                                message: 'Solo puede ingresar caracteres alfabéticos'
-                            }
-                        }
-                    },
-                    "txt-numero-documento-identidad": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe ingresar un número de documento de identidad",
-                            },
-                            callback: {
-                                message: 'El número de documento de identidad no es válido',
-                                callback: function (value, validator, $field) {
-                                    let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
-                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {
-                                        if (value === "") {
-                                            return true;
-                                        }
-                                        if (value.length != 8) {
-                                            return {
-                                                valid: false,
-                                                message: "DNI inválido"
-                                            }
-                                        }
-                                        else {
-                                            if (!(/^[0-9]*$/).test(value)) {
-                                                return {
-                                                    valid: false,
-                                                    message: "DNI inválido"
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
-                                        if (value === "") {
-                                            return true;
-                                        }
-                                        if (value.length != 11) {
-                                            return {
-                                                valid: false,
-                                                message: "RUC inválido"
-                                            }
-                                        }
-                                        else {
-                                            if (!(/^[0-9]*$/).test(value)) {
-                                                return {
-                                                    valid: false,
-                                                    message: "RUC inválido"
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiCE) {
-                                        if (value === "") {
-                                            return true;
-                                        }
-                                        if (value.length != 11) {
-                                            return {
-                                                valid: false,
-                                                message: "Carnet de Extranjería inválido"
-                                            }
-                                        }
-                                        else {
-                                            if (!(/^[0-9]*$/).test(value)) {
-                                                return {
-                                                    valid: false,
-                                                    message: "Carnet de Extranjería inválido"
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiPasaporte) {
-                                        if (value === "") {
-                                            return true;
-                                        }
-                                        if (value.length != 7) {
-                                            return {
-                                                valid: false,
-                                                message: "Pasaporte inválido"
-                                            }
-                                        }
-                                        else {
-                                            if (!(/^[0-9]*$/).test(value)) {
-                                                return {
-                                                    valid: false,
-                                                    message: "Pasaporte inválido"
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-                    },
-                    "txt-correo": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe ingresar correo válido",
-                            },
-                            emailAddress: {
-                                message: 'La dirección de correo no es válido'
-                            }
-                        }
-                    },
-                    "txt-direccion": {
-                        validators: {
-                            notEmpty: {
-                                message: "Debe ingresar direccion",
-                            },
-                            regexp: {
-                                regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
-                                message: 'Solo puede ingresar caracteres alfabéticos'
-                            },
-                            stringLength: {
-                                min: 5,
-                                message: 'Dirección no válida'
-                            }
-                        }
-                    }
+                    //    }
+                    //},
+                    //"txt-nombre-comercial": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe ingresar nombre comercial",
+                    //        },
+                    //        regexp: {
+                    //            regexp: /^[a-zA-Z0-9-ñÑá-úÁ-Ú ]+$/,
+                    //            message: 'Solo puede ingresar caracteres alfabéticos'
+                    //        }
+                    //    }
+                    //},
+                    //"txt-numero-documento-identidad": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe ingresar un número de documento de identidad",
+                    //        },
+                    //        callback: {
+                    //            message: 'El número de documento de identidad no es válido',
+                    //            callback: function (value, validator, $field) {
+                    //                let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
+                    //                if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {
+                    //                    if (value === "") {
+                    //                        return true;
+                    //                    }
+                    //                    if (value.length != 8) {
+                    //                        return {
+                    //                            valid: false,
+                    //                            message: "DNI inválido"
+                    //                        }
+                    //                    }
+                    //                    else {
+                    //                        if (!(/^[0-9]*$/).test(value)) {
+                    //                            return {
+                    //                                valid: false,
+                    //                                message: "DNI inválido"
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }
+                    //                if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiRUC) {
+                    //                    if (value === "") {
+                    //                        return true;
+                    //                    }
+                    //                    if (value.length != 11) {
+                    //                        return {
+                    //                            valid: false,
+                    //                            message: "RUC inválido"
+                    //                        }
+                    //                    }
+                    //                    else {
+                    //                        if (!(/^[0-9]*$/).test(value)) {
+                    //                            return {
+                    //                                valid: false,
+                    //                                message: "RUC inválido"
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }
+                    //                if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiCE) {
+                    //                    if (value === "") {
+                    //                        return true;
+                    //                    }
+                    //                    if (value.length != 11) {
+                    //                        return {
+                    //                            valid: false,
+                    //                            message: "Carnet de Extranjería inválido"
+                    //                        }
+                    //                    }
+                    //                    else {
+                    //                        if (!(/^[0-9]*$/).test(value)) {
+                    //                            return {
+                    //                                valid: false,
+                    //                                message: "Carnet de Extranjería inválido"
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }
+                    //                if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiPasaporte) {
+                    //                    if (value === "") {
+                    //                        return true;
+                    //                    }
+                    //                    if (value.length != 7) {
+                    //                        return {
+                    //                            valid: false,
+                    //                            message: "Pasaporte inválido"
+                    //                        }
+                    //                    }
+                    //                    else {
+                    //                        if (!(/^[0-9]*$/).test(value)) {
+                    //                            return {
+                    //                                valid: false,
+                    //                                message: "Pasaporte inválido"
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }
+                    //                return true;
+                    //            }
+                    //        }
+                    //    }
+                    //},
+                    //"txt-correo": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe ingresar correo válido",
+                    //        },
+                    //        emailAddress: {
+                    //            message: 'La dirección de correo no es válido'
+                    //        }
+                    //    }
+                    //},
+                    //"txt-direccion": {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: "Debe ingresar direccion",
+                    //        },
+                    //        regexp: {
+                    //            regexp: /^[a-zA-Z0-9-_ñÑ .]+$/,
+                    //            message: 'Solo puede ingresar caracteres alfabéticos'
+                    //        },
+                    //        stringLength: {
+                    //            min: 5,
+                    //            message: 'Dirección no válida'
+                    //        }
+                    //    }
+                    //}
                 }
             })
             .on('success.form.bv', function (e) {
@@ -272,10 +272,14 @@ const pageConfiguracion = {
     },
 
     CmbListaTipoOperacionVentaChange: function () {
-        let data = $("#cmb-lista-tipo-operacion-venta").select2("data").map(x => { x.selected = false; return x; });
-        let dataTipoComprobante = data.map(x => Object.assign({}, { ...x.TipoComprobante })).distinct(["TipoComprobanteId"]).map(x => Object.assign({}, { ...x, text: x.Nombre, element: HTMLOptGroupElement }));
+        let idsSelected = $("#cmb-lista-tipo-operacion-venta").select2("data").map(x => x.id);
+        let dataBase = tipoComprobanteTipoOperacionVentaLista.filter(x => idsSelected.some(y => y == `${x.TipoComprobanteId}|${x.TipoOperacionVentaId}`));
+        //let data = $("#cmb-lista-tipo-operacion-venta").select2("data").map(x => { x.selected = false; return x; });
+        let data = dataBase.map(x => Object.assign({}, { ...x.TipoComprobante })).distinct(["TipoComprobanteId"]).map(x => Object.assign({}, { ...x, text: x.Nombre, element: HTMLOptGroupElement }));
+        //let dataTipoComprobante = data.map(x => Object.assign({}, { ...x.TipoComprobante })).distinct(["TipoComprobanteId"]).map(x => Object.assign({}, { ...x, text: x.Nombre, element: HTMLOptGroupElement }));
+        let dataTipoComprobante = data.distinct(["TipoComprobanteId"]).map(x => Object.assign({}, { ...x, text: x.Nombre, element: HTMLOptGroupElement }));
         if (dataTipoComprobante != null) {
-            dataTipoComprobante.forEach(x => x.children = data.filter(y => y.TipoComprobanteId == x.TipoComprobanteId).map(y => Object.assign({}, { ...y, id: `${x.TipoComprobanteId}|${y.TipoOperacionVentaId}`, text: `${x.Nombre} - ${y.TipoOperacionVenta.Nombre}`, element: HTMLOptionElement })));
+            dataTipoComprobante.forEach(x => x.children = dataBase.filter(y => y.TipoComprobanteId == x.TipoComprobanteId).map(y => Object.assign({}, { ...y, id: `${x.TipoComprobanteId}|${y.TipoOperacionVentaId}`, text: `${x.Nombre} - ${y.TipoOperacionVenta.Nombre}`, element: HTMLOptionElement })));
         }
 
         $("#cmb-tipo-operacion-venta-default").empty();
@@ -361,36 +365,64 @@ const pageConfiguracion = {
     },
 
     EnviarFormulario: function () {
-        let clienteId = $("#txt-opcion").val();
-        let nombres = $("#txt-nombres").val();
-        let nrodocumento = $("#txt-numero-documento-identidad").val();
-        let nombrecomercial = $("#txt-nombre-comercial").val();
-        let direcion = $("#txt-direccion").val();
-        let correo = $("#txt-correo").val();
-        let tipodocumentoidentidadId = $("#cmb-tipo-documento-identidad").val();
-        let distritoId = $("#cmb-distrito").val();
+        let imageLogoBlob = Dropzone.forElement("#fle-imagen-logo-container").files[0];
+        let imageLogoFile = new File([imageLogoBlob], imageLogoBlob.name, { type: imageLogoBlob.type });
+
+        let imageLogoFormatoBlob = Dropzone.forElement("#fle-imagen-logo-formato-container").files[0];
+        let imageLogoFormatoFile = new File([imageLogoFormatoBlob], imageLogoFormatoBlob.name, { type: imageLogoFormatoBlob.type});
+
+        // DATOS DE LA EMPRESA
+        let nombreComercialEmpresa = $("#txt-nombre-comercial").val();
+
+        // DATOS PREDETERMINADOS
+        let listaMonedaIds = $("#cmb-lista-moneda").val();
+        let monedaIdPorDefecto = $("#cmb-moneda-default").val();
+        let listaTipoAfectacionIgvIds = $("#cmb-lista-tipo-afectacion-igv").val();
+        let tipoAfectacionIgvPorDefecto = $("#cmb-tipo-afectacion-igv-default").val();
+        let listaTipoOperacionVentaIds = $("#cmb-lista-tipo-operacion-venta").val();
+        let tipoOperacionVentaIdsPorDefecto = $("#cmb-tipo-operacion-venta-default").val();
+        let listaTipoProductoIds = $("#cmb-lista-tipo-producto").val();
+        let tipoProductoIdPorDefecto = $("#cmb-tipo-producto-default").val();
+        let listaUnidadMedidaIds = $("#cmb-lista-unidad-medida").val();
+        let unidadMedidaIdPorDefecto = $("#cmb-unidad-medida-default").val();
+
+        // DATOS SUNAT
+        let cuentaCorriente = $("#txt-cuenta-corriente").val();
+        let comentarioLegal = $("#txt-comentario-legal").val();
+        let comentarioLegalDetraccion = $("#txt-comentario-legal-detraccion").val();
+        let formatoIds = $("#cmb-formato").val();
+        let cantidadDecimalGeneral = $("#txt-cantidad-decimal-general").val();
+        let cantidadDecimalDetallado = $("#txt-cantidad-decimal-detallado").val();
+
 
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
-        let ObjectoJson = {
-            ClienteId: clienteId,
-            EmpresaId: empresaId,
-            TipoDocumentoIdentidadId: tipodocumentoidentidadId,
-            NroDocumentoIdentidad: nrodocumento,
-            RazonSocial: nombres,
-            NombreComercial: nombrecomercial,
-            DistritoId: distritoId,
-            Direccion: direcion,
-            Correo: correo,
-            FlagActivo: 1,
-            Usuario: user
-        }
+        let formData = new FormData();
+        formData.append("EmpresaId", empresaId);
+        formData.append("Empresa.NombreComercial", nombreComercialEmpresa);
+        formData.append("Empresa.EmpresaImagen.LogoFile", imageLogoFile);
+        formData.append("Empresa.EmpresaImagen.LogoFormatoFile", imageLogoFormatoFile);
+        formData.append("ListaMoneda", listaMonedaIds);
+        formData.append("MonedaIdPorDefecto", monedaIdPorDefecto);
+        formData.append("ListaTipoAfectacionIgv", listaTipoAfectacionIgvIds);
+        formData.append("TipoAfectacionIgvIdPorDefecto", tipoAfectacionIgvPorDefecto);
+        formData.append("ListaTipoComprobanteTipoOperacionVenta", listaTipoOperacionVentaIds);
+        formData.append("TipoComprobanteTipoOperacionVentaIdsPorDefecto", tipoOperacionVentaIdsPorDefecto);
+        formData.append("ListaTipoProducto", listaTipoProductoIds);
+        formData.append("TipoProductoIdPorDefecto", tipoProductoIdPorDefecto);
+        formData.append("ListaUnidadMedida", listaUnidadMedidaIds);
+        formData.append("UnidadMedidaIdPorDefecto", unidadMedidaIdPorDefecto);
+        formData.append("CuentaCorriente", cuentaCorriente);
+        formData.append("ComentarioLegal", comentarioLegal);
+        formData.append("ComentarioLegalDetraccion", comentarioLegalDetraccion);
+        formData.append("FormatoIds", formatoIds);
+        formData.append("CantidadDecimalGeneral", cantidadDecimalGeneral);
+        formData.append("CantidadDecimalDetallado", cantidadDecimalDetallado);
 
-        let url = `${urlRoot}api/cliente/guardar-cliente`;
-        let params = JSON.stringify(ObjectoJson);
-        let headers = { 'Content-Type': 'application/json' };
-        let init = { method: 'POST', body: params, headers };
+        let url = `${urlRoot}api/empresaconfiguracion/guardar-empresaconfiguracion`;
+        let params = formData;
+        let init = { method: 'POST', body: params };
 
         fetch(url, init)
             .then(r => r.json())
@@ -420,7 +452,7 @@ const pageConfiguracion = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Clientes`
+                    location.href = `${urlRoot}Configuracion`
                 }
             }
         });
@@ -457,10 +489,11 @@ const pageConfiguracion = {
         $("#cmb-provincia").val(data.Distrito.ProvinciaId).trigger("change");
         $("#cmb-distrito").val(data.DistritoId).trigger("change");
         $("#txt-direccion").val(data.Direccion);
-        let extensionLogo = data.EmpresaImagen.LogoTipoContenido.split('/')[1];
+        //let extensionLogo = data.EmpresaImagen.LogoTipoContenido.split('/')[1];
         let logoBase64 = `data:${data.EmpresaImagen.LogoTipoContenido};base64,${data.EmpresaImagen.Logo}`;
         let blob = pageConfiguracion.dataURItoBlob(logoBase64);
-        blob.name = 'Logo.' + extensionLogo;
+        blob.name = data.EmpresaImagen.LogoNombre;
+        blob.contentType = data.EmpresaImagen.LogoTipoContenido;
         let fileLogoDropZone = Dropzone.forElement("#fle-imagen-logo-container");
         fileLogoDropZone.addFile(blob);
         fileLogoDropZone.emit("complete", blob);
@@ -477,14 +510,21 @@ const pageConfiguracion = {
 
             $("#cmb-moneda-default").val(data.EmpresaConfiguracion.MonedaIdPorDefecto).trigger("change");
             $("#cmb-tipo-afectacion-igv-default").val(data.EmpresaConfiguracion.TipoAfectacionIgvIdPorDefecto).trigger("change");
-            $("#cmb-tipo-operacion-venta-default").val(data.EmpresaConfiguracion.TipoComprobanteTipoOperacionVentaIdPorDefecto).trigger("change");
+            $("#cmb-tipo-operacion-venta-default").val(data.EmpresaConfiguracion.ListaTipoComprobanteTipoOperacionVentaIdPorDefecto).trigger("change");
             $("#cmb-tipo-producto-default").val(data.EmpresaConfiguracion.TipoProductoIdPorDefecto).trigger("change");
             $("#cmb-unidad-medida-default").val(data.EmpresaConfiguracion.UnidadMedidaIdPorDefecto).trigger("change");
+            $("#txt-cuenta-corriente").val(data.EmpresaConfiguracion.CuentaCorriente);
+            $("#txt-comentario-legal").val(data.EmpresaConfiguracion.ComentarioLegal);
+            $("#txt-comentario-legal-detraccion").val(data.EmpresaConfiguracion.ComentarioLegalDetraccion);
+            $("#cmb-formato").val(data.EmpresaConfiguracion.ListaFormatoId).trigger("change");
+            $("#txt-cantidad-decimal-general").val(data.EmpresaConfiguracion.CantidadDecimalGeneral);
+            $("#txt-cantidad-decimal-detallado").val(data.EmpresaConfiguracion.CantidadDecimalDetallado);
         }
-        let extensionLogoFormato = data.EmpresaImagen.LogoFormatoTipoContenido.split('/')[1];
+        //let extensionLogoFormato = data.EmpresaImagen.LogoFormatoTipoContenido.split('/')[1];
         let logoFormatoBase64 = `data:${data.EmpresaImagen.LogoFormatoTipoContenido};base64,${data.EmpresaImagen.LogoFormato}`;
         let blobFormato = pageConfiguracion.dataURItoBlob(logoFormatoBase64);
-        blobFormato.name = 'Logo-Formato.' + extensionLogoFormato;
+        blobFormato.name = data.EmpresaImagen.LogoFormatoNombre;
+        blobFormato.contentType = data.EmpresaImagen.LogoFormatoTipoContenido;
         let fileLogoFormatoDropZone = Dropzone.forElement("#fle-imagen-logo-formato-container");
         fileLogoFormatoDropZone.addFile(blobFormato);
         fileLogoFormatoDropZone.emit("complete", blobFormato);

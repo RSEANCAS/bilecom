@@ -1,14 +1,17 @@
-﻿const pageMantenimientoProveedor = {
+﻿var tipoDocumentoIdentidadLista = [], paisLista = [], departamentoLista = [], provinciaLista = [], distritoLista =[];
+
+const pageMantenimientoProveedor = {
     Init: function () {
-        this.Validar();
         this.CargarCombo(this.InitEvents());
+        this.Validar();
     },
     InitEvents: function () {
-        pageMantenimientoProveedor.ObtenerDatos();
+        pageMantenimientoProveedor.CargarCombo(pageMantenimientoProveedor.ObtenerDatos);
 
         $("#cmb-pais").change(pageMantenimientoProveedor.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoProveedor.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoProveedor.CmbProvinciaChange);
+        
     },
     Validar: function () {
         $("#frm-proveedor-mantenimiento")
@@ -147,31 +150,6 @@
             });
     },
 
-    CargarCombo: async function (fn=null) {
-        let promises = [
-            fetch(`${urlRoot}api/pais/listar-pais`),
-            fetch(`${urlRoot}api/departamento/listar-departamento`),
-            fetch(`${urlRoot}api/provincia/listar-provincia`),
-            fetch(`${urlRoot}api/distrito/listar-distrito`),
-            fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`)]
-        Promise.all(promises)
-            .then(r => Promise.all(r.map(x => x.json())))
-            .then(([PaisLista, DepartamentoLista, ProvinciaLista, DistritoLista, TipoDocumentoIdentidadLista]) => {
-                paisLista = PaisLista;
-                departamentoLista = DepartamentoLista;
-                provinciaLista = ProvinciaLista;
-                distritoLista = DistritoLista;
-
-                pageMantenimientoProveedor.ResponsePaisListar(PaisLista);
-
-                pageMantenimientoProveedor.ResponseDepartamentoListar(DepartamentoLista);
-                pageMantenimientoProveedor.ResponseProvinciaListar(ProvinciaLista);
-                pageMantenimientoProveedor.ResponseDistritoListar(DistritoLista);
-                pageMantenimientoProveedor.ResponseTipoDocumentoIdentidadListar(TipoDocumentoIdentidadLista);
-                if (typeof fn == 'function') fn();
-            })
-    },
-
     ObtenerDatos: function () {
         let numero = $("#txt-opcion").val();
         if (numero != 0) {
@@ -188,6 +166,32 @@
             $("#cmb-departamento").val(15).trigger('change');
             $("#cmb-provincia").val(128).trigger('change');
         }
+    },
+
+    CargarCombo: async function (fn=null) {
+        let promises = [
+            fetch(`${urlRoot}api/pais/listar-pais`),
+            fetch(`${urlRoot}api/departamento/listar-departamento`),
+            fetch(`${urlRoot}api/provincia/listar-provincia`),
+            fetch(`${urlRoot}api/distrito/listar-distrito`),
+            fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`)]
+        Promise.all(promises)
+            .then(r => Promise.all(r.map(x => x.json())))
+            .then(([PaisLista, DepartamentoLista, ProvinciaLista, DistritoLista, TipoDocumentoIdentidadLista]) => {
+                paisLista = PaisLista || [];
+                departamentoLista = DepartamentoLista || [];
+                provinciaLista = ProvinciaLista || [];
+                distritoLista = DistritoLista || [];
+                tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
+
+                pageMantenimientoProveedor.ResponsePaisListar(PaisLista);
+
+                pageMantenimientoProveedor.ResponseDepartamentoListar(DepartamentoLista);
+                pageMantenimientoProveedor.ResponseProvinciaListar(ProvinciaLista);
+                pageMantenimientoProveedor.ResponseDistritoListar(DistritoLista);
+                pageMantenimientoProveedor.ResponseTipoDocumentoIdentidadListar(TipoDocumentoIdentidadLista);
+                if (typeof fn == "function") fn();
+            })
     },
 
     EnviarFormulario: function () {
@@ -263,8 +267,16 @@
         $("#txt-nombre-comercial").val(data.NombreComercial);
         $("#txt-correo").val(data.Correo);
         $("#txt-direccion").val(data.Direccion);
-        $("#cmb-tipo-documento-identidad").val(data.TipoDocumentoIdentidadId);
-        $("#cmb-distrito").val(data.DistritoId);
+        $("#cmb-tipo-documento-identidad").val(data.TipoDocumentoIdentidadId).trigger("change");
+
+        /*let valorDepartamento = data.DistritoId.substr(0, 2);
+        $("#cmb-departamento").val(valorDepartamento).trigger("change");
+
+        let valorProvincia = data.DistritoId.substr(0, 4);
+        $("#cmb-provincia").val(valorProvincia).trigger("change");
+        */
+        $("#cmb-distrito").val(data.DistritoId).trigger("change");
+
 
         $("#cmb-tipo-documento-identidad").prop("disabled", true);
         $("#txt-numero-documento-identidad").prop("disabled", true);
@@ -273,6 +285,7 @@
     ResponsePaisListar: function (data) {
         let datapais = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.PaisId, text: item.Nombre }); });
         $("#cmb-pais").select2({ data: datapais, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-pais").val(145).trigger("change");
     },
 
     ResponseDepartamentoListar: function (data) {

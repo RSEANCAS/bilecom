@@ -16,9 +16,9 @@ namespace bilecom.app.Controllers.Api
 
         [HttpGet]
         [Route("conteo_x_documento-tablero")]
-        public TableroConteo_x_DocumentoBe Obtener(int empresaId, int Anyo, int Mes)
+        public TableroConteo_x_DocumentoBe Obtener(int empresaId, int anio, int mes)
         {
-            return tableroConteo_X_DocumentoBl.Obtener(empresaId,Anyo,Mes);
+            return tableroConteo_X_DocumentoBl.Obtener(empresaId, anio, mes);
         }
     }
 }

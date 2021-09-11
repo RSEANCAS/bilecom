@@ -11,7 +11,7 @@ namespace bilecom.bl
     public class Conexion
     {
         static string NombreConexion = ConfigurationManager.AppSettings["NombreConexion"];
-        static string CadenaConexion = ConfigurationManager.ConnectionStrings[NombreConexion].ConnectionString;
-        protected SqlConnection cn = new SqlConnection(CadenaConexion);
+        internal static string CadenaConexion = ConfigurationManager.ConnectionStrings[NombreConexion].ConnectionString;
+        //internal SqlConnection cn = new SqlConnection(CadenaConexion);
     }
 }

@@ -91,7 +91,7 @@ namespace bilecom.app.Controllers.Api
 
                     string contenidoXml = Generar.GenerarXML(creditNoteType);
                     string hash = null;
-                    string contenidoXmlFirmado = Generar.RetornarXmlFirmado("/tns:Invoice", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", contenidoXml, rutaCertificado, claveCertificado, out hash);
+                    string contenidoXmlFirmado = Generar.RetornarXmlFirmado("/tns:CreditNote", "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2", contenidoXml, rutaCertificado, claveCertificado, out hash);
                     registro.Hash = hash;
 
                     var qr = Generar.GenerarQR(registro.Empresa.Ruc, TipoComprobante.NotaCredito.GetAttributeOfType<DefaultValueAttribute>().Value.ToString(), registro.Serie.Serial, registro.NroComprobante, registro.FechaHoraEmision, registro.Cliente.TipoDocumentoIdentidad.Codigo, registro.Cliente.NroDocumentoIdentidad, registro.TotalIgv, registro.ImporteTotal, registro.Hash);
@@ -126,7 +126,7 @@ namespace bilecom.app.Controllers.Api
                         .Replace("[BENEFICIARIO]", registro.Empresa.RazonSocial)
                         .Replace("[CUENTA_CORRIENTE]", registro.Empresa.EmpresaConfiguracion.CuentaCorriente)
                         .Replace("[COMENTARIO_LEGAL]", registro.Empresa.EmpresaConfiguracion.ComentarioLegal)
-                        .Replace("[OBSERVACIONES]", registro.Observacion)
+                        .Replace("[OBSERVACIONES]", registro.Motivo)
                         .Replace("[LETRAS_MONTOAPAGAR]", registro.ImporteTotalEnLetras)
                         .Replace("[TOTAL_MONTOAPAGAR]", registro.ImporteTotal.ToString("0.00"))
                         .Replace("[QR]", registro.QRBase64);

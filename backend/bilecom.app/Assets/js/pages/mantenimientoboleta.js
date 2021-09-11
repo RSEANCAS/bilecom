@@ -132,6 +132,7 @@ const pageMantenimientoBoleta = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnNuevoClienteClick: function () {
         bootbox.dialog({
             title: "Nuevo Cliente",
@@ -247,11 +248,11 @@ const pageMantenimientoBoleta = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
         pageMantenimientoBoleta.LlenarDatosCliente(data);
         $(modal).modal('hide');
     },
-
 
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
@@ -267,6 +268,7 @@ const pageMantenimientoBoleta = {
         pageMantenimientoBoleta.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
     },
+
     LlenarDatosCliente(data) {
         pageMantenimientoBoleta.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
@@ -354,7 +356,7 @@ const pageMantenimientoBoleta = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt">IGV %</span>
-                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly value="18.00">
+                                <input class="form-control" name="txt-detalle-porcentaje-igv" id="txt-detalle-porcentaje-igv" placeholder="IGV %" readonly>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -419,7 +421,7 @@ const pageMantenimientoBoleta = {
                     $("#frm-boleta-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
 
-                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoBoleta.CalcularImporteTotal);
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento, #cmb-detalle-tipo-afectacion-igv").change(pageMantenimientoBoleta.CalcularImporteTotal);
 
                 $("#cmb-detalle-codigo").select2({
                     allowClear: true,
@@ -543,12 +545,17 @@ const pageMantenimientoBoleta = {
             return;
         }
         data = data[0];
+        delete data.disabled;
+        delete data.selected;
+        delete data.element;
+        delete data._resultId;
+        data = { ...data, id: data.ProductoId, text: data.Nombre };
 
-        //$("#cmb-detalle-descripcion").select2('data', data);
-        let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
+        let optionDefaultDescripcion = $(new Option(data.Nombre, data.ProductoId, true, true)).data({ data });
+
         $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
 
-        pageMantenimientoBoleta.CargarOtrosCamposProducto(data);
+        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
     },
 
     CmbDetalleDescripcionChange: function () {
@@ -558,12 +565,17 @@ const pageMantenimientoBoleta = {
             return;
         }
         data = data[0];
+        delete data.disabled;
+        delete data.selected;
+        delete data.element;
+        delete data._resultId;
+        data = { ...data, id: data.ProductoId, text: data.Codigo };
 
-        //$("#cmb-detalle-codigo").select2('data', data);
-        let optionDefaultCodigo = new Option(data.Codigo, data.ProductoId, true, true);
+        let optionDefaultCodigo = $(new Option(data.Codigo, data.ProductoId, true, true)).data({ data });
+
         $("#cmb-detalle-codigo").append(optionDefaultCodigo);
 
-        pageMantenimientoBoleta.CargarOtrosCamposProducto(data);
+        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
     },
 
     CargarOtrosCamposProducto(data) {
@@ -626,6 +638,7 @@ const pageMantenimientoBoleta = {
                 pageMantenimientoBoleta.EnviarFormulario();
             });
     },
+
     ValidarClienteNuevo: function () {
         $("#frm-boleta-cliente-nuevo")
             .bootstrapValidator({
@@ -767,6 +780,7 @@ const pageMantenimientoBoleta = {
                 pageMantenimientoBoleta.BtnGuardarySeleccionar();
             });
     },
+
     ValidarDetalle: function () {
         $("#frm-boleta-detalle")
             .bootstrapValidator({
@@ -882,8 +896,8 @@ const pageMantenimientoBoleta = {
         let precioUnitarioString = $("#txt-detalle-precio-unitario").val().replace(/,/g, '');
         let descuentoString = $("#txt-detalle-descuento").val().replace(/,/g, '');
 
-        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
-        let porcentajeIgvString = tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : $("#txt-detalle-porcentaje-igv").val().replace(/,/g, "");
+        let tipoAfectacionIgv = $("#cmb-detalle-tipo-afectacion-igv").select2("data").length == 0 ? null : $("#cmb-detalle-tipo-afectacion-igv").select2("data")[0];
+        let porcentajeIgvString = tipoAfectacionIgv == null ? "0" : tipoAfectacionIgv.FlagExonerado || tipoAfectacionIgv.FlagInafecto || (tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado) ? "0" : "18.00";
         let porcentajeIgv = Number(porcentajeIgvString);
 
         let cantidad = isNaN(Number(cantidadString)) ? 0 : Number(cantidadString);
@@ -891,9 +905,9 @@ const pageMantenimientoBoleta = {
         let valorUnitario = precioUnitario / (1 + (porcentajeIgv / 100));
         let valorVenta = valorUnitario * cantidad;
         let descuento = isNaN(Number(descuentoString)) ? 0 : Number(descuentoString);
-        let importeTotal = cantidad * (precioUnitario - descuento);
-        let igv = tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : importeTotal - valorVenta;
-        importeTotal = tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
+        let importeTotal = (cantidad * precioUnitario) - descuento;
+        let igv = tipoAfectacionIgv == null ? 0 : tipoAfectacionIgv.FlagGratuito && !tipoAfectacionIgv.FlagGravado ? 0 : valorVenta * (porcentajeIgv / 100);
+        importeTotal = tipoAfectacionIgv == null ? 0 : tipoAfectacionIgv.FlagGratuito ? 0 : importeTotal;
 
 
         $("#txt-detalle-cantidad").val(cantidad.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
@@ -1152,7 +1166,7 @@ const pageMantenimientoBoleta = {
     ResponseUnidadMedidaListar: function (data, dropdownParent = null) {
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
 
-        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        let dataUnidadMedida = data.filter(x => x.TipoProductoId == tipoProductoId).map(x => Object.assign(x, { id: x.UnidadMedidaId, text: x.Descripcion }));
         $("#cmb-detalle-unidad-medida").empty();
         $("#cmb-detalle-unidad-medida").select2({ data: dataUnidadMedida, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-unidad-medida").val("").trigger("change");
@@ -1192,6 +1206,7 @@ const pageMantenimientoBoleta = {
         return $("#txt-filtro-personal-nombres-completos").val();
 
     },
+
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
@@ -1209,14 +1224,17 @@ const pageMantenimientoBoleta = {
         let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
         $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
     },
+
     ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
         data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
     },
+
     BtnCierraNuevoCliente: function () {
         $("#modal-nuevo-cliente").modal('hide');
     },
+
     BtnGuardarySeleccionar: function () {
         let clienteId = 0;
         let nombres = $("#txt-cliente-nombres-razonsocial-nuevo").val();
@@ -1253,6 +1271,7 @@ const pageMantenimientoBoleta = {
             .then(pageMantenimientoBoleta.ResponseClienteNuevoGuardar);
         
     },
+
     ResponseClienteNuevoGuardar: function (data) {
         
         let tipo = "", mensaje = "";
@@ -1286,6 +1305,7 @@ const pageMantenimientoBoleta = {
             }
         });
     },
+
     LimpiarDatosClienteNuevo: function () {
         pageMantenimientoBoleta.datosclienteNuevo = {
             ClienteId: 0,

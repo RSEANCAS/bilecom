@@ -47,12 +47,14 @@ namespace bilecom.app.Controllers.Api
             List<ColumnasEmpresaImagen> columnasEmpresaImagen = new List<ColumnasEmpresaImagen>();
             if (withLogo)
             {
+                columnasEmpresaImagen.Add(ColumnasEmpresaImagen.LogoNombre);
                 columnasEmpresaImagen.Add(ColumnasEmpresaImagen.LogoTipoContenido);
                 columnasEmpresaImagen.Add(ColumnasEmpresaImagen.Logo);
             }
 
             if (withLogoFormato)
             {
+                columnasEmpresaImagen.Add(ColumnasEmpresaImagen.LogoFormatoNombre);
                 columnasEmpresaImagen.Add(ColumnasEmpresaImagen.LogoFormatoTipoContenido);
                 columnasEmpresaImagen.Add(ColumnasEmpresaImagen.LogoFormato);
             }

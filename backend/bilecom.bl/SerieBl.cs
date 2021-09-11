@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,12 +19,15 @@ namespace bilecom.bl
             List<SerieBe> lista = new List<SerieBe>();
             try
             {
-                cn.Open();
-                lista = serieDa.ListarPorTipoComprobante(empresaId, ambienteSunatId, tipoComprobanteId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = serieDa.ListarPorTipoComprobante(empresaId, ambienteSunatId, tipoComprobanteId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
         
@@ -33,12 +37,15 @@ namespace bilecom.bl
             List<SerieBe> lista = null;
             try
             {
-                cn.Open();
-                lista = serieDa.Buscar(empresaId, ambienteSunatId, tipoComprobanteId, serial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = serieDa.Buscar(empresaId, ambienteSunatId, tipoComprobanteId, serial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
@@ -47,12 +54,15 @@ namespace bilecom.bl
             SerieBe respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = serieDa.Obtener(empresaId, serieId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = serieDa.Obtener(empresaId, serieId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { respuesta = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
 
@@ -61,12 +71,15 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = serieDa.Guardar(serieBe, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = serieDa.Guardar(serieBe, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
 
@@ -75,12 +88,15 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = serieDa.Eliminar(empresaId, serieId, Usuario, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = serieDa.Eliminar(empresaId, serieId, Usuario, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
     }

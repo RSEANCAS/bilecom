@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,15 +32,18 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = tipoCambioDa.Guardar(tipoCambioBe, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = tipoCambioDa.Guardar(tipoCambioBe, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex)
             {
                 seGuardo = false;
             }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
     }

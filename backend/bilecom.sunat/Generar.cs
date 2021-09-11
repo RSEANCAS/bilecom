@@ -376,11 +376,33 @@ namespace bilecom.sunat
             return xmlDocument.OuterXml;
         }
 
-        public byte[] GenerarXML(DebitNoteType item)
+        public static string GenerarXML(DebitNoteType item)
         {
-            byte[] xmlByte = null;
+            XmlSerializer serializer = new XmlSerializer(typeof(DebitNoteType));
+            XmlSerializerNamespaces oxmlnames = new XmlSerializerNamespaces();
+            oxmlnames.Add("", "urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2");
+            oxmlnames.Add("cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+            oxmlnames.Add("cbc", "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
+            oxmlnames.Add("ccts", "urn:un:unece:uncefact:documentation:2");
+            oxmlnames.Add("ds", "http://www.w3.org/2000/09/xmldsig#");
+            oxmlnames.Add("ext", "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+            oxmlnames.Add("qdt", "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2");
+            oxmlnames.Add("sac", "urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1");
+            oxmlnames.Add("udt", "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2");
+            oxmlnames.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-            return xmlByte;
+            MemoryStream ms = new MemoryStream();
+            serializer.Serialize(ms, item, oxmlnames);
+            ms.Position = 0;
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.PreserveWhitespace = true;
+            xmlDocument.Load(ms);
+
+            XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", null);
+            xmlDocument.ReplaceChild(xmlDeclaration, xmlDocument.FirstChild);
+
+            return xmlDocument.OuterXml;
         }
 
         public static byte[] GenerarQR(string rucEmpresa, string codigoSunatTipoComprobante, string serie, int nroComprobante, DateTime fechaEmision, string codigoSunatTipoDocumentoIdentidad, string nroDocumentoIdentidadCliente, decimal totalIGV, decimal totalImporte, string hash)

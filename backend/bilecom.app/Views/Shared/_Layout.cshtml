@@ -101,15 +101,32 @@
 
                         <!--Navigation toogle button-->
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <li class="tgl-menu-btn">
-                            <a class="mainnav-toggle" href="#">
+                        <li class="tgl-menu-btn" style="display: flex; align-items:center;">
+                            <a class="mainnav-toggle" href="#" style="display:flex; align-items: center">
                                 <i class="demo-pli-list-view"></i>
                             </a>
+                            <div class="form-group form-inline mar-no">
+                                <label class="text-light text-bold">SEDE: </label>
+                                <div class="btn-group">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button">
+                                            @(listaSede.First(x => x.SedeId == sedeId).Nombre) <i class="dropdown-caret"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            @foreach (var item in listaSede)
+                                            {
+                                                <li @(item.SedeId == sedeId ? "class=active" : "")><a href="javascript:pageLayout.CambiarSede(@item.SedeId)">@item.Nombre</a></li>
+
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End Navigation toogle button-->
                     </ul>
-                    <ul class="nav navbar-top-links" style="display: flex; align-items: center;">
+                    @*<ul class="nav navbar-top-links" style="display: flex; align-items: center;">
                         <li class="tgl-menu-btn">
                             <div class="form-group form-inline mar-no">
                                 <label class="text-light text-bold">SEDE: </label>
@@ -129,7 +146,7 @@
                                 </div>
                             </div>
                         </li>
-                    </ul>
+                    </ul>*@
                     <ul class="nav navbar-top-links" style="margin-left: auto">
 
 

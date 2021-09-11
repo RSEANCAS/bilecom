@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmbienteSunatDa.cs" />
+    <Compile Include="CommonDa.cs" />
     <Compile Include="CotizacionDa.cs" />
     <Compile Include="CategoriaProductoDa.cs" />
     <Compile Include="ClienteDa.cs" />
@@ -53,6 +54,11 @@
     <Compile Include="EmpresaDa.cs" />
     <Compile Include="EmpresaImagenDa.cs" />
     <Compile Include="BoletaDa.cs" />
+    <Compile Include="EmpresaMonedaDa.cs" />
+    <Compile Include="EmpresaTipoAfectacionIgvDa.cs" />
+    <Compile Include="EmpresaTipoComprobanteTipoOperacionVentaDa.cs" />
+    <Compile Include="EmpresaTipoProductoDa.cs" />
+    <Compile Include="EmpresaUnidadMedidaDa.cs" />
     <Compile Include="NotaCreditoDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="BoletaDetalleDa.cs" />
@@ -63,6 +69,8 @@
     <Compile Include="MonedaDa.cs" />
     <Compile Include="MovimientoDa.cs" />
     <Compile Include="MovimientoDetalleDa.cs" />
+    <Compile Include="NotaDebitoDa.cs" />
+    <Compile Include="NotaDebitoDetalleDa.cs" />
     <Compile Include="OpcionDa.cs" />
     <Compile Include="PaisDa.cs" />
     <Compile Include="PerfilDa.cs" />
@@ -81,6 +89,7 @@
     <Compile Include="FormatoDa.cs" />
     <Compile Include="TipoComprobanteTipoOperacionVentaDa.cs" />
     <Compile Include="TipoDocumentoIdentidadDa.cs" />
+    <Compile Include="TipoNotaDa.cs" />
     <Compile Include="TipoOperacionAlmacenDa.cs" />
     <Compile Include="TipoOperacionVentaDa.cs" />
     <Compile Include="TipoMovimientoDa.cs" />

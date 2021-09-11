@@ -68,6 +68,86 @@ namespace bilecom.da
             return lista;
         }
 
+        public FacturaBe Obtener(int empresaId, int facturaId, SqlConnection cn)
+        {
+            FacturaBe item = null;
+
+            using (SqlCommand cmd = new SqlCommand("usp_factura_obtener", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@empresaId", empresaId.GetNullable());
+                cmd.Parameters.AddWithValue("@facturaId", facturaId.GetNullable());
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.HasRows)
+                    {
+                        item = new FacturaBe();
+
+                        if (dr.Read())
+                        {
+                            item.EmpresaId = dr.GetData<int>("EmpresaId");
+                            item.FacturaId = dr.GetData<int>("FacturaId");
+                            item.AmbienteSunatId = dr.GetData<int>("AmbienteSunatId");
+                            item.SedeId = dr.GetData<int>("SedeId");
+                            item.SerieId = dr.GetData<int>("SerieId");
+                            item.NroComprobante = dr.GetData<int>("NroComprobante");
+                            item.FechaHoraEmision = dr.GetData<DateTime>("FechaHoraEmision");
+                            item.FechaVencimiento = dr.GetData<DateTime>("FechaVencimiento");
+                            item.MonedaId = dr.GetData<int>("MonedaId");
+                            item.TipoOperacionVentaId = dr.GetData<int>("TipoOperacionVentaId");
+                            item.ClienteId = dr.GetData<int>("ClienteId");
+                            item.FormaPagoId = dr.GetData<int>("FormaPagoId");
+                            item.FlagExportacion = dr.GetData<bool>("FlagExportacion");
+                            item.FlagGratuito = dr.GetData<bool>("FlagGratuito");
+                            item.FlagEmisorItinerante = dr.GetData<bool>("FlagEmisorItinerante");
+                            item.FlagAnticipo = dr.GetData<bool>("FlagAnticipo");
+                            item.FlagISC = dr.GetData<bool>("FlagISC");
+                            item.FlagOtrosCargos = dr.GetData<bool>("FlagOtrosCargos");
+                            item.FlagOtrosTributos = dr.GetData<bool>("FlagOtrosTributos");
+                            item.TotalGravado = dr.GetData<decimal>("TotalGravado");
+                            item.TotalExonerado = dr.GetData<decimal>("TotalExonerado");
+                            item.TipoTributoIdExonerado = dr.GetData<int?>("TipoTributoIdExonerado");
+                            item.TotalInafecto = dr.GetData<decimal>("TotalInafecto");
+                            item.TipoTributoIdInafecto = dr.GetData<int?>("TipoTributoIdInafecto");
+                            item.TotalExportacion = dr.GetData<decimal>("TotalExportacion");
+                            item.TipoTributoIdExportacion = dr.GetData<int?>("TipoTributoIdExportacion");
+                            item.TotalGratuito = dr.GetData<decimal>("TotalGratuito");
+                            item.TipoTributoIdGratuito = dr.GetData<int?>("TipoTributoIdGratuito");
+                            item.TotalVentaArrozPilado = dr.GetData<decimal>("TotalVentaArrozPilado");
+                            item.TotalIgv = dr.GetData<decimal>("TotalIgv");
+                            item.TipoTributoIdIgv = dr.GetData<int?>("TipoTributoIdIgv");
+                            item.TotalIsc = dr.GetData<decimal>("TotalIsc");
+                            item.TipoTributoIdIsc = dr.GetData<int?>("TipoTributoIdIsc");
+                            item.TotalOtrosTributos = dr.GetData<decimal>("TotalOtrosTributos");
+                            item.TipoTributoIdOtrosTributos = dr.GetData<int?>("TipoTributoIdOtrosTributos");
+                            item.TotalOtrosCargos = dr.GetData<decimal>("TotalOtrosCargos");
+                            item.TotalBaseImponible = dr.GetData<decimal>("TotalBaseImponible");
+                            item.TotalDescuentos = dr.GetData<decimal>("TotalDescuentos");
+                            item.ImporteTotal = dr.GetData<decimal>("ImporteTotal");
+                            item.ImporteTotalEnLetras = dr.GetData<string>("ImporteTotalEnLetras");
+                            item.Observacion = dr.GetData<string>("Observacion");
+                            item.Hash = dr.GetData<string>("Hash");
+                            item.FlagAnulado = dr.GetData<bool>("FlagAnulado");
+                            item.CodigoRespuestaSunat = dr.GetData<string>("CodigoRespuestaSunat");
+                            item.DescripcionRespuestaSunat = dr.GetData<string>("DescripcionRespuestaSunat");
+                            item.EstadoIdRespuestaSunat = dr.GetData<int?>("EstadoIdRespuestaSunat");
+                            item.RutaXml = dr.GetData<string>("RutaXml");
+                            item.RutaPdf = dr.GetData<string>("RutaPdf");
+                            item.RutaCdr = dr.GetData<string>("RutaCdr");
+                            item.FormatoId = dr.GetData<int?>("FormatoId");
+                            //item.CreadoPor = dr.GetData<string>("CreadoPor");
+                            //item.FechaCreacion = dr.GetData<string>("FechaCreacion");
+                            //item.ModificadoPor = dr.GetData<string>("ModificadoPor");
+                            //item.FechaModificacion = dr.GetData<string>("FechaModificacion");
+                        }
+                    }
+                }
+            }
+
+            return item;
+        }
+
         public bool Guardar(FacturaBe registro, SqlConnection cn, out int? facturaId, out int? nroComprobante, out DateTime? fechaHoraEmision, out string totalImporteEnLetras)
         {
             facturaId = null;

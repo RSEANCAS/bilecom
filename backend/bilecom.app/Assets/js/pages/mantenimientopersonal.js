@@ -1,16 +1,16 @@
 ﻿var paisLista = [], departamentoLista = [], provinciaLista = [], distritoLista = [];
 const pageMantenimientoPersonal = {
     Init: function () {
-        this.Validar();
+        
         this.CargarCombo(this.InitEvents())
+        this.Validar();
     },
     InitEvents: function () {
-
+        pageMantenimientoPersonal.ObtenerDatos();
         $("#cmb-pais").change(pageMantenimientoPersonal.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoPersonal.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoPersonal.CmbProvinciaChange);
 
-        pageMantenimientoPersonal.ObtenerDatos();
     },
 
     CmbPaisChange: function () {
@@ -147,10 +147,10 @@ const pageMantenimientoPersonal = {
                     "txt-nombres": {
                         validators: {
                             notEmpty: {
-                                message: "Debe ingresar nombres o razón social",
+                                message: "Debe ingresar nombres completos",
                             },
                             callback: {
-                                message: 'El nombre o razón social no es válido',
+                                message: 'Nombres completos no es válido',
                                 callback: function (value, validator, $field) {
                                     let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").select2('data')[0];
                                     if (tipoDocumentoIdentidad.CodigoTipoDocumentoIdentidad == tdiDNI) {

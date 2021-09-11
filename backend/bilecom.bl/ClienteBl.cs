@@ -3,6 +3,7 @@ using bilecom.da;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,26 +20,32 @@ namespace bilecom.bl
             List<ClienteBe> lista = null;
             try
             {
-                cn.Open();
-                lista = clienteDa.Buscar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    lista = clienteDa.Buscar(empresaId, nroDocumentoIdentidad, razonSocial, pagina, cantidadRegistros, columnaOrden, ordenMax, cn, out totalRegistros);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { lista = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
         }
 
-        public ClienteBe Obtener(int EmpresaId, int ClienteId)
+        public ClienteBe Obtener(int empresaId, int clienteId)
         {
             ClienteBe respuesta = null;
             try
             {
-                cn.Open();
-                respuesta = clienteDa.Obtener(EmpresaId, ClienteId, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    respuesta = clienteDa.Obtener(empresaId, clienteId, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { respuesta = null; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return respuesta;
         }
 
@@ -47,12 +54,15 @@ namespace bilecom.bl
             int seGuardo = 0;
             try
             {
-                cn.Open();
-                seGuardo = clienteDa.Guardar(registro, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = clienteDa.Guardar(registro, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = 0; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
 
@@ -61,12 +71,15 @@ namespace bilecom.bl
             bool seGuardo = false;
             try
             {
-                cn.Open();
-                seGuardo = clienteDa.Eliminar(empresaId,clienteId,Usuario, cn);
-                cn.Close();
+                using (var cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    seGuardo = clienteDa.Eliminar(empresaId, clienteId, Usuario, cn);
+                    cn.Close();
+                }
             }
             catch (Exception ex) { seGuardo = false; }
-            finally { if (cn.State == ConnectionState.Open) cn.Close(); }
+            //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return seGuardo;
         }
     }

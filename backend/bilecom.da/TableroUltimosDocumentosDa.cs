@@ -20,8 +20,8 @@ namespace bilecom.da
                 using (SqlCommand cmd = new SqlCommand("dbo.usp_tablero_ultimosdocumentosemitidos", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@EmpresaId", EmpresaId.GetNullable());
-                    cmd.Parameters.AddWithValue("@CantidadRegistros", CantidadRegistros.GetNullable());
+                    cmd.Parameters.AddWithValue("@empresaId", EmpresaId.GetNullable());
+                    cmd.Parameters.AddWithValue("@cantidadRegistros", CantidadRegistros.GetNullable());
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.HasRows)

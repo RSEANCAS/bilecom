@@ -1,4 +1,4 @@
-var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formaPagoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
+var tipoComprobanteLista = [], serieTipoComprobanteLista = [], serieLista = [], monedaLista = [], tipoNotaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
 var departamentoLista = [], provinciaLista = [], distritoLista = [];
 
 var datosclienteNuevo = {
@@ -22,34 +22,36 @@ const columnsDetalle = [
     { data: "PrecioUnitario", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     { data: "ImporteTotal", render: (data) => data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
     {
-        data: "FacturaDetalleId", render: function (data, type, row) {
-            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoFactura.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
-                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoFactura.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
+        data: "NotaDebitoDetalleId", render: function (data, type, row) {
+            return `<button type="button" class="btn btn-xs btn-default btn-hover-dark ion-edit add-tooltip btnEditar" onclick='pageMantenimientoNotaDebito.BtnAgregarDetalleClick(event, ${data})' data-original-title="Editar" data-container="body"></button>
+                    <button type="button" class="btn btn-xs btn-danger btn-hover-danger ion-trash-a add-tooltip btnEliminar" onclick='pageMantenimientoNotaDebito.BtnEliminarDetalleClick(${data})' data-original-title="Eliminar" data-container="body"></button>`
         }
     },
 ];
 
 const fechaActual = new Date();
 
-const pageMantenimientoFactura = {
+const pageMantenimientoNotaDebito = {
     Init: function () {
         common.ConfiguracionDataTable();
+        this.InitEvents();
         this.CargarCombo(() => {
-            this.InitEvents();
             this.Validar();
             this.ListarDetalle();
         });
     },
 
     InitEvents: function () {
-        $("#btn-buscar-cliente").click(pageMantenimientoFactura.BtnBuscarClienteClick);
-        $("#btn-agregar-detalle").click(pageMantenimientoFactura.BtnAgregarDetalleClick);
+        $("#chk-comprobante-externo").change(pageMantenimientoNotaDebito.ChkComprobanteExternoChange).trigger("change");
+        $("#btn-buscar-cliente").click(pageMantenimientoNotaDebito.BtnBuscarClienteClick);
+        $("#btn-agregar-detalle").click(pageMantenimientoNotaDebito.BtnAgregarDetalleClick);
 
+        $("#txt-fecha-emision-comprobante").datepicker({ format: "dd/mm/yyyy", autoclose: true });
         $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
+        $("#cmb-tipo-comprobante").change(pageMantenimientoNotaDebito.CmbTipoComprobanteChange);
+        pageMantenimientoNotaDebito.ObtenerDatos();
 
-        pageMantenimientoFactura.ObtenerDatos();
-
-        $("#btn-nuevo-cliente").click(pageMantenimientoFactura.BtnNuevoClienteClick);
+        $("#btn-nuevo-cliente").click(pageMantenimientoNotaDebito.BtnNuevoClienteClick);
     },
 
     BtnBuscarClienteClick: function () {
@@ -98,7 +100,7 @@ const pageMantenimientoFactura = {
                 $(e.currentTarget).attr("id", "modal-busqueda-cliente");
 
                 $("#modal-busqueda-cliente").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
                 let user = common.ObtenerUsuario();
@@ -108,8 +110,8 @@ const pageMantenimientoFactura = {
                     url: `${urlRoot}api/cliente/buscar-cliente`,
                     data: {
                         empresaId: empresaId,
-                        nroDocumentoIdentidad: pageMantenimientoFactura.ObtenerFiltroClienteNroDocumentoIdentidad,
-                        razonSocial: pageMantenimientoFactura.ObtenerFiltroClienteNombres
+                        nroDocumentoIdentidad: pageMantenimientoNotaDebito.ObtenerFiltroClienteNroDocumentoIdentidad,
+                        razonSocial: pageMantenimientoNotaDebito.ObtenerFiltroClienteNombres
                     }
                 };
 
@@ -120,7 +122,7 @@ const pageMantenimientoFactura = {
                     { data: "RazonSocial" },
                     {
                         data: "ClienteId", render: function (data, type, row) {
-                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoFactura.BtnSeleccionarClienteClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
+                            return `<button class="btn btn-xs btn-default btn-hover-dark ion-checkmark-circled add-tooltip" onclick='pageMantenimientoNotaDebito.BtnSeleccionarClienteClick(${JSON.stringify(row)})' data-original-title="Seleccionar" data-container="body"></button>`
                         }
                     },
                 ];
@@ -132,11 +134,12 @@ const pageMantenimientoFactura = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnNuevoClienteClick: function () {
         bootbox.dialog({
             title: "Nuevo Cliente",
             message:
-                `<form id="frm-factura-cliente-nuevo" autocomplete="off">
+                `<form id="frm-notadebito-cliente-nuevo" autocomplete="off">
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -161,13 +164,13 @@ const pageMantenimientoFactura = {
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Departamento</label>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbDepartamentoChange()"></select>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaDebito.CmbDepartamentoChange()"></select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Provincia</label>
-                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbProvinciaChange()"></select>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaDebito.CmbProvinciaChange()"></select>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -196,12 +199,12 @@ const pageMantenimientoFactura = {
                     <!--<div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoFactura.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
+                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoNotaDebito.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoFactura.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
+                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoNotaDebito.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
                             </div>
                         </div>
                     </div>-->
@@ -212,7 +215,7 @@ const pageMantenimientoFactura = {
                     label: 'Guardar y Seleccionar',
                     className: 'btn-success',
                     callback: function () {
-                        $("#frm-factura-cliente-nuevo").trigger("submit");
+                        $("#frm-notadebito-cliente-nuevo").trigger("submit");
                         return false;
                     },
 
@@ -221,7 +224,7 @@ const pageMantenimientoFactura = {
                     label: 'Cancelar',
                     classname: 'btn-danger',
                     callback: function () {
-                        pageMantenimientoFactura.BtnCierraNuevoCliente();
+                        pageMantenimientoNotaDebito.BtnCierraNuevoCliente();
                     }
                 }
             },
@@ -229,17 +232,17 @@ const pageMantenimientoFactura = {
                 $(e.currentTarget).attr("id", "modal-nuevo-cliente");
 
                 $("#modal-nuevo-cliente").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
-                pageMantenimientoFactura.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
-                pageMantenimientoFactura.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoNotaDebito.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoNotaDebito.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
-                pageMantenimientoFactura.CmbDepartamentoChange();
-                pageMantenimientoFactura.ValidarClienteNuevo();
+                pageMantenimientoNotaDebito.CmbDepartamentoChange();
+                pageMantenimientoNotaDebito.ValidarClienteNuevo();
                 //$("#btn-buscar-cliente-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-cliente", ajax, columns));
                 //$("#btn-buscar-cliente-dialog").trigger("click");
             },
@@ -247,28 +250,122 @@ const pageMantenimientoFactura = {
             animateOut: 'zoomOutUp'
         });
     },
+
     BtnSeleccionarClienteClick: function (data, modal = "#modal-busqueda-cliente") {
-        pageMantenimientoFactura.LlenarDatosCliente(data);
+        pageMantenimientoNotaDebito.LlenarDatosCliente(data);
         $(modal).modal('hide');
     },
 
+    ChkComprobanteExternoChange: function () {
+        let checked = $("#chk-comprobante-externo").prop("checked");
+
+        if (checked) {
+            $("#btn-nuevo-cliente").removeClass("hidden");
+            $("#btn-buscar-cliente").removeClass("hidden");
+        } else {
+            $("#btn-nuevo-cliente").addClass("hidden");
+            $("#btn-buscar-cliente").addClass("hidden");
+        }
+
+        $("#cmb-tipo-comprobante").trigger("change");
+
+        let select2ConfigNroComprobante = {
+            allowClear: true,
+            placeholder: '[Seleccione...]',
+        }
+
+        if (checked) {
+            select2ConfigNroComprobante.tags = true;
+        } else {
+            select2ConfigNroComprobante.minimumInputLength = 1;
+            select2ConfigNroComprobante.ajax = {
+                url: `${urlRoot}api/common/buscar-comprobante-venta`,
+                data: function (params) {
+                    let user = common.ObtenerUsuario();
+                    let nroComprobante = params.term;
+                    let serieId = $("#cmb-serie-tipo-comprobante").val();
+                    let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+                    return { empresaId: user.Empresa.EmpresaId, ambienteSunatId, tipoComprobanteId, serieId, nroComprobante };
+                },
+                processResults: function (data) {
+                    let results = (data || []).map(x => Object.assign(x, { id: x.ComprobanteId, text: x.NroComprobante }));
+                    return { results };
+                }
+            };
+        }
+
+        $("#cmb-nro-comprobante").empty().select2(select2ConfigNroComprobante);
+        if (checked) {
+            $("#cmb-nro-comprobante").off("change");
+        } else {
+            $("#cmb-nro-comprobante").change(pageMantenimientoNotaDebito.CmbNroComprobanteChange);
+        }
+
+        $("#txt-fecha-emision-comprobante").val("");
+        $("#txt-fecha-emision-comprobante").prop("readonly", !checked);
+        pageMantenimientoNotaDebito.LimpiarDatosCliente();
+    },
+
+    CmbTipoComprobanteChange: function () {
+        let checkedComprobanteExterno = $("#chk-comprobante-externo").prop("checked");
+
+        if (checkedComprobanteExterno) {
+            pageMantenimientoNotaDebito.ResponseSerieTipoComprobanteListar([]);
+            return;
+        }
+
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let user = common.ObtenerUsuario();
+        fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteId}`)
+            .then(common.ResponseToJson)
+            .then(SerieTipoComprobanteLista => {
+                serieTipoComprobanteLista = SerieTipoComprobanteLista || [];
+                pageMantenimientoNotaDebito.ResponseSerieTipoComprobanteListar(serieTipoComprobanteLista);
+            })
+    },
+
+    CmbNroComprobanteChange: function () {
+        let data = $("#cmb-nro-comprobante").select2('data');
+        if (data.length == 0) {
+            $("#txt-fecha-emision-comprobante").val("");
+            pageMantenimientoNotaDebito.LimpiarDatosCliente();
+            detalleLista = [];
+            pageMantenimientoNotaDebito.ListarDetalle();
+            return;
+        }
+        data = data[0];
+        let user = common.ObtenerUsuario();
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let empresaId = user.Empresa.EmpresaId;
+
+        let url = `${urlRoot}api/common/obtener-comprobante-venta?empresaId=${empresaId}&tipoComprobanteId=${tipoComprobanteId}&comprobanteId=${data.ComprobanteId}`;
+
+        fetch(url)
+            .then(common.ResponseToJson)
+            .then(pageMantenimientoNotaDebito.ResponseComprobanteObtener);
+        //let fechaHoraEmision = new Date(data.FechaHoraEmision);
+        //let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
+        //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        //pageMantenimientoNotaDebito.LlenarDatosCliente(data.Cliente);
+    },
 
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
         let ProvinciaFiltro = provinciaLista.filter(x => x.DepartamentoId == departamentoId);
-        pageMantenimientoFactura.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+        pageMantenimientoNotaDebito.ResponseProvinciaListar(ProvinciaFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
-        pageMantenimientoFactura.CmbProvinciaChange();
+        pageMantenimientoNotaDebito.CmbProvinciaChange();
     },
 
     CmbProvinciaChange: function () {
         let provinciaId = $("#cmb-cliente-provincia-nuevo").val();
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
-        pageMantenimientoFactura.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+        pageMantenimientoNotaDebito.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
 
     },
+
     LlenarDatosCliente(data) {
-        pageMantenimientoFactura.LimpiarDatosCliente();
+        pageMantenimientoNotaDebito.LimpiarDatosCliente();
         $("#hdn-cliente-id").val(data.ClienteId);
         $("#cmb-tipo-documento-identidad-cliente").val(data.TipoDocumentoIdentidadId).trigger('change');
         $("#txt-numero-documento-identidad-cliente").val(data.NroDocumentoIdentidad);
@@ -294,7 +391,7 @@ const pageMantenimientoFactura = {
                                 </label>
                             </div>`,
             message:
-                `<form id="frm-factura-detalle" autocomplete="off">
+                `<form id="frm-notadebito-detalle" autocomplete="off">
                     ${(id == null ? "" : `<input type="hidden" id="hdn-detalle-id" value="${id}" />`)}
                     <div class="row">
                         <div class="col-sm-4">
@@ -401,7 +498,7 @@ const pageMantenimientoFactura = {
                     label: 'Guardar',
                     className: 'btn-primary',
                     callback: function () {
-                        $("#frm-factura-detalle").trigger("submit");
+                        $("#frm-notadebito-detalle").trigger("submit");
                         return false;
                     },
 
@@ -410,16 +507,16 @@ const pageMantenimientoFactura = {
             onShow: function (e) {
                 $(e.currentTarget).attr("id", "modal-detalle-agregar");
 
-                pageMantenimientoFactura.ResponseTipoProductoListar(tipoProductoLista);
-                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoFactura.RbtDetalleTipoProductoChange);
+                pageMantenimientoNotaDebito.ResponseTipoProductoListar(tipoProductoLista);
+                $("input[name='rbt-detalle-tipo-producto']").change(pageMantenimientoNotaDebito.RbtDetalleTipoProductoChange);
 
-                $("#chk-detalle-avanzado").change(pageMantenimientoFactura.ChkDetalleAvanzado);
+                $("#chk-detalle-avanzado").change(pageMantenimientoNotaDebito.ChkDetalleAvanzado);
 
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
 
-                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoFactura.CalcularImporteTotal);
+                $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoNotaDebito.CalcularImporteTotal);
 
                 $("#cmb-detalle-codigo").select2({
                     allowClear: true,
@@ -441,7 +538,7 @@ const pageMantenimientoFactura = {
                     }
                 });
 
-                $("#cmb-detalle-codigo").change(pageMantenimientoFactura.CmbDetalleCodigoChange);
+                $("#cmb-detalle-codigo").change(pageMantenimientoNotaDebito.CmbDetalleCodigoChange);
 
                 $("#cmb-detalle-codigo-sunat").select2({ tags: true, placeholder: 'Ingrese Código Sunat', dropdownParent: $("#modal-detalle-agregar") });
 
@@ -465,17 +562,17 @@ const pageMantenimientoFactura = {
                     }
                 });
 
-                $("#cmb-detalle-descripcion").change(pageMantenimientoFactura.CmbDetalleDescripcionChange);
+                $("#cmb-detalle-descripcion").change(pageMantenimientoNotaDebito.CmbDetalleDescripcionChange);
 
-                pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+                pageMantenimientoNotaDebito.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
                 //$("input[name='rbt-detalle-tipo-producto']").trigger("change");
 
-                pageMantenimientoFactura.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
+                pageMantenimientoNotaDebito.ResponseTipoAfectacionIgvListar(tipoAfectacionIgvLista, dropdownParent = $("#modal-detalle-agregar"));
 
                 let registroExiste = id != null;
 
                 if (registroExiste == true) {
-                    let index = detalleLista.findIndex(x => x.FacturaDetalleId == id);
+                    let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == id);
                     let data = detalleLista[index];
 
                     let optionDefault = new Option(data.Descripcion, data.ProductoId, true, true);
@@ -485,7 +582,7 @@ const pageMantenimientoFactura = {
                     $("#txt-detalle-precio-unitario").val(data.PrecioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     $("#txt-detalle-importe-total").val(data.ImporteTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 }
-                pageMantenimientoFactura.ValidarDetalle();
+                pageMantenimientoNotaDebito.ValidarDetalle();
             },
             animateIn: 'zoomInDown',
             animateOut: 'zoomOutUp'
@@ -510,11 +607,11 @@ const pageMantenimientoFactura = {
             callback: function (result) {
                 if (result == true) {
                     //debugger;
-                    let index = detalleLista.findIndex(x => x.FacturaDetalleId == id);
-                    if (detalleLista[index].FacturaDetalleId > 0) detalleListaEliminados.push(detalleLista[index].FacturaDetalleId);
+                    let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == id);
+                    if (detalleLista[index].NotaDebitoDetalleId > 0) detalleListaEliminados.push(detalleLista[index].NotaDebitoDetalleId);
                     detalleLista.splice(index, 1);
-                    pageMantenimientoFactura.ListarDetalle();
-                    $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
+                    pageMantenimientoNotaDebito.ListarDetalle();
+                    $("#frm-notadebito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 }
             }
         })
@@ -548,7 +645,7 @@ const pageMantenimientoFactura = {
         let optionDefaultDescripcion = new Option(data.Nombre, data.ProductoId, true, true);
         $("#cmb-detalle-descripcion").append(optionDefaultDescripcion);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoNotaDebito.CargarOtrosCamposProducto(data);
     },
 
     CmbDetalleDescripcionChange: function () {
@@ -563,7 +660,7 @@ const pageMantenimientoFactura = {
         let optionDefaultCodigo = new Option(data.Codigo, data.ProductoId, true, true);
         $("#cmb-detalle-codigo").append(optionDefaultCodigo);
 
-        pageMantenimientoFactura.CargarOtrosCamposProducto(data);
+        pageMantenimientoNotaDebito.CargarOtrosCamposProducto(data);
     },
 
     CargarOtrosCamposProducto(data) {
@@ -574,20 +671,20 @@ const pageMantenimientoFactura = {
             $("#cmb-detalle-codigo-sunat").append(optionDefaultCodigoSunat);
         }
 
-        //pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        //pageMantenimientoNotaDebito.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
         $("#cmb-detalle-unidad-medida").val(data.UnidadMedidaId).trigger("change");
         $("#cmb-detalle-tipo-afectacion-igv").val(data.TipoAfectacionIgvId).trigger("change");
     },
 
     RbtDetalleTipoProductoChange: function () {
-        pageMantenimientoFactura.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
+        pageMantenimientoNotaDebito.ResponseUnidadMedidaListar(unidadMedidaLista, dropdownParent = $("#modal-detalle-agregar"));
     },
 
     ListarDetalle: function () {
         detalleLista = detalleLista.map((x, i) => Object.assign(x, { Fila: (i + 1) }));
         common.CreateDataTableFromData("#tbl-lista-detalle", detalleLista, columnsDetalle);
         $("#hdn-detalle").val(detalleLista.length);
-        pageMantenimientoFactura.MostrarTotales();
+        pageMantenimientoNotaDebito.MostrarTotales();
     },
 
     MostrarTotales: function () {
@@ -596,10 +693,17 @@ const pageMantenimientoFactura = {
     },
 
     Validar: function () {
-        $("#frm-factura-mantenimiento")
+        $("#frm-notadebito-mantenimiento")
             .bootstrapValidator({
                 excluded: [],
                 fields: {
+                    "cmb-nro-comprobante": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar un comprobante.",
+                            }
+                        }
+                    },
                     "hdn-cliente-id": {
                         validators: {
                             notEmpty: {
@@ -623,16 +727,17 @@ const pageMantenimientoFactura = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoFactura.EnviarFormulario();
+                pageMantenimientoNotaDebito.EnviarFormulario();
             });
     },
+
     ValidarClienteNuevo: function () {
-        $("#frm-factura-cliente-nuevo")
+        $("#frm-notadebito-cliente-nuevo")
             .bootstrapValidator({
                 fields: {
                     "cmb-cliente-tipo-documento-identidad-nuevo": {
                         validators: {
-                            notEmpty: {message:"Debe seleccionar tipo de documento de identidad."}
+                            notEmpty: { message: "Debe seleccionar tipo de documento de identidad." }
                         }
                     },
                     "txt-cliente-nro-documento-identidad-nuevo": {
@@ -763,12 +868,13 @@ const pageMantenimientoFactura = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                
-                pageMantenimientoFactura.BtnGuardarySeleccionar();
+
+                pageMantenimientoNotaDebito.BtnGuardarySeleccionar();
             });
     },
+
     ValidarDetalle: function () {
-        $("#frm-factura-detalle")
+        $("#frm-notadebito-detalle")
             .bootstrapValidator({
                 fields: {
                     "cmb-detalle-descripcion": {
@@ -799,14 +905,14 @@ const pageMantenimientoFactura = {
             })
             .on('success.form.bv', function (e) {
                 e.preventDefault();
-                pageMantenimientoFactura.GuardarDetalle();
+                pageMantenimientoNotaDebito.GuardarDetalle();
                 $("#modal-detalle-agregar").modal('hide');
             });
     },
 
     GuardarDetalle: function () {
-        let facturaDetalleId = pageMantenimientoFactura.ObtenerFacturaDetalleId();
-        let detalleExiste = detalleLista.some(x => x.FacturaDetalleId == facturaDetalleId);
+        let notaDebitoDetalleId = pageMantenimientoNotaDebito.ObtenerNotaDebitoDetalleId();
+        let detalleExiste = detalleLista.some(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
         let tipoProductoId = $("input[name='rbt-detalle-tipo-producto']:checked").val();
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let unidadMedidaId = $("#cmb-detalle-unidad-medida").val();
@@ -831,7 +937,7 @@ const pageMantenimientoFactura = {
         let totalImporte = tipoAfectacionIgv.FlagGratuito ? 0 : Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
 
         let data = {
-            FacturaDetalleId: facturaDetalleId,
+            NotaDebitoDetalleId: notaDebitoDetalleId,
             TipoProductoId: tipoProductoId,
             Cantidad: cantidad,
             UnidadMedidaId: unidadMedidaId,
@@ -859,22 +965,66 @@ const pageMantenimientoFactura = {
         }
 
         if (detalleExiste == true) {
-            let index = detalleLista.findIndex(x => x.FacturaDetalleId == facturaDetalleId);
+            let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
             detalleLista[index] = Object.assign(detalleLista[index], data);
         }
         else detalleLista.push(data);
 
-        pageMantenimientoFactura.ListarDetalle();
+        pageMantenimientoNotaDebito.ListarDetalle();
     },
 
-    ObtenerFacturaDetalleId: function () {
-        let facturaDetalleId = $("#hdn-detalle-id").val();
-        if (facturaDetalleId != null) return Number(facturaDetalleId);
+    GuardarDetalleDeComprobante: function (item) {
+        let notaDebitoDetalleId = pageMantenimientoNotaDebito.ObtenerNotaDebitoDetalleId();
+        //let detalleExiste = detalleLista.some(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
+        let data = {
+            NotaDebitoDetalleId: notaDebitoDetalleId,
+            TipoProductoId: item.TipoProductoId,
+            Cantidad: item.Cantidad,
+            UnidadMedidaId: item.UnidadMedidaId,
+            UnidadMedida: item.UnidadMedida,
+            ProductoId: item.ProductoId,
+            CodigoSunat: item.CodigoSunat,
+            Codigo: item.Codigo,
+            Descripcion: item.Descripcion,
+            FlagAplicaICPBER: false,
+            TipoAfectacionIgvId: item.TipoAfectacionIgvId,
+            TipoAfectacionIgv: item.TipoAfectacionIgv,
+            TipoTributoIdIGV: item.TipoTributoIdIGV,
+            TipoTributoIGV: item.TipoTributoIGV,
+            Descuento: item.Descuento,
+            ISC: item.ISC,
+            PorcentajeIGV: item.PorcentajeIGV,
+            IGV: item.IGV,
+            ICPBER: 0,
+            PorcentajeICPBER: 0,
+            ValorUnitario: item.ValorUnitario,
+            PrecioUnitario: item.PrecioUnitario,
+            ValorVenta: item.ValorVenta,
+            PrecioVenta: item.PrecioVenta,
+            ImporteTotal: item.ImporteTotal,
+            TipoComprobanteId: item.TipoComprobanteId,
+            ComprobanteId: item.ComprobanteId,
+            ComprobanteDetalleId: item.ComprobanteDetalleId
+        }
 
-        let listaIdNegativos = detalleLista.filter(x => x.FacturaDetalleId < 0);
-        facturaDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.FacturaDetalleId).sort((a, b) => a - b)[0];
-        facturaDetalleId--;
-        return facturaDetalleId;
+        //if (detalleExiste == true) {
+        //    let index = detalleLista.findIndex(x => x.NotaDebitoDetalleId == notaDebitoDetalleId);
+        //    detalleLista[index] = Object.assign(detalleLista[index], data);
+        //}
+        //else detalleLista.push(data);
+        detalleLista.push(data);
+
+        pageMantenimientoNotaDebito.ListarDetalle();
+    },
+
+    ObtenerNotaDebitoDetalleId: function () {
+        let notaDebitoDetalleId = $("#hdn-detalle-id").val();
+        if (notaDebitoDetalleId != null) return Number(notaDebitoDetalleId);
+
+        let listaIdNegativos = detalleLista.filter(x => x.NotaDebitoDetalleId < 0);
+        notaDebitoDetalleId = listaIdNegativos.length == 0 ? 0 : listaIdNegativos.map(x => x.NotaDebitoDetalleId).sort((a, b) => a - b)[0];
+        notaDebitoDetalleId--;
+        return notaDebitoDetalleId;
     },
 
     CalcularImporteTotal: function () {
@@ -907,57 +1057,57 @@ const pageMantenimientoFactura = {
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
-            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/tipocomprobante/listar-tipocomprobante`),
+            fetch(`${urlRoot}api/serie/listar-serie-por-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&ambienteSunatId=${ambienteSunatId}&tipoComprobanteId=${tipoComprobanteIdNotaDebito}`),
             fetch(`${urlRoot}api/moneda/listar-moneda-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
-            fetch(`${urlRoot}api/tipooperacionventa/listar-tipooperacionventa-por-empresa-tipocomprobante?empresaId=${user.Empresa.EmpresaId}&tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/tiponota/listar-tiponota-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdNotaDebito}`),
             fetch(`${urlRoot}api/tipodocumentoidentidad/listar-tipodocumentoidentidad`),
             fetch(`${urlRoot}api/tipoproducto/listar-tipoproducto-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/unidadmedida/listar-unidadmedida-por-empresa?empresaId=${user.Empresa.EmpresaId}`),
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
             fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`),
-            fetch(`${urlRoot}api/formapago/listar-formapago`),
-            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdNotaDebito}`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
             fetch(`${urlRoot}api/provincia/listar-provincia`),
             fetch(`${urlRoot}api/distrito/listar-distrito`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormaPagoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+            .then(([TipoComprobanteLista, SerieLista, MonedaLista, TipoNotaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+                tipoComprobanteLista = TipoComprobanteLista || [];
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
-                tipoOperacionVentaLista = TipoOperacionVentaLista || [];
+                tipoNotaLista = TipoNotaLista || [];
                 tipoDocumentoIdentidadLista = TipoDocumentoIdentidadLista || [];
                 unidadMedidaLista = UnidadMedidaLista || [];
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
                 tipoTributoLista = TipoTributoLista || [];
-                formaPagoLista = FormaPagoLista || [];
                 formatoLista = FormatoLista || [];
                 departamentoLista = DepartamentoLista || [];
                 provinciaLista = ProvinciaLista || [];
                 distritoLista = DistritoLista || [];
 
-                pageMantenimientoFactura.ResponseSerieListar(serieLista);
-                pageMantenimientoFactura.ResponseMonedaListar(monedaLista);
-                pageMantenimientoFactura.ResponseTipoOperacionVentaListar(tipoOperacionVentaLista);
-                pageMantenimientoFactura.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
-                pageMantenimientoFactura.ResponseFormaPagoListar(formaPagoLista);
-                pageMantenimientoFactura.ResponseFormatoListar(formatoLista);
+                pageMantenimientoNotaDebito.ResponseTipoComprobanteListar(tipoComprobanteLista);
+                pageMantenimientoNotaDebito.ResponseSerieListar(serieLista);
+                pageMantenimientoNotaDebito.ResponseMonedaListar(monedaLista);
+                pageMantenimientoNotaDebito.ResponseTipoNotaListar(tipoNotaLista);
+                pageMantenimientoNotaDebito.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
+                pageMantenimientoNotaDebito.ResponseFormatoListar(formatoLista);
                 if (typeof fnNext == "function") fnNext();
             })
     },
 
     ObtenerDatos: function () {
-        if (facturaId != null) {
+        if (notaDebitoId != null) {
             let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
 
-            let url = `${urlRoot}api/factura/obtener-factura?empresaId=${empresaId}&facturaId=${facturaId}`;
+            let url = `${urlRoot}api/notadebito/obtener-notadebito?empresaId=${empresaId}&notaDebitoId=${notaDebitoId}`;
             let init = { method: 'GET' };
 
             fetch(url, init)
                 .then(common.ResponseToJson)
-                .then(pageMantenimientoFactura.ResponseObtenerDatos);
+                .then(pageMantenimientoNotaDebito.ResponseObtenerDatos);
         }
     },
 
@@ -967,6 +1117,17 @@ const pageMantenimientoFactura = {
     },
 
     EnviarFormulario: function () {
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let tipoComprobante = $("#cmb-tipo-comprobante").select2("data")[0];
+        tipoComprobante = { Codigo: tipoComprobante.Codigo };
+        let serieTipoComprobante = $("#cmb-serie-tipo-comprobante").select2("data")[0];
+        serieTipoComprobante = { Serial: serieTipoComprobante.Serial };
+        let comprobanteId = $("#cmb-nro-comprobante").val();
+        let comprobante = $("#cmb-nro-comprobante").select2("data")[0];
+        comprobante = { NroComprobante: comprobante.NroComprobante };
+        //let fechaEmisionComprobante = $("#txt-fecha-emision-comprobante").datepicker('getDate').toISOString();
+        
+
         let serieId = $("#cmb-serie").val();
         let serie = $("#cmb-serie").select2("data")[0];
         serie = { Serial: serie.Serial };
@@ -974,14 +1135,18 @@ const pageMantenimientoFactura = {
         let moneda = $("#cmb-moneda").select2("data")[0];
         moneda = { MonedaId: moneda.MonedaId, Nombre: moneda.Nombre, Simbolo: moneda.Simbolo, Codigo: moneda.Codigo };
         let monedaId = $("#cmb-moneda").val();
-        let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
-        let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
-        tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
-        let formaPagoId = $("#cmb-forma-pago").val();
-        let formaPago = $("#cmb-forma-pago").select2("data")[0];
-        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
+        //let tipoOperacionVentaId = $("#cmb-tipo-operacion-venta").val();
+        //let tipoOperacionVenta = $("#cmb-tipo-operacion-venta").select2("data")[0];
+        //tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
+        //let formaPagoId = $("#cmb-forma-pago").val();
+        //let formaPago = $("#cmb-forma-pago").select2("data")[0];
+        //formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
         let formatoId = $("#cmb-formato").val();
-        let observacion = $("#txt-observacion").val();
+        let tipoNotaId = $("#cmb-tipo-nota").val();
+        let tipoNota = $("#cmb-tipo-nota").select2("data")[0];
+        tipoNota = { TipoNotaId: tipoNota.TipoNotaId, CodigoSunat: tipoNota.CodigoSunat };
+        let motivo = $("#txt-motivo").val();
+        //let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();
         let tipoDocumentoIdentidadCliente = $("#cmb-tipo-documento-identidad-cliente").select2("data")[0];
         let cliente = {
@@ -990,12 +1155,12 @@ const pageMantenimientoFactura = {
             RazonSocial: $("#txt-nombres-completos-cliente").val(),
             Direccion: $("#txt-direccion-cliente").val()
         };
-        let totalGravado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExonerado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalInafecto = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalExportacion = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalGratuito = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
-        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoFactura.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGravado = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGravado && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExonerado = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExonerado && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalInafecto = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagInafecto && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalExportacion = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagExportacion && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalGratuito = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
+        let totalVentaArrozPilado = detalleLista.filter(x => pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagVentaArrozPilado && !pageMantenimientoNotaDebito.ObtenerTipoAfectacionIgv(x.TipoAfectacionIgvId).FlagGratuito).map(x => x.ValorVenta).reduce((a, b) => a + b, 0);
         let totalIGV = detalleLista.map(x => x.IGV).reduce((a, b) => a + b, 0);
         let totalISC = detalleLista.map(x => x.ISC).reduce((a, b) => a + b, 0);
         let totalOtrosCargos = 0;
@@ -1017,19 +1182,26 @@ const pageMantenimientoFactura = {
 
         let ObjectoJson = {
             EmpresaId: empresaId,
-            FacturaId: facturaId,
+            NotaDebitoId: notaDebitoId,
             SedeId: sedeId,
+            TipoComprobanteId: tipoComprobanteId,
+            TipoComprobante: tipoComprobante,
+            ComprobanteId: comprobanteId,
+            ComprobanteStr: `${serieTipoComprobante.Serial}-${comprobante.NroComprobante}`,
             SerieId: serieId,
             Serie: serie,
             FechaVencimiento: fechaVencimiento,
             MonedaId: monedaId,
             Moneda: moneda,
-            TipoOperacionVentaId: tipoOperacionVentaId,
-            TipoOperacionVenta: tipoOperacionVenta,
-            FormaPagoId: formaPagoId,
-            FormaPago: formaPago,
+            //TipoOperacionVentaId: tipoOperacionVentaId,
+            //TipoOperacionVenta: tipoOperacionVenta,
+            //FormaPagoId: formaPagoId,
+            //FormaPago: formaPago,
             FormatoId: formatoId,
-            Observacion: observacion,
+            TipoNotaId: tipoNotaId,
+            TipoNota: tipoNota,
+            Motivo: motivo,
+            //Observacion: observacion,
             FlagExportacion: false,
             FlagGratuito: false,
             FlagEmisorItinerante: false,
@@ -1051,8 +1223,9 @@ const pageMantenimientoFactura = {
             TotalOtrosTributos: totalOtrosTributos,
             TotalBaseImponible: totalBaseImponible,
             TotaDescuentos: totalDescuentoDetalle,
-            ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
-            Observacion: observacion,
+            ImporteTotal: importeTotal,
+            //ImporteTotal: detalleLista.map(x => x.ImporteTotal).reduce((a, b) => a + b, 0),
+            //Observacion: observacion,
             TipoTributoIdExonerado: totalExonerado > 0 ? tipoTributoIdExonerado : null,
             TipoTributoExonerado: tipoTributoExonerado,
             TipoTributoIdInafecto: totalInafecto > 0 ? tipoTributoIdInafecto : null,
@@ -1065,22 +1238,22 @@ const pageMantenimientoFactura = {
             TipoTributoIgv: tipoTributoIgv,
             TipoTributoIdIsc: totalISC > 0 ? tipoTributoIdIsc : null,
             TipoTributoIsc: tipoTributoIsc,
-            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago: null,
+            TipoTributoIdOtrosTributos: totalOtrosTributos > 0 ? tipoTributoIdOtrosConceptosPago : null,
             TipoTributoOtrosTributos: tipoTributoOth,
             AmbienteSunatId: ambienteSunatId,
             Usuario: user.Nombre,
-            ListaFacturaDetalle: detalleLista,
-            ListaFacturaDetalleEliminados: detalleListaEliminados
+            ListaNotaDebitoDetalle: detalleLista,
+            ListaNotaDebitoDetalleEliminados: detalleListaEliminados
         }
 
-        let url = `${urlRoot}api/factura/guardar-factura`;
+        let url = `${urlRoot}api/notadebito/guardar-notadebito`;
         let params = JSON.stringify(ObjectoJson);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoFactura.ResponseEnviarFormulario);
+            .then(pageMantenimientoNotaDebito.ResponseEnviarFormulario);
     },
 
     ResponseEnviarFormulario: function (data) {
@@ -1106,7 +1279,7 @@ const pageMantenimientoFactura = {
             timer: 1800,
             onHide: function () {
                 if (data == true) {
-                    location.href = `${urlRoot}Facturas`
+                    location.href = `${urlRoot}NotasDebito`
                 }
             }
         });
@@ -1117,10 +1290,24 @@ const pageMantenimientoFactura = {
         $("#cmb-serie").val(data.SerieId).trigger("change");
         $("#cmb-moneda").val(data.MonedaId).trigger("change");
         $("#txt-nro-comprobante").val(data.NroComprobante.toLocaleString("es-PE", { minimumIntegerDigits: 8 }).replace(/,/g, ''));
-        pageMantenimientoFactura.LlenarDatosCliente(data.Cliente);
-        pageMantenimientoFactura.LlenarDatosPersonal(data.Personal);
-        detalleLista = data.ListaFacturaDetalle;
-        pageMantenimientoFactura.ListarDetalle();
+        pageMantenimientoNotaDebito.LlenarDatosCliente(data.Cliente);
+        pageMantenimientoNotaDebito.LlenarDatosPersonal(data.Personal);
+        detalleLista = data.ListaNotaDebitoDetalle;
+        pageMantenimientoNotaDebito.ListarDetalle();
+    },
+
+    ResponseTipoComprobanteListar: function (data) {
+        let dataTipoComprobante = data.filter(x => [tipoComprobanteIdFactura, tipoComprobanteIdBoleta].includes(x.TipoComprobanteId)).map(x => Object.assign(x, { id: x.TipoComprobanteId, text: x.Nombre }));
+        $("#cmb-tipo-comprobante").select2({ data: dataTipoComprobante, width: '100%', placeholder: '[Seleccione...]' }).trigger("change");
+    },
+
+    ResponseSerieTipoComprobanteListar: function (data) {
+        let checkedComprobanteExterno = $("#chk-comprobante-externo").prop("checked");
+        let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
+        let select2Config = { data: dataSerie, width: '100%', placeholder: '[Seleccione...]' };
+        if (checkedComprobanteExterno) select2Config.tags = true;
+
+        $("#cmb-serie-tipo-comprobante").empty().select2(select2Config);
     },
 
     ResponseSerieListar: function (data) {
@@ -1133,9 +1320,9 @@ const pageMantenimientoFactura = {
         $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[Seleccione...]' });
     },
 
-    ResponseTipoOperacionVentaListar: function (data) {
-        let dataTipoOperacionVenta = data.map(x => Object.assign(x, { id: x.TipoOperacionVentaId, text: x.Nombre }));
-        $("#cmb-tipo-operacion-venta").select2({ data: dataTipoOperacionVenta, width: '100%', placeholder: '[Seleccione...]' });
+    ResponseTipoNotaListar: function (data) {
+        let dataTipoNota = data.map(x => Object.assign(x, { id: x.TipoNotaId, text: x.Descripcion }));
+        $("#cmb-tipo-nota").select2({ data: dataTipoNota, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseTipoDocumentoIdentidadListar: function (data) {
@@ -1143,7 +1330,7 @@ const pageMantenimientoFactura = {
         $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]' });
         $("#cmb-tipo-documento-identidad-cliente").val("").trigger("change");
     },
-    
+
     ResponseTipoProductoListar: function (data) {
         let dataTipoProducto = data.map((x, i) => `<label class="radio-inline"><input type="radio" ${(i == 0 ? "checked" : "")} id="rbt-detalle-tipo-producto-${x.TipoProductoId}" name="rbt-detalle-tipo-producto" value="${x.TipoProductoId}" /> ${x.Nombre}</label>`).join('');
         $("#div-detalle-tipo-producto").html(dataTipoProducto);
@@ -1163,11 +1350,6 @@ const pageMantenimientoFactura = {
         $("#cmb-detalle-tipo-afectacion-igv").empty();
         $("#cmb-detalle-tipo-afectacion-igv").select2({ data: dataTipoAfectacionIgv, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
         $("#cmb-detalle-tipo-afectacion-igv").val("").trigger("change");
-    },
-
-    ResponseFormaPagoListar: function (data) {
-        let dataFormaPago = data.map(x => Object.assign(x, { id: x.FormaPagoId, text: x.Descripcion }));
-        $("#cmb-forma-pago").select2({ data: dataFormaPago, width: '100%', placeholder: '[Seleccione...]' });
     },
 
     ResponseFormatoListar: function (data) {
@@ -1192,31 +1374,60 @@ const pageMantenimientoFactura = {
         return $("#txt-filtro-personal-nombres-completos").val();
 
     },
+
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
-        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]',dropdownParent});
+        $("#cmb-cliente-departamento-nuevo").select2({ data: datadepartamento, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseProvinciaListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-provincia-nuevo").empty();
         let dataprovincia = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.ProvinciaId, text: item.Nombre }); });
-        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+        $("#cmb-cliente-provincia-nuevo").select2({ data: dataprovincia, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
 
     ResponseDistritoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-distrito-nuevo").empty();
         let datadistrito = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DistritoId, text: item.Nombre }); });
-        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent});
+        $("#cmb-cliente-distrito-nuevo").select2({ data: datadistrito, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
     },
+
     ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
         data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
     },
+
+    ResponseComprobanteObtener: function (data) {
+        let tipoComprobanteId = $("#cmb-tipo-comprobante").val();
+        let fechaHoraEmision = new Date(data.FechaHoraEmision);
+        let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
+        //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
+        $("#txt-fecha-emision-comprobante").datepicker("setDate", fechaHoraEmision);
+        pageMantenimientoNotaDebito.LlenarDatosCliente(data.Cliente);
+
+        if (tipoComprobanteId == tipoComprobanteIdBoleta) data.ListaDetalle = data.ListaBoletaDetalle || [];
+        if (tipoComprobanteId == tipoComprobanteIdFactura) data.ListaDetalle = data.ListaFacturaDetalle || [];
+        detalleLista = [];
+        data.ListaDetalle.forEach(x => {
+            x.TipoComprobanteId = tipoComprobanteId;
+            if (tipoComprobanteId == tipoComprobanteIdBoleta) {
+                x.ComprobanteId = x.BoletaId;
+                x.ComprobanteDetalleId = x.BoletaDetalleId;
+            }
+            if (tipoComprobanteId == tipoComprobanteIdFactura) {
+                x.ComprobanteId = x.FacturaId;
+                x.ComprobanteDetalleId = x.FacturaDetalleId;
+            }
+            pageMantenimientoNotaDebito.GuardarDetalleDeComprobante(x)
+        });
+    },
+
     BtnCierraNuevoCliente: function () {
         $("#modal-nuevo-cliente").modal('hide');
     },
+
     BtnGuardarySeleccionar: function () {
         let clienteId = 0;
         let nombres = $("#txt-cliente-nombres-razonsocial-nuevo").val();
@@ -1230,7 +1441,7 @@ const pageMantenimientoFactura = {
         let empresaId = common.ObtenerUsuario().Empresa.EmpresaId;
         let user = common.ObtenerUsuario().Nombre;
 
-        pageMantenimientoFactura.datosclienteNuevo = {
+        pageMantenimientoNotaDebito.datosclienteNuevo = {
             ClienteId: clienteId,
             EmpresaId: empresaId,
             TipoDocumentoIdentidadId: tipodocumentoidentidadId,
@@ -1244,25 +1455,26 @@ const pageMantenimientoFactura = {
             Usuario: user
         }
         let url = `${urlRoot}api/cliente/guardar-cliente`;
-        let params = JSON.stringify(pageMantenimientoFactura.datosclienteNuevo);
+        let params = JSON.stringify(pageMantenimientoNotaDebito.datosclienteNuevo);
         let headers = { 'Content-Type': 'application/json' };
         let init = { method: 'POST', body: params, headers };
 
         fetch(url, init)
             .then(r => r.json())
-            .then(pageMantenimientoFactura.ResponseClienteNuevoGuardar);
-        
+            .then(pageMantenimientoNotaDebito.ResponseClienteNuevoGuardar);
+
     },
+
     ResponseClienteNuevoGuardar: function (data) {
-        
+
         let tipo = "", mensaje = "";
         if (data > 0) {
             //$("#hdn-cliente-id").val(data);
             tipo = "success";
             mensaje = "¡Se ha guardado y seleccionado con éxito!";
-            pageMantenimientoFactura.datosclienteNuevo.ClienteId = data;
-            pageMantenimientoFactura.BtnSeleccionarClienteClick(pageMantenimientoFactura.datosclienteNuevo,"#modal-nuevo-cliente");
-            pageMantenimientoFactura.BtnCierraNuevoCliente();
+            pageMantenimientoNotaDebito.datosclienteNuevo.ClienteId = data;
+            pageMantenimientoNotaDebito.BtnSeleccionarClienteClick(pageMantenimientoNotaDebito.datosclienteNuevo, "#modal-nuevo-cliente");
+            pageMantenimientoNotaDebito.BtnCierraNuevoCliente();
         } else {
             tipo = "danger";
             mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
@@ -1281,13 +1493,14 @@ const pageMantenimientoFactura = {
             timer: 1800,
             onHide: function () {
                 //if (data == true) {
-                //    location.href = `${urlRoot}Facturas`
+                //    location.href = `${urlRoot}NotaDebitos`
                 //}
             }
         });
     },
+
     LimpiarDatosClienteNuevo: function () {
-        pageMantenimientoFactura.datosclienteNuevo = {
+        pageMantenimientoNotaDebito.datosclienteNuevo = {
             ClienteId: 0,
             EmpresaId: 0,
             TipoDocumentoIdentidadId: 0,
