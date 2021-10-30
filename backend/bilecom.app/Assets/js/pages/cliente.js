@@ -23,6 +23,18 @@
         let nombres = $("#txt-nombres-o-razon-social").val();
         return nombres;
     },
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
@@ -40,7 +52,9 @@
                 data: {
                     empresaId: empresaId,
                     nroDocumentoIdentidad: pageCliente.ObtenerNroDocumentoIdentidad,
-                    razonSocial: pageCliente.ObtenerNombres
+                    razonSocial: pageCliente.ObtenerNombres,
+                    columnaOrden: pageCliente.ObtenerNombreColumna,
+                    ordenMax: pageCliente.ObtenerOrdenColumna
                 }
             },
             columns: [
@@ -52,7 +66,8 @@
                     data: "ClienteId", render: function (data, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Clientes/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a>
                                 <button class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageCliente.btnEliminaClick(${data})" data-original-title="Delete" data-container="body" ></button >`
-                    }
+                    },
+                    orderable:false
                 },
             ]
         })

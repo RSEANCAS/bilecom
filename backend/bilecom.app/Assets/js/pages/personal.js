@@ -23,10 +23,23 @@
         let nombresCompletos = $("#txt-nombres-completos").val();  
         return nombresCompletos;
     },
+
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
-            $(id).DataTable().ajax.reload();
+            $(id).DataTable().ajax.reload();    
             return;
         }
         let user = common.ObtenerUsuario();
@@ -40,7 +53,9 @@
                 data: {
                     empresaId: empresaId,
                     nroDocumentoIdentidad: pagePersonal.ObtenerNroDocumentoIdentidad,
-                    nombresCompletos: pagePersonal.ObtenerNombreCompletos
+                    nombresCompletos: pagePersonal.ObtenerNombreCompletos,
+                    columnaOrden: pagePersonal.ObtenerNombreColumna,
+                    ordenMax: pagePersonal.ObtenerOrdenColumna
                 }
             },
             columns: [
@@ -51,7 +66,8 @@
                 {
                     data: "PersonalId", render: function (data, type, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Personal/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pagePersonal.btnEliminaClick(${data})" data - original - title="Delete" data - container="body" ></a >`
-                    }
+                    },
+                    orderable: false
                 },
             ]
         })
