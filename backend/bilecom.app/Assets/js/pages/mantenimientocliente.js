@@ -1,8 +1,8 @@
 ﻿var paisLista = [], departamentoLista = [], provinciaLista = [], distritoLista = [];
 const pageMantenimientoCliente = {
     Init: function () {
-        this.Validar();
         this.InitEvents();
+        this.Validar();
     },
 
     InitEvents: function () {
@@ -94,7 +94,7 @@ const pageMantenimientoCliente = {
                                         if (value.length != 8) {
                                             return {
                                                 valid: false,
-                                                message:"DNI inválido"
+                                                message:"DNI conta de 8 dígitos"
                                             }
                                         }
                                         else {
@@ -110,10 +110,16 @@ const pageMantenimientoCliente = {
                                         if (value === "") {
                                             return true;
                                         }
+                                        if (value.substring(0, 2) != "10" && value.substr(0, 2) != "15" && value.substr(0, 2) != "20") {
+                                            return {
+                                                valid: false,
+                                                message: "Ruc empieza con 10, 15 o 20"
+                                            }
+                                        }
                                         if (value.length != 11) {
                                             return {
                                                 valid: false,
-                                                message: "RUC inválido"
+                                                message: "RUC conta de 11 digitos"
                                             }
                                         }
                                         else {
@@ -309,7 +315,6 @@ const pageMantenimientoCliente = {
             tipo = "danger";
             mensaje = "¡Se ha producido un error, vuelve a intentarlo!";
         }
-
         $.niftyNoty({
             type: tipo,
             container: "floating",
@@ -322,7 +327,7 @@ const pageMantenimientoCliente = {
             focus: true,
             timer: 1800,
             onHide: function () {
-                if (data == true) {
+                if (data > 0) {
                     location.href = `${urlRoot}Clientes`
                 }
             }

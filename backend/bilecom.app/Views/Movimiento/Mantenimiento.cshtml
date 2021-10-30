@@ -4,12 +4,31 @@
 }
 
 @section links_footer{
+
     <link href="@Url.Content("~/Assets/plugins/select2/css/select2.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/ionicons/css/ionicons.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/plugins/switchery/switchery.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/css/nifty.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Assets/css/demo/nifty-demo-icons.min.css")" rel="stylesheet">
+
+    <!--Bootstrap Stylesheet [ REQUIRED ]-->
+    <link href="@Url.Content("~/Assets/css/bootstrap.min.css")" rel="stylesheet">
+
+    <!--Nifty Stylesheet [ REQUIRED ]-->
+    <link href="@Url.Content("~/Assets/css/nifty.min.css")" rel="stylesheet">
+
+    <!--Nifty Premium Icon [ DEMONSTRATION ]-->
+    <link href="@Url.Content("~/Assets/css/demo/nifty-demo-icons.min.css")" rel="stylesheet">
+
+    <!--Demo [ DEMONSTRATION ]-->
+    <link href="@Url.Content("~/Assets/css/demo/nifty-demo.min.css")" rel="stylesheet">
+
+
 }
 
 <div id="content-container">
@@ -107,6 +126,19 @@
                                         <span class="bg-dark box-block pad-lft pad-rgt">Número Ref.</span>
                                         <input class="form-control" placeholder="N° Ref." name="txt-referencia-numero" id="txt-referencia-numero" data-bv-field="txt-referencia-numero">
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-main text-bold">Sizes</p>
+                                    <ul class="list-inline">
+
+                                        <!--Switchery : Sizes-->
+                                        <!--===================================================-->
+                                        <li><input class="switchery" id="demo-sw-sz-lg" type="checkbox" checked></li>
+                                        <li><input id="demo-sw-sz" type="checkbox" checked></li>
+                                        <li><input id="demo-sw-sz-sm" type="checkbox" checked></li>
+                                        <!--===================================================-->
+
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -339,6 +371,11 @@
     <script src="@Url.Content("~/Assets/plugins/bootstrap-validator/bootstrapValidator.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/mantenimientomovimiento.js")"></script>
+    <script src="@Url.Content("~/Assets/plugins/switchery/switchery.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/nifty.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Assets/js/demo/nifty-demo.min.js")"></script>
+
     <script>
         const tipoComprobanteIdMovimiento = @((int)Enums.TipoComprobante.Movimiento);
         const movimientoId = @(Request["id"] != null && ViewBag.Accion == (int)Enums.Accion.Editar ? Request["id"].ToString() : "null");

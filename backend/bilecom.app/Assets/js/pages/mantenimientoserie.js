@@ -1,4 +1,5 @@
-﻿const pageMantenimientoSerie = {
+﻿var Datos = [];
+const pageMantenimientoSerie = {
     Init: function () {
         this.CargarCombo(() => {
             this.InitEvents();
@@ -10,6 +11,7 @@
     InitEvents: function () {
         pageMantenimientoSerie.ObtenerDatos();
         $("#cmb-tipo-comprobante").change();
+        $("#chk-flag-sin-final").change();
     },
 
     Validar: function () {
@@ -46,9 +48,24 @@
                             },
                             regexp: {
                                 regexp: /^[0-9]/,
-                                message: 'Solo puede ingresar caracteres numericos'
+                                message: 'Solo puede ingresar caracteres numericos.'
                             }
                             
+                        }
+                    },
+                    "txt-valor-final": {
+                        validators: {
+                            callback: {
+                                message: "Debe ingresar Valor Final.",
+                                callback: function (value, validator, $field) {
+                                    let valCheck = $("#chk-flag-sin-final").prop("checked");
+                                    if (valCheck == true) {
+                                        if ($("#txt-valor-final").val().trim() == "") {
+                                            return false;
+                                        } else { return true;}
+                                    } else { return true;}
+                                }
+                            }
                         }
                     },
                     "cmb-tipo-comprobante-referencia": {
@@ -67,7 +84,19 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    "txt-valor-actual": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe ingresar Valor Actual.",
+                            },
+                            regexp: {
+                                regexp: /^[0-9]/,
+                                message: 'Solo puede ingresar caracteres numericos'
+                            }
+
+                        }
+                    },
                 }
             })
             .on('success.form.bv', function (e) {
@@ -140,8 +169,12 @@
     },
 
     ResponseObtenerDatos: function (data) {
+        Datos = data;
+
         $("#cmb-tipo-comprobante").val(data.TipoComprobanteId).trigger("change");
-        $("#txt-serial").val(data.Serial);
+        $("#cmb-tipo-comprobante").prop("disabled", true);
+        $("#txt-serial").val(data.Serial.substr(1, 3));
+        $("#txt-serial").prop("disabled", true);
         $("#txt-valor-inicial").val(data.ValorInicial);
         $("#chk-flag-sin-final").prop("checked",data.FlagSinFinal);
         $("#txt-valor-final").val(data.ValorFinal);
@@ -212,3 +245,25 @@ $("#cmb-tipo-comprobante-referencia").change(function () {
     let data = $("#cmb-tipo-comprobante-referencia").select2('data');
     $("#txt-identificador").val(data[0].IdentificadorSerie);
 })
+
+$("#chk-flag-sin-final").change(function () {
+    let numero = $("#txt-opcion").val();
+    if (numero == 0) {
+        let valCheck = $("#chk-flag-sin-final").prop("checked");
+        if (valCheck == false) {
+            $("#txt-valor-final").prop("disabled", true);
+            $("#txt-valor-final").val("");
+        } else {
+            $("#txt-valor-final").prop("disabled", false);
+        }
+    } else {
+        let valCheck = $("#chk-flag-sin-final").prop("checked");
+        if (valCheck == false) {
+            $("#txt-valor-final").prop("disabled", true);
+            $("#txt-valor-final").val("");
+        } else {
+            $("#txt-valor-final").prop("disabled", false);
+            $("#txt-valor-final").val(Datos.ValorFinal);
+        }
+    }
+});

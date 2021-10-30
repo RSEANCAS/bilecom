@@ -51,7 +51,30 @@ const pageMantenimientoProducto = {
                                 message: "Debe de ingresar código sunat."
                             }
                         }
-                    }
+                    },
+                    "txt-stock-minimo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe de ingresar stock minimo."
+                            },
+                            regexp: {
+                                regexp: /^[0-9]+([.][0-9]+)?$/,
+                                message: 'Solo se aceptan números.'
+                            }
+                        }
+                    },
+                    "txt-monto": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe de ingresar monto."
+                            },
+                            regexp: {
+                                regexp: /^[0-9]+([.][0-9]+)?$/,
+                                message: 'Solo se aceptan números.'
+                            }
+                        }
+                    },
+
                 }
             })
             .on('success.form.bv', function(e) {

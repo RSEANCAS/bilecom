@@ -440,9 +440,10 @@ const pageMantenimientoMovimiento = {
                         </div>
                         <div class="col-md-4">
                             <div class="form-group" style="padding-top:15px">
-					                <span class="bg-success box-block pad-lft pad-rgt">&nbsp;</span>
+                                    <input id="demo-sw-sz-sm" type="checkbox" id="chk-activar-fecha-vencimiento" checked>
+					                <!--<span class="bg-success box-block pad-lft pad-rgt">&nbsp;</span>
 					                <input id="chk-activar-fecha-vencimiento" class="magic-checkbox" type="checkbox" >
-					                <label for="chk-activar-fecha-vencimiento">Activar fecha de vencimiento</label>
+					                <label for="chk-activar-fecha-vencimiento">Activar fecha de vencimiento</label>-->
                             </div>
                         </div>
                         <div class="col-sm-4">
