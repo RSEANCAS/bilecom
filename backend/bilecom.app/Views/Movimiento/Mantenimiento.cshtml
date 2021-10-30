@@ -62,13 +62,13 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Movimiento</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento" id="cmb-tipo-movimiento" data-bv-field="cmb-tipo-movimiento" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoMovimiento.CmbTipoOperacionAlmacenChange()"></select>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento" id="cmb-tipo-movimiento" data-bv-field="cmb-tipo-movimiento" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoMovimiento.CmbTipoOperacionAlmacenChange()" disabled></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <span class="bg-dark box-block pad-lft pad-rgt">Almacen</span>
-                                        <select class="form-control val-exc select2-show-accessible" name="cmb-almacen" id="cmb-almacen" data-bv-field="cmb-almacen" tabindex="-1" aria-hidden="false"></select>
+                                        <select class="form-control val-exc select2-show-accessible" name="cmb-almacen" id="cmb-almacen" data-bv-field="cmb-almacen" tabindex="-1" aria-hidden="false" disabled></select>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -126,19 +126,6 @@
                                         <span class="bg-dark box-block pad-lft pad-rgt">Número Ref.</span>
                                         <input class="form-control" placeholder="N° Ref." name="txt-referencia-numero" id="txt-referencia-numero" data-bv-field="txt-referencia-numero">
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class="text-main text-bold">Sizes</p>
-                                    <ul class="list-inline">
-
-                                        <!--Switchery : Sizes-->
-                                        <!--===================================================-->
-                                        <li><input class="switchery" id="demo-sw-sz-lg" type="checkbox" checked></li>
-                                        <li><input id="demo-sw-sz" type="checkbox" checked></li>
-                                        <li><input id="demo-sw-sz-sm" type="checkbox" checked></li>
-                                        <!--===================================================-->
-
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -238,9 +225,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
                     <div class="panel panel-bordered panel-dark">
                         <div class="panel-heading">
                             <div class="panel-control">
@@ -362,6 +346,39 @@
             </div>
         </div>
     </form>
+</div>
+<div id="MovimientoInicio" name="MovimientoInicio" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Datos Iniciales</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <span class="bg-dark box-block pad-lft pad-rgt">Tipo de Movimiento</span>
+                            <select class="form-control val-exc select2-show-accessible" name="cmb-tipo-movimiento-modal" id="cmb-tipo-movimiento-modal" data-bv-field="cmb-tipo-movimiento-modal" tabindex="-1" aria-hidden="false" onchange=""></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <span class="bg-dark box-block pad-lft pad-rgt">Almacen</span>
+                            <select class="form-control val-exc select2-show-accessible" name="cmb-almacen-modal" id="cmb-almacen-modal" data-bv-field="cmb-almacen-modal" tabindex="-1" aria-hidden="false"></select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="btnSeleccionarDatosInicio" class="btn btn-lg btn-success btn-block">Seleccionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section scripts_footer{
