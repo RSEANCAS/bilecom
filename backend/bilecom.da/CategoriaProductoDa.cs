@@ -63,7 +63,8 @@ namespace bilecom.da
                         while (dr.Read())
                         {
                             CategoriaProductoBe item = new CategoriaProductoBe();
-                            item.CategoriaProductoId = dr.GetData<int>("Fila");
+                            item.Fila = dr.GetData<int>("Fila");
+                            item.CategoriaProductoId = dr.GetData<int>("CategoriaProductoId");
                             item.EmpresaId = dr.GetData<int>("EmpresaId");
                             item.Nombre = dr.GetData<string>("Nombre");
                             lista.Add(item);

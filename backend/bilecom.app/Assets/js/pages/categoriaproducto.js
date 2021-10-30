@@ -19,6 +19,18 @@
         let nombre = $("#txt-nombre").val();
         return nombre;
     },
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
@@ -35,16 +47,19 @@
                 url: `${urlRoot}api/categoriaproducto/buscar-categoriaproducto`,
                 data: {
                     empresaId: empresaId,
-                    nombre: pageCategoriaProducto.ObtenerNombre
+                    nombre: pageCategoriaProducto.ObtenerNombre,
+                    columnaOrden: pageCategoriaProducto.ObtenerNombreColumna,
+                    ordenMax: pageCategoriaProducto.ObtenerOrdenColumna
                 }
             },
             columns: [
-                { data: "CategoriaProductoId" },
+                { data: "Fila" },
                 { data: "Nombre" },
                 {
                     data: "CategoriaProductoId", render: function (data, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}CategoriasProducto/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageCategoriaProducto.btnEliminaClick(${data})" data - original - title="Delete" data - container="body" ></a >`
-                    }
+                    },
+                    orderable:false
                 },
             ]
         })
