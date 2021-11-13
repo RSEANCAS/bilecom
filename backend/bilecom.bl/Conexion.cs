@@ -12,6 +12,8 @@ namespace bilecom.bl
     {
         static string NombreConexion = ConfigurationManager.AppSettings["NombreConexion"];
         internal static string CadenaConexion = ConfigurationManager.ConnectionStrings[NombreConexion].ConnectionString;
+        static string Log = ConfigurationManager.AppSettings["RutaLog"];
+
         //internal SqlConnection cn = new SqlConnection(CadenaConexion);
     }
 }
