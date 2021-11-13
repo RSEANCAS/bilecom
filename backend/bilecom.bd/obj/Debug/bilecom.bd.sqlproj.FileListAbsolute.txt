@@ -1,0 +1,6 @@
+C:\Jare\bilecom\backend\bilecom.bd\bin\Debug\bilecom.bd.dacpac
+C:\Jare\bilecom\backend\bilecom.bd\bin\Debug\bilecom.bd.dll
+C:\Jare\bilecom\backend\bilecom.bd\bin\Debug\bilecom.bd.pdb
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.sqlprojAssemblyReference.cache
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.dll
+C:\Jare\bilecom\backend\bilecom.bd\obj\Debug\bilecom.bd.pdb

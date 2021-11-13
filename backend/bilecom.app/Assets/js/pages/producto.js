@@ -26,6 +26,18 @@
         return categoria;
     },
 
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
@@ -43,7 +55,9 @@
                 data: {
                     empresaId: empresaId,
                     nombre: pageProducto.ObtenerNombre,
-                    categoriaNombre:pageProducto.ObtenerCategoria
+                    categoriaNombre: pageProducto.ObtenerCategoria,
+                    columnaOrden: pageProducto.ObtenerNombreColumna,
+                    ordenMax: pageProducto.ObtenerOrdenColumna
                 }
             },
             columns: [
@@ -54,7 +68,8 @@
                 {
                     data: "ProductoId", render: function (data, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}productos/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageProducto.btnEliminaClick(${data})" data - original - title="Delete" data - container="body" ></a >`
-                    }
+                    },
+                    orderable : false
                 },
             ]
         })

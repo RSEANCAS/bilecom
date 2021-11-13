@@ -50,6 +50,17 @@
         $("#cmb-tipo-comprobante").select2({ data: datatipocomprobante, width: '100%', placeholder: '[TODOS...]', allowClear: true });
         $("#cmb-tipo-comprobante").val(null).trigger("change");
     },
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
 
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
@@ -69,7 +80,9 @@
                     empresaId: empresaId,
                     ambienteSunatId: ambienteSunatId,
                     tipoComprobanteId: pageSerie.ObtenerTipoComprobante,
-                    serial: pageSerie.ObtenerSerial
+                    serial: pageSerie.ObtenerSerial,
+                    columnaOrden: pageSerie.ObtenerNombreColumna,
+                    ordenMax: pageSerie.ObtenerOrdenColumna
                 }
             },
             columns: [
@@ -82,7 +95,8 @@
                 {
                     data: "SerieId", render: function (data, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Series/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><button class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageSerie.btnEliminaClick(${data})" data-original-title="Delete" data-container="body" ></button >`
-                    }
+                    },
+                    orderable:false
                 },
             ]
         })

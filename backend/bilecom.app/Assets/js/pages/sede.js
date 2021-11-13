@@ -5,7 +5,7 @@
         $("#btn-buscar").trigger("click");
     },
     InitEvents: function () {
-        $("#txt-nombre").val(pageSede.BtnBuscarClick);
+        $("#txt-nombre").keyup(pageSede.BtnBuscarClick);
         $("#btn-buscar").click(pageSede.BtnBuscarClick);
     },
     BtnBuscarClick: function (e) {
@@ -19,6 +19,18 @@
         let nombre = $("#txt-nombre").val();
         return nombre;
     },
+    ObtenerNombreColumna: function () {
+        var [columnIndex] = $('#tbl-lista').DataTable().order()[0];
+        var columnName = $('#tbl-lista').DataTable().column(columnIndex).dataSrc();
+        return columnName;
+    },
+
+    ObtenerOrdenColumna: function () {
+        var [columnIndex, columnSort] = $('#tbl-lista').DataTable().order()[0];
+
+        return columnSort;
+    },
+
     CreateDataTable: function (id) {
         let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
@@ -35,7 +47,9 @@
                 url: `${urlRoot}api/sede/buscar-sede`,
                 data: {
                     empresaId: empresaId,
-                    nombre: pageSede.ObtenerNombre
+                    nombre: pageSede.ObtenerNombre,
+                    columnaOrden: pageSede.ObtenerNombreColumna,
+                    ordenMax: pageSede.ObtenerOrdenColumna
                 }
             },
             columns: [
@@ -46,7 +60,8 @@
                 {
                     data: "SedeId", render: function (data, row) {
                         return `<a class="btn btn-sm btn-default btn-hover-dark demo-psi-pen-5 add-tooltip" href="${urlRoot}Sedes/Editar?Id=${data}" data-original-title="Edit" data-container="body"></a><a class="btn btn-sm btn-default btn-hover-danger demo-pli-trash add-tooltip" onclick="pageSede.btnEliminaClick(${data})" data - original - title="Delete" data - container="body" ></a >`
-                    }
+                    },
+                    orderable:false
                 },
             ]
         })

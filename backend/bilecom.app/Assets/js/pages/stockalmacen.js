@@ -74,7 +74,15 @@ const pageStockAlmacen = {
         })
     },
     ResponseSedeAlmacen: function (data) {
+
         let dataAlmacen = data.map(x => Object.assign(x, { id: x.SedeId, text: x.Nombre + ' - ' + x.Direccion }));
+        let todos = {
+            id: 0,
+            text: "TODOS LOS ALMACENES"
+        }
+        dataAlmacen.push(todos);
+        dataAlmacen.sort((a,b)=> a.id - b.id);
+
         $("#cmb-almacen").select2({ data: dataAlmacen, width: '100%', placeholder: '[SELECCIONE...]' });
     },
 }

@@ -1,5 +1,6 @@
 ﻿var serieLista = [], sedealmacenLista = [], monedaLista = [], tipoDocumentoIdentidadLista = [], detalleLista = [],
     detalleListaEliminados = [], tipoMovimientoLista = [], tipoOperacionAlmacen = [], tipoComprobanteLista = [], tipoProductoLista = [];
+
 const fechaActual = new Date();
 const columnsDetalle = [
     { data: "Fila" },
@@ -20,15 +21,15 @@ const columnsDetalle = [
 
 const pageMantenimientoMovimiento = {
     Init: function () {
-
         common.ConfiguracionDataTable();
         this.CargarCombo(() => {
             this.Validar();
             this.InitEvents();
             $("#cmb-tipo-movimiento").change();
             this.ListarDetalle();
+            
         });
-
+        pageMantenimientoMovimiento.ModalInicio();
         $("#cmb-tipo-movimiento").change(function () {
             let tipomov = $("#cmb-tipo-movimiento").val();
             if (tipomov == 1) {
@@ -57,8 +58,12 @@ const pageMantenimientoMovimiento = {
 
         pageMantenimientoMovimiento.ObtenerDatos();
         pageMantenimientoMovimiento.CmbReferenciaTipoChange();
+        
     },
+    ModalInicio: function () {
+        $('#MovimientoInicio').modal('toggle');
 
+    },
     BtnBuscarClienteClick: function () {
         bootbox.dialog({
             message:
@@ -439,18 +444,18 @@ const pageMantenimientoMovimiento = {
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group" style="padding-top:15px">
-                                    <input id="demo-sw-sz-sm" type="checkbox" id="chk-activar-fecha-vencimiento" checked>
-					                <!--<span class="bg-success box-block pad-lft pad-rgt">&nbsp;</span>
-					                <input id="chk-activar-fecha-vencimiento" class="magic-checkbox" type="checkbox" >
-					                <label for="chk-activar-fecha-vencimiento">Activar fecha de vencimiento</label>-->
+                            <div class="form-group" >
+                                    <!--<input id="demo-sw-sz-sm" type="checkbox" id="chk-activar-fecha-vencimiento" checked>-->
+					                <span class="bg-success box-block pad-lft pad-rgt">&nbsp;</span>
+					                <input id="chk-activar-fecha-vencimiento" class="magic-checkbox" type="checkbox">
+					                <label for="chk-activar-fecha-vencimiento">Activar fecha de vencimiento</label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <span class="bg-dark box-block pad-lft pad-rgt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de Vencimiento</font></font></span>
                                 <div class="input-group date">
-                                    <input type="text" id="txt-fecha-vencimiento" class="form-control" readonly>
+                                    <input type="text" id="txt-fecha-vencimiento" class="form-control" readonly disabled>
                                     <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
                                 </div>
                             </div>
@@ -498,7 +503,7 @@ const pageMantenimientoMovimiento = {
 
                 $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true });
                 $("#txt-fecha-vencimiento").datepicker("setDate", fechaActual);
-
+                
                 $("#txt-detalle-cantidad, #txt-detalle-precio-unitario").change(pageMantenimientoMovimiento.CalcularImporteTotal);
                 pageMantenimientoMovimiento.ResponseTipoProductoListar(tipoProductoLista);
                 $("#cmb-detalle-codigo").select2({
@@ -559,6 +564,15 @@ const pageMantenimientoMovimiento = {
                     $("#txt-detalle-precio-unitario").val(data.PrecioUnitario.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                     $("#txt-detalle-importe-total").val(data.TotalImporte.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 }
+                $("#chk-activar-fecha-vencimiento").change(function () {
+                    let estadocheck = $("#chk-activar-fecha-vencimiento").prop("checked");
+                    if (estadocheck) {
+                        $("#txt-fecha-vencimiento").prop("disabled", false);
+                    } else {
+                        $("#txt-fecha-vencimiento").datepicker("setDate", fechaActual);
+                        $("#txt-fecha-vencimiento").prop("disabled", true);
+                    }
+                });
                 pageMantenimientoMovimiento.ValidarDetalle();
             },
             animateIn: 'zoomInDown',
@@ -773,7 +787,7 @@ const pageMantenimientoMovimiento = {
         let cantidad = Number($("#txt-detalle-cantidad").val().replace(/,/g, ""));
         let precioUnitario = Number($("#txt-detalle-precio-unitario").val().replace(/,/g, ""));
         let totalImporte = Number($("#txt-detalle-importe-total").val().replace(/,/g, ""))
-        let flagFechaVencimiento = $('#chk-activar-fecha-vencimiento').prop("checked"); 
+        let flagFechaVencimiento = $("#chk-activar-fecha-vencimiento").prop("checked"); 
         let fechaVencimiento = $("#txt-fecha-vencimiento").datepicker('getDate').toISOString();
         let data = {
             MovimientoDetalleId: MovimientoDetalleId,
@@ -846,6 +860,7 @@ const pageMantenimientoMovimiento = {
                 pageMantenimientoMovimiento.ResponseMonedaListar(monedaLista);
                 pageMantenimientoMovimiento.ResponseTipoDocumentoIdentidadListar(tipoDocumentoIdentidadLista);
                 pageMantenimientoMovimiento.ResponseTipoMovimientoListar(tipoMovimientoLista);
+
                 pageMantenimientoMovimiento.ResponseTipoComprobanteListar(tipoComprobanteLista);
 
                 if (typeof fnNext == "function") fnNext();
@@ -989,6 +1004,10 @@ const pageMantenimientoMovimiento = {
     ResponseSedeAlmacen: function (data) {
         let dataAlmacen = data.map(x => Object.assign(x, { id: x.SedeId, text: x.Nombre +' - '+ x.Direccion}));
         $("#cmb-almacen").select2({ data: dataAlmacen, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-almacen").val("").trigger("change");
+
+        let dataAlmacenModal = data.map(x => Object.assign(x, { id: x.SedeId, text: x.Nombre + ' - ' + x.Direccion }));
+        $("#cmb-almacen-modal").select2({ dropdownParent: $('#MovimientoInicio') ,data: dataAlmacenModal, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseSerieListar: function (data) {
         let dataSerie = data.map(x => Object.assign(x, { id: x.SerieId, text: x.Serial }));
@@ -1000,9 +1019,14 @@ const pageMantenimientoMovimiento = {
         $("#cmb-moneda").select2({ data: dataMoneda, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     ResponseTipoMovimientoListar: function (data) {
-        let dataTipoMovimiento = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion}));
+        let dataTipoMovimiento = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
         $("#cmb-tipo-movimiento").select2({ data: dataTipoMovimiento, width: '100%', placeholder: '[SELECCIONE...]' });
+        $("#cmb-tipo-movimiento").val("").trigger("change");
+
+        let dataTipoMovimientoModal = data.map(x => Object.assign(x, { id: x.Id, text: x.Descripcion }));
+        $("#cmb-tipo-movimiento-modal").select2({ dropdownParent: $('#MovimientoInicio'),data: dataTipoMovimientoModal, width: '100%', placeholder: '[SELECCIONE...]' });
     },
+    
     ResponseTipoDocumentoIdentidadListar: function (data) {
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-tipo-documento-identidad-cliente").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[SELECCIONE...]' });
@@ -1112,3 +1136,12 @@ const pageMantenimientoMovimiento = {
         pageMantenimientoMovimiento.CargarOtrosCamposProducto(data);
     },
 }
+$("#btnSeleccionarDatosInicio").click(function () {
+    let valTipoMovimiento = $("#cmb-tipo-movimiento-modal").val();
+    let valIdAlmacen = $("#cmb-almacen-modal").val();
+
+    $("#cmb-tipo-movimiento").val(valTipoMovimiento).trigger("change");
+    $("#cmb-almacen").val(valIdAlmacen).trigger("change");
+
+    $("#MovimientoInicio").modal("hide");
+});
