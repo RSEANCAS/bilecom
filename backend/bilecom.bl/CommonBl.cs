@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace bilecom.bl
 {
@@ -29,6 +30,32 @@ namespace bilecom.bl
             catch (Exception ex) { lista = null; }
             //finally { if (cn.State == ConnectionState.Open) cn.Close(); }
             return lista;
+        }
+
+        public bool BulkInsert(string tableName, DataSet dataBulk, bool withTruncate = false)
+        {
+            bool bulkInsertComplete = false;
+
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection cn = new SqlConnection(CadenaConexion))
+                    {
+                        cn.Open();
+                        if (withTruncate) bulkInsertComplete = commonDa.TruncateTable(tableName, cn);
+                        else bulkInsertComplete = true;
+
+                        if (bulkInsertComplete) bulkInsertComplete = commonDa.BulkInsert(tableName, dataBulk, cn);
+
+                        if (bulkInsertComplete) scope.Complete();
+                        cn.Close();
+                    }
+                }
+            }
+            catch (Exception ex) { bulkInsertComplete = false; }
+
+            return bulkInsertComplete;
         }
     }
 }

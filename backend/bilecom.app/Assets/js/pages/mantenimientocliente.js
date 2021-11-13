@@ -6,10 +6,10 @@ const pageMantenimientoCliente = {
     },
 
     InitEvents: function () {
-        pageMantenimientoCliente.CargarCombo(pageMantenimientoCliente.ObtenerDatos());
         $("#cmb-pais").change(pageMantenimientoCliente.CmbPaisChange)
         $("#cmb-departamento").change(pageMantenimientoCliente.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoCliente.CmbProvinciaChange);
+        pageMantenimientoCliente.CargarCombo(pageMantenimientoCliente.ObtenerDatos);
     },
 
     Validar: function () {
@@ -241,7 +241,6 @@ const pageMantenimientoCliente = {
                 distritoLista = DistritoLista;
 
                 pageMantenimientoCliente.ResponsePaisListar(PaisLista);
-
                 pageMantenimientoCliente.ResponseDepartamentoListar(DepartamentoLista);
                 pageMantenimientoCliente.ResponseProvinciaListar(ProvinciaLista);
                 pageMantenimientoCliente.ResponseDistritoListar(DistritoLista);
@@ -263,9 +262,9 @@ const pageMantenimientoCliente = {
                 .then(r => r.json())
                 .then(pageMantenimientoCliente.ResponseObtenerDatos);
         } else {
-            $("#cmb-pais").val(145).trigger('change');
-            $("#cmb-departamento").val(15).trigger('change');
-            $("#cmb-provincia").val(128).trigger('change');
+            $("#cmb-pais").val("145").trigger('change');
+            $("#cmb-departamento").val("15").trigger('change');
+            $("#cmb-provincia").val("128").trigger('change');
         }
     },
 

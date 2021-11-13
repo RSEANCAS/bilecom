@@ -35,7 +35,8 @@
         if (data != null && typeof (data) == "object") {
             common.GuardarDataCookie(data);
 
-            location.reload();
+            if (urlRedirect == "") location.reload();
+            else location.href = urlRedirect;
         } else {
         }
 
