@@ -60,5 +60,55 @@ namespace bilecom.da
             }
             return lista;
         }
+
+        public bool TruncateTable(string tableName, SqlConnection cn)
+        {
+            bool seTrunco = false;
+
+            using (SqlCommand cmd = new SqlCommand($"truncate table {tableName}", cn))
+            {
+                cmd.CommandType = CommandType.Text;
+
+                int filasAfectadas = cmd.ExecuteNonQuery();
+
+                seTrunco = true;
+            }
+
+            return seTrunco;
+        }
+
+        public bool BulkInsert(string tableName, DataSet dataBulk, SqlConnection cn)
+        {
+            bool bulkInsertComplete = false;
+
+            using (var sqlBulk = new SqlBulkCopy(cn))
+            {
+                sqlBulk.BatchSize = 10000;
+                sqlBulk.DestinationTableName = tableName;
+                sqlBulk.BulkCopyTimeout = 0;
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Ruc", "Ruc"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("RazonSocial", "RazonSocial"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("EstadoContribuyente", "EstadoContribuyente"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("CondicionDomiciliaria", "CondicionDomiciliaria"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Ubigeo", "Ubigeo"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("TipoVia", "TipoVia"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("NombreVia", "NombreVia"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("CodigoZona", "CodigoZona"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("TipoZona", "TipoZona"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Numero", "Numero"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Interior", "Interior"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Lote", "Lote"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Departamento", "Departamento"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Manzana", "Manzana"));
+                sqlBulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Kilometro", "Kilometro"));
+
+                sqlBulk.WriteToServer(dataBulk.Tables[0]);
+                sqlBulk.Close();
+
+                dataBulk = null;
+            }
+
+            return bulkInsertComplete;
+        }
     }
 }

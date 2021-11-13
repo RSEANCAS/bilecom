@@ -158,6 +158,7 @@
     <script src="@Url.Content("~/Assets/js/pages/login.js")" charset="utf-8"></script>
     <script>
         const urlRoot = "@Url.Content("~")";
+        const urlRedirect = "@(string.IsNullOrEmpty(ViewBag.UrlRedirect) ? "" : ViewBag.UrlRedirect.Trim() == "/" ? "" : ViewBag.UrlRedirect)";
         $(document).ready(function () {
             pageLogin.Init();
         });

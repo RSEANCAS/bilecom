@@ -1,7 +1,13 @@
-﻿using bilecom.ut;
+﻿using bilecom.bl;
+using bilecom.procesos.dto;
+using bilecom.ut;
+using FileHelpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -17,35 +23,136 @@ namespace bilecom.procesos.manager
             string linkPadronSunatLocal = AppSettings.Get<string>("sunat.link.padron_sunat_local");
             string folderPadronSunat = AppSettings.Get<string>("sunat.folder.padron_sunat").Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory);
             DirectoryInfo dirInfoPadronSunat = new DirectoryInfo(folderPadronSunat);
-            string filePadronSunat = AppSettings.Get<string>("sunat.file.padron_sunat");
-            string filePadronSunatLocal = AppSettings.Get<string>("sunat.file.padron_sunat_local").Replace("~", AppDomain.CurrentDomain.BaseDirectory);
-            string pathFilePadronSunat = Path.Combine(dirInfoPadronSunat.FullName, filePadronSunat);
-            string pathFilePadronSunatLocal = Path.Combine(dirInfoPadronSunat.FullName, filePadronSunatLocal);
-            FileInfo filInfoPadronSunat = new FileInfo(pathFilePadronSunat);
-            FileInfo filInfoPadronSunatLocal = new FileInfo(pathFilePadronSunatLocal);
+            string filePadronSunatZip = AppSettings.Get<string>("sunat.file.zip.padron_sunat");
+            string filePadronSunatLocalZip = AppSettings.Get<string>("sunat.file.zip.padron_sunat_local").Replace("~", AppDomain.CurrentDomain.BaseDirectory);
+            string pathFilePadronSunatZip = Path.Combine(dirInfoPadronSunat.FullName, filePadronSunatZip);
+            string pathFilePadronSunatLocalZip = Path.Combine(dirInfoPadronSunat.FullName, filePadronSunatLocalZip);
+            FileInfo filInfoPadronSunatZip = new FileInfo(pathFilePadronSunatZip);
+            FileInfo filInfoPadronSunatLocalZip = new FileInfo(pathFilePadronSunatLocalZip);
+
+            string filePadronSunatTxt = AppSettings.Get<string>("sunat.file.txt.padron_sunat");
+            string filePadronSunatLocalTxt = AppSettings.Get<string>("sunat.file.txt.padron_sunat_local").Replace("~", AppDomain.CurrentDomain.BaseDirectory);
+            string pathFilePadronSunatTxt = Path.Combine(dirInfoPadronSunat.FullName, filePadronSunatTxt);
+            string pathFilePadronSunatLocalTxt = Path.Combine(dirInfoPadronSunat.FullName, filePadronSunatLocalTxt);
+            FileInfo filInfoPadronSunatTxt = new FileInfo(pathFilePadronSunatTxt);
+            FileInfo filInfoPadronSunatLocalTxt = new FileInfo(pathFilePadronSunatLocalTxt);
 
             if (!dirInfoPadronSunat.Exists) dirInfoPadronSunat.Create();
-            if (filInfoPadronSunat.Exists) filInfoPadronSunat.Delete();
-            if (filInfoPadronSunatLocal.Exists) filInfoPadronSunatLocal.Delete();
+            if (filInfoPadronSunatZip.Exists) filInfoPadronSunatZip.Delete();
+            if (filInfoPadronSunatLocalZip.Exists) filInfoPadronSunatLocalZip.Delete();
+            if (filInfoPadronSunatTxt.Exists) filInfoPadronSunatTxt.Delete();
+            if (filInfoPadronSunatLocalTxt.Exists) filInfoPadronSunatLocalTxt.Delete();
 
             try
             {
                 using (var webClient = new WebClient())
                 {
-                    //webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                    webClient.DownloadFile(linkPadronSunat, filInfoPadronSunat.FullName);
-                    webClient.DownloadFile(linkPadronSunatLocal, filInfoPadronSunatLocal.FullName);
+                    webClient.DownloadFile(linkPadronSunat, filInfoPadronSunatZip.FullName);
+                    webClient.DownloadFile(linkPadronSunatLocal, filInfoPadronSunatLocalZip.FullName);
                 }
+
+                if (filInfoPadronSunatZip.Exists) ZipFile.ExtractToDirectory(filInfoPadronSunatZip.FullName, folderPadronSunat);
+
+                if (filInfoPadronSunatTxt.Exists) LoadFilePadronSunat(filInfoPadronSunatTxt.FullName);
             }
             catch (WebException ex) { throw ex; }
             catch (Exception ex) { throw ex; }
         }
 
-        //private static void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        //{
-        //    var webClient = (WebClient)sender;
-            
-        //    Console.WriteLine($"Descargando archivo de {webClient.BaseAddress} - {e.ProgressPercentage}%");
-        //}
+        static void LoadFilePadronSunat(string fileName)
+        {
+            CommonBl commonBl = new CommonBl();
+            DataSet dsMasivo = new DataSet("vRecords");
+            DataTable tbl = new DataTable("vRecord");
+
+            tbl.Columns.Add("Ruc", typeof(string));
+            tbl.Columns.Add("RazonSocial", typeof(string));
+            tbl.Columns.Add("EstadoContribuyente", typeof(string));
+            tbl.Columns.Add("CondicionDomiciliaria", typeof(string));
+            tbl.Columns.Add("Ubigeo", typeof(string));
+            tbl.Columns.Add("TipoVia", typeof(string));
+            tbl.Columns.Add("NombreVia", typeof(string));
+            tbl.Columns.Add("CodigoZona", typeof(string));
+            tbl.Columns.Add("TipoZona", typeof(string));
+            tbl.Columns.Add("Numero", typeof(string));
+            tbl.Columns.Add("Interior", typeof(string));
+            tbl.Columns.Add("Lote", typeof(string));
+            tbl.Columns.Add("Departamento", typeof(string));
+            tbl.Columns.Add("Manzana", typeof(string));
+            tbl.Columns.Add("Kilometro", typeof(string));
+
+            dsMasivo.Tables.Add(tbl);
+            var total = 0;
+
+            try
+            {
+                //using (TextReader stream = new StreamReader(fileName, Encoding.GetEncoding(1252)))
+                FileHelperEngine engine = new FileHelperEngine(typeof(SunatPadronDto));
+                var data = engine.ReadFile(fileName).Cast<SunatPadronDto>().ToList();
+                Queue<SunatPadronDto> dataQ = new Queue<SunatPadronDto>(data);
+
+                data = null;
+
+                //while (data.Count > 0)
+                //{
+                //    var item = data.FirstOrDefault();
+                //    dataQ.Enqueue(item);
+                //    data.RemoveAt(0);
+                //}
+
+                //if (data.Count == 0) data = null;
+
+                while (dataQ.Count > 0)
+                {
+                    var item = dataQ.Dequeue();
+
+                    DataRow drMasivo = dsMasivo.Tables["vRecord"].NewRow();
+
+                    drMasivo["Ruc"] = item.Ruc.Trim();
+                    drMasivo["RazonSocial"] = item.RazonSocial.Trim();
+                    drMasivo["EstadoContribuyente"] = item.EstadoContribuyente.Trim();
+                    drMasivo["CondicionDomiciliaria"] = item.CondicionDomiciliaria.Trim();
+                    drMasivo["Ubigeo"] = item.Ubigeo.Trim();
+                    drMasivo["TipoVia"] = item.TipoVia.Trim();
+                    drMasivo["NombreVia"] = item.NombreVia.Trim();
+                    drMasivo["CodigoZona"] = item.CodigoZona.Trim();
+                    drMasivo["TipoZona"] = item.TipoZona.Trim();
+                    drMasivo["Numero"] = item.Numero.Trim();
+                    drMasivo["Interior"] = item.Interior.Trim();
+                    drMasivo["Lote"] = item.Lote.Trim();
+                    drMasivo["Departamento"] = item.Departamento.Trim();
+                    drMasivo["Manzana"] = item.Manzana.Trim();
+                    drMasivo["Kilometro"] = item.Kilometro.Trim();
+
+                    dsMasivo.Tables["vRecord"].Rows.Add(drMasivo);
+
+                    total++;
+                }
+            }
+            catch (FileHelpersException ex)
+            {
+                Console.WriteLine(ex.Message);
+                total = 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                total = 0;
+            }
+
+            if (total > 0)
+            {
+                try
+                {
+                    string tableName = "[dbo].[SunatPadron]";
+
+                    bool bulkInsertComplete = commonBl.BulkInsert(tableName, dsMasivo, withTruncate: true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
     }
 }

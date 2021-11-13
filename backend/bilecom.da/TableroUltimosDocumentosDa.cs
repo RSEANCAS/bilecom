@@ -30,6 +30,9 @@ namespace bilecom.da
                             while (dr.Read())
                             {
                                 TableroUltimosDocumentosBe item = new TableroUltimosDocumentosBe();
+                                item.TipoComprobanteId = dr.GetData<int>("TipoComprobanteId");
+                                item.TipoComprobanteCodigoSunat = dr.GetData<string>("TipoComprobanteCodigoSunat");
+                                item.TipoComprobanteNombre = dr.GetData<string>("TipoComprobanteNombre");
                                 item.TipoDocumentoDescripcion = dr.GetData<string>("TipoDocumentoDescripcion");
                                 item.ClienteRazonSocial = dr.GetData<string>("ClienteRazonSocial");
                                 item.Serie = dr.GetData<string>("Serie");
@@ -38,6 +41,7 @@ namespace bilecom.da
                                 item.Total = dr.GetData<decimal>("Total");
                                 item.SimboloMoneda = dr.GetData<string>("SimboloMoneda");
                                 item.EstadoSunatId = dr.GetData<int?>("EstadoSunatId");
+                                item.FlagAnulado = dr.GetData<bool>("FlagAnulado");
                                 respuesta.Add(item);
                             }
                         }
