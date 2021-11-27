@@ -59,6 +59,7 @@
     <Compile Include="EmpresaTipoComprobanteTipoOperacionVentaDa.cs" />
     <Compile Include="EmpresaTipoProductoDa.cs" />
     <Compile Include="EmpresaUnidadMedidaDa.cs" />
+    <Compile Include="KardexDa.cs" />
     <Compile Include="NotaCreditoDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="BoletaDetalleDa.cs" />

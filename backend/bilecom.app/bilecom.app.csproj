@@ -2842,6 +2842,7 @@
     <Compile Include="Controllers\Api\DistritoController.cs" />
     <Compile Include="Controllers\Api\EmpresaConfiguracionController.cs" />
     <Compile Include="Controllers\Api\BoletaController.cs" />
+    <Compile Include="Controllers\Api\KardexController.cs" />
     <Compile Include="Controllers\Api\NotaCreditoController.cs" />
     <Compile Include="Controllers\Api\FacturaController.cs" />
     <Compile Include="Controllers\Api\FormaPagoController.cs" />

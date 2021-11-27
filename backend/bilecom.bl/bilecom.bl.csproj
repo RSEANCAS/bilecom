@@ -62,6 +62,7 @@
     <Compile Include="FormatoBl.cs" />
     <Compile Include="GuiaRemisionRemitenteBl.cs" />
     <Compile Include="GuiaRemisionTransportistaBl.cs" />
+    <Compile Include="KardexBl.cs" />
     <Compile Include="MonedaBl.cs" />
     <Compile Include="MovimientoBl.cs" />
     <Compile Include="NotaCreditoBl.cs" />
