@@ -1,5 +1,5 @@
 var tipoComprobanteLista = [], serieTipoComprobanteLista = [], serieLista = [], monedaLista = [], tipoNotaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
-var departamentoLista = [], provinciaLista = [], distritoLista = [];
+var paisLista = [], departamentoLista = [], provinciaLista = [], distritoLista = [];
 
 var datosclienteNuevo = {
     ClienteId: 0,
@@ -56,10 +56,9 @@ const pageMantenimientoNotaCredito = {
 
     BtnBuscarClienteClick: function () {
         bootbox.dialog({
+            title: 'Buscar Cliente',
             message:
-                `<p class='text-semibold text-main'>Buscar Cliente</p>
-                    <hr>
-                    <div class="row">
+                `<div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">N° Doc. Identidad</label>
@@ -102,6 +101,8 @@ const pageMantenimientoNotaCredito = {
                 $("#modal-busqueda-cliente").on("hide.bs.modal", function () {
                     $("#frm-notacredito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
+
+                $("#modal-busqueda-cliente").find(".modal-header, .modal-header .modal-title, .modal-header .close").addClass("bg-dark");
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
@@ -161,19 +162,25 @@ const pageMantenimientoNotaCredito = {
                         </div>          
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label">Pais</label>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-pais-nuevo" id="cmb-cliente-pais-nuevo" data-bv-field="cmb-cliente-pais-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaCredito.CmbPaisChange()"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Departamento</label>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaCredito.CmbDepartamentoChange()"></select>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Provincia</label>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoNotaCredito.CmbProvinciaChange()"></select>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Distrito</label>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-distrito-nuevo" id="cmb-cliente-distrito-nuevo" data-bv-field="cmb-cliente-distrito-nuevo" tabindex="-1" aria-hidden="false" ></select>
@@ -235,13 +242,22 @@ const pageMantenimientoNotaCredito = {
                     $("#frm-notacredito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
+                $("#modal-nuevo-cliente").find(".modal-header, .modal-header .modal-title, .modal-header .close").addClass("bg-dark");
+
+                $("#cmb-cliente-tipo-documento-identidad-nuevo").change(pageMantenimientoNotaCredito.CmbTipoDocumentoIdentidadChange);
+                $("#txt-cliente-nro-documento-identidad-nuevo").change(pageMantenimientoNotaCredito.TxtNroDocumentoIdentidadChange);
+
                 pageMantenimientoNotaCredito.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
-                pageMantenimientoNotaCredito.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoNotaCredito.ResponsePaisListar(paisLista, dropdownParent = $("#modal-nuevo-cliente"));
+                $("#cmb-cliente-pais-nuevo").val("145").trigger('change');
+                $("#cmb-cliente-departamento-nuevo").val("15").trigger('change');
+                $("#cmb-cliente-provincia-nuevo").val("128").trigger('change');
+                //pageMantenimientoNotaCredito.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
-                pageMantenimientoNotaCredito.CmbDepartamentoChange();
+                //pageMantenimientoNotaCredito.CmbDepartamentoChange();
                 pageMantenimientoNotaCredito.ValidarClienteNuevo();
                 //$("#btn-buscar-cliente-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-cliente", ajax, columns));
                 //$("#btn-buscar-cliente-dialog").trigger("click");
@@ -347,6 +363,22 @@ const pageMantenimientoNotaCredito = {
         //let fechaHoraEmisionStr = fechaHoraEmision.toLocaleString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" });
         //$("#txt-fecha-emision-comprobante").val(fechaHoraEmisionStr);
         //pageMantenimientoNotaCredito.LlenarDatosCliente(data.Cliente);
+    },
+
+    CmbTipoDocumentoIdentidadChange: function (e) {
+        pageMantenimientoNotaCredito.ObtenerDatosPadronSunat();
+    },
+
+    TxtNroDocumentoIdentidadChange: function (e) {
+        pageMantenimientoNotaCredito.ObtenerDatosPadronSunat();
+    },
+
+    CmbPaisChange: function () {
+        let paisId = $("#cmb-cliente-pais-nuevo").val();
+        let DepartamentoFiltro = departamentoLista.filter(x => x.PaisId == paisId);
+        pageMantenimientoNotaCredito.ResponseDepartamentoListar(DepartamentoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+
+        pageMantenimientoNotaCredito.CmbDepartamentoChange();
     },
 
     CmbDepartamentoChange: function () {
@@ -515,6 +547,8 @@ const pageMantenimientoNotaCredito = {
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
                     $("#frm-notacredito-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
+
+                $("#modal-detalle-agregar").find(".modal-header, .modal-header .modal-title, .modal-header .close").addClass("bg-dark");
 
                 $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento").change(pageMantenimientoNotaCredito.CalcularImporteTotal);
 
@@ -818,6 +852,13 @@ const pageMantenimientoNotaCredito = {
                             }
                         }
                     },
+                    "cmb-cliente-pais-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar pais",
+                            }
+                        }
+                    },
                     "cmb-cliente-departamento-nuevo": {
                         validators: {
                             notEmpty: {
@@ -1054,6 +1095,19 @@ const pageMantenimientoNotaCredito = {
         $("#txt-detalle-importe-total").val(importeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
 
+    ObtenerDatosPadronSunat: function () {
+        let tipoDocumentoIdentidad = $("#cmb-cliente-tipo-documento-identidad-nuevo").val();
+        if (tipoDocumentoIdentidad != tdiRUC) return;
+
+        let nroDocumentoIdentidad = $("#txt-cliente-nro-documento-identidad-nuevo").val();
+        if (nroDocumentoIdentidad.trim() == '') return;
+
+        let url = `${urlRoot}api/sunat/obtener-padron-por-ruc?ruc=${nroDocumentoIdentidad}`;
+        fetch(url)
+            .then(common.ResponseToJson)
+            .then(pageMantenimientoNotaCredito.ResponsePadronSunatObtenerPorRuc);
+    },
+
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
@@ -1067,13 +1121,14 @@ const pageMantenimientoNotaCredito = {
             fetch(`${urlRoot}api/tipoafectacionigv/listar-tipoafectacionigv-por-empresa?empresaId=${user.Empresa.EmpresaId}&withTipoTributo=true`),
             fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`),
             fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdNotaCredito}`),
+            fetch(`${urlRoot}api/pais/listar-pais`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
             fetch(`${urlRoot}api/provincia/listar-provincia`),
             fetch(`${urlRoot}api/distrito/listar-distrito`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([TipoComprobanteLista, SerieLista, MonedaLista, TipoNotaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+            .then(([TipoComprobanteLista, SerieLista, MonedaLista, TipoNotaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormatoLista, PaisLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
                 tipoComprobanteLista = TipoComprobanteLista || [];
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
@@ -1084,6 +1139,7 @@ const pageMantenimientoNotaCredito = {
                 tipoAfectacionIgvLista = TipoAfectacionIgvLista || [];
                 tipoTributoLista = TipoTributoLista || [];
                 formatoLista = FormatoLista || [];
+                paisLista = PaisLista || [];
                 departamentoLista = DepartamentoLista || [];
                 provinciaLista = ProvinciaLista || [];
                 distritoLista = DistritoLista || [];
@@ -1375,6 +1431,11 @@ const pageMantenimientoNotaCredito = {
 
     },
 
+    ResponsePaisListar: function (data, dropdownParent = null) {
+        let datapais = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.PaisId, text: item.Nombre }); });
+        $("#cmb-cliente-pais-nuevo").select2({ data: datapais, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
+    },
+
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
@@ -1497,6 +1558,16 @@ const pageMantenimientoNotaCredito = {
                 //}
             }
         });
+    },
+
+    ResponsePadronSunatObtenerPorRuc: function (data) {
+        $("#txt-cliente-nombres-razonsocial-nuevo").val(data.RazonSocial);
+        /*$("#txt-nombre-comercial").val(data.RazonSocial);*/
+        if (data.PaisId != null) $("#cmb-cliente-pais-nuevo").val(data.PaisId).trigger("change");
+        if (data.DepartamentoId != null) $("#cmb-cliente-departamento-nuevo").val(data.DepartamentoId).trigger("change");
+        if (data.ProvinciaId != null) $("#cmb-cliente-provincia-nuevo").val(data.ProvinciaId).trigger("change");
+        if (data.DistritoId != null) $("#cmb-cliente-distrito-nuevo").val(data.DistritoId);
+        $("#txt-cliente-direccion-nuevo").val(data.Direccion);
     },
 
     LimpiarDatosClienteNuevo: function () {

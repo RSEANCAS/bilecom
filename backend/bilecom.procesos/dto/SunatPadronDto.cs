@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace bilecom.procesos.dto
 {
     [DelimitedRecord("|")]
+    [IgnoreFirst()]
     public class SunatPadronDto
     {
         [FieldOrder(0)]

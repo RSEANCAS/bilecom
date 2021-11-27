@@ -81,6 +81,7 @@
     <Compile Include="ProvinciaDa.cs" />
     <Compile Include="SerieDa.cs" />
     <Compile Include="StockAlmacenDa.cs" />
+    <Compile Include="SunatPadronDa.cs" />
     <Compile Include="TableroConteo_x_DocumentoDa.cs" />
     <Compile Include="TableroUltimosDocumentosDa.cs" />
     <Compile Include="TipoAfectacionIgvDa.cs" />

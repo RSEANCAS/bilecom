@@ -1,5 +1,5 @@
 var serieLista = [], monedaLista = [], tipoOperacionVentaLista = [], tipoDocumentoIdentidadLista = [], tipoProductoLista = [], unidadMedidaLista = [], tipoAfectacionIgvLista = [], tipoTributoLista = [], formaPagoLista = [], formatoLista = [], detalleLista = [], detalleListaEliminados = [];
-var departamentoLista = [], provinciaLista = [], distritoLista = [];
+var paisLista = [],departamentoLista = [], provinciaLista = [], distritoLista = [];
 
 var datosclienteNuevo = {
     ClienteId: 0,
@@ -54,10 +54,9 @@ const pageMantenimientoFactura = {
 
     BtnBuscarClienteClick: function () {
         bootbox.dialog({
+            title: "Buscar Cliente",
             message:
-                `<p class='text-semibold text-main'>Buscar Cliente</p>
-                    <hr>
-                    <div class="row">
+                `<div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">N° Doc. Identidad</label>
@@ -100,6 +99,8 @@ const pageMantenimientoFactura = {
                 $("#modal-busqueda-cliente").on("hide.bs.modal", function () {
                     $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
+
+                $("#modal-busqueda-cliente").find(".modal-header, .modal-header .modal-title, .modal-header .close").addClass("bg-dark");
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
@@ -159,19 +160,25 @@ const pageMantenimientoFactura = {
                         </div>          
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label">Pais</label>
+                                <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-pais-nuevo" id="cmb-cliente-pais-nuevo" data-bv-field="cmb-cliente-pais-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbPaisChange()"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Departamento</label>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-departamento-nuevo" id="cmb-cliente-departamento-nuevo" data-bv-field="cmb-cliente-departamento-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbDepartamentoChange()"></select>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Provincia</label>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-provincia-nuevo" id="cmb-cliente-provincia-nuevo" data-bv-field="cmb-cliente-provincia-nuevo" tabindex="-1" aria-hidden="false" onchange="pageMantenimientoFactura.CmbProvinciaChange()"></select>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Distrito</label>
                                 <select class="form-control val-exc select2-show-accessible" name="cmb-cliente-distrito-nuevo" id="cmb-cliente-distrito-nuevo" data-bv-field="cmb-cliente-distrito-nuevo" tabindex="-1" aria-hidden="false" ></select>
@@ -194,18 +201,6 @@ const pageMantenimientoFactura = {
                             </div>
                         </div>
                     </div>
-                    <!--<div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <button id="btn-cliente-guardar-nuevo" class="btn btn-success" type="button" onclick="pageMantenimientoFactura.BtnGuardarySeleccionar()"><i class="ion-save"></i> Guardar y Seleccionar</button>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <button id="btn-cliente-cancelar-nuevo" class="btn btn-danger" type="button" onClick="pageMantenimientoFactura.BtnCierraNuevoCliente()"><i class="ion-save"></i> Cancelar</button>
-                            </div>
-                        </div>
-                    </div>-->
                 </form>`,
             closeButton: true,
             buttons: {
@@ -233,13 +228,22 @@ const pageMantenimientoFactura = {
                     $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-cliente-id");
                 })
 
+                $("#modal-nuevo-cliente").find(".modal-header, .modal-header .modal-title, .modal-header .close").addClass("bg-dark");
+
+                $("#cmb-cliente-tipo-documento-identidad-nuevo").change(pageMantenimientoFactura.CmbTipoDocumentoIdentidadChange);
+                $("#txt-cliente-nro-documento-identidad-nuevo").change(pageMantenimientoFactura.TxtNroDocumentoIdentidadChange);
+
                 pageMantenimientoFactura.ResponseTipoDocumentoIdentidadNuevoListar(tipoDocumentoIdentidadLista, dropdownParent = $("#modal-nuevo-cliente"));
-                pageMantenimientoFactura.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
+                pageMantenimientoFactura.ResponsePaisListar(paisLista, dropdownParent = $("#modal-nuevo-cliente"));
+                $("#cmb-cliente-pais-nuevo").val("145").trigger('change');
+                $("#cmb-cliente-departamento-nuevo").val("15").trigger('change');
+                $("#cmb-cliente-provincia-nuevo").val("128").trigger('change');
+                //pageMantenimientoFactura.ResponseDepartamentoListar(departamentoLista, dropdownParent = $("#modal-nuevo-cliente"));
 
                 let user = common.ObtenerUsuario();
                 let empresaId = user.Empresa.EmpresaId;
 
-                pageMantenimientoFactura.CmbDepartamentoChange();
+                //pageMantenimientoFactura.CmbDepartamentoChange();
                 pageMantenimientoFactura.ValidarClienteNuevo();
                 //$("#btn-buscar-cliente-dialog").click(() => common.CreateDataTableFromAjax("#tbl-busqueda-cliente", ajax, columns));
                 //$("#btn-buscar-cliente-dialog").trigger("click");
@@ -254,6 +258,22 @@ const pageMantenimientoFactura = {
         $(modal).modal('hide');
     },
 
+    CmbTipoDocumentoIdentidadChange: function (e) {
+        pageMantenimientoFactura.ObtenerDatosPadronSunat();
+    },
+
+    TxtNroDocumentoIdentidadChange: function (e) {
+        pageMantenimientoFactura.ObtenerDatosPadronSunat();
+    },
+
+    CmbPaisChange: function () {
+        let paisId = $("#cmb-cliente-pais-nuevo").val();
+        let DepartamentoFiltro = departamentoLista.filter(x => x.PaisId == paisId);
+        pageMantenimientoFactura.ResponseDepartamentoListar(DepartamentoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
+
+        pageMantenimientoFactura.CmbDepartamentoChange();
+    },
+
     CmbDepartamentoChange: function () {
         let departamentoId = $("#cmb-cliente-departamento-nuevo").val();
         let ProvinciaFiltro = provinciaLista.filter(x => x.DepartamentoId == departamentoId);
@@ -266,7 +286,6 @@ const pageMantenimientoFactura = {
         let provinciaId = $("#cmb-cliente-provincia-nuevo").val();
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
         pageMantenimientoFactura.ResponseDistritoListar(DistritoFiltro, dropdownParent = $("#modal-nuevo-cliente"));
-
     },
 
     LlenarDatosCliente(data) {
@@ -420,6 +439,8 @@ const pageMantenimientoFactura = {
                 $("#modal-detalle-agregar").on("hide.bs.modal", function () {
                     $("#frm-factura-mantenimiento").data('bootstrapValidator').revalidateField("hdn-detalle");
                 })
+
+                $("#modal-detalle-agregar").find(".modal-header, .modal-header .modal-title, .modal-header .close").addClass("bg-dark");
 
                 $("#txt-detalle-cantidad, #txt-detalle-precio-unitario, #txt-detalle-descuento, #cmb-detalle-tipo-afectacion-igv").change(pageMantenimientoFactura.CalcularImporteTotal);
 
@@ -726,6 +747,13 @@ const pageMantenimientoFactura = {
                             }
                         }
                     },
+                    "cmb-cliente-pais-nuevo": {
+                        validators: {
+                            notEmpty: {
+                                message: "Debe seleccionar pais",
+                            }
+                        }
+                    },
                     "cmb-cliente-departamento-nuevo": {
                         validators: {
                             notEmpty: {
@@ -918,6 +946,19 @@ const pageMantenimientoFactura = {
         $("#txt-detalle-importe-total").val(importeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     },
 
+    ObtenerDatosPadronSunat: function () {
+        let tipoDocumentoIdentidad = $("#cmb-cliente-tipo-documento-identidad-nuevo").val();
+        if (tipoDocumentoIdentidad != tdiRUC) return;
+
+        let nroDocumentoIdentidad = $("#txt-cliente-nro-documento-identidad-nuevo").val();
+        if (nroDocumentoIdentidad.trim() == '') return;
+
+        let url = `${urlRoot}api/sunat/obtener-padron-por-ruc?ruc=${nroDocumentoIdentidad}`;
+        fetch(url)
+            .then(common.ResponseToJson)
+            .then(pageMantenimientoFactura.ResponsePadronSunatObtenerPorRuc);
+    },
+
     CargarCombo: async function (fnNext) {
         let user = common.ObtenerUsuario();
         let promises = [
@@ -931,13 +972,14 @@ const pageMantenimientoFactura = {
             fetch(`${urlRoot}api/tipoTributo/listar-tipoTributo`),
             fetch(`${urlRoot}api/formapago/listar-formapago`),
             fetch(`${urlRoot}api/formato/listar-formato-por-tipocomprobante?tipoComprobanteId=${tipoComprobanteIdFactura}`),
+            fetch(`${urlRoot}api/pais/listar-pais`),
             fetch(`${urlRoot}api/departamento/listar-departamento`),
             fetch(`${urlRoot}api/provincia/listar-provincia`),
             fetch(`${urlRoot}api/distrito/listar-distrito`)
         ]
         Promise.all(promises)
             .then(r => Promise.all(r.map(common.ResponseToJson)))
-            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormaPagoLista, FormatoLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
+            .then(([SerieLista, MonedaLista, TipoOperacionVentaLista, TipoDocumentoIdentidadLista, TipoProductoLista, UnidadMedidaLista, TipoAfectacionIgvLista, TipoTributoLista, FormaPagoLista, FormatoLista, PaisLista, DepartamentoLista, ProvinciaLista, DistritoLista]) => {
                 tipoProductoLista = TipoProductoLista || [];
                 serieLista = SerieLista || [];
                 monedaLista = MonedaLista || [];
@@ -948,6 +990,7 @@ const pageMantenimientoFactura = {
                 tipoTributoLista = TipoTributoLista || [];
                 formaPagoLista = FormaPagoLista || [];
                 formatoLista = FormatoLista || [];
+                paisLista = PaisLista || [];
                 departamentoLista = DepartamentoLista || [];
                 provinciaLista = ProvinciaLista || [];
                 distritoLista = DistritoLista || [];
@@ -1207,6 +1250,11 @@ const pageMantenimientoFactura = {
 
     },
 
+    ResponsePaisListar: function (data, dropdownParent = null) {
+        let datapais = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.PaisId, text: item.Nombre }); });
+        $("#cmb-cliente-pais-nuevo").select2({ data: datapais, width: '100%', placeholder: '[SELECCIONE...]', dropdownParent });
+    },
+
     ResponseDepartamentoListar: function (data, dropdownParent = null) {
         $("#cmb-cliente-departamento-nuevo").empty();
         let datadepartamento = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.DepartamentoId, text: item.Nombre }); });
@@ -1226,7 +1274,7 @@ const pageMantenimientoFactura = {
     },
 
     ResponseTipoDocumentoIdentidadNuevoListar: function (data, dropdownParent = null) {
-        data = data.filter(x => x.TipoDocumentoIdentidadId == 2);
+        data = data.filter(x => x.TipoDocumentoIdentidadId == tdiRUC);
         let dataTipoDocumentoIdentidad = data.map(x => Object.assign(x, { id: x.TipoDocumentoIdentidadId, text: x.Descripcion }));
         $("#cmb-cliente-tipo-documento-identidad-nuevo").select2({ data: dataTipoDocumentoIdentidad, width: '100%', placeholder: '[Seleccione...]', dropdownParent });
     },
@@ -1304,6 +1352,16 @@ const pageMantenimientoFactura = {
                 //}
             }
         });
+    },
+
+    ResponsePadronSunatObtenerPorRuc: function (data) {
+        $("#txt-cliente-nombres-razonsocial-nuevo").val(data.RazonSocial);
+        /*$("#txt-nombre-comercial").val(data.RazonSocial);*/
+        if (data.PaisId != null) $("#cmb-cliente-pais-nuevo").val(data.PaisId).trigger("change");
+        if (data.DepartamentoId != null) $("#cmb-cliente-departamento-nuevo").val(data.DepartamentoId).trigger("change");
+        if (data.ProvinciaId != null) $("#cmb-cliente-provincia-nuevo").val(data.ProvinciaId).trigger("change");
+        if (data.DistritoId != null) $("#cmb-cliente-distrito-nuevo").val(data.DistritoId);
+        $("#txt-cliente-direccion-nuevo").val(data.Direccion);
     },
 
     LimpiarDatosClienteNuevo: function () {

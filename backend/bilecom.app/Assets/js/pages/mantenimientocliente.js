@@ -6,7 +6,9 @@ const pageMantenimientoCliente = {
     },
 
     InitEvents: function () {
-        $("#cmb-pais").change(pageMantenimientoCliente.CmbPaisChange)
+        $("#cmb-tipo-documento-identidad").change(pageMantenimientoCliente.TxtNroDocumentoIdentidadChange);
+        $("#txt-numero-documento-identidad").change(pageMantenimientoCliente.TxtNroDocumentoIdentidadChange);
+        $("#cmb-pais").change(pageMantenimientoCliente.CmbPaisChange);
         $("#cmb-departamento").change(pageMantenimientoCliente.CmbDepartamentoChange);
         $("#cmb-provincia").change(pageMantenimientoCliente.CmbProvinciaChange);
         pageMantenimientoCliente.CargarCombo(pageMantenimientoCliente.ObtenerDatos);
@@ -207,6 +209,14 @@ const pageMantenimientoCliente = {
             });
     },
 
+    CmbTipoDocumentoIdentidadChange: function (e) {
+        pageMantenimientoCliente.ObtenerDatosPadronSunat();
+    },
+
+    TxtNroDocumentoIdentidadChange: function (e) {
+        pageMantenimientoCliente.ObtenerDatosPadronSunat();
+    },
+
     CmbPaisChange: function () {
         let paisId = $("#cmb-pais").val();
         let DepartamentoFiltro = departamentoLista.filter(x => x.PaisId == paisId);
@@ -223,6 +233,19 @@ const pageMantenimientoCliente = {
         let provinciaId = $("#cmb-provincia").val();
         let DistritoFiltro = distritoLista.filter(x => x.ProvinciaId == provinciaId);
         pageMantenimientoCliente.ResponseDistritoListar(DistritoFiltro);
+    },
+
+    ObtenerDatosPadronSunat: function () {
+        let tipoDocumentoIdentidad = $("#cmb-tipo-documento-identidad").val();
+        if (tipoDocumentoIdentidad != tdiRUC) return;
+
+        let nroDocumentoIdentidad = $("#txt-numero-documento-identidad").val();
+        if (nroDocumentoIdentidad.trim() == '') return;
+
+        let url = `${urlRoot}api/sunat/obtener-padron-por-ruc?ruc=${nroDocumentoIdentidad}`;
+        fetch(url)
+            .then(common.ResponseToJson)
+            .then(pageMantenimientoCliente.ResponsePadronSunatObtenerPorRuc);
     },
 
     CargarCombo: async function (fn = null) {
@@ -374,6 +397,15 @@ const pageMantenimientoCliente = {
         let datatipodocumentoidentidad = data.map(x => { let item = Object.assign({}, x); return Object.assign(item, { id: item.TipoDocumentoIdentidadId, text: item.Descripcion }); });
         $("#cmb-tipo-documento-identidad").select2({ data: datatipodocumentoidentidad, width: '100%', placeholder: '[SELECCIONE...]' });
         
-    }
+    },
 
+    ResponsePadronSunatObtenerPorRuc: function (data) {
+        $("#txt-nombres").val(data.RazonSocial);
+        $("#txt-nombre-comercial").val(data.RazonSocial);
+        if (data.PaisId != null) $("#cmb-pais").val(data.PaisId).trigger("change");
+        if (data.DepartamentoId != null) $("#cmb-departamento").val(data.DepartamentoId).trigger("change");
+        if (data.ProvinciaId != null) $("#cmb-provincia").val(data.ProvinciaId).trigger("change");
+        if (data.DistritoId != null) $("#cmb-distrito").val(data.DistritoId);
+        $("#txt-direccion").val(data.Direccion);
+    }
 }
