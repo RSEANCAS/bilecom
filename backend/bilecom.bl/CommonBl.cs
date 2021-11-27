@@ -38,19 +38,15 @@ namespace bilecom.bl
 
             try
             {
-                using (TransactionScope scope = new TransactionScope())
+                using (SqlConnection cn = new SqlConnection(CadenaConexion))
                 {
-                    using (SqlConnection cn = new SqlConnection(CadenaConexion))
-                    {
-                        cn.Open();
-                        if (withTruncate) bulkInsertComplete = commonDa.TruncateTable(tableName, cn);
-                        else bulkInsertComplete = true;
+                    cn.Open();
+                    if (withTruncate) bulkInsertComplete = commonDa.TruncateTable(tableName, cn);
+                    else bulkInsertComplete = true;
 
-                        if (bulkInsertComplete) bulkInsertComplete = commonDa.BulkInsert(tableName, dataBulk, cn);
+                    if (bulkInsertComplete) bulkInsertComplete = commonDa.BulkInsert(tableName, dataBulk, cn);
 
-                        if (bulkInsertComplete) scope.Complete();
-                        cn.Close();
-                    }
+                    cn.Close();
                 }
             }
             catch (Exception ex) { bulkInsertComplete = false; }
