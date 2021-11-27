@@ -17,7 +17,9 @@ namespace bilecom.app.Controllers
         [IsLoginFilter]
         public ActionResult Index()
         {
+
             //if (estaLogueado) return RedirectToAction("Index", "Inicio");
+            ViewBag.UrlRedirect = TempData["UrlRedirect"];
             return View();
         }
 

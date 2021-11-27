@@ -32,7 +32,7 @@ namespace bilecom.app.Controllers.Api
         }
         [HttpGet]
         [Route("buscarnivel2-kardex")]
-        public DataPaginate<KardexNivel2Be> BuscarNivel2(int empresaId, int almacenId, int productoId, DateTime fechaInicio, DateTime fechaFinal, int draw, int start, int length, string columnaOrden = "FechaHoraEmision", string ordenMax = "ASC")
+        public DataPaginate<KardexNivel2Be> BuscarNivel2(int empresaId, int almacenId, int productoId, DateTime fechaInicio, DateTime fechaFinal, int draw=1, int start=0, int length=10, string columnaOrden = "FechaHoraEmision", string ordenMax = "ASC")
         {
             int totalRegistros = 0;
             var lista = kardexBl.BuscarNivel2(empresaId, almacenId, productoId, fechaInicio, fechaFinal, start, length, columnaOrden, ordenMax, out totalRegistros);

@@ -7,7 +7,16 @@
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
 }
+<style>
+    td.details-control {
+	background: url('/Assets/img/details_open.png') no-repeat center center;
+	cursor: pointer;
+}
 
+tr.shown td.details-control {
+	background: url('/Assets/img/details_close.png') no-repeat center center;
+}
+</style>
 <div id="content-container">
     <div id="page-head">
 
@@ -24,7 +33,7 @@
                 <li><a href="#"><i class="demo-pli-home"></i></a></li>
                 <li><a href="#">Pages</a></li>
                 <li class="active">Blank page</li>
-            </ol>*@ 
+            </ol>*@
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <!--End breadcrumb-->
 
@@ -113,6 +122,7 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/kardex.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script>
         $(document).ready(function () {
             pageKardex.Init();

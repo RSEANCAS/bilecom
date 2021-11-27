@@ -6,10 +6,12 @@
         this.InitEvents();
         pageInicio.CreateDataTable("#tbl-ultimosdocumentos")
     },
+
     InitEvents: function () {
         this.CargaConteo_x_Documento();
 
     },
+
     CargaConteo_x_Documento: function () {
         var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
@@ -53,7 +55,7 @@
                 dataSrc: ""
             },
             columns: [
-                { data: "TipoDocumentoDescripcion", render: (data) => data.trim() },
+                { data: "TipoComprobanteNombre", render: (data) => data.trim() },
                 { data: "Serie", render: function (data, type, row) { return `${row.Serie}-` + ("00000000" + row.Numero).slice(-8) } },
                 { data: "FechaEmision", render: (data) => (new Date(data)).toLocaleDateString("es-PE", { year: "numeric", month: "2-digit", day: "2-digit" }) },
                 { data: "Total", render: (data, type, row) => row.SimboloMoneda + " " + data.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
@@ -73,6 +75,27 @@
 
                         return `<span class="text-center label label-table ${tipolabel}">${row.EstadoSunatDescripcion}</span>`
                     }
+                },
+                {
+                    data: null, className: 'text-center', render: function (data, type, row) {
+                        var user = common.ObtenerUsuario();
+                        let nombreArchivo = `${user.Empresa.Ruc}-${row.TipoComprobanteCodigoSunat}-${row.Serie}-${row.Numero}`;
+                        let rutaArchivo = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/${row.TipoComprobanteCodigoSunat}/${row.Serie}-${row.Numero}/${nombreArchivo}`;
+                        let rutaArchivoCdr = `${urlRoot}App_Files/${user.Empresa.Ruc}/Sunat/${ambienteSunatNombre}/Comprobantes/${row.TipoComprobanteCodigoSunat}/${row.Serie}-${row.Numero}/R-${nombreArchivo}`;
+
+                        return `${row.FlagAnulado == true ? "" :
+                            `<div class="input-group-btn dropdown">
+	                            <button data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" type="button">
+		                            <i class="fa fa-download"></i> <i class="fa fa-sort-down"></i>
+	                            </button>
+	                            <ul class="dropdown-menu">
+		                            <li><a download="${nombreArchivo}.pdf" href="${rutaArchivo}.pdf">PDF</a></li>
+		                            <li><a download="${nombreArchivo}.xml" href="${rutaArchivo}.xml">XML</a></li>
+		                            <li><a download="R-${nombreArchivo}.zip" href="${rutaArchivoCdr}.zip">CDR</a></li>
+	                            </ul>
+                            </div>`
+                            }`;
+                    }
                 }
             ]
         })
@@ -89,6 +112,7 @@
         $("#span-nd-emitidos").text(data.TotalDocumentoND);
         $("#span-nd-anulados").text(data.TotalAnuladoND);
     },
+
     ConfiguracionDataTableTablero() {
         $.extend($.fn.dataTable.defaults, {
             searching: false,

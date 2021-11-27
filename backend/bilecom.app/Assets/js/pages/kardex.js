@@ -1,5 +1,6 @@
 ﻿var sedealmacenLista = [], productoLista = [],table;
 const fechaActual = new Date();
+var detalle;
 const pageKardex = {
     Init: function () {
         common.ConfiguracionDataTable();
@@ -29,10 +30,11 @@ const pageKardex = {
         $('#tbl-lista tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.api().row(tr);
+
             if (row.child.isShown()) {
                 // This row is already open - close it
                 row.child.hide();
-                //tr.removeClass('shown');
+                tr.removeClass('shown');
                 
             }
             else {
@@ -40,8 +42,8 @@ const pageKardex = {
                 //row.child(format(row.data())).show();
                 //let NombreTabla = "#tbl-"+row.data().ProductoId;
                 row.child(pageKardex.DevuelveDetalle(row.data())).show();
-                pageKardex.CreateDataTableDetalle("#tbl-detalle", row.data());
-                //tr.addClass('shown');
+                //pageKardex.CreateDataTableDetalle("#tbl-detalle", row.data());
+                tr.addClass('shown');
                 
             }
         });
@@ -122,14 +124,14 @@ const pageKardex = {
         })
     },
     CreateDataTableDetalle: function (id, item) {
-        let estaInicializado = $.fn.DataTable.isDataTable(id);
+        /*let estaInicializado = $.fn.DataTable.isDataTable(id);
         if (estaInicializado == true) {
             $(id).DataTable().ajax.reload();
             return;
-        }
+        }*/
         let user = common.ObtenerUsuario();
         let empresaId = user.Empresa.EmpresaId;
-
+        let productoId = item.ProductoId;
         table = $(id).dataTable({
             processing: true,
             serverSide: true,
@@ -139,7 +141,7 @@ const pageKardex = {
                 data: {
                     empresaId: empresaId,
                     almacenId: () => $("#cmb-almacen").val(),
-                    productoId: item.ProductoId,
+                    productoId: productoId,
                     fechaInicio: pageKardex.ObtenerFechaDesde,
                     fechaFinal: pageKardex.ObtenerFechaHasta
                 }
@@ -166,7 +168,82 @@ const pageKardex = {
         $("#cmb-almacen").select2({ data: dataAlmacen, width: '100%', placeholder: '[SELECCIONE...]' });
     },
     DevuelveDetalle: function (item) {
-        return `<table id="#tbl-detalle" class="table table-striped table-bordered small" cellspacing="0" width="100%">
+        var tabla = document.createElement("table");
+        tabla.className = "table table-striped table-bordered small";
+        var thead = document.createElement("thead");
+        var trCab = document.createElement("tr");
+        trCab.style = "background-color:#FFFA93;";
+
+        var columna1 = document.createElement("td");
+        columna1.textContent = "Nº";
+        columna1.style = "width:25px;";
+        var columna2 = document.createElement("td");
+        columna2.textContent = "Tipo de Movimiento";
+        columna2.className = "min-tablet text-center";
+        var columna3 = document.createElement("td");
+        columna3.textContent = "Fecha y Hora de Emisión";
+        columna3.className = "min-tablet text-center";
+        var columna4 = document.createElement("td");
+        columna4.textContent = "Cantidad";
+        columna4.className = "min-tablet text-center";
+        var columna5 = document.createElement("td");
+        columna5.textContent = "Precio";
+        columna5.className = "min-tablet text-center";
+        var columna6 = document.createElement("td");
+        columna6.textContent = "Importe Total";
+        columna6.className = "min-tablet text-center";
+
+        trCab.appendChild(columna1);
+        trCab.appendChild(columna2);
+        trCab.appendChild(columna3);
+        trCab.appendChild(columna4);
+        trCab.appendChild(columna5);
+        trCab.appendChild(columna6);
+
+        thead.appendChild(trCab);
+        tabla.appendChild(thead);
+        var tblBody = document.createElement("tbody");
+        
+        let user = common.ObtenerUsuario();
+        let empresaId = user.Empresa.EmpresaId;
+        let productoId = item.ProductoId;
+
+        $.ajax({
+            url: `${urlRoot}api/kardex/buscarnivel2-kardex`,
+            type: "GET",
+            data: {
+                empresaId: empresaId,
+                almacenId: () => $("#cmb-almacen").val(),
+                productoId: productoId,
+                fechaInicio: pageKardex.ObtenerFechaDesde,
+                fechaFinal: pageKardex.ObtenerFechaHasta
+            },
+            dataType: "JSON",
+            success: function (data) {
+                detalle = data;
+                if (detalle != "undifined" && detalle != null) {
+                   /* forEach(var det in detalle.data)
+                    {
+                        alert(det.Cantidad);
+                    }*/
+                    
+                    detalle.data.forEach(function (x) {
+                        var trD = document.createElement("tr");
+                        trD.innerHTML = "";
+                        trD.innerHTML = `<td>${x.Fila}</td><td>${x.TipoMovimientoDescripcion}</td><td>${moment(x.FechaHoraEmision).format('DD/MM/YYYY HH:mm')}</td><td>${x.Cantidad}</td><td>${x.PrecioUnitario}</td><td>${x.TotalImporte}</td>`;
+                        tblBody.appendChild(trD);
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error...');
+            }
+        });
+        
+
+        tabla.appendChild(tblBody);
+
+        /*let tabla = `<table id="#tbl-detalle" class="table table-striped table-bordered small" cellspacing="0" width="100%">
                     <thead>
                         <tr style="background-color:#FFFA93">
                             <th rowspan="1" colspan="1" style="width:25px">N°</th>
@@ -179,7 +256,10 @@ const pageKardex = {
                     </thead>
                     <tbody>
                     </tbody>
-                </table>`;
+                </table>`;*/
+
+        return tabla;
+
     },
     ObtenerFechaHasta: function () {
         let fechaHasta = $("#txt-fecha-emision-hasta").datepicker("getDate");

@@ -17,7 +17,11 @@ namespace bilecom.app.Controllers.Filters
         {
             if (!IsLogin)
             {
+                string urlRedirect = filterContext.HttpContext.Request.Url.AbsolutePath;
                 filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new { Controller = "Login", Action = "Index" }));
+                var tempData = filterContext.Controller.TempData;
+                tempData["UrlRedirect"] = urlRedirect;
+                //filterContext.Controller.ViewBag.UrlRedirect = urlRedirect;
             }
             else
             {
