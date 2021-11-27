@@ -92,6 +92,7 @@
     <Compile Include="SedeUsuarioBe.cs" />
     <Compile Include="SerieBe.cs" />
     <Compile Include="StockAlmacenBe.cs" />
+    <Compile Include="SunatPadronBe.cs" />
     <Compile Include="TableroConteo_x_DocumentoBe.cs" />
     <Compile Include="TableroUltimosDocumentosBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />
