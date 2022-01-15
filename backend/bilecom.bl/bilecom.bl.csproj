@@ -62,6 +62,7 @@
     <Compile Include="FormatoBl.cs" />
     <Compile Include="GuiaRemisionRemitenteBl.cs" />
     <Compile Include="GuiaRemisionTransportistaBl.cs" />
+    <Compile Include="KardexBl.cs" />
     <Compile Include="MonedaBl.cs" />
     <Compile Include="MovimientoBl.cs" />
     <Compile Include="NotaCreditoBl.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="RecuperarContrasenaBl.cs" />
     <Compile Include="SerieBl.cs" />
     <Compile Include="StockAlmacenBl.cs" />
+    <Compile Include="SunatBl.cs" />
     <Compile Include="TableroConteo_x_DocumentoBl.cs" />
     <Compile Include="TableroUltimosDocumentosBl.cs" />
     <Compile Include="TipoAfectacionIgvBl.cs" />

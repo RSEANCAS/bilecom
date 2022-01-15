@@ -71,6 +71,7 @@
     <Compile Include="FormatoCorreoBe.cs" />
     <Compile Include="FormaPagoBe.cs" />
     <Compile Include="GuiaRemisionBe.cs" />
+    <Compile Include="KardexBe.cs" />
     <Compile Include="MonedaBe.cs" />
     <Compile Include="MovimientoBe.cs" />
     <Compile Include="MovimientoDetalleBe.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="SedeUsuarioBe.cs" />
     <Compile Include="SerieBe.cs" />
     <Compile Include="StockAlmacenBe.cs" />
+    <Compile Include="SunatPadronBe.cs" />
     <Compile Include="TableroConteo_x_DocumentoBe.cs" />
     <Compile Include="TableroUltimosDocumentosBe.cs" />
     <Compile Include="TipoAfectacionIgvBe.cs" />

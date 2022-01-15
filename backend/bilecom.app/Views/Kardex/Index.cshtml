@@ -7,7 +7,16 @@
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css")" rel="stylesheet">
 }
+<style>
+    td.details-control {
+	background: url('/Assets/img/details_open.png') no-repeat center center;
+	cursor: pointer;
+}
 
+tr.shown td.details-control {
+	background: url('/Assets/img/details_close.png') no-repeat center center;
+}
+</style>
 <div id="content-container">
     <div id="page-head">
 
@@ -24,7 +33,7 @@
                 <li><a href="#"><i class="demo-pli-home"></i></a></li>
                 <li><a href="#">Pages</a></li>
                 <li class="active">Blank page</li>
-            </ol>*@ 
+            </ol>*@
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <!--End breadcrumb-->
 
@@ -88,14 +97,13 @@
                 <table id="tbl-lista" class="table table-striped table-bordered small" cellspacing="0" width="100%">
                     <thead>
                         <tr class="bg-primary">
+                            <th class="min-tablet"></th>
                             <th rowspan="1" colspan="1" style="width:25px">N°</th>
-                            <th>Fecha</th>
-                            <th class="min-tablet">Tipo Movimiento</th>
-                            <th class="min-tablet">Motivo Movimiento</th>
-                            <th class="min-tablet">Documento</th>
-                            <th class="min-tablet">Documento Referencia</th>
-                            <th class="min-tablet">Cantidad</th>
-                            <th class="min-tablet">Nuevo Stock</th>
+                            <th class="min-tablet text-center">Codigo</th>
+                            <th class="min-tablet text-center">Codigo Sunat</th>
+                            <th class="min-tablet text-center">Producto</th>
+                            <th class="min-tablet text-center">Unidad de Medida</th>
+                            <th class="min-tablet text-center">Stock Actual</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,6 +122,7 @@
     <script src="@Url.Content("~/Assets/plugins/datatables/media/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js")"></script>
     <script src="@Url.Content("~/Assets/js/pages/kardex.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script>
         $(document).ready(function () {
             pageKardex.Init();

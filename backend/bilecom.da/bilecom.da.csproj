@@ -59,6 +59,7 @@
     <Compile Include="EmpresaTipoComprobanteTipoOperacionVentaDa.cs" />
     <Compile Include="EmpresaTipoProductoDa.cs" />
     <Compile Include="EmpresaUnidadMedidaDa.cs" />
+    <Compile Include="KardexDa.cs" />
     <Compile Include="NotaCreditoDa.cs" />
     <Compile Include="FacturaDa.cs" />
     <Compile Include="BoletaDetalleDa.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="ReporteDa.cs" />
     <Compile Include="SerieDa.cs" />
     <Compile Include="StockAlmacenDa.cs" />
+    <Compile Include="SunatPadronDa.cs" />
     <Compile Include="TableroConteo_x_DocumentoDa.cs" />
     <Compile Include="TableroUltimosDocumentosDa.cs" />
     <Compile Include="TipoAfectacionIgvDa.cs" />
