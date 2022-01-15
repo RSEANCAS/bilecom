@@ -1,10 +1,14 @@
 ﻿@{
     ViewBag.Titulo = "Dashboard";
+
 }
+
 @section links_footer{
     <link href="@Url.Content("~/Assets/plugins/datatables/media/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css")" rel="stylesheet" />
+
 }
+
 <div id="content-container">
     <div id="page-head">
 
@@ -97,7 +101,7 @@
                     <div class="panel-heading">
                         <div class="panel-control">
                             <a class="demo-panel-ref-btn btn btn-default" href="@Url.Action("Facturacion/Ventas", "Reporte")">Ir al reporte de ventas <i class="fa fa-external-link-square"></i></a>
-@*                            <button class="demo-panel-ref-btn btn btn-default" data-toggle="panel-overlay" data-target="#demo-panel-collapse-default"><i class="demo-psi-repeat-2"></i></button>*@
+                            @*                            <button class="demo-panel-ref-btn btn btn-default" data-toggle="panel-overlay" data-target="#demo-panel-collapse-default"><i class="demo-psi-repeat-2"></i></button>*@
                         </div>
                         <h3 class="panel-title">Ultimos Documentos Emitidos</h3>
                     </div>

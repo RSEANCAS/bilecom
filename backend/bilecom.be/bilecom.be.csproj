@@ -48,6 +48,7 @@
     <Compile Include="BoletaDetalleBe.cs" />
     <Compile Include="CargoBe.cs" />
     <Compile Include="ClienteBe.cs" />
+    <Compile Include="ComprobanteBe.cs" />
     <Compile Include="CotizacionBe.cs" />
     <Compile Include="CategoriaProductoBe.cs" />
     <Compile Include="Custom\BootStrapValidator.cs" />
