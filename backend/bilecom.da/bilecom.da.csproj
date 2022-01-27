@@ -80,6 +80,7 @@
     <Compile Include="ProductoDa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvinciaDa.cs" />
+    <Compile Include="ReporteDa.cs" />
     <Compile Include="SerieDa.cs" />
     <Compile Include="StockAlmacenDa.cs" />
     <Compile Include="SunatPadronDa.cs" />
