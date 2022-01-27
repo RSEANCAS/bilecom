@@ -32,6 +32,24 @@ namespace bilecom.bl
             return lista;
         }
 
+        public bool TruncateTable(string tableName)
+        {
+            bool bulkInsertComplete = false;
+
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(CadenaConexion))
+                {
+                    cn.Open();
+                    bulkInsertComplete = commonDa.TruncateTable(tableName, cn);
+                    cn.Close();
+                }
+            }
+            catch (Exception ex) { bulkInsertComplete = false; }
+
+            return bulkInsertComplete;
+        }
+
         public bool BulkInsert(string tableName, DataSet dataBulk, bool withTruncate = false)
         {
             bool bulkInsertComplete = false;

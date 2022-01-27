@@ -21,12 +21,14 @@ namespace bilecom.app.Controllers
         public ActionResult Nuevo()
         {
             TempData["Id"] = 0;
+            ViewBag.Titulo = "Nuevo Producto";
             return View("Mantenimiento");
         }
         [Route("Editar")]
         public ActionResult Editar(int id)
         {
             TempData["Id"] = id;
+            ViewBag.Titulo = "Editar Producto";
             return View("Mantenimiento");
         }
 

@@ -30,6 +30,7 @@ namespace bilecom.da
                                 FormaPagoBe item = new FormaPagoBe();
                                 item.FormaPagoId = dr.GetData<int>("FormaPagoId");
                                 item.Descripcion = dr.GetData<string>("Descripcion");
+                                item.DescripcionSunat = dr.GetData<string>("DescripcionSunat");
                                 lista.Add(item);
                             }
                         }

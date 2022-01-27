@@ -93,12 +93,6 @@ namespace bilecom.app.Controllers.Api
                     string rutaCertificado = registro.Empresa.EmpresaConfiguracion.RutaCertificado.Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory);
                     string claveCertificado = registro.Empresa.EmpresaConfiguracion.ClaveCertificado;
 
-                    //string rucSOL = AppSettings.Get<string>("Sunat.RucSOL");
-                    //string usuarioSOL = AppSettings.Get<string>("Sunat.UsuarioSOL");
-                    //string claveSOL = AppSettings.Get<string>("Sunat.ClaveSOL");
-                    //string rutaCertificado = AppSettings.Get<string>("Sunat.RutaCertificado").Replace(@"~\", AppDomain.CurrentDomain.BaseDirectory);
-                    //string claveCertificado = AppSettings.Get<string>("Sunat.ClaveCertificado");
-
                     InvoiceType invoiceType = ComprobanteSunat.ObtenerComprobante(registro, ComprobanteSunat.VersionUBL._2_1);
 
                     string contenidoXml = Generar.GenerarXML(invoiceType);

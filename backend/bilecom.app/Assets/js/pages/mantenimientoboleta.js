@@ -45,7 +45,8 @@ const pageMantenimientoBoleta = {
         $("#btn-buscar-cliente").click(pageMantenimientoBoleta.BtnBuscarClienteClick);
         $("#btn-agregar-detalle").click(pageMantenimientoBoleta.BtnAgregarDetalleClick);
 
-        $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
+        $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true });
+        $("#txt-fecha-vencimiento").datepicker("update", fechaActual);
 
         pageMantenimientoBoleta.ObtenerDatos();
 
@@ -1012,7 +1013,7 @@ const pageMantenimientoBoleta = {
         tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
         let formaPagoId = $("#cmb-forma-pago").val();
         let formaPago = $("#cmb-forma-pago").select2("data")[0];
-        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
+        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion, DescripcionSunat: formaPago.DescripcionSunat };
         let formatoId = $("#cmb-formato").val();
         let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();

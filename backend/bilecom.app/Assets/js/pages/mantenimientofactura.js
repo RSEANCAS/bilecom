@@ -45,7 +45,8 @@ const pageMantenimientoFactura = {
         $("#btn-buscar-cliente").click(pageMantenimientoFactura.BtnBuscarClienteClick);
         $("#btn-agregar-detalle").click(pageMantenimientoFactura.BtnAgregarDetalleClick);
 
-        $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true, startDate: fechaActual });
+        $("#txt-fecha-vencimiento").datepicker({ format: "dd/mm/yyyy", autoclose: true });
+        $("#txt-fecha-vencimiento").datepicker("update", fechaActual);
 
         pageMantenimientoFactura.ObtenerDatos();
 
@@ -1036,7 +1037,7 @@ const pageMantenimientoFactura = {
         tipoOperacionVenta = { CodigoSunat: tipoOperacionVenta.CodigoSunat };
         let formaPagoId = $("#cmb-forma-pago").val();
         let formaPago = $("#cmb-forma-pago").select2("data")[0];
-        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion };
+        formaPago = { FormaPagoId: formaPagoId, Descripcion: formaPago.Descripcion, DescripcionSunat: formaPago.DescripcionSunat };
         let formatoId = $("#cmb-formato").val();
         let observacion = $("#txt-observacion").val();
         let clienteId = $("#hdn-cliente-id").val();

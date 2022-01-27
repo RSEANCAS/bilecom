@@ -10,5 +10,6 @@ namespace bilecom.be
     {
         public int FormaPagoId { get; set; }
         public string Descripcion { get; set; }
+        public string DescripcionSunat { get; set; }
     }
 }

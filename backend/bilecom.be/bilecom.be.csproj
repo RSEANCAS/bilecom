@@ -45,6 +45,7 @@
     <Compile Include="AmbienteSunatBe.cs" />
     <Compile Include="Base.cs" />
     <Compile Include="BoletaBe.cs" />
+    <Compile Include="BoletaCreditoDetalleBe.cs" />
     <Compile Include="BoletaDetalleBe.cs" />
     <Compile Include="CargoBe.cs" />
     <Compile Include="ClienteBe.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="EmpresaImagenBe.cs" />
     <Compile Include="EmpresaTipoAfectacionIgvBe.cs" />
     <Compile Include="FacturaBe.cs" />
+    <Compile Include="FacturaCreditoDetalleBe.cs" />
     <Compile Include="FacturaDetalleBe.cs" />
     <Compile Include="BoletaDocumentoBe.cs" />
     <Compile Include="FacturaDocumentoBe.cs" />

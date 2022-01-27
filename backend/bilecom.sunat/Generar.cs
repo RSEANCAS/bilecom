@@ -131,7 +131,7 @@ namespace bilecom.sunat
             xmlDocument.PreserveWhitespace = true;
             xmlDocument.LoadXml(xmlString);
 
-            X509Certificate2 certificado = new X509Certificate2(rutaCertificado, claveCertificado);
+            X509Certificate2 certificado = new X509Certificate2(rutaCertificado, claveCertificado, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
 
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xmlDocument.NameTable);
             nsMgr.AddNamespace("tns", tnsString);
@@ -144,9 +144,9 @@ namespace bilecom.sunat
             SignedXml signedXml = new SignedXml(xmlDocument);
 
             signedXml.SigningKey = certificado.GetRSAPrivateKey();
-            System.Security.Cryptography.Xml.KeyInfo KeyInfo = new System.Security.Cryptography.Xml.KeyInfo();
+            KeyInfo KeyInfo = new KeyInfo();
 
-            System.Security.Cryptography.Xml.Reference Reference = new System.Security.Cryptography.Xml.Reference();
+            Reference Reference = new Reference();
             Reference.Uri = "";
 
             Reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());

@@ -107,6 +107,35 @@ namespace bilecom.app.Helper
             //invoiceType.ProfileID.schemeName = "SUNAT:Identificador de Tipo de Operación";
             //invoiceType.ProfileID.schemeAgencyName = "PE:SUNAT";
             //invoiceType.ProfileID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo17";
+
+            // XX. FORMA DE PAGO
+            int cantidadCreditoDetalle = (item.FormaPagoId == (int)FormaPago.Credito ? item.ListaFacturaCreditoDetalle.Count : 0) + 1;
+            invoiceType.PaymentTerms = new sunat.comprobante.invoice.PaymentTermsType[cantidadCreditoDetalle];
+            invoiceType.PaymentTerms[0] = new sunat.comprobante.invoice.PaymentTermsType();
+            invoiceType.PaymentTerms[0].ID = new sunat.comprobante.invoice.IDType();
+            invoiceType.PaymentTerms[0].ID.Value = "FormaPago";
+            invoiceType.PaymentTerms[0].PaymentMeansID = new sunat.comprobante.invoice.PaymentMeansIDType[1];
+            invoiceType.PaymentTerms[0].PaymentMeansID[0] = new sunat.comprobante.invoice.PaymentMeansIDType();
+            invoiceType.PaymentTerms[0].PaymentMeansID[0].Value = item.FormaPago.DescripcionSunat;
+            if (item.FormaPagoId == (int)FormaPago.Credito)
+            {
+                invoiceType.PaymentTerms[0].Amount = new sunat.comprobante.invoice.AmountType2();
+                invoiceType.PaymentTerms[0].Amount.Value = Math.Round(item.TotalCredito, 2);
+
+                int i = 1;
+                foreach(FacturaCreditoDetalleBe credito in item.ListaFacturaCreditoDetalle)
+                {
+                    invoiceType.PaymentTerms[i] = new sunat.comprobante.invoice.PaymentTermsType();
+                    invoiceType.PaymentTerms[i].ID = new sunat.comprobante.invoice.IDType();
+                    invoiceType.PaymentTerms[i].ID.Value = "FormaPago";
+                    invoiceType.PaymentTerms[i].PaymentMeansID = new sunat.comprobante.invoice.PaymentMeansIDType[1];
+                    invoiceType.PaymentTerms[i].PaymentMeansID[0] = new sunat.comprobante.invoice.PaymentMeansIDType();
+                    invoiceType.PaymentTerms[i].PaymentMeansID[0].Value = $"Cuota{i:000}";
+                    invoiceType.PaymentTerms[i].Amount = new sunat.comprobante.invoice.AmountType2();
+                    invoiceType.PaymentTerms[i].Amount.Value = Math.Round(item.TotalCredito, 2);
+                    i++;
+                }
+            }
             #endregion
 
             #region Firma Digital
@@ -900,6 +929,35 @@ namespace bilecom.app.Helper
             //invoiceType.ProfileID.schemeName = "SUNAT:Identificador de Tipo de Operación";
             //invoiceType.ProfileID.schemeAgencyName = "PE:SUNAT";
             //invoiceType.ProfileID.schemeURI = "urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo17";
+
+            // XX. FORMA DE PAGO
+            int cantidadCreditoDetalle = (item.FormaPagoId == (int)FormaPago.Credito ? item.ListaBoletaCreditoDetalle.Count : 0) + 1;
+            invoiceType.PaymentTerms = new sunat.comprobante.invoice.PaymentTermsType[cantidadCreditoDetalle];
+            invoiceType.PaymentTerms[0] = new sunat.comprobante.invoice.PaymentTermsType();
+            invoiceType.PaymentTerms[0].ID = new sunat.comprobante.invoice.IDType();
+            invoiceType.PaymentTerms[0].ID.Value = "FormaPago";
+            invoiceType.PaymentTerms[0].PaymentMeansID = new sunat.comprobante.invoice.PaymentMeansIDType[1];
+            invoiceType.PaymentTerms[0].PaymentMeansID[0] = new sunat.comprobante.invoice.PaymentMeansIDType();
+            invoiceType.PaymentTerms[0].PaymentMeansID[0].Value = item.FormaPago.DescripcionSunat;
+            if (item.FormaPagoId == (int)FormaPago.Credito)
+            {
+                invoiceType.PaymentTerms[0].Amount = new sunat.comprobante.invoice.AmountType2();
+                invoiceType.PaymentTerms[0].Amount.Value = Math.Round(item.TotalCredito, 2);
+
+                int i = 1;
+                foreach (BoletaCreditoDetalleBe credito in item.ListaBoletaCreditoDetalle)
+                {
+                    invoiceType.PaymentTerms[i] = new sunat.comprobante.invoice.PaymentTermsType();
+                    invoiceType.PaymentTerms[i].ID = new sunat.comprobante.invoice.IDType();
+                    invoiceType.PaymentTerms[i].ID.Value = "FormaPago";
+                    invoiceType.PaymentTerms[i].PaymentMeansID = new sunat.comprobante.invoice.PaymentMeansIDType[1];
+                    invoiceType.PaymentTerms[i].PaymentMeansID[0] = new sunat.comprobante.invoice.PaymentMeansIDType();
+                    invoiceType.PaymentTerms[i].PaymentMeansID[0].Value = $"Cuota{i:000}";
+                    invoiceType.PaymentTerms[i].Amount = new sunat.comprobante.invoice.AmountType2();
+                    invoiceType.PaymentTerms[i].Amount.Value = Math.Round(item.TotalCredito, 2);
+                    i++;
+                }
+            }
             #endregion
 
             #region Firma Digital

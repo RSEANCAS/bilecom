@@ -31,6 +31,19 @@ namespace bilecom.be
         public ClienteBe Cliente { get; set; }
         public int? FormaPagoId { get; set; }
         public FormaPagoBe FormaPago { get; set; }
+        public List<FacturaCreditoDetalleBe> ListaFacturaCreditoDetalle { get; set; }
+        public decimal TotalCredito
+        {
+            get
+            {
+                decimal total = 0;
+                if (ListaFacturaCreditoDetalle != null)
+                {
+                    total = ListaFacturaCreditoDetalle.Sum(x => x.Monto);
+                }
+                return total;
+            }
+        }
         public bool FlagExportacion { get; set; }
         public bool FlagGratuito { get; set; }
         public bool FlagEmisorItinerante { get; set; }

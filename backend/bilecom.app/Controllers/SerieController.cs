@@ -22,6 +22,7 @@ namespace bilecom.app.Controllers
         public ActionResult Nuevo()
         {
             TempData["Id"] = 0;
+            ViewBag.Titulo = "Nueva Serie";
             return View("Mantenimiento");
         }
 
@@ -29,6 +30,7 @@ namespace bilecom.app.Controllers
         public ActionResult Editar(int Id)
         {
             TempData["Id"] = Id;
+            ViewBag.Titulo = "Editar Serie";
             return View("Mantenimiento");
         }
     }

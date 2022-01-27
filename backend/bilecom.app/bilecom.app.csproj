@@ -53,8 +53,8 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.8.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
-    <Reference Include="Select.HtmlToPdf, Version=20.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
-      <HintPath>..\packages\Select.HtmlToPdf.20.2.0\lib\net40\Select.HtmlToPdf.dll</HintPath>
+    <Reference Include="Select.HtmlToPdf, Version=21.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
+      <HintPath>..\packages\Select.HtmlToPdf.21.2.0\lib\net40\Select.HtmlToPdf.dll</HintPath>
     </Reference>
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.8.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
@@ -3216,6 +3216,7 @@
     <Content Include="Views\Movimiento\Mantenimiento.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Factura\Mantenimiento.cshtml" />
+    <None Include="Properties\PublishProfiles\BileComWeb - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Configuracion\Index.cshtml" />
