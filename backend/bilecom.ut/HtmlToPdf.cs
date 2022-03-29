@@ -1,6 +1,4 @@
-﻿using Pechkin;
-using Pechkin.Synchronized;
-using SelectPdf;
+﻿using SelectPdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,13 +53,13 @@ namespace bilecom.ut
             return PDFBytes;
         }
 
-        public static byte[] GenerarPDF(string html)
-        {
-            byte[] pdfBuffer = new SimplePechkin(new GlobalConfig()).Convert(new Pechkin.ObjectConfig().SetScreenMediaType(true), html);
+        //public static byte[] GenerarPDF(string html)
+        //{
+        //    byte[] pdfBuffer = new SimplePechkin(new GlobalConfig()).Convert(new Pechkin.ObjectConfig().SetScreenMediaType(true), html);
 
-            return pdfBuffer;
+        //    return pdfBuffer;
 
-        }
+        //}
         //public void prueba()
         //{
         //    string archivo = File.ReadAllText(@"C:/Users/Usuario01/Downloads/templateFactura.html");

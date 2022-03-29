@@ -8272,6 +8272,22 @@ blockquote {
 .bg-dark a:focus {
   color: #fff;
 }
+
+
+.bg-dark:before, .bg-dark:after {
+    background-color: #3a444e !important;
+}
+
+.bg-dark:before,
+.bg-dark:before a {
+    color: #fff;
+}
+
+.bg-dark:before a:hover,
+.bg-dark:before a:focus {
+    color: #fff;
+}
+
 /* TEXTS */
 /*======================================*/
 .text-light,
@@ -8770,6 +8786,9 @@ a.text-dark:focus {
 .mar-all-5 {
     margin: 5px;
 }
+.mar-top-no {
+    margin-top: 0px;
+}
 .mar-top {
   margin-top: 15px;
 }
@@ -8778,6 +8797,9 @@ a.text-dark:focus {
 }
 .mar-top-5 {
     margin-top: 5px;
+}
+.mar-btm-no {
+    margin-bottom: 0px;
 }
 .mar-btm {
   margin-bottom: 15px;
@@ -8788,6 +8810,9 @@ a.text-dark:focus {
 .mar-btm-5 {
     margin-bottom: 5px;
 }
+.mar-lft-no {
+    margin-left: 0px;
+}
 .mar-lft {
   margin-left: 15px;
 }
@@ -8797,6 +8822,9 @@ a.text-dark:focus {
 .mar-lft-5 {
     margin-left: 5px;
 }
+.mar-rgt-no {
+    margin-right: 0px;
+}
 .mar-rgt {
   margin-right: 15px;
 }
@@ -8805,6 +8833,10 @@ a.text-dark:focus {
 }
 .mar-rgt-5 {
     margin-right: 5px;
+}
+.mar-hor-no {
+    margin-left: 0px;
+    margin-right: 0px;
 }
 .mar-hor {
   margin-left: 15px;
@@ -8817,6 +8849,10 @@ a.text-dark:focus {
 .mar-hor-5 {
     margin-left: 5px;
     margin-right: 5px;
+}
+.mar-ver-no {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 .mar-ver {
   margin-top: 15px;

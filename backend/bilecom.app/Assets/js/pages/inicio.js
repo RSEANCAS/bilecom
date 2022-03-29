@@ -115,6 +115,7 @@
 
     ConfiguracionDataTableTablero() {
         $.extend($.fn.dataTable.defaults, {
+            width: "100%",
             searching: false,
             lengthChange: false,
             paging: false,

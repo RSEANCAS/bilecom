@@ -5,6 +5,10 @@ backend/bilecom.app/bin
 backend/bilecom.app/obj
 backend/bilecom.app.admin/bin
 backend/bilecom.app.admin/obj
+backend/bilecom.batch/bin
+backend/bilecom.batch/obj
+backend/bilecom.bd/bin
+backend/bilecom.bd/obj
 backend/bilecom.bl/bin
 backend/bilecom.bl/obj
 backend/bilecom.da/bin
